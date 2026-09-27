@@ -844,8 +844,8 @@ export default function CustomerManagementView({ onSwitchToAccessControl, showNo
   const bottomTabs = [
     { id: 'thongTin', label: 'Thông tin' },
     { id: 'baoGia', label: 'Báo giá', count: subtabsData?.baoGia?.length },
-    { id: 'donHang', label: 'Đơn hàng', count: subtabsData?.donHang?.length },
     { id: 'datHang', label: 'Đặt hàng', count: subtabsData?.datHang?.length },
+    { id: 'donHang', label: 'Đơn hàng', count: subtabsData?.donHang?.length },
     { id: 'giaHanThe', label: 'Gia hạn thẻ', count: subtabsData?.giaHanThe?.length },
     { id: 'baoLuuThe', label: 'Bảo lưu thẻ', count: subtabsData?.baoLuuThe?.length },
     { id: 'doiLoaiThe', label: 'Đổi loại thẻ', count: subtabsData?.doiLoaiThe?.length },
@@ -1868,34 +1868,52 @@ export default function CustomerManagementView({ onSwitchToAccessControl, showNo
                     </table>
                   )}
 
-                  {/* TAB 12: PHIẾU THU CÔNG NỢ (TTHUCHI: LAPHIEUTHUCONGNO = 1) */}
+                  {/* TAB 12: PHIẾU THU CÔNG NỢ (TTHUCHI: LAPHIEUTHUCONGNO = 1 - KHỚP 100% SCOLUMN VÀ WINFORMS DESKTOP) */}
                   {activeBottomTab === 'thuCongNo' && (
                     <table className="cust-sub-table">
                       <thead>
                         <tr>
                           <th style={{ width: 30, textAlign: 'center' }}></th>
-                          <th style={{ width: 110 }}>Số phiếu</th>
+                          <th style={{ width: 100 }}>Ghi chú</th>
+                          <th style={{ width: 100 }}>Số phiếu</th>
                           <th style={{ width: 90 }}>Ngày</th>
-                          <th style={{ width: 110, textAlign: 'right' }}>Thu nợ</th>
-                          <th style={{ width: 150 }}>Khách hàng</th>
-                          <th style={{ width: 160 }}>Diễn giải</th>
-                          <th style={{ width: 110 }}>Chứng từ gốc</th>
-                          <th style={{ width: 120 }}>Nhân viên</th>
-                          <th style={{ width: 150 }}>Ghi chú</th>
+                          <th style={{ width: 140 }}>Tên đối tượng</th>
+                          <th style={{ width: 120 }}>Địa chỉ</th>
+                          <th style={{ width: 110 }}>Nhân viên</th>
+                          <th style={{ width: 130 }}>Khách hàng</th>
+                          <th style={{ width: 100 }}>Loại đối tượng</th>
+                          <th style={{ width: 120 }}>Lý do thu chi</th>
+                          <th style={{ width: 150 }}>Diễn giải</th>
+                          <th style={{ width: 100 }}>Chứng từ gốc</th>
+                          <th style={{ width: 100, textAlign: 'right' }}>Số tiền thu</th>
+                          <th style={{ width: 100, textAlign: 'right' }}>Số tiền chi</th>
+                          <th style={{ width: 120 }}>Nhà cung cấp</th>
+                          <th style={{ width: 95, textAlign: 'center' }}>Chuyển khoản</th>
+                          <th style={{ width: 100 }}>Đặt cọc</th>
                         </tr>
                       </thead>
                       <tbody>
                         {(subtabsData?.thuCongNo || subtabsData?.phieuThuCongNo)?.map((cn, idx) => (
                           <tr key={cn.id || idx}>
                             <td style={{ textAlign: 'center', color: '#64748b' }}>{idx + 1}</td>
+                            <td>{cn.note}</td>
                             <td><strong>{cn.soPhiu}</strong></td>
                             <td>{cn.ngay}</td>
-                            <td style={{ textAlign: 'right', fontWeight: 600, color: '#16a34a' }}>{cn.thu?.toLocaleString()}</td>
                             <td>{cn.tenDoiTuong}</td>
+                            <td>{cn.diaChi}</td>
+                            <td>{cn.nhanVien}</td>
+                            <td>{cn.khachHang}</td>
+                            <td>{cn.loaiDoiTuong}</td>
+                            <td>{cn.lyDoThuChi}</td>
                             <td>{cn.dienGiai}</td>
                             <td>{cn.chungTuGoc}</td>
-                            <td>{cn.nhanVien}</td>
-                            <td>{cn.note}</td>
+                            <td style={{ textAlign: 'right', fontWeight: 600, color: '#16a34a' }}>{cn.thu?.toLocaleString()}</td>
+                            <td style={{ textAlign: 'right', fontWeight: 600, color: '#dc2626' }}>{cn.chi?.toLocaleString()}</td>
+                            <td>{cn.nhaCungCap}</td>
+                            <td style={{ textAlign: 'center' }}>
+                              <input type="checkbox" checked={!!cn.chuyenKhoan} readOnly style={{ accentColor: '#2563eb' }} />
+                            </td>
+                            <td>{cn.datCoc}</td>
                           </tr>
                         ))}
                       </tbody>

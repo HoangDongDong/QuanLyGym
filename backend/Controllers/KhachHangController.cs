@@ -792,16 +792,21 @@ public class KhachHangController : ControllerBase
                 }
             }
 
-            // 12. Tab Phiếu thu công nợ (TTHUCHI: LAPHIEUTHUCONGNO = 1)
+            // 12. Tab Phiếu thu công nợ (TTHUCHI: LAPHIEUTHUCONGNO = 1 - KHỚP 100% SCOLUMN VÀ WINFORMS)
             var thuCongNo = new List<object>();
             using (var cmd = conn.CreateCommand())
             {
                 cmd.CommandText = @"
                     SELECT 
-                        tc.ID, tc.NAME AS SO_PHIEU, tc.NGAY, tc.THU, tc.TENDOITUONG,
-                        tc.DIENGIAI, tc.CHUNGTUGOC, nv.NAME AS TEN_NHANVIEN, tc.NOTE
+                        tc.ID, tc.NOTE, tc.NAME AS SO_PHIEU, tc.NGAY, tc.TENDOITUONG, tc.DIACHI,
+                        nv.NAME AS TEN_NHANVIEN, k.NAME AS TEN_KHACH, tc.LOAIDOITUONG, ld.NAME AS TEN_LYDO,
+                        tc.DIENGIAI, tc.CHUNGTUGOC, tc.THU, tc.CHI, ncc.NAME AS TEN_NHACUNGCAP,
+                        tc.CHUYENKHOAN, tc.TDATHANGID
                     FROM TTHUCHI tc
                     LEFT JOIN DNHANVIEN nv ON tc.DNHANVIENID = nv.ID
+                    LEFT JOIN DKHACHHANG k ON tc.DKHACHHANGID = k.ID
+                    LEFT JOIN DLYDOTHUCHI ld ON tc.DLYDOTHUCHIID = ld.ID
+                    LEFT JOIN DNHACUNGCAP ncc ON tc.DNHACUNGCAPID = ncc.ID
                     WHERE tc.DKHACHHANGID = @id AND tc.LAPHIEUTHUCONGNO = 1
                     ORDER BY tc.NGAY DESC, tc.TIMECREATED DESC";
                 cmd.Parameters.AddWithValue("@id", id.Trim());
@@ -811,14 +816,22 @@ public class KhachHangController : ControllerBase
                     thuCongNo.Add(new
                     {
                         id = r["ID"]?.ToString()?.Trim(),
+                        note = r["NOTE"]?.ToString()?.Trim() ?? "",
                         soPhiu = r["SO_PHIEU"]?.ToString()?.Trim() ?? "",
                         ngay = r["NGAY"] is not DBNull ? Convert.ToDateTime(r["NGAY"]).ToString("dd/MM/yyyy") : "",
-                        thu = r["THU"] is not DBNull ? Convert.ToDecimal(r["THU"]) : 0,
                         tenDoiTuong = r["TENDOITUONG"]?.ToString()?.Trim() ?? "",
+                        diaChi = r["DIACHI"]?.ToString()?.Trim() ?? "",
+                        nhanVien = r["TEN_NHANVIEN"]?.ToString()?.Trim() ?? "",
+                        khachHang = r["TEN_KHACH"]?.ToString()?.Trim() ?? "",
+                        loaiDoiTuong = r["LOAIDOITUONG"]?.ToString()?.Trim() ?? "",
+                        lyDoThuChi = r["TEN_LYDO"]?.ToString()?.Trim() ?? "",
                         dienGiai = r["DIENGIAI"]?.ToString()?.Trim() ?? "",
                         chungTuGoc = r["CHUNGTUGOC"]?.ToString()?.Trim() ?? "",
-                        nhanVien = r["TEN_NHANVIEN"]?.ToString()?.Trim() ?? "",
-                        note = r["NOTE"]?.ToString()?.Trim() ?? ""
+                        thu = r["THU"] is not DBNull ? Convert.ToDecimal(r["THU"]) : 0,
+                        chi = r["CHI"] is not DBNull ? Convert.ToDecimal(r["CHI"]) : 0,
+                        nhaCungCap = r["TEN_NHACUNGCAP"]?.ToString()?.Trim() ?? "",
+                        chuyenKhoan = r["CHUYENKHOAN"] is not DBNull && (Convert.ToInt32(r["CHUYENKHOAN"]) == 1 || Convert.ToInt32(r["CHUYENKHOAN"]) == 30),
+                        datCoc = r["TDATHANGID"]?.ToString()?.Trim() ?? ""
                     });
                 }
             }
