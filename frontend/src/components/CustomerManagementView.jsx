@@ -866,23 +866,7 @@ export default function CustomerManagementView({ onSwitchToAccessControl, showNo
 
   return (
     <div className="cust-mgmt-container">
-      {/* 1. TOP TABS (DOCUMENT MANAGER TABS NHƯ WINFORMS) */}
-      <div className="cust-doc-tabs">
-        <div
-          className="cust-doc-tab"
-          onClick={onSwitchToAccessControl}
-          title="Chuyển sang màn hình Kiểm soát vào ra"
-        >
-          <span>Kiểm soát vào ra</span>
-          <span className="cust-tab-close">×</span>
-        </div>
-        <div className="cust-doc-tab active" title="Màn hình Danh mục khách hàng hiện tại">
-          <span>Danh mục khách hàng</span>
-          <span className="cust-tab-close">×</span>
-        </div>
-      </div>
-
-      {/* 2. MAIN SPLIT WORKSPACE */}
+      {/* MAIN SPLIT WORKSPACE */}
       <div className="cust-split-body">
         {/* LEFT SIDEBAR: CÂY DANH MỤC (HỖ TRỢ CẢ TRẠNG THÁI THẺ & NHÓM KHÁCH HÀNG NHƯ TREEGRIDMG) */}
         <div className="cust-left-pane">
