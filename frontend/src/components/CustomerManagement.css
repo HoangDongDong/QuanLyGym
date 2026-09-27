@@ -2972,8 +2972,8 @@
 }
 
 .wf-menu-item:hover {
-  background: #bde0fe;
-  outline: 1px solid #7da2ce;
+  background: linear-gradient(180deg, #fff7d6 0%, #ffeaa8 50%, #fed876 51%, #ffebae 100%);
+  outline: 1px solid #d4a742;
 }
 
 .wf-menu-icon {

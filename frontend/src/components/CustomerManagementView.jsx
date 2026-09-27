@@ -8,6 +8,7 @@ import DeviceSyncModal from './DeviceSyncModal';
 import FingerprintEnrollModal from './FingerprintEnrollModal';
 import TreeItemModal from './TreeItemModal';
 import TreeQuickAddModal from './TreeQuickAddModal';
+import SubtabAeModal from './SubtabAeModal';
 import './CustomerManagement.css';
 
 export default function CustomerManagementView({ onSwitchToAccessControl, showNotification }) {
@@ -86,6 +87,29 @@ export default function CustomerManagementView({ onSwitchToAccessControl, showNo
   const [showTreeSubSapXep, setShowTreeSubSapXep] = useState(false);
   const [treeSortBy, setTreeSortBy] = useState('name'); // 'name' | 'custom'
   const [showTreePropsDialog, setShowTreePropsDialog] = useState(false);
+
+  // --- SUBTAB CONTEXT MENU STATES (MATCHING WINFORMS DESKTOP CONTEXTMENUSTRIP) ---
+  const [subtabContextMenu, setSubtabContextMenu] = useState({
+    visible: false,
+    x: 0,
+    y: 0,
+    tabId: 'datHang',
+    tabLabel: 'Đặt hàng',
+    item: null,
+    colKey: '',
+    colTitle: '',
+    cellValue: ''
+  });
+  const [showSubtabSubSapXep, setShowSubtabSubSapXep] = useState(false);
+  const [showSubtabPropsDialog, setShowSubtabPropsDialog] = useState(false);
+  const [showSubtabColChooser, setShowSubtabColChooser] = useState(false);
+  const [subtabAeModal, setSubtabAeModal] = useState({
+    show: false,
+    mode: 'create', // 'create' | 'edit'
+    tabId: 'datHang',
+    tabLabel: 'Đặt hàng',
+    initialData: null
+  });
 
   // --- REAL TREE ITEMS & ICONS FROM FIREBIRD DB ---
   const [treeItems, setTreeItems] = useState([]);
@@ -223,6 +247,7 @@ export default function CustomerManagementView({ onSwitchToAccessControl, showNo
       if (e.key === 'Escape') {
         if (contextMenu.visible) closeContextMenu();
         if (treeContextMenu.visible) closeTreeContextMenu();
+        if (subtabContextMenu.visible) closeSubtabContextMenu();
         setFocusedCell(null);
         return;
       }
@@ -247,7 +272,7 @@ export default function CustomerManagementView({ onSwitchToAccessControl, showNo
 
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [modalState.show, selectedCustomer, contextMenu.visible, treeContextMenu.visible]);
+  }, [modalState.show, subtabAeModal.show, selectedCustomer, contextMenu.visible, treeContextMenu.visible, subtabContextMenu.visible]);
 
   // Tự động đóng Menu ngữ cảnh chuột phải & xóa ô focus khi nhấp chuột ra ngoài
   useEffect(() => {
@@ -264,13 +289,16 @@ export default function CustomerManagementView({ onSwitchToAccessControl, showNo
       if (treeContextMenu.visible) {
         closeTreeContextMenu();
       }
+      if (subtabContextMenu.visible) {
+        closeSubtabContextMenu();
+      }
       setFocusedCell(null);
     };
 
     // Lắng nghe cả pointerdown trên document để bắt kịp mọi tương tác click chuột ngay lập tức
     document.addEventListener('pointerdown', handleOutsideClick);
     return () => document.removeEventListener('pointerdown', handleOutsideClick);
-  }, [contextMenu.visible, treeContextMenu.visible]);
+  }, [contextMenu.visible, treeContextMenu.visible, subtabContextMenu.visible]);
 
   // Xử lý cuộn thanh tab phần đáy
   const scrollBottomTabs = (offset) => {
@@ -425,7 +453,193 @@ export default function CustomerManagementView({ onSwitchToAccessControl, showNo
     showNotification && showNotification('Đã sao chép dòng vào bộ nhớ tạm (dạng bảng Excel)!');
   };
 
-  // 6. Tự động giãn cột
+  // --- SUBTAB CONTEXT MENU HANDLERS (WINFORMS TÂN AN PHÁT) ---
+  const handleSubtabContextMenu = (e, tabId = null, tabLabel = null, item = null, colKey = '', colTitle = '', cellValue = '') => {
+    e.preventDefault();
+    e.stopPropagation();
+
+    const currentTabId = tabId || activeBottomTab;
+    const tabObj = bottomTabs.find(t => t.id === currentTabId);
+    const currentTabLabel = tabLabel || (tabObj ? tabObj.label : 'Bản ghi');
+
+    if (currentTabId !== activeBottomTab) {
+      setActiveBottomTab(currentTabId);
+    }
+
+    const menuWidth = 195;
+    const menuHeight = 350;
+    const x = e.clientX + menuWidth > window.innerWidth ? window.innerWidth - menuWidth - 10 : e.clientX;
+    const y = e.clientY + menuHeight > window.innerHeight ? window.innerHeight - menuHeight - 10 : e.clientY;
+
+    setSubtabContextMenu({
+      visible: true,
+      x,
+      y,
+      tabId: currentTabId,
+      tabLabel: currentTabLabel,
+      item,
+      colKey,
+      colTitle,
+      cellValue: cellValue !== undefined && cellValue !== null ? String(cellValue) : ''
+    });
+  };
+
+  const closeSubtabContextMenu = () => {
+    setSubtabContextMenu(prev => ({ ...prev, visible: false }));
+    setShowSubtabSubSapXep(false);
+  };
+
+  // 1. Thêm mới bản ghi subtab
+  const handleOpenAddSubtab = () => {
+    const { tabId, tabLabel } = subtabContextMenu;
+    closeSubtabContextMenu();
+    setSubtabAeModal({
+      show: true,
+      mode: 'create',
+      tabId: tabId || activeBottomTab,
+      tabLabel: tabLabel || (bottomTabs.find(t => t.id === activeBottomTab)?.label || 'Bản ghi'),
+      initialData: null
+    });
+  };
+
+  // 2. Chỉnh sửa bản ghi subtab
+  const handleOpenEditSubtab = () => {
+    const { tabId, tabLabel, item } = subtabContextMenu;
+    closeSubtabContextMenu();
+    if (!item) {
+      showNotification && showNotification('Vui lòng chọn một dòng để chỉnh sửa!');
+      return;
+    }
+    setSubtabAeModal({
+      show: true,
+      mode: 'edit',
+      tabId: tabId || activeBottomTab,
+      tabLabel: tabLabel || (bottomTabs.find(t => t.id === activeBottomTab)?.label || 'Bản ghi'),
+      initialData: item
+    });
+  };
+
+  // 3. Sắp xếp subtab (Tăng dần / Giảm dần)
+  const handleSubtabSort = (dir) => {
+    closeSubtabContextMenu();
+    const { tabId } = subtabContextMenu;
+    setSubtabsData(prev => {
+      if (!prev || !prev[tabId] || !Array.isArray(prev[tabId])) return prev;
+      const sorted = [...prev[tabId]].sort((a, b) => {
+        const valA = a.ngay || a.soPhiu || '';
+        const valB = b.ngay || b.soPhiu || '';
+        return dir === 'asc' ? String(valA).localeCompare(String(valB)) : String(valB).localeCompare(String(valA));
+      });
+      return { ...prev, [tabId]: sorted };
+    });
+    showNotification && showNotification(`Đã sắp xếp danh sách ${dir === 'asc' ? 'tăng dần ▲' : 'giảm dần ▼'}`);
+  };
+
+  // 4. Refresh subtab
+  const handleSubtabRefresh = () => {
+    closeSubtabContextMenu();
+    if (selectedCustomerId) {
+      setSubtabsLoading(true);
+      khachHangService.getSubtabs(selectedCustomerId).then((res) => {
+        if (res && res.data) {
+          setSubtabsData(res.data);
+          showNotification && showNotification(`Đã tải lại dữ liệu "${subtabContextMenu.tabLabel}"`);
+        }
+        setSubtabsLoading(false);
+      }).catch(() => setSubtabsLoading(false));
+    }
+  };
+
+  // 5. In danh sách subtab
+  const handleSubtabPrint = () => {
+    closeSubtabContextMenu();
+    window.print();
+  };
+
+  // 6. Sao chép ô
+  const handleSubtabCopyCell = () => {
+    const { cellValue } = subtabContextMenu;
+    closeSubtabContextMenu();
+    navigator.clipboard.writeText(cellValue || '');
+    showNotification && showNotification(`Đã sao chép "${cellValue || 'ô'}" vào bộ nhớ tạm!`);
+  };
+
+  // 7. Sao chép vùng chọn (dòng TSV)
+  const handleSubtabCopyRow = () => {
+    const { item, tabLabel } = subtabContextMenu;
+    closeSubtabContextMenu();
+    if (!item) {
+      showNotification && showNotification('Chưa chọn dòng nào để sao chép!');
+      return;
+    }
+    const keys = Object.keys(item).filter(k => k !== 'id');
+    const tsv = keys.join('\t') + '\n' + keys.map(k => item[k] ?? '').join('\t');
+    navigator.clipboard.writeText(tsv);
+    showNotification && showNotification(`Đã sao chép dòng "${tabLabel}" vào bộ nhớ tạm!`);
+  };
+
+  // 8. Xóa bản ghi subtab
+  const handleSubtabDelete = async () => {
+    const { tabId, tabLabel, item } = subtabContextMenu;
+    closeSubtabContextMenu();
+    if (!item || !item.id) {
+      showNotification && showNotification('Vui lòng chọn một dòng để xóa!');
+      return;
+    }
+    if (window.confirm(`Bạn có chắc chắn muốn xóa bản ghi '${item.soPhiu || item.id}' trong tab '${tabLabel}' không?`)) {
+      try {
+        const res = await khachHangService.deleteSubtabItem(tabId, item.id);
+        if (res && res.success) {
+          showNotification && showNotification(`Đã xóa bản ghi khỏi '${tabLabel}'!`);
+          handleSubtabRefresh();
+        } else {
+          showNotification && showNotification(res?.message || 'Không thể xóa bản ghi');
+        }
+      } catch (err) {
+        console.error(err);
+        showNotification && showNotification('Lỗi khi xóa bản ghi!');
+      }
+    }
+  };
+
+  // 9. Lưu bản ghi subtab từ modal
+  const handleSaveSubtabItem = async (tabId, data, mode) => {
+    try {
+      const res = await khachHangService.createSubtabItem(tabId, data);
+      if (res && res.success) {
+        showNotification && showNotification(`Đã lưu thành công vào tab '${bottomTabs.find(t => t.id === tabId)?.label || tabId}'!`);
+        if (selectedCustomerId) {
+          khachHangService.getSubtabs(selectedCustomerId).then((r) => {
+            if (r && r.data) setSubtabsData(r.data);
+          });
+        }
+      } else {
+        alert(res?.message || 'Không thể lưu bản ghi');
+      }
+    } catch (err) {
+      console.error(err);
+      alert('Lỗi kết nối cơ sở dữ liệu khi lưu bản ghi subtab!');
+    }
+  };
+
+  // Danh sách các cột của từng subtab phục vụ Cột hiển thị (Column Chooser)
+  const subtabColumnMap = {
+    thongTin: ['Mã khách', 'Tên khách hàng', 'Điện thoại', 'Email', 'Địa chỉ', 'Tỉnh thành', 'Facebook', 'Ngày sinh', 'Mã số thuế', 'Loại thẻ', 'Trạng thái', 'Thời hạn', 'Số lần', 'Đã tập', 'Còn lại'],
+    baoGia: ['Ngày', 'Số phiếu', 'Tên khách', 'Địa chỉ', 'Điện thoại', 'Tiền hàng', 'Tiền giảm giá', 'Tổng cộng'],
+    datHang: ['Số phiếu', 'Ngày', 'Khách hàng', 'Điện thoại', 'Địa chỉ', 'Email', 'Tiền hàng', 'Tỉ lệ giảm (%)', 'Tiền giảm giá', 'Tiền thuế', 'Phí vận chuyển', 'Tổng cộng', 'Ghi chú'],
+    donHang: ['Số phiếu', 'Ngày', 'Khách hàng', 'Tổng cộng', 'Nhân viên bán', 'Giờ thanh toán', 'Thu ngân', 'Voucher', 'Tiền mặt', 'Chuyển khoản', 'Thẻ tt', 'Tiền hàng', 'Tiền giảm giá', 'Tiền thuế', 'Phí vận chuyển', 'Thanh toán', 'Còn lại', 'Nhân viên giao hàng', 'Trích nhân viên', 'Cửa hàng', 'Ghi chú'],
+    giaHanThe: ['Số tiền', 'Ghi chú', 'Số phiếu', 'Ngày', 'Khách hàng', 'Số lần', 'Loại thẻ', 'Từ ngày', 'Đến ngày', 'Đã tập', 'Tỉ lệ giảm', 'Tiền giảm', 'Tổng cộng', 'Thanh toán', 'Khuyến mại', 'Số ngày', 'Số tháng', 'Lần tặng thêm', 'Ngày tặng thêm', 'Doanh số', 'Chưa kích hoạt'],
+    baoLuuThe: ['Số tiền', 'Ghi chú', 'Số phiếu', 'Ngày', 'Khách hàng', 'Loại thẻ', 'Từ ngày', 'Đến ngày', 'Số ngày bảo lưu', 'Đến ngày thực'],
+    doiLoaiThe: ['Số tiền chênh lệch', 'Ghi chú', 'Số phiếu', 'Ngày', 'Khách hàng', 'Loại thẻ cũ', 'Loại thẻ mới'],
+    tangGiamDiem: ['Số phiếu', 'Ngày', 'Khách hàng', 'Điểm tăng', 'Điểm giảm', 'Lý do', 'Ghi chú'],
+    theTrang: ['Ngày', 'Khách hàng', 'Chiều cao (cm)', 'Cân nặng (kg)', 'BMI', 'Vòng ngực', 'Vòng bụng', 'Vòng mông', 'Ghi chú'],
+    phieuThu: ['Số phiếu', 'Ngày', 'Số tiền thu', 'Khách hàng / Đối tượng', 'Lý do thu chi', 'Diễn giải', 'Chứng từ gốc', 'Nhân viên', 'Ghi chú'],
+    phieuChi: ['Số phiếu', 'Ngày', 'Số tiền chi', 'Đối tượng nhận', 'Lý do thu chi', 'Diễn giải', 'Chứng từ gốc', 'Nhân viên', 'Ghi chú'],
+    thuCongNo: ['Ghi chú', 'Số phiếu', 'Ngày', 'Tên đối tượng', 'Địa chỉ', 'Nhân viên', 'Khách hàng', 'Loại đối tượng', 'Lý do thu chi', 'Diễn giải', 'Chứng từ gốc', 'Số tiền thu', 'Số tiền chi', 'Nhà cung cấp', 'Chuyển khoản', 'Đặt cọc'],
+    datCoc: ['Số phiếu', 'Ngày', 'Số tiền đặt cọc', 'Khách hàng / Đối tượng', 'Lý do thu chi', 'Diễn giải', 'Ghi chú'],
+    vaoRa: ['Mã vào ra', 'Thời gian', 'Khách hàng', 'Cửa kiểm soát', 'Trạng thái', 'Ghi chú']
+  };
+
   // --- TREE CONTEXT MENU & CRUD ACTION HANDLERS ---
   const handleTreeContextMenu = (e, item) => {
     e.preventDefault();
@@ -1318,6 +1532,12 @@ export default function CustomerManagementView({ onSwitchToAccessControl, showNo
                     key={tab.id}
                     className={`cust-bottom-tab ${activeBottomTab === tab.id ? 'active' : ''}`}
                     onClick={() => setActiveBottomTab(tab.id)}
+                    onContextMenu={(e) => {
+                      e.preventDefault();
+                      e.stopPropagation();
+                      setActiveBottomTab(tab.id);
+                      handleSubtabContextMenu(e, tab.id, tab.label);
+                    }}
                   >
                     <span>{tab.label}</span>
                     {typeof tab.count === 'number' && tab.count > 0 && (
@@ -1334,7 +1554,14 @@ export default function CustomerManagementView({ onSwitchToAccessControl, showNo
               </button>
             </div>
 
-            <div className="cust-bottom-tab-body" style={{ overflowX: 'auto', overflowY: 'auto' }}>
+            <div
+              className="cust-bottom-tab-body"
+              style={{ overflowX: 'auto', overflowY: 'auto' }}
+              onContextMenu={(e) => {
+                e.preventDefault();
+                handleSubtabContextMenu(e, activeBottomTab, bottomTabs.find(t => t.id === activeBottomTab)?.label);
+              }}
+            >
               {subtabsLoading ? (
                 <div style={{ padding: '20px', textAlign: 'center', color: '#64748b' }}>
                   <i className="fa-solid fa-spinner fa-spin"></i> Đang tải dữ liệu chi tiết...
@@ -2593,6 +2820,225 @@ export default function CustomerManagementView({ onSwitchToAccessControl, showNo
         onClose={() => setShowTreeQuickAdd(false)}
       />
 
-</div>
+      {/* ========================================================================= */}
+      {/* SUBTAB CONTEXT MENU (KHỚP 100% ẢNH THỰC TẾ WINFORMS TÂN AN PHÁT)         */}
+      {/* ========================================================================= */}
+      {subtabContextMenu.visible && (
+        <div
+          className="wf-context-menu"
+          style={{ top: subtabContextMenu.y, left: subtabContextMenu.x, width: 185 }}
+          onClick={(e) => e.stopPropagation()}
+        >
+          {/* 1. + Thêm [Tên tab] (e.g. Thêm Đặt hàng, Thêm Báo giá, etc.) */}
+          <div
+            className="wf-menu-item"
+            onClick={handleOpenAddSubtab}
+          >
+            <span className="wf-menu-icon" style={{ color: '#16a34a', fontWeight: 'bold', fontSize: 13 }}>✚</span>
+            <span className="wf-menu-text" style={{ fontWeight: 600 }}>
+              Thêm {subtabContextMenu.tabLabel}
+            </span>
+          </div>
+
+          {/* 2. Thêm nhanh (excel) */}
+          <div
+            className="wf-menu-item"
+            onClick={() => { closeSubtabContextMenu(); setShowExcelImport(true); }}
+          >
+            <span className="wf-menu-icon"></span>
+            <span className="wf-menu-text">Thêm nhanh (excel)</span>
+          </div>
+
+          {/* 3. Cập nhật nhanh (excel) */}
+          <div
+            className="wf-menu-item"
+            onClick={() => { closeSubtabContextMenu(); setShowExcelImport(true); }}
+          >
+            <span className="wf-menu-icon"></span>
+            <span className="wf-menu-text">Cập nhật nhanh (excel)</span>
+          </div>
+
+          {/* 4. ✏️ Chỉnh sửa */}
+          <div
+            className="wf-menu-item"
+            onClick={handleOpenEditSubtab}
+          >
+            <span className="wf-menu-icon" style={{ color: '#d97706' }}>✏️</span>
+            <span className="wf-menu-text">Chỉnh sửa</span>
+          </div>
+
+          <div className="wf-menu-separator"></div>
+
+          {/* 5. Sắp xếp theo ► */}
+          <div
+            className="wf-menu-item has-submenu"
+            onMouseEnter={() => setShowSubtabSubSapXep(true)}
+            onMouseLeave={() => setShowSubtabSubSapXep(false)}
+          >
+            <span className="wf-menu-icon"></span>
+            <span className="wf-menu-text">Sắp xếp theo</span>
+            <span className="wf-submenu-arrow">▶</span>
+
+            {showSubtabSubSapXep && (
+              <div className="wf-submenu" style={{ width: 155 }}>
+                <div className="wf-menu-item" onClick={() => handleSubtabSort('asc')}>
+                  <span className="wf-menu-icon" style={{ fontSize: 10 }}>▲</span>
+                  <span className="wf-menu-text">Sắp xếp tăng dần</span>
+                </div>
+                <div className="wf-menu-item" onClick={() => handleSubtabSort('desc')}>
+                  <span className="wf-menu-icon" style={{ fontSize: 10 }}>▼</span>
+                  <span className="wf-menu-text">Sắp xếp giảm dần</span>
+                </div>
+              </div>
+            )}
+          </div>
+
+          {/* 6. 🔄 Refresh */}
+          <div
+            className="wf-menu-item"
+            onClick={handleSubtabRefresh}
+          >
+            <span className="wf-menu-icon" style={{ color: '#16a34a' }}>🔄</span>
+            <span className="wf-menu-text">Refresh</span>
+          </div>
+
+          {/* 7. In danh sách */}
+          <div
+            className="wf-menu-item"
+            onClick={handleSubtabPrint}
+          >
+            <span className="wf-menu-icon"></span>
+            <span className="wf-menu-text">In danh sách</span>
+          </div>
+
+          <div className="wf-menu-separator"></div>
+
+          {/* 8. 📄 Sao chép ô */}
+          <div
+            className="wf-menu-item"
+            onClick={handleSubtabCopyCell}
+          >
+            <span className="wf-menu-icon" style={{ color: '#0284c7' }}>📄</span>
+            <span className="wf-menu-text">Sao chép ô</span>
+          </div>
+
+          {/* 9. 📑 Sao chép vùng chọn */}
+          <div
+            className="wf-menu-item"
+            onClick={handleSubtabCopyRow}
+          >
+            <span className="wf-menu-icon" style={{ color: '#0284c7' }}>📑</span>
+            <span className="wf-menu-text">Sao chép vùng chọn</span>
+          </div>
+
+          {/* 10. ❌ Xóa */}
+          <div
+            className="wf-menu-item"
+            onClick={handleSubtabDelete}
+          >
+            <span className="wf-menu-icon" style={{ color: '#dc2626' }}>❌</span>
+            <span className="wf-menu-text">Xóa</span>
+          </div>
+
+          <div className="wf-menu-separator"></div>
+
+          {/* 11. Tự động dãn cột */}
+          <div
+            className="wf-menu-item"
+            onClick={() => { closeSubtabContextMenu(); showNotification && showNotification('Đã tự động dãn cột theo nội dung'); }}
+          >
+            <span className="wf-menu-icon"></span>
+            <span className="wf-menu-text">Tự động dãn cột</span>
+          </div>
+
+          {/* 12. Cột hiển thị */}
+          <div
+            className="wf-menu-item"
+            onClick={() => { closeSubtabContextMenu(); setShowSubtabColChooser(true); }}
+          >
+            <span className="wf-menu-icon"></span>
+            <span className="wf-menu-text">Cột hiển thị</span>
+          </div>
+
+          {/* 13. Thuộc tính */}
+          <div
+            className="wf-menu-item"
+            onClick={() => { closeSubtabContextMenu(); setShowSubtabPropsDialog(true); }}
+          >
+            <span className="wf-menu-icon"></span>
+            <span className="wf-menu-text">Thuộc tính</span>
+          </div>
+        </div>
+      )}
+
+      {/* MODAL THUỘC TÍNH BẢN GHI SUBTAB */}
+      {showSubtabPropsDialog && (
+        <div className="sub-modal-backdrop" onClick={() => setShowSubtabPropsDialog(false)}>
+          <div className="choice-dialog-window" onClick={(e) => e.stopPropagation()} style={{ width: 440 }}>
+            <div className="choice-dialog-titlebar">
+              <span>Thuộc tính: {subtabContextMenu.tabLabel || 'Subtab'}</span>
+              <button className="choice-dialog-close" onClick={() => setShowSubtabPropsDialog(false)}>✕</button>
+            </div>
+            <div className="choice-dialog-body" style={{ fontSize: 12 }}>
+              <div style={{ marginBottom: 6 }}><strong>Phân hệ / Tab:</strong> {subtabContextMenu.tabLabel}</div>
+              <div style={{ marginBottom: 6 }}><strong>Số phiếu / Mã:</strong> {subtabContextMenu.item?.soPhiu || subtabContextMenu.item?.id || '---'}</div>
+              <div style={{ marginBottom: 6 }}><strong>Khách hàng:</strong> {subtabContextMenu.item?.khachHang || subtabContextMenu.item?.tenKhach || selectedCustomer?.tenKhachHang || '---'}</div>
+              <div style={{ marginBottom: 6 }}><strong>Ngày lập:</strong> {subtabContextMenu.item?.ngay || '---'}</div>
+              <div style={{ marginBottom: 6 }}>
+                <strong>Giá trị / Số tiền:</strong>{' '}
+                {(subtabContextMenu.item?.soTien || subtabContextMenu.item?.tongCong || subtabContextMenu.item?.thu || subtabContextMenu.item?.chi)?.toLocaleString() || '---'}
+              </div>
+              <div style={{ marginBottom: 6 }}><strong>Nhân viên:</strong> {subtabContextMenu.item?.nhanVien || 'Administrator'}</div>
+              <div style={{ marginBottom: 6 }}><strong>Ghi chú:</strong> {subtabContextMenu.item?.note || 'Không có ghi chú'}</div>
+              <div style={{ marginTop: 14, textAlign: 'right' }}>
+                <button className="tn-btn-primary" style={{ padding: '4px 16px', height: 26 }} onClick={() => setShowSubtabPropsDialog(false)}>Đóng</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* MODAL CỘT HIỂN THỊ SUBTAB */}
+      {showSubtabColChooser && (
+        <div className="sub-modal-backdrop" onClick={() => setShowSubtabColChooser(false)}>
+          <div className="choice-dialog-window" onClick={(e) => e.stopPropagation()} style={{ width: 360 }}>
+            <div className="choice-dialog-titlebar">
+              <span>Cột hiển thị: {subtabContextMenu.tabLabel || 'Lưới dữ liệu'}</span>
+              <button className="choice-dialog-close" onClick={() => setShowSubtabColChooser(false)}>✕</button>
+            </div>
+            <div className="choice-dialog-body" style={{ fontSize: 12 }}>
+              <div style={{ maxHeight: 250, overflowY: 'auto', border: '1px solid #c0c0c0', padding: 8, background: '#fff' }}>
+                {(subtabColumnMap[subtabContextMenu.tabId] || ['Số phiếu', 'Ngày', 'Khách hàng', 'Ghi chú']).map(col => (
+                  <div key={col} style={{ padding: '3px 0' }}>
+                    <label style={{ cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 6 }}>
+                      <input type="checkbox" defaultChecked style={{ accentColor: '#2563eb' }} />
+                      <span>{col}</span>
+                    </label>
+                  </div>
+                ))}
+              </div>
+              <div style={{ marginTop: 12, display: 'flex', justifyContent: 'flex-end', gap: 8 }}>
+                <button className="tn-btn-primary" style={{ padding: '4px 14px', height: 26 }} onClick={() => setShowSubtabColChooser(false)}>Đồng ý</button>
+                <button className="tn-btn-cancel" style={{ padding: '4px 12px', height: 26 }} onClick={() => setShowSubtabColChooser(false)}>Thoát</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* MODAL THÊM / SỬA BẢN GHI SUBTAB (WINFORMS LOOK & FEEL) */}
+      <SubtabAeModal
+        show={subtabAeModal.show}
+        mode={subtabAeModal.mode}
+        tabId={subtabAeModal.tabId}
+        tabLabel={subtabAeModal.tabLabel}
+        customer={selectedCustomer}
+        initialData={subtabAeModal.initialData}
+        metadata={metadata}
+        onSave={handleSaveSubtabItem}
+        onClose={() => setSubtabAeModal(prev => ({ ...prev, show: false }))}
+      />
+
+    </div>
   );
 }

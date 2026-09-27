@@ -38,6 +38,18 @@ export const khachHangService = {
     }
   },
 
+  // Thêm mới bản ghi vào subtab
+  createSubtabItem: async (tabId, data) => {
+    const response = await api.post(`/khachhang/subtabs/${tabId}`, data);
+    return response.data;
+  },
+
+  // Xóa bản ghi trong subtab
+  deleteSubtabItem: async (tabId, itemId) => {
+    const response = await api.delete(`/khachhang/subtabs/${tabId}/${itemId}`);
+    return response.data;
+  },
+
   // Lấy danh mục tham chiếu phục vụ thêm/sửa khách hàng
   getMetadata: async () => {
     try {
