@@ -838,10 +838,7 @@ export default function CustomerManagementView({ onSwitchToAccessControl, showNo
   }, [treeItems, groupCounts, groups]);
 
   const currentTreeList = treeMode === 'trangThai' ? statusTreeItems : groupTreeItems;
-  const filteredTreeItems = currentTreeList.filter(item => {
-    if (item.itemType === 2) return true;
-    return (item.label || '').toLowerCase().includes(treeSearch.toLowerCase().trim());
-  });
+  const filteredTreeItems = currentTreeList;
 
   // Định nghĩa danh sách các tab ở phần đáy (14 tab khớp toàn bộ WinForms No1Lib)
   const bottomTabs = [
@@ -921,13 +918,13 @@ export default function CustomerManagementView({ onSwitchToAccessControl, showNo
             >
               <i className="fa-solid fa-rotate" style={{ color: '#0284c7' }}></i>
             </button>
-            <input
-              type="text"
-              className="cust-tree-search"
-              placeholder={treeMode === 'trangThai' ? 'Tìm trạng thái...' : 'Tìm nhóm...'}
-              value={treeSearch}
-              onChange={(e) => setTreeSearch(e.target.value)}
-            />
+            <button 
+              className="cust-tree-btn cust-tree-btn-right" 
+              title="Tùy chọn danh mục" 
+              onClick={(e) => handleTreeContextMenu(e, null)}
+            >
+              <i className="fa-solid fa-gear" style={{ color: '#64748b' }}></i>
+            </button>
           </div>
 
           <div 
