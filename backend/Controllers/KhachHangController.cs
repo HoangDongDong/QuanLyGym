@@ -944,6 +944,12 @@ public class KhachHangController : ControllerBase
             string soPhiu = body.TryGetProperty("soPhiu", out var pSp) ? pSp.GetString() ?? "" : "";
             string note = body.TryGetProperty("note", out var pNote) ? pNote.GetString() ?? "" : "";
 
+            DateTime ngayChungTu = DateTime.Now;
+            if (body.TryGetProperty("ngay", out var pNg) && !string.IsNullOrWhiteSpace(pNg.GetString()) && DateTime.TryParse(pNg.GetString(), out var parsedNgay))
+            {
+                ngayChungTu = parsedNgay;
+            }
+
             if (string.IsNullOrWhiteSpace(soPhiu))
             {
                 string norm = tabId.Trim().ToLower().Replace("_", "").Replace("-", "");
@@ -971,11 +977,11 @@ public class KhachHangController : ControllerBase
             {
                 case "dathang":
                     cmd.CommandText = @"
-                        INSERT INTO TDATHANG (ID, NAME, NGAY, DKHACHHANGID, TIENHANG, TONGCONG, NOTE, TIMECREATED, USERCREATEDID)
-                        VALUES (@id, @name, @ngay, @khId, @tienHang, @tongCong, @note, @timeCreated, @userCreated)";
+                        INSERT INTO TDATHANG (ID, NAME, NGAY, DKHACHHANGID, TIENHANG, TONGCONG, NOTE, STATUS, TIMECREATED, USERCREATEDID)
+                        VALUES (@id, @name, @ngay, @khId, @tienHang, @tongCong, @note, 30, @timeCreated, @userCreated)";
                     cmd.Parameters.AddWithValue("@id", newId);
                     cmd.Parameters.AddWithValue("@name", soPhiu);
-                    cmd.Parameters.AddWithValue("@ngay", DateTime.Now);
+                    cmd.Parameters.AddWithValue("@ngay", ngayChungTu);
                     cmd.Parameters.AddWithValue("@khId", khId);
                     cmd.Parameters.AddWithValue("@tienHang", body.TryGetProperty("tienHang", out var pTh) ? pTh.GetDecimal() : 0);
                     cmd.Parameters.AddWithValue("@tongCong", body.TryGetProperty("tongCong", out var pTc) ? pTc.GetDecimal() : 0);
@@ -986,11 +992,11 @@ public class KhachHangController : ControllerBase
 
                 case "baogia":
                     cmd.CommandText = @"
-                        INSERT INTO TBAOGIA (ID, NAME, NGAY, DKHACHHANGID, TIENHANG, TONGCONG, NOTE, TIMECREATED, USERCREATEDID)
-                        VALUES (@id, @name, @ngay, @khId, @tienHang, @tongCong, @note, @timeCreated, @userCreated)";
+                        INSERT INTO TBAOGIA (ID, NAME, NGAY, DKHACHHANGID, TIENHANG, TONGCONG, NOTE, STATUS, TIMECREATED, USERCREATEDID)
+                        VALUES (@id, @name, @ngay, @khId, @tienHang, @tongCong, @note, 30, @timeCreated, @userCreated)";
                     cmd.Parameters.AddWithValue("@id", newId);
                     cmd.Parameters.AddWithValue("@name", soPhiu);
-                    cmd.Parameters.AddWithValue("@ngay", DateTime.Now);
+                    cmd.Parameters.AddWithValue("@ngay", ngayChungTu);
                     cmd.Parameters.AddWithValue("@khId", khId);
                     cmd.Parameters.AddWithValue("@tienHang", body.TryGetProperty("tienHang", out var pBth) ? pBth.GetDecimal() : 0);
                     cmd.Parameters.AddWithValue("@tongCong", body.TryGetProperty("tongCong", out var pBtc) ? pBtc.GetDecimal() : 0);
@@ -1001,15 +1007,25 @@ public class KhachHangController : ControllerBase
 
                 case "donhang":
                     cmd.CommandText = @"
-                        INSERT INTO TDONHANG (ID, NAME, NGAY, DKHACHHANGID, TIENHANG, TONGCONG, THANHTOAN, NOTE, TIMECREATED, USERCREATEDID)
-                        VALUES (@id, @name, @ngay, @khId, @tienHang, @tongCong, @thanhToan, @note, @timeCreated, @userCreated)";
+                        INSERT INTO TDONHANG (ID, NAME, NGAY, DKHACHHANGID, TIENHANG, TILEGIAMGIA, TIENGIAMGIA, TILETHUE, TIENTHUE, PHIVANCHUYEN, TONGCONG, THANHTOAN, DKHOXUATID, DNHANVIENXUATID, DIENGIAI, GIAOHANG, DOITRA, NOTE, STATUS, TIMECREATED, USERCREATEDID)
+                        VALUES (@id, @name, @ngay, @khId, @tienHang, @tiLeGiam, @tienGiam, @tiLeThue, @tienThue, @phiVc, @tongCong, @thanhToan, @khoId, @nvXuatId, @dienGiai, @giaoHang, @doiTra, @note, 30, @timeCreated, @userCreated)";
                     cmd.Parameters.AddWithValue("@id", newId);
                     cmd.Parameters.AddWithValue("@name", soPhiu);
-                    cmd.Parameters.AddWithValue("@ngay", DateTime.Now);
+                    cmd.Parameters.AddWithValue("@ngay", ngayChungTu);
                     cmd.Parameters.AddWithValue("@khId", khId);
                     cmd.Parameters.AddWithValue("@tienHang", body.TryGetProperty("tienHang", out var pDth) ? pDth.GetDecimal() : 0);
+                    cmd.Parameters.AddWithValue("@tiLeGiam", body.TryGetProperty("tiLeGiamGia", out var pDtlg) ? pDtlg.GetDecimal() : 0);
+                    cmd.Parameters.AddWithValue("@tienGiam", body.TryGetProperty("tienGiamGia", out var pDtg) ? pDtg.GetDecimal() : 0);
+                    cmd.Parameters.AddWithValue("@tiLeThue", body.TryGetProperty("tiLeThue", out var pDtlth) ? pDtlth.GetDecimal() : 0);
+                    cmd.Parameters.AddWithValue("@tienThue", body.TryGetProperty("tienThue", out var pDtth) ? pDtth.GetDecimal() : 0);
+                    cmd.Parameters.AddWithValue("@phiVc", body.TryGetProperty("phiVanChuyen", out var pDpvc) ? pDpvc.GetDecimal() : 0);
                     cmd.Parameters.AddWithValue("@tongCong", body.TryGetProperty("tongCong", out var pDtc) ? pDtc.GetDecimal() : 0);
                     cmd.Parameters.AddWithValue("@thanhToan", body.TryGetProperty("thanhToan", out var pDtt) ? pDtt.GetDecimal() : 0);
+                    cmd.Parameters.AddWithValue("@khoId", body.TryGetProperty("dkhoXuatId", out var pDkx) ? (object)pDkx.GetString() : DBNull.Value);
+                    cmd.Parameters.AddWithValue("@nvXuatId", body.TryGetProperty("dnhanVienXuatId", out var pDnvx) ? (object)pDnvx.GetString() : DBNull.Value);
+                    cmd.Parameters.AddWithValue("@dienGiai", body.TryGetProperty("dienGiai", out var pDdg) ? (object)pDdg.GetString() : DBNull.Value);
+                    cmd.Parameters.AddWithValue("@giaoHang", body.TryGetProperty("giaoHang", out var pDgh) ? (object)pDgh.GetString() : DBNull.Value);
+                    cmd.Parameters.AddWithValue("@doiTra", body.TryGetProperty("doiTra", out var pDdt) ? pDdt.GetDecimal() : 0);
                     cmd.Parameters.AddWithValue("@note", note);
                     cmd.Parameters.AddWithValue("@timeCreated", DateTime.Now);
                     cmd.Parameters.AddWithValue("@userCreated", _adminUserId);
@@ -1017,19 +1033,27 @@ public class KhachHangController : ControllerBase
 
                 case "giahanthe":
                     cmd.CommandText = @"
-                        INSERT INTO TGIAHANTHE (ID, NAME, NGAY, DKHACHHANGID, DLOAITHEID, SOTIEN, TONGCONG, THANHTOAN, SOLAN, TUNGAY, DENNGAY, DLOAIGIAODICHID, NOTE, TIMECREATED, USERCREATEDID)
-                        VALUES (@id, @name, @ngay, @khId, @loaiTheId, @soTien, @tongCong, @thanhToan, @soLan, @tuNgay, @denNgay, '1', @note, @timeCreated, @userCreated)";
+                        INSERT INTO TGIAHANTHE (ID, NAME, NGAY, DKHACHHANGID, DLOAITHEID, DCATAPID, SOTIEN, TILEGIAMGIA, TIENGIAMGIA, TONGCONG, THANHTOAN, SOLAN, SOTHANG, SONGAY, NGAYTANGTHEM, LANTANGTHEM, KHUYENMAI, TUNGAY, DENNGAY, DLOAIGIAODICHID, NOTE, STATUS, TIMECREATED, USERCREATEDID)
+                        VALUES (@id, @name, @ngay, @khId, @loaiTheId, @catapId, @soTien, @tiLeGiam, @tienGiam, @tongCong, @thanhToan, @soLan, @soThang, @soNgay, @ngayTang, @lanTang, @khuyenMai, @tuNgay, @denNgay, '1', @note, 30, @timeCreated, @userCreated)";
                     cmd.Parameters.AddWithValue("@id", newId);
                     cmd.Parameters.AddWithValue("@name", soPhiu);
-                    cmd.Parameters.AddWithValue("@ngay", DateTime.Now);
+                    cmd.Parameters.AddWithValue("@ngay", ngayChungTu);
                     cmd.Parameters.AddWithValue("@khId", khId);
                     cmd.Parameters.AddWithValue("@loaiTheId", body.TryGetProperty("dloaiTheId", out var pLt) ? (object)pLt.GetString() : DBNull.Value);
+                    cmd.Parameters.AddWithValue("@catapId", body.TryGetProperty("dcatapId", out var pCt) ? (object)pCt.GetString() : DBNull.Value);
                     cmd.Parameters.AddWithValue("@soTien", body.TryGetProperty("soTien", out var pSt) ? pSt.GetDecimal() : 0);
+                    cmd.Parameters.AddWithValue("@tiLeGiam", body.TryGetProperty("tiLeGiamGia", out var pGtl) ? pGtl.GetDecimal() : 0);
+                    cmd.Parameters.AddWithValue("@tienGiam", body.TryGetProperty("tienGiamGia", out var pGtg) ? pGtg.GetDecimal() : 0);
                     cmd.Parameters.AddWithValue("@tongCong", body.TryGetProperty("tongCong", out var pGtc) ? pGtc.GetDecimal() : 0);
                     cmd.Parameters.AddWithValue("@thanhToan", body.TryGetProperty("thanhToan", out var pGtt) ? pGtt.GetDecimal() : 0);
                     cmd.Parameters.AddWithValue("@soLan", body.TryGetProperty("soLan", out var pSl) ? pSl.GetInt32() : 0);
-                    cmd.Parameters.AddWithValue("@tuNgay", DateTime.Now);
-                    cmd.Parameters.AddWithValue("@denNgay", DateTime.Now.AddMonths(1));
+                    cmd.Parameters.AddWithValue("@soThang", body.TryGetProperty("soThang", out var pSth) ? pSth.GetInt32() : 1);
+                    cmd.Parameters.AddWithValue("@soNgay", body.TryGetProperty("soNgay", out var pSng) ? pSng.GetInt32() : 30);
+                    cmd.Parameters.AddWithValue("@ngayTang", body.TryGetProperty("ngayTangThem", out var pNt) ? pNt.GetInt32() : 0);
+                    cmd.Parameters.AddWithValue("@lanTang", body.TryGetProperty("lanTangThem", out var pLtng) ? pLtng.GetInt32() : 0);
+                    cmd.Parameters.AddWithValue("@khuyenMai", body.TryGetProperty("khuyenMai", out var pKm) ? (object)pKm.GetString() : DBNull.Value);
+                    cmd.Parameters.AddWithValue("@tuNgay", body.TryGetProperty("tuNgay", out var pTn) && DateTime.TryParse(pTn.GetString(), out var dTn) ? dTn : DateTime.Now);
+                    cmd.Parameters.AddWithValue("@denNgay", body.TryGetProperty("denNgay", out var pDn) && DateTime.TryParse(pDn.GetString(), out var dDn) ? dDn : DateTime.Now.AddMonths(1));
                     cmd.Parameters.AddWithValue("@note", note);
                     cmd.Parameters.AddWithValue("@timeCreated", DateTime.Now);
                     cmd.Parameters.AddWithValue("@userCreated", _adminUserId);
@@ -1037,14 +1061,15 @@ public class KhachHangController : ControllerBase
 
                 case "baoluuthe":
                     cmd.CommandText = @"
-                        INSERT INTO TGIAHANTHE (ID, NAME, NGAY, DKHACHHANGID, TUNGAY, DENNGAY, SONGAY, SOTIEN, DLOAIGIAODICHID, NOTE, TIMECREATED, USERCREATEDID)
-                        VALUES (@id, @name, @ngay, @khId, @tuNgay, @denNgay, @soNgay, @soTien, '9', @note, @timeCreated, @userCreated)";
+                        INSERT INTO TGIAHANTHE (ID, NAME, NGAY, DKHACHHANGID, DLOAITHEID, TUNGAY, DENNGAY, SONGAY, SOTIEN, DLOAIGIAODICHID, NOTE, STATUS, TIMECREATED, USERCREATEDID)
+                        VALUES (@id, @name, @ngay, @khId, @loaiTheId, @tuNgay, @denNgay, @soNgay, @soTien, '9', @note, 30, @timeCreated, @userCreated)";
                     cmd.Parameters.AddWithValue("@id", newId);
                     cmd.Parameters.AddWithValue("@name", soPhiu);
-                    cmd.Parameters.AddWithValue("@ngay", DateTime.Now);
+                    cmd.Parameters.AddWithValue("@ngay", ngayChungTu);
                     cmd.Parameters.AddWithValue("@khId", khId);
-                    cmd.Parameters.AddWithValue("@tuNgay", DateTime.Now);
-                    cmd.Parameters.AddWithValue("@denNgay", DateTime.Now.AddDays(30));
+                    cmd.Parameters.AddWithValue("@loaiTheId", body.TryGetProperty("dloaiTheId", out var pBllt) ? (object)pBllt.GetString() : DBNull.Value);
+                    cmd.Parameters.AddWithValue("@tuNgay", body.TryGetProperty("tuNgay", out var pBltn) && DateTime.TryParse(pBltn.GetString(), out var dBltn) ? dBltn : DateTime.Now);
+                    cmd.Parameters.AddWithValue("@denNgay", body.TryGetProperty("denNgay", out var pBldn) && DateTime.TryParse(pBldn.GetString(), out var dBldn) ? dBldn : DateTime.Now.AddDays(30));
                     cmd.Parameters.AddWithValue("@soNgay", body.TryGetProperty("soNgay", out var pSn) ? pSn.GetInt32() : 30);
                     cmd.Parameters.AddWithValue("@soTien", body.TryGetProperty("soTien", out var pBlst) ? pBlst.GetDecimal() : 0);
                     cmd.Parameters.AddWithValue("@note", note);
@@ -1054,11 +1079,11 @@ public class KhachHangController : ControllerBase
 
                 case "doiloaithe":
                     cmd.CommandText = @"
-                        INSERT INTO TGIAHANTHE (ID, NAME, NGAY, DKHACHHANGID, DLOAITHEID, SOTIEN, DLOAIGIAODICHID, NOTE, TIMECREATED, USERCREATEDID)
-                        VALUES (@id, @name, @ngay, @khId, @loaiTheId, @soTien, '2', @note, @timeCreated, @userCreated)";
+                        INSERT INTO TGIAHANTHE (ID, NAME, NGAY, DKHACHHANGID, DLOAITHEID, SOTIEN, DLOAIGIAODICHID, NOTE, STATUS, TIMECREATED, USERCREATEDID)
+                        VALUES (@id, @name, @ngay, @khId, @loaiTheId, @soTien, '2', @note, 30, @timeCreated, @userCreated)";
                     cmd.Parameters.AddWithValue("@id", newId);
                     cmd.Parameters.AddWithValue("@name", soPhiu);
-                    cmd.Parameters.AddWithValue("@ngay", DateTime.Now);
+                    cmd.Parameters.AddWithValue("@ngay", ngayChungTu);
                     cmd.Parameters.AddWithValue("@khId", khId);
                     cmd.Parameters.AddWithValue("@loaiTheId", body.TryGetProperty("dloaiTheIdMoi", out var pDlt) ? (object)pDlt.GetString() : DBNull.Value);
                     cmd.Parameters.AddWithValue("@soTien", body.TryGetProperty("soTien", out var pDlst) ? pDlst.GetDecimal() : 0);
@@ -1069,11 +1094,11 @@ public class KhachHangController : ControllerBase
 
                 case "tanggiamdiem":
                     cmd.CommandText = @"
-                        INSERT INTO TTANGGIAMDIEM (ID, NAME, NGAY, DKHACHHANGID, DIEMTANG, DIEMGIAM, NOTE, TIMECREATED, USERCREATEDID)
-                        VALUES (@id, @name, @ngay, @khId, @diemTang, @diemGiam, @note, @timeCreated, @userCreated)";
+                        INSERT INTO TTANGGIAMDIEM (ID, NAME, NGAY, DKHACHHANGID, DIEMTANG, DIEMGIAM, NOTE, STATUS, TIMECREATED, USERCREATEDID)
+                        VALUES (@id, @name, @ngay, @khId, @diemTang, @diemGiam, @note, 30, @timeCreated, @userCreated)";
                     cmd.Parameters.AddWithValue("@id", newId);
                     cmd.Parameters.AddWithValue("@name", soPhiu);
-                    cmd.Parameters.AddWithValue("@ngay", DateTime.Now);
+                    cmd.Parameters.AddWithValue("@ngay", ngayChungTu);
                     cmd.Parameters.AddWithValue("@khId", khId);
                     cmd.Parameters.AddWithValue("@diemTang", body.TryGetProperty("diemTang", out var pDt) ? pDt.GetInt32() : 0);
                     cmd.Parameters.AddWithValue("@diemGiam", body.TryGetProperty("diemGiam", out var pDg) ? pDg.GetInt32() : 0);
@@ -1084,10 +1109,10 @@ public class KhachHangController : ControllerBase
 
                 case "thetrang":
                     cmd.CommandText = @"
-                        INSERT INTO DTHETRANG (ID, NGAY, DKHACHHANGID, CHIEUCAO, CANNANG, BMI, VONGNGUC, VONGBUNG, VONGMONG, NOTE, TIMECREATED, USERCREATEDID)
-                        VALUES (@id, @ngay, @khId, @chieuCao, @canNang, @bmi, @vongNguc, @vongBung, @vongMong, @note, @timeCreated, @userCreated)";
+                        INSERT INTO DTHETRANG (ID, NGAY, DKHACHHANGID, CHIEUCAO, CANNANG, BMI, VONGNGUC, VONGBUNG, VONGMONG, NOTE, STATUS, TIMECREATED, USERCREATEDID)
+                        VALUES (@id, @ngay, @khId, @chieuCao, @canNang, @bmi, @vongNguc, @vongBung, @vongMong, @note, 30, @timeCreated, @userCreated)";
                     cmd.Parameters.AddWithValue("@id", newId);
-                    cmd.Parameters.AddWithValue("@ngay", DateTime.Now);
+                    cmd.Parameters.AddWithValue("@ngay", ngayChungTu);
                     cmd.Parameters.AddWithValue("@khId", khId);
                     cmd.Parameters.AddWithValue("@chieuCao", body.TryGetProperty("chieuCao", out var pCc) ? pCc.GetDecimal() : 0);
                     cmd.Parameters.AddWithValue("@canNang", body.TryGetProperty("canNang", out var pCn) ? pCn.GetDecimal() : 0);
@@ -1101,22 +1126,90 @@ public class KhachHangController : ControllerBase
                     break;
 
                 case "phieuthu":
-                case "phieuchi":
-                case "thucongno":
-                case "datcoc":
                     cmd.CommandText = @"
-                        INSERT INTO TTHUCHI (ID, NAME, NGAY, DKHACHHANGID, THU, CHI, LAPHIEUTHUCONGNO, DIENGIAI, CHUNGTUGOC, CHUYENKHOAN, NOTE, TIMECREATED, USERCREATEDID)
-                        VALUES (@id, @name, @ngay, @khId, @thu, @chi, @laThuCongNo, @dienGiai, @chungTuGoc, @chuyenKhoan, @note, @timeCreated, @userCreated)";
+                        INSERT INTO TTHUCHI (ID, NAME, NGAY, DKHACHHANGID, LOAI, LOAIDOITUONG, TENDOITUONG, DIACHI, DNHANVIENID, DLYDOTHUCHIID, DIENGIAI, CHUNGTUGOC, THU, CHI, CHUYENKHOAN, DCUAHANGID, NOTE, STATUS, TIMECREATED, USERCREATEDID)
+                        VALUES (@id, @name, @ngay, @khId, 0, @loaiDoiTuong, @tenDoiTuong, @diaChi, @nhanVienId, @lyDoId, @dienGiai, @chungTuGoc, @thu, 0, @chuyenKhoan, @cuaHangId, @note, 30, @timeCreated, @userCreated)";
                     cmd.Parameters.AddWithValue("@id", newId);
                     cmd.Parameters.AddWithValue("@name", soPhiu);
-                    cmd.Parameters.AddWithValue("@ngay", DateTime.Now);
+                    cmd.Parameters.AddWithValue("@ngay", ngayChungTu);
                     cmd.Parameters.AddWithValue("@khId", khId);
-                    cmd.Parameters.AddWithValue("@thu", body.TryGetProperty("thu", out var pThu) ? pThu.GetDecimal() : 0);
-                    cmd.Parameters.AddWithValue("@chi", body.TryGetProperty("chi", out var pChi) ? pChi.GetDecimal() : 0);
-                    cmd.Parameters.AddWithValue("@laThuCongNo", tabId.ToLower() == "thucongno" ? 1 : 0);
-                    cmd.Parameters.AddWithValue("@dienGiai", body.TryGetProperty("dienGiai", out var pDgiai) ? (object)pDgiai.GetString() : DBNull.Value);
-                    cmd.Parameters.AddWithValue("@chungTuGoc", body.TryGetProperty("chungTuGoc", out var pCtg) ? (object)pCtg.GetString() : DBNull.Value);
-                    cmd.Parameters.AddWithValue("@chuyenKhoan", body.TryGetProperty("chuyenKhoan", out var pCk) && pCk.GetBoolean() ? 1 : 0);
+                    cmd.Parameters.AddWithValue("@loaiDoiTuong", body.TryGetProperty("loaiDoiTuong", out var pLdt) ? pLdt.GetInt32() : 2);
+                    cmd.Parameters.AddWithValue("@tenDoiTuong", body.TryGetProperty("tenDoiTuong", out var pTdt) ? (object)pTdt.GetString() : DBNull.Value);
+                    cmd.Parameters.AddWithValue("@diaChi", body.TryGetProperty("diaChi", out var pDc) ? (object)pDc.GetString() : DBNull.Value);
+                    cmd.Parameters.AddWithValue("@nhanVienId", body.TryGetProperty("dnhanVienId", out var pNvid) ? (object)pNvid.GetString() : DBNull.Value);
+                    cmd.Parameters.AddWithValue("@lyDoId", body.TryGetProperty("dlyDoThuChiId", out var pLdid) ? (object)pLdid.GetString() : DBNull.Value);
+                    cmd.Parameters.AddWithValue("@dienGiai", body.TryGetProperty("dienGiai", out var pPtDg) ? (object)pPtDg.GetString() : DBNull.Value);
+                    cmd.Parameters.AddWithValue("@chungTuGoc", body.TryGetProperty("chungTuGoc", out var pPtCtg) ? (object)pPtCtg.GetString() : DBNull.Value);
+                    cmd.Parameters.AddWithValue("@thu", body.TryGetProperty("thu", out var pPtThu) ? pPtThu.GetDecimal() : 0);
+                    cmd.Parameters.AddWithValue("@chuyenKhoan", body.TryGetProperty("chuyenKhoan", out var pPtCk) && pPtCk.GetBoolean() ? 1 : 0);
+                    cmd.Parameters.AddWithValue("@cuaHangId", body.TryGetProperty("dcuaHangId", out var pChid) ? (object)pChid.GetString() : DBNull.Value);
+                    cmd.Parameters.AddWithValue("@note", note);
+                    cmd.Parameters.AddWithValue("@timeCreated", DateTime.Now);
+                    cmd.Parameters.AddWithValue("@userCreated", _adminUserId);
+                    break;
+
+                case "phieuchi":
+                    cmd.CommandText = @"
+                        INSERT INTO TTHUCHI (ID, NAME, NGAY, DKHACHHANGID, LOAI, LOAIDOITUONG, TENDOITUONG, DIACHI, DNHANVIENID, DLYDOTHUCHIID, DIENGIAI, CHUNGTUGOC, THU, CHI, CHUYENKHOAN, DCUAHANGID, NOTE, STATUS, TIMECREATED, USERCREATEDID)
+                        VALUES (@id, @name, @ngay, @khId, 1, @loaiDoiTuong, @tenDoiTuong, @diaChi, @nhanVienId, @lyDoId, @dienGiai, @chungTuGoc, 0, @chi, @chuyenKhoan, @cuaHangId, @note, 30, @timeCreated, @userCreated)";
+                    cmd.Parameters.AddWithValue("@id", newId);
+                    cmd.Parameters.AddWithValue("@name", soPhiu);
+                    cmd.Parameters.AddWithValue("@ngay", ngayChungTu);
+                    cmd.Parameters.AddWithValue("@khId", khId);
+                    cmd.Parameters.AddWithValue("@loaiDoiTuong", body.TryGetProperty("loaiDoiTuong", out var pLdtC) ? pLdtC.GetInt32() : 2);
+                    cmd.Parameters.AddWithValue("@tenDoiTuong", body.TryGetProperty("tenDoiTuong", out var pTdtC) ? (object)pTdtC.GetString() : DBNull.Value);
+                    cmd.Parameters.AddWithValue("@diaChi", body.TryGetProperty("diaChi", out var pDcC) ? (object)pDcC.GetString() : DBNull.Value);
+                    cmd.Parameters.AddWithValue("@nhanVienId", body.TryGetProperty("dnhanVienId", out var pNvidC) ? (object)pNvidC.GetString() : DBNull.Value);
+                    cmd.Parameters.AddWithValue("@lyDoId", body.TryGetProperty("dlyDoThuChiId", out var pLdidC) ? (object)pLdidC.GetString() : DBNull.Value);
+                    cmd.Parameters.AddWithValue("@dienGiai", body.TryGetProperty("dienGiai", out var pPcDg) ? (object)pPcDg.GetString() : DBNull.Value);
+                    cmd.Parameters.AddWithValue("@chungTuGoc", body.TryGetProperty("chungTuGoc", out var pPcCtg) ? (object)pPcCtg.GetString() : DBNull.Value);
+                    cmd.Parameters.AddWithValue("@chi", body.TryGetProperty("chi", out var pPcChi) ? pPcChi.GetDecimal() : 0);
+                    cmd.Parameters.AddWithValue("@chuyenKhoan", body.TryGetProperty("chuyenKhoan", out var pPcCk) && pPcCk.GetBoolean() ? 1 : 0);
+                    cmd.Parameters.AddWithValue("@cuaHangId", body.TryGetProperty("dcuaHangId", out var pChidC) ? (object)pChidC.GetString() : DBNull.Value);
+                    cmd.Parameters.AddWithValue("@note", note);
+                    cmd.Parameters.AddWithValue("@timeCreated", DateTime.Now);
+                    cmd.Parameters.AddWithValue("@userCreated", _adminUserId);
+                    break;
+
+                case "datcoc":
+                    cmd.CommandText = @"
+                        INSERT INTO TTHUCHI (ID, NAME, NGAY, DKHACHHANGID, TENDOITUONG, DIENTHOAI, DIACHI, DLOAITHEID, GIATRIGOI, GIAMGIA, TIENGIAM, THU, CHI, DLYDOTHUCHIID, CHUYENKHOAN, NOTE, STATUS, TIMECREATED, USERCREATEDID)
+                        VALUES (@id, @name, @ngay, @khId, @tenDoiTuong, @dienThoai, @diaChi, @loaiTheId, @giaTriGoi, @giamGia, @tienGiam, @thu, 0, @lyDoId, @chuyenKhoan, @note, 30, @timeCreated, @userCreated)";
+                    cmd.Parameters.AddWithValue("@id", newId);
+                    cmd.Parameters.AddWithValue("@name", soPhiu);
+                    cmd.Parameters.AddWithValue("@ngay", ngayChungTu);
+                    cmd.Parameters.AddWithValue("@khId", khId);
+                    cmd.Parameters.AddWithValue("@tenDoiTuong", body.TryGetProperty("tenDoiTuong", out var pDcTdt) ? (object)pDcTdt.GetString() : DBNull.Value);
+                    cmd.Parameters.AddWithValue("@dienThoai", body.TryGetProperty("dienThoai", out var pDcDt) ? (object)pDcDt.GetString() : DBNull.Value);
+                    cmd.Parameters.AddWithValue("@diaChi", body.TryGetProperty("diaChi", out var pDcDc) ? (object)pDcDc.GetString() : DBNull.Value);
+                    cmd.Parameters.AddWithValue("@loaiTheId", body.TryGetProperty("dloaiTheId", out var pDcLt) ? (object)pDcLt.GetString() : DBNull.Value);
+                    cmd.Parameters.AddWithValue("@giaTriGoi", body.TryGetProperty("giaTriGoi", out var pDcg) ? pDcg.GetDecimal() : 0);
+                    cmd.Parameters.AddWithValue("@giamGia", body.TryGetProperty("giamGia", out var pDcGg) ? pDcGg.GetDecimal() : 0);
+                    cmd.Parameters.AddWithValue("@tienGiam", body.TryGetProperty("tienGiam", out var pDcTg) ? pDcTg.GetDecimal() : 0);
+                    cmd.Parameters.AddWithValue("@thu", body.TryGetProperty("thu", out var pDcThu) ? pDcThu.GetDecimal() : 0);
+                    cmd.Parameters.AddWithValue("@lyDoId", body.TryGetProperty("dlyDoThuChiId", out var pDcLyDo) ? (object)pDcLyDo.GetString() : DBNull.Value);
+                    cmd.Parameters.AddWithValue("@chuyenKhoan", body.TryGetProperty("chuyenKhoan", out var pDcCk) && pDcCk.GetBoolean() ? 1 : 0);
+                    cmd.Parameters.AddWithValue("@note", note);
+                    cmd.Parameters.AddWithValue("@timeCreated", DateTime.Now);
+                    cmd.Parameters.AddWithValue("@userCreated", _adminUserId);
+                    break;
+
+                case "thucongno":
+                    cmd.CommandText = @"
+                        INSERT INTO TTHUCHI (ID, NAME, NGAY, DKHACHHANGID, LOAI, LAPHIEUTHUCONGNO, TENDOITUONG, DIACHI, DNHANVIENID, DLYDOTHUCHIID, DIENGIAI, CHUNGTUGOC, THU, CHI, CHUYENKHOAN, NOTE, STATUS, TIMECREATED, USERCREATEDID)
+                        VALUES (@id, @name, @ngay, @khId, 0, 1, @tenDoiTuong, @diaChi, @nhanVienId, @lyDoId, @dienGiai, @chungTuGoc, @thu, 0, @chuyenKhoan, @note, 30, @timeCreated, @userCreated)";
+                    cmd.Parameters.AddWithValue("@id", newId);
+                    cmd.Parameters.AddWithValue("@name", soPhiu);
+                    cmd.Parameters.AddWithValue("@ngay", ngayChungTu);
+                    cmd.Parameters.AddWithValue("@khId", khId);
+                    cmd.Parameters.AddWithValue("@tenDoiTuong", body.TryGetProperty("tenDoiTuong", out var pCnTdt) ? (object)pCnTdt.GetString() : DBNull.Value);
+                    cmd.Parameters.AddWithValue("@diaChi", body.TryGetProperty("diaChi", out var pCnDc) ? (object)pCnDc.GetString() : DBNull.Value);
+                    cmd.Parameters.AddWithValue("@nhanVienId", body.TryGetProperty("dnhanVienId", out var pCnNv) ? (object)pCnNv.GetString() : DBNull.Value);
+                    cmd.Parameters.AddWithValue("@lyDoId", body.TryGetProperty("dlyDoThuChiId", out var pCnLyDo) ? (object)pCnLyDo.GetString() : DBNull.Value);
+                    cmd.Parameters.AddWithValue("@dienGiai", body.TryGetProperty("dienGiai", out var pCnDg) ? (object)pCnDg.GetString() : DBNull.Value);
+                    cmd.Parameters.AddWithValue("@chungTuGoc", body.TryGetProperty("chungTuGoc", out var pCnCtg) ? (object)pCnCtg.GetString() : DBNull.Value);
+                    cmd.Parameters.AddWithValue("@thu", body.TryGetProperty("thu", out var pCnThu) ? pCnThu.GetDecimal() : 0);
+                    cmd.Parameters.AddWithValue("@chuyenKhoan", body.TryGetProperty("chuyenKhoan", out var pCnCk) && pCnCk.GetBoolean() ? 1 : 0);
                     cmd.Parameters.AddWithValue("@note", note);
                     cmd.Parameters.AddWithValue("@timeCreated", DateTime.Now);
                     cmd.Parameters.AddWithValue("@userCreated", _adminUserId);
@@ -1128,7 +1221,7 @@ public class KhachHangController : ControllerBase
                         VALUES (@id, @name, @ngay, @gio, @khId, @note, 1, @timeCreated, @userCreated)";
                     cmd.Parameters.AddWithValue("@id", newId);
                     cmd.Parameters.AddWithValue("@name", soPhiu);
-                    cmd.Parameters.AddWithValue("@ngay", DateTime.Now);
+                    cmd.Parameters.AddWithValue("@ngay", ngayChungTu);
                     cmd.Parameters.AddWithValue("@gio", DateTime.Now.ToString("HH:mm:ss"));
                     cmd.Parameters.AddWithValue("@khId", khId);
                     cmd.Parameters.AddWithValue("@note", note);
@@ -1297,6 +1390,54 @@ public class KhachHangController : ControllerBase
                 }
             }
 
+            var lyDoThuChi = new List<object>();
+            using (var cmd = conn.CreateCommand())
+            {
+                cmd.CommandText = "SELECT ID, NAME, LALYDOTHU FROM DLYDOTHUCHI WHERE (STATUS <> -1 OR STATUS IS NULL) ORDER BY SORTORDER, NAME";
+                using var r = cmd.ExecuteReader();
+                while (r.Read())
+                {
+                    int ldt = r["LALYDOTHU"] is not DBNull ? Convert.ToInt32(r["LALYDOTHU"]) : 0;
+                    lyDoThuChi.Add(new
+                    {
+                        id = r["ID"]?.ToString()?.Trim(),
+                        name = r["NAME"]?.ToString()?.Trim() ?? "",
+                        laThu = ldt == 30,
+                        laChi = ldt == 0
+                    });
+                }
+            }
+
+            var khoHang = new List<object>();
+            using (var cmd = conn.CreateCommand())
+            {
+                cmd.CommandText = "SELECT ID, NAME FROM DKHOHANG WHERE (STATUS <> -1 OR STATUS IS NULL) ORDER BY SORTORDER, NAME";
+                using var r = cmd.ExecuteReader();
+                while (r.Read())
+                {
+                    khoHang.Add(new
+                    {
+                        id = r["ID"]?.ToString()?.Trim(),
+                        name = r["NAME"]?.ToString()?.Trim() ?? ""
+                    });
+                }
+            }
+
+            var cuaHang = new List<object>();
+            using (var cmd = conn.CreateCommand())
+            {
+                cmd.CommandText = "SELECT ID, NAME FROM DCUAHANG WHERE (STATUS <> -1 OR STATUS IS NULL) ORDER BY SORTORDER, NAME";
+                using var r = cmd.ExecuteReader();
+                while (r.Read())
+                {
+                    cuaHang.Add(new
+                    {
+                        id = r["ID"]?.ToString()?.Trim(),
+                        name = r["NAME"]?.ToString()?.Trim() ?? ""
+                    });
+                }
+            }
+
             return Ok(new
             {
                 success = true,
@@ -1307,7 +1448,10 @@ public class KhachHangController : ControllerBase
                     caTap,
                     nhanVien,
                     trangThai,
-                    tinhThanh
+                    tinhThanh,
+                    lyDoThuChi,
+                    khoHang,
+                    cuaHang
                 }
             });
         }
