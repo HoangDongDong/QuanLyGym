@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { khachHangService } from '../services/khachHangService';
 
 export default function SubtabAeModal({
   show,
@@ -57,6 +58,15 @@ export default function SubtabAeModal({
         nhanVienId: customer?.nhanVienId || '',
         nhanVien: customer?.nhanVien || 'Administrator'
       };
+
+      // Tự động lấy số phiếu chuẩn theo cấu hình hệ thống (NOTEMPLATE)
+      khachHangService.generateSlipNumber(tabId).then(res => {
+        if (res && res.success && res.soPhiu) {
+          setFormData(prev => ({ ...prev, soPhiu: res.soPhiu }));
+        }
+      }).catch(err => {
+        console.error('Lỗi lấy số phiếu tự động:', err);
+      });
 
       if (tabId === 'datHang' || tabId === 'baoGia') {
         setFormData({

@@ -163,6 +163,22 @@ export const khachHangService = {
   updateSystemConfig: async (configs) => {
     const response = await api.post('/khachhang/system-config', { configs });
     return response.data;
+  },
+
+  // 8. CẤU HÌNH CÁCH SINH SỐ PHIẾU (NOTEMPLATE)
+  getSlipConfigs: async () => {
+    const response = await api.get('/khachhang/slip-configs');
+    return response.data;
+  },
+
+  updateSlipConfigs: async (items) => {
+    const response = await api.post('/khachhang/slip-configs', { items });
+    return response.data;
+  },
+
+  generateSlipNumber: async (tabId) => {
+    const response = await api.get(`/khachhang/generate-slip-number?tabId=${encodeURIComponent(tabId)}`);
+    return response.data;
   }
 };
 

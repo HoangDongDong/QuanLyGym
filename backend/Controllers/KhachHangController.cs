@@ -944,6 +944,27 @@ public class KhachHangController : ControllerBase
             string soPhiu = body.TryGetProperty("soPhiu", out var pSp) ? pSp.GetString() ?? "" : "";
             string note = body.TryGetProperty("note", out var pNote) ? pNote.GetString() ?? "" : "";
 
+            if (string.IsNullOrWhiteSpace(soPhiu))
+            {
+                string norm = tabId.Trim().ToLower().Replace("_", "").Replace("-", "");
+                var def = SlipDefinitions.FirstOrDefault(d => 
+                    string.Equals(d.Key, norm, StringComparison.OrdinalIgnoreCase) ||
+                    string.Equals(d.TableName, norm, StringComparison.OrdinalIgnoreCase));
+                if (def != null)
+                {
+                    string template = "";
+                    using (var tCmd = conn.CreateCommand())
+                    {
+                        tCmd.CommandText = $"SELECT NOTEMPLATE FROM {def.Source} WHERE ID = @id";
+                        tCmd.Parameters.AddWithValue("@id", def.SourceId);
+                        var tplObj = tCmd.ExecuteScalar();
+                        if (tplObj != null && tplObj != DBNull.Value)
+                            template = tplObj.ToString()?.Trim() ?? "";
+                    }
+                    soPhiu = GenerateSlipNumberCore(conn, template, def.TableName, def.ColumnName);
+                }
+            }
+
             using var cmd = conn.CreateCommand();
 
             switch (tabId.ToLower())
@@ -2176,6 +2197,241 @@ public class KhachHangController : ControllerBase
             return StatusCode(500, new { success = false, message = "Lỗi lưu cấu hình hệ thống: " + ex.Message });
         }
     }
+
+    private static readonly List<SlipConfigDef> SlipDefinitions = new()
+    {
+        new() { Key = "khachhang", Name = "Khách hàng", Source = "STABLEDESC", SourceId = "5fcc571a-662d-4953-a83f-6004c732f439", TableName = "DKHACHHANG", ColumnName = "MAKHACH" },
+        new() { Key = "baogia", Name = "Báo giá", Source = "STABLEDESC", SourceId = "b2d3ffd4-9037-4dd1-b255-ec16dd122e66", TableName = "TBAOGIA", ColumnName = "NAME" },
+        new() { Key = "donhang", Name = "Đơn hàng", Source = "SFORM", SourceId = "f3f7bb77-f4ba-4111-9066-014f52be79a0", TableName = "TDONHANG", ColumnName = "NAME" },
+        new() { Key = "phieunhap", Name = "Phiếu nhập kho", Source = "SFORM", SourceId = "24399cd6-11fa-4eb8-98bc-9e23e66aab14", TableName = "TDONHANG", ColumnName = "NAME" },
+        new() { Key = "phieuxuat", Name = "Phiếu xuất kho", Source = "SFORM", SourceId = "1f13b546-6197-4d51-9af1-b45fff263df0", TableName = "TDONHANG", ColumnName = "NAME" },
+        new() { Key = "phieuchuyenkho", Name = "Phiếu chuyển kho", Source = "SFORM", SourceId = "cc92bb29-b8a5-41c1-976a-174ca77fb542", TableName = "TDONHANG", ColumnName = "NAME" },
+        new() { Key = "phieukiemke", Name = "Phiếu kiểm kê", Source = "SFORM", SourceId = "93d9d7d4-dc0d-4fb4-a3e8-ee5d4f808346", TableName = "TDONHANG", ColumnName = "NAME" },
+        new() { Key = "dathang", Name = "Đặt hàng", Source = "STABLEDESC", SourceId = "780a9daf-b2b7-417c-8ff3-21700fab6990", TableName = "TDATHANG", ColumnName = "NAME" },
+        new() { Key = "phieuthu", Name = "Phiếu thu", Source = "SFORM", SourceId = "6a447203-3a1b-4622-b248-b6a84a29d3e3", TableName = "TTHUCHI", ColumnName = "NAME" },
+        new() { Key = "phieuchi", Name = "Phiếu chi", Source = "SFORM", SourceId = "9f094553-7b79-4427-9acd-dedf3c2a0eda", TableName = "TTHUCHI", ColumnName = "NAME" },
+        new() { Key = "thucongno", Name = "Phiếu thu công nợ", Source = "SFORM", SourceId = "f34aa294-898a-4674-8a92-54d07994d159", TableName = "TTHUCHI", ColumnName = "NAME" },
+        new() { Key = "datcoc", Name = "Đặt cọc", Source = "SFORM", SourceId = "18b008ef-9054-4908-bb3e-69aff123eebf", TableName = "TTHUCHI", ColumnName = "NAME" },
+        new() { Key = "bangluong", Name = "Bảng lương", Source = "STABLEDESC", SourceId = "bd89ba4e-9d23-4b22-9541-0e4385fe28f8", TableName = "TBANGLUONG", ColumnName = "NAME" },
+        new() { Key = "giahanthe", Name = "Gia hạn thẻ", Source = "SFORM", SourceId = "522dea56-9af0-4f94-9f0e-7107b1f9702e", TableName = "TGIAHANTHE", ColumnName = "NAME" },
+        new() { Key = "baoluuthe", Name = "Bảo lưu thẻ", Source = "SFORM", SourceId = "1ad99fb9-ba15-451c-9a36-d62dbb95fda0", TableName = "TGIAHANTHE", ColumnName = "NAME" },
+        new() { Key = "doiloaithe", Name = "Đổi loại thẻ", Source = "SFORM", SourceId = "beda35b4-e4bc-479b-b892-1b35e00de712", TableName = "TGIAHANTHE", ColumnName = "NAME" },
+        new() { Key = "tanggiamdiem", Name = "Tăng giảm điểm", Source = "STABLEDESC", SourceId = "34ec0bca-7b21-4d67-9b92-b1f7800139c5", TableName = "TTANGGIAMDIEM", ColumnName = "NAME" }
+    };
+
+    private string GenerateSlipNumberCore(FbConnection conn, string template, string tableName, string colName = "NAME", DateTime? date = null)
+    {
+        if (string.IsNullOrWhiteSpace(template)) return "";
+        var d = date ?? DateTime.Now;
+
+        string res = template;
+        res = res.Replace("(yyyy)", d.ToString("yyyy"));
+        res = res.Replace("(yy)", d.ToString("yy"));
+        res = res.Replace("(MM)", d.ToString("MM"));
+        res = res.Replace("(dd)", d.ToString("dd"));
+
+        var match = System.Text.RegularExpressions.Regex.Match(res, @"\(\*+\)");
+        if (!match.Success) return res;
+
+        int digitCount = match.Value.Length - 2;
+        string prefix = res.Substring(0, match.Index);
+        string suffix = res.Substring(match.Index + match.Length);
+
+        long maxNum = 0;
+        try
+        {
+            using var cmd = conn.CreateCommand();
+            cmd.CommandText = $"SELECT {colName} FROM {tableName} WHERE {colName} LIKE @pattern";
+            cmd.Parameters.AddWithValue("@pattern", $"{prefix}%{suffix}");
+
+            using var reader = cmd.ExecuteReader();
+            while (reader.Read())
+            {
+                if (reader.IsDBNull(0)) continue;
+                string val = reader.GetString(0).Trim();
+                if (val.StartsWith(prefix) && (string.IsNullOrEmpty(suffix) || val.EndsWith(suffix)))
+                {
+                    int len = val.Length - prefix.Length - suffix.Length;
+                    if (len > 0)
+                    {
+                        string numPart = val.Substring(prefix.Length, len);
+                        if (long.TryParse(numPart, out long parsed))
+                        {
+                            if (parsed > maxNum) maxNum = parsed;
+                        }
+                    }
+                }
+            }
+        }
+        catch
+        {
+            // Table or column may not exist or error
+        }
+
+        long nextNum = maxNum + 1;
+        string padded = nextNum.ToString().PadLeft(digitCount, '0');
+        return $"{prefix}{padded}{suffix}";
+    }
+
+    [HttpGet("slip-configs")]
+    public IActionResult GetSlipConfigs()
+    {
+        try
+        {
+            using var conn = new FbConnection(GetConnStr());
+            conn.Open();
+
+            var result = new List<SlipConfigDef>();
+
+            foreach (var def in SlipDefinitions)
+            {
+                var item = new SlipConfigDef
+                {
+                    Key = def.Key,
+                    Name = def.Name,
+                    Source = def.Source,
+                    SourceId = def.SourceId,
+                    TableName = def.TableName,
+                    ColumnName = def.ColumnName
+                };
+
+                try
+                {
+                    using var cmd = conn.CreateCommand();
+                    cmd.CommandText = $"SELECT NOTEMPLATE FROM {def.Source} WHERE ID = @id";
+                    cmd.Parameters.AddWithValue("@id", def.SourceId);
+                    var tplObj = cmd.ExecuteScalar();
+                    item.Template = tplObj != null && tplObj != DBNull.Value ? tplObj.ToString()?.Trim() ?? "" : "";
+                }
+                catch
+                {
+                    item.Template = "";
+                }
+
+                if (!string.IsNullOrEmpty(item.Template))
+                {
+                    item.Sample = GenerateSlipNumberCore(conn, item.Template, def.TableName, def.ColumnName);
+                }
+                else
+                {
+                    item.Sample = "";
+                }
+
+                result.Add(item);
+            }
+
+            return Ok(new { success = true, items = result });
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(500, new { success = false, message = "Lỗi tải cấu hình số phiếu: " + ex.Message });
+        }
+    }
+
+    [HttpPost("slip-configs")]
+    public IActionResult UpdateSlipConfigs([FromBody] UpdateSlipConfigsRequest req)
+    {
+        try
+        {
+            using var conn = new FbConnection(GetConnStr());
+            conn.Open();
+
+            foreach (var item in req.Items)
+            {
+                var def = SlipDefinitions.FirstOrDefault(d => 
+                    string.Equals(d.Key, item.Key, StringComparison.OrdinalIgnoreCase) ||
+                    (!string.IsNullOrEmpty(item.SourceId) && string.Equals(d.SourceId, item.SourceId, StringComparison.OrdinalIgnoreCase)));
+
+                if (def == null) continue;
+
+                using var cmd = conn.CreateCommand();
+                cmd.CommandText = $@"
+                    UPDATE {def.Source} 
+                    SET NOTEMPLATE = @tpl,
+                        TIMEMODIFIED = CURRENT_TIMESTAMP,
+                        USERMODIFIEDID = '4f1466a0-0756-4ba9-afa8-053b96ca7569'
+                    WHERE ID = @id";
+                cmd.Parameters.AddWithValue("@tpl", item.Template ?? "");
+                cmd.Parameters.AddWithValue("@id", def.SourceId);
+                cmd.ExecuteNonQuery();
+            }
+
+            return Ok(new { success = true, message = "Cập nhật cấu hình số phiếu thành công!" });
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(500, new { success = false, message = "Lỗi lưu cấu hình số phiếu: " + ex.Message });
+        }
+    }
+
+    [HttpGet("generate-slip-number")]
+    public IActionResult GenerateSlipNumber([FromQuery] string tabId)
+    {
+        try
+        {
+            if (string.IsNullOrWhiteSpace(tabId))
+                return BadRequest(new { success = false, message = "tabId không hợp lệ" });
+
+            // Normalize tabId: e.g. "baoGia" -> "baogia", "datHang" -> "dathang", "giaHanThe" -> "giahanthe"
+            string normalized = tabId.Trim().ToLower().Replace("_", "").Replace("-", "");
+
+            var def = SlipDefinitions.FirstOrDefault(d => 
+                string.Equals(d.Key, normalized, StringComparison.OrdinalIgnoreCase) ||
+                string.Equals(d.TableName, normalized, StringComparison.OrdinalIgnoreCase));
+
+            if (def == null)
+            {
+                // Fallback prefix
+                return Ok(new { success = true, tabId, soPhiu = "", template = "" });
+            }
+
+            using var conn = new FbConnection(GetConnStr());
+            conn.Open();
+
+            string template = "";
+            using (var cmd = conn.CreateCommand())
+            {
+                cmd.CommandText = $"SELECT NOTEMPLATE FROM {def.Source} WHERE ID = @id";
+                cmd.Parameters.AddWithValue("@id", def.SourceId);
+                var tplObj = cmd.ExecuteScalar();
+                if (tplObj != null && tplObj != DBNull.Value)
+                    template = tplObj.ToString()?.Trim() ?? "";
+            }
+
+            string soPhiu = GenerateSlipNumberCore(conn, template, def.TableName, def.ColumnName);
+
+            return Ok(new { success = true, tabId, template, soPhiu });
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(500, new { success = false, message = "Lỗi sinh số phiếu: " + ex.Message });
+        }
+    }
+}
+
+public class SlipConfigDef
+{
+    public string Key { get; set; } = "";
+    public string Name { get; set; } = "";
+    public string Source { get; set; } = "SFORM";
+    public string SourceId { get; set; } = "";
+    public string TableName { get; set; } = "";
+    public string ColumnName { get; set; } = "NAME";
+    public string? Template { get; set; }
+    public string? Sample { get; set; }
+}
+
+public class UpdateSlipConfigsRequest
+{
+    public List<UpdateSlipConfigItem> Items { get; set; } = new();
+}
+
+public class UpdateSlipConfigItem
+{
+    public string Key { get; set; } = "";
+    public string? Source { get; set; }
+    public string? SourceId { get; set; }
+    public string Template { get; set; } = "";
 }
 
 public class UpdateSystemConfigRequest
