@@ -6,7 +6,7 @@
 .cust-mgmt-container {
   display: flex;
   flex-direction: column;
-  height: calc(100vh - 48px);
+  height: calc(100vh - 64px);
   width: 100%;
   background: #dfe7f0;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -85,15 +85,14 @@
   position: relative;
 }
 
-/* LEFT PANE: TRẠNG THÁI TREE */
+/* LEFT PANE: TRẠNG THÁI TREE (KHUNG VÀNG - CO DÃN ĐƯỢC) */
 .cust-left-pane {
-  width: 185px;
-  min-width: 160px;
   background: #f7fafc;
-  border-right: 1px solid #b6c7db;
   display: flex;
   flex-direction: column;
   flex-shrink: 0;
+  overflow: hidden;
+  position: relative;
 }
 
 .cust-pane-header {
@@ -516,17 +515,104 @@
   color: #fecaca;
 }
 
-/* 3. BOTTOM DETAIL PANEL ("PHÂN TÍCH KĨ PHẦN ĐÁY") */
+/* 3. BOTTOM DETAIL PANEL (KHUNG TÍM PHẦN ĐÁY - CO DÃN ĐƯỢC) */
 .cust-bottom-pane {
-  height: 200px;
-  min-height: 160px;
-  max-height: 380px;
   background: #f7fafc;
   display: flex;
   flex-direction: column;
-  border-top: 2px solid #3b82f6;
   position: relative;
   flex-shrink: 0;
+}
+
+/* ===================================================================
+   SPLITTERS & RESIZABLE PANELS (CO DÃN THEO KHUNG KẺ CỦA NGƯỜI DÙNG)
+   - Vertical Splitter: Giữa Khung Vàng (Cây bên trái) và Khung Tím (Bảng khách hàng)
+   - Horizontal Splitter: Giữa Bảng khách hàng (trên) và Chi tiết các Tab (dưới)
+   =================================================================== */
+.cust-vertical-splitter {
+  width: 6px;
+  background: #d1dbe7;
+  border-left: 1px solid #b2c5d9;
+  border-right: 1px solid #b2c5d9;
+  cursor: col-resize;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  user-select: none;
+  z-index: 20;
+  transition: background 0.15s ease, border-color 0.15s ease;
+}
+
+.cust-vertical-splitter:hover,
+.cust-vertical-splitter.dragging {
+  background: #0284c7;
+  border-color: #0369a1;
+  box-shadow: 0 0 6px rgba(2, 132, 199, 0.45);
+}
+
+.splitter-grip-vertical {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  align-items: center;
+  pointer-events: none;
+}
+
+.splitter-grip-vertical span {
+  display: block;
+  width: 2px;
+  height: 2px;
+  border-radius: 50%;
+  background: #64748b;
+}
+
+.cust-vertical-splitter:hover .splitter-grip-vertical span,
+.cust-vertical-splitter.dragging .splitter-grip-vertical span {
+  background: #ffffff;
+}
+
+.cust-horizontal-splitter {
+  height: 6px;
+  background: #d1dbe7;
+  border-top: 1px solid #b2c5d9;
+  border-bottom: 1px solid #b2c5d9;
+  cursor: row-resize;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  user-select: none;
+  z-index: 20;
+  transition: background 0.15s ease, border-color 0.15s ease;
+}
+
+.cust-horizontal-splitter:hover,
+.cust-horizontal-splitter.dragging {
+  background: #0284c7;
+  border-color: #0369a1;
+  box-shadow: 0 0 6px rgba(2, 132, 199, 0.45);
+}
+
+.splitter-grip-horizontal {
+  display: flex;
+  flex-direction: row;
+  gap: 3px;
+  align-items: center;
+  pointer-events: none;
+}
+
+.splitter-grip-horizontal span {
+  display: block;
+  width: 2px;
+  height: 2px;
+  border-radius: 50%;
+  background: #64748b;
+}
+
+.cust-horizontal-splitter:hover .splitter-grip-horizontal span,
+.cust-horizontal-splitter.dragging .splitter-grip-horizontal span {
+  background: #ffffff;
 }
 
 .cust-bottom-tabs-header {

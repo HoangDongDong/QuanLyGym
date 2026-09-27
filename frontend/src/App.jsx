@@ -77,6 +77,40 @@ export default function App() {
   const [isMobileSidebarOpen, setIsMobileSidebarOpen] = useState(false);
   const [timeFilter, setTimeFilter] = useState('Nov');
 
+  // Co dãn độ rộng thanh Sidebar điều hướng (Hộp Đỏ theo ảnh người dùng)
+  const [sidebarWidth, setSidebarWidth] = useState(() => {
+    const saved = localStorage.getItem('admindek_sidebar_width');
+    return saved ? Math.max(160, Math.min(420, parseInt(saved, 10))) : 240;
+  });
+  const [isDraggingSidebarSplitter, setIsDraggingSidebarSplitter] = useState(false);
+
+  const handleSidebarSplitterPointerDown = (e) => {
+    e.preventDefault();
+    if (isSidebarCollapsed) return;
+    setIsDraggingSidebarSplitter(true);
+    const startX = e.clientX;
+    const startWidth = sidebarWidth;
+
+    const handlePointerMove = (moveEvent) => {
+      const deltaX = moveEvent.clientX - startX;
+      const newWidth = Math.max(160, Math.min(420, startWidth + deltaX));
+      setSidebarWidth(newWidth);
+    };
+
+    const handlePointerUp = () => {
+      setIsDraggingSidebarSplitter(false);
+      window.removeEventListener('pointermove', handlePointerMove);
+      window.removeEventListener('pointerup', handlePointerUp);
+      setSidebarWidth((w) => {
+        localStorage.setItem('admindek_sidebar_width', String(w));
+        return w;
+      });
+    };
+
+    window.addEventListener('pointermove', handlePointerMove);
+    window.addEventListener('pointerup', handlePointerUp);
+  };
+
   // Submenu toggle states - Mở sẵn nhóm tương ứng với URL hiện tại
   const [openSubmenu, setOpenSubmenu] = useState({
     hoatDong: initialRoute.submenu === 'hoatDong' || !initialRoute.submenu,
@@ -250,7 +284,10 @@ export default function App() {
       )}
 
       {/* ================= 1. LEFT SIDEBAR (ADMINDEK STYLE) ================= */}
-      <aside className={`admindek-sidebar ${isSidebarCollapsed ? 'collapsed' : ''} ${isMobileSidebarOpen ? 'mobile-open' : ''}`}>
+      <aside
+        className={`admindek-sidebar ${isSidebarCollapsed ? 'collapsed' : ''} ${isMobileSidebarOpen ? 'mobile-open' : ''} ${isDraggingSidebarSplitter ? 'resizing' : ''}`}
+        style={!isSidebarCollapsed ? { width: `${sidebarWidth}px`, minWidth: `${sidebarWidth}px`, transition: isDraggingSidebarSplitter ? 'none' : undefined } : undefined}
+      >
         {/* Brand Header */}
         <div className="sidebar-header">
           <div className="sidebar-brand" onClick={() => navigateTo('dashboard', 'Dashboard', 'Dashboard')}>
@@ -755,6 +792,14 @@ export default function App() {
             )}
           </div>
         </div>
+
+        {!isSidebarCollapsed && (
+          <div
+            className={`sidebar-splitter ${isDraggingSidebarSplitter ? 'dragging' : ''}`}
+            onPointerDown={handleSidebarSplitterPointerDown}
+            title="Kéo sang trái/phải để co dãn thanh menu điều hướng (Hộp Đỏ)"
+          />
+        )}
       </aside>
 
       {/* ================= 2. MAIN CONTENT AREA ================= */}

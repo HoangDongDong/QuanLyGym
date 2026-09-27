@@ -133,6 +133,90 @@ export default function CustomerManagementView({ onSwitchToAccessControl, showNo
     customerData: null
   });
 
+  // --- RESIZABLE PANELS (CO DÃN KHUNG HÌNH THEO YÊU CẦU NGƯỜI DÙNG) ---
+  // 1. Khung Vàng (Cây bên trái - cust-left-pane)
+  const [treePaneWidth, setTreePaneWidth] = useState(() => {
+    const saved = localStorage.getItem('cust_tree_pane_width');
+    return saved ? Math.max(130, Math.min(500, parseInt(saved, 10))) : 200;
+  });
+  const [isDraggingTreeSplitter, setIsDraggingTreeSplitter] = useState(false);
+
+  const handleTreeSplitterPointerDown = (e) => {
+    e.preventDefault();
+    setIsDraggingTreeSplitter(true);
+    const startX = e.clientX;
+    const startWidth = treePaneWidth;
+
+    const handlePointerMove = (moveEvent) => {
+      const deltaX = moveEvent.clientX - startX;
+      const newWidth = Math.max(120, Math.min(550, startWidth + deltaX));
+      setTreePaneWidth(newWidth);
+    };
+
+    const handlePointerUp = () => {
+      setIsDraggingTreeSplitter(false);
+      window.removeEventListener('pointermove', handlePointerMove);
+      window.removeEventListener('pointerup', handlePointerUp);
+      setTreePaneWidth((w) => {
+        localStorage.setItem('cust_tree_pane_width', String(w));
+        return w;
+      });
+    };
+
+    window.addEventListener('pointermove', handlePointerMove);
+    window.addEventListener('pointerup', handlePointerUp);
+  };
+
+  const handleTreeSplitterDoubleClick = () => {
+    setTreePaneWidth((prev) => {
+      const next = prev < 150 ? 200 : 130;
+      localStorage.setItem('cust_tree_pane_width', String(next));
+      return next;
+    });
+  };
+
+  // 2. Chiều cao phần đáy (cust-bottom-pane bên trong Khung Tím)
+  const [bottomPaneHeight, setBottomPaneHeight] = useState(() => {
+    const saved = localStorage.getItem('cust_bottom_pane_height');
+    return saved ? Math.max(38, Math.min(600, parseInt(saved, 10))) : 220;
+  });
+  const [isDraggingBottomSplitter, setIsDraggingBottomSplitter] = useState(false);
+
+  const handleBottomSplitterPointerDown = (e) => {
+    e.preventDefault();
+    setIsDraggingBottomSplitter(true);
+    const startY = e.clientY;
+    const startHeight = bottomPaneHeight;
+
+    const handlePointerMove = (moveEvent) => {
+      const deltaY = moveEvent.clientY - startY;
+      const maxH = Math.max(300, window.innerHeight - 250);
+      const newHeight = Math.max(38, Math.min(maxH, startHeight - deltaY));
+      setBottomPaneHeight(newHeight);
+    };
+
+    const handlePointerUp = () => {
+      setIsDraggingBottomSplitter(false);
+      window.removeEventListener('pointermove', handlePointerMove);
+      window.removeEventListener('pointerup', handlePointerUp);
+      setBottomPaneHeight((h) => {
+        localStorage.setItem('cust_bottom_pane_height', String(h));
+        return h;
+      });
+    };
+
+    window.addEventListener('pointermove', handlePointerMove);
+    window.addEventListener('pointerup', handlePointerUp);
+  };
+
+  const handleBottomSplitterDoubleClick = () => {
+    setBottomPaneHeight((prev) => {
+      const next = prev <= 42 ? 220 : 38;
+      localStorage.setItem('cust_bottom_pane_height', String(next));
+      return next;
+    });
+  };
+
 
   // Tải danh sách khách hàng & số lượng cây trạng thái / nhóm
   const loadCustomersAndCounts = async (
@@ -1079,8 +1163,15 @@ export default function CustomerManagementView({ onSwitchToAccessControl, showNo
     <div className="cust-mgmt-container">
       {/* MAIN SPLIT WORKSPACE */}
       <div className="cust-split-body">
-        {/* LEFT SIDEBAR: CÂY DANH MỤC (HỖ TRỢ CẢ TRẠNG THÁI THẺ & NHÓM KHÁCH HÀNG NHƯ TREEGRIDMG) */}
-        <div className="cust-left-pane">
+        {/* LEFT SIDEBAR: CÂY DANH MỤC (HỖ TRỢ CẢ TRẠNG THÁI THẺ & NHÓM KHÁCH HÀNG NHƯ TREEGRIDMG - KHUNG VÀNG) */}
+        <div
+          className="cust-left-pane"
+          style={{
+            width: `${treePaneWidth}px`,
+            minWidth: `${treePaneWidth}px`,
+            transition: isDraggingTreeSplitter ? 'none' : undefined
+          }}
+        >
           {/* TAB CHUYỂN ĐỔI CHẾ ĐỘ CÂY (DEVEXPRESS XTRATABCONTROL / TREEGRIDMG) */}
           <div className="cust-pane-tabs">
             <div
@@ -1217,8 +1308,21 @@ export default function CustomerManagementView({ onSwitchToAccessControl, showNo
           </div>
         </div>
 
+        {/* VERTICAL SPLITTER GIỮA KHUNG VÀNG (CÂY TRÁI) VÀ KHUNG TÍM (NỘI DUNG PHẢI) */}
+        <div
+          className={`cust-vertical-splitter ${isDraggingTreeSplitter ? 'dragging' : ''}`}
+          onPointerDown={handleTreeSplitterPointerDown}
+          onDoubleClick={handleTreeSplitterDoubleClick}
+          title="Kéo sang trái/phải để co dãn Cây danh mục (Khung Vàng) • Nhấp đúp để chuyển đổi nhanh"
+        >
+          <div className="splitter-grip-vertical">
+            <span></span>
+            <span></span>
+            <span></span>
+          </div>
+        </div>
 
-        {/* RIGHT AREA: MASTER GRID + BOTTOM DETAIL TABS */}
+        {/* RIGHT AREA: MASTER GRID + BOTTOM DETAIL TABS (KHUNG TÍM) */}
         <div className="cust-right-pane">
           <div className="cust-main-header">
             <span>Khách hàng</span>
@@ -1520,8 +1624,30 @@ export default function CustomerManagementView({ onSwitchToAccessControl, showNo
             </table>
           </div>
 
-                    {/* 3. BOTTOM DETAIL PANEL ("PHÂN TÍCH KĨ PHẦN ĐÁY") */}
-          <div className="cust-bottom-pane">
+          {/* HORIZONTAL SPLITTER GIỮA BẢNG KHÁCH HÀNG (TRÊN) VÀ CHI TIẾT TABS (DƯỚI) */}
+          <div
+            className={`cust-horizontal-splitter ${isDraggingBottomSplitter ? 'dragging' : ''}`}
+            onPointerDown={handleBottomSplitterPointerDown}
+            onDoubleClick={handleBottomSplitterDoubleClick}
+            title="Kéo lên/xuống để co dãn Bảng khách hàng & Chi tiết phần đáy • Nhấp đúp để thu gọn/mở rộng"
+          >
+            <div className="splitter-grip-horizontal">
+              <span></span>
+              <span></span>
+              <span></span>
+            </div>
+          </div>
+
+          {/* 3. BOTTOM DETAIL PANEL (KHUNG TÍM PHẦN ĐÁY) */}
+          <div
+            className="cust-bottom-pane"
+            style={{
+              height: `${bottomPaneHeight}px`,
+              minHeight: `${bottomPaneHeight}px`,
+              transition: isDraggingBottomSplitter ? 'none' : undefined,
+              overflow: bottomPaneHeight <= 42 ? 'hidden' : undefined
+            }}
+          >
             <div className="cust-bottom-tabs-header">
               <div
                 ref={bottomTabsRef}
