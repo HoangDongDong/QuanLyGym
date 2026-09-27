@@ -137,7 +137,7 @@ export default function CustomerManagementView({ onSwitchToAccessControl, showNo
   // 1. Khung Vàng (Cây bên trái - cust-left-pane)
   const [treePaneWidth, setTreePaneWidth] = useState(() => {
     const saved = localStorage.getItem('cust_tree_pane_width');
-    return saved ? Math.max(130, Math.min(500, parseInt(saved, 10))) : 200;
+    return saved ? Math.max(130, Math.min(500, parseInt(saved, 10))) : 220;
   });
   const [isDraggingTreeSplitter, setIsDraggingTreeSplitter] = useState(false);
 
@@ -178,7 +178,7 @@ export default function CustomerManagementView({ onSwitchToAccessControl, showNo
   // 2. Chiều cao phần đáy (cust-bottom-pane bên trong Khung Tím)
   const [bottomPaneHeight, setBottomPaneHeight] = useState(() => {
     const saved = localStorage.getItem('cust_bottom_pane_height');
-    return saved ? Math.max(38, Math.min(600, parseInt(saved, 10))) : 220;
+    return saved ? Math.max(38, Math.min(600, parseInt(saved, 10))) : 270;
   });
   const [isDraggingBottomSplitter, setIsDraggingBottomSplitter] = useState(false);
 
@@ -211,10 +211,20 @@ export default function CustomerManagementView({ onSwitchToAccessControl, showNo
 
   const handleBottomSplitterDoubleClick = () => {
     setBottomPaneHeight((prev) => {
-      const next = prev <= 42 ? 220 : 38;
+      const next = prev <= 42 ? 270 : 38;
       localStorage.setItem('cust_bottom_pane_height', String(next));
       return next;
     });
+  };
+
+  // 3. Tỷ lệ phóng to giao diện máy tính (Chuẩn 100% | To rõ 110% | Rất to 120%)
+  const [uiScale, setUiScale] = useState(() => {
+    return localStorage.getItem('cust_ui_scale') || '100';
+  });
+
+  const handleSetUiScale = (scale) => {
+    setUiScale(scale);
+    localStorage.setItem('cust_ui_scale', scale);
   };
 
 
@@ -1160,7 +1170,7 @@ export default function CustomerManagementView({ onSwitchToAccessControl, showNo
                     (treeMode === 'nhomKhach' && selectedGroupId === 'trash');
 
   return (
-    <div className="cust-mgmt-container">
+    <div className={`cust-mgmt-container ${uiScale !== '100' ? `scale-${uiScale}` : ''}`}>
       {/* MAIN SPLIT WORKSPACE */}
       <div className="cust-split-body">
         {/* LEFT SIDEBAR: CÂY DANH MỤC (HỖ TRỢ CẢ TRẠNG THÁI THẺ & NHÓM KHÁCH HÀNG NHƯ TREEGRIDMG - KHUNG VÀNG) */}
@@ -1325,12 +1335,42 @@ export default function CustomerManagementView({ onSwitchToAccessControl, showNo
         {/* RIGHT AREA: MASTER GRID + BOTTOM DETAIL TABS (KHUNG TÍM) */}
         <div className="cust-right-pane">
           <div className="cust-main-header">
-            <span>Khách hàng</span>
-            {isInTrash && (
-              <span style={{ fontSize: 11, color: '#dc2626', fontWeight: 600, marginLeft: 8 }}>
-                (Thùng rác - Bản ghi đã xóa)
+            <div style={{ display: 'flex', alignItems: 'center' }}>
+              <span>Khách hàng</span>
+              {isInTrash && (
+                <span style={{ fontSize: 12, color: '#dc2626', fontWeight: 600, marginLeft: 8 }}>
+                  (Thùng rác - Bản ghi đã xóa)
+                </span>
+              )}
+            </div>
+
+            {/* BỘ NÚT CHUYỂN ĐỔI CỠ GIAO DIỆN MÁY TÍNH TO RÕ RÀNG */}
+            <div className="cust-scale-group" title="Tùy chỉnh cỡ giao diện to nhỏ cho máy tính">
+              <span className="cust-scale-label">
+                <i className="fa-solid fa-display"></i> Cỡ giao diện:
               </span>
-            )}
+              <button
+                className={`cust-scale-btn ${uiScale === '100' ? 'active' : ''}`}
+                onClick={() => handleSetUiScale('100')}
+                title="Cỡ chuẩn (100%)"
+              >
+                Chuẩn
+              </button>
+              <button
+                className={`cust-scale-btn ${uiScale === '110' ? 'active' : ''}`}
+                onClick={() => handleSetUiScale('110')}
+                title="To rõ nét cho màn hình vi tính (110%)"
+              >
+                To rõ (110%)
+              </button>
+              <button
+                className={`cust-scale-btn ${uiScale === '120' ? 'active' : ''}`}
+                onClick={() => handleSetUiScale('120')}
+                title="Rất to dễ nhìn & dễ bấm (120%)"
+              >
+                Cực to (120%)
+              </button>
+            </div>
           </div>
 
           {/* TOOLBAR RIBBON KHÁCH HÀNG */}
