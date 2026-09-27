@@ -6,6 +6,8 @@ import FastReportModal from './FastReportModal';
 import ExcelImportModal from './ExcelImportModal';
 import DeviceSyncModal from './DeviceSyncModal';
 import FingerprintEnrollModal from './FingerprintEnrollModal';
+import TreeItemModal from './TreeItemModal';
+import TreeQuickAddModal from './TreeQuickAddModal';
 import './CustomerManagement.css';
 
 export default function CustomerManagementView({ onSwitchToAccessControl, showNotification }) {
@@ -85,11 +87,28 @@ export default function CustomerManagementView({ onSwitchToAccessControl, showNo
   const [treeSortBy, setTreeSortBy] = useState('name'); // 'name' | 'custom'
   const [showTreePropsDialog, setShowTreePropsDialog] = useState(false);
 
+  // --- REAL TREE ITEMS & ICONS FROM FIREBIRD DB ---
+  const [treeItems, setTreeItems] = useState([]);
+  const [treeIcons, setTreeIcons] = useState([]);
+  const [collapsedFolders, setCollapsedFolders] = useState({});
+
+  // Tree Modals State (Thêm trạng thái / Thư mục / Thêm nhanh)
+  const [treeModal, setTreeModal] = useState({
+    show: false,
+    mode: 'create', // 'create' | 'edit'
+    itemType: 0, // 0: item, 1: folder, 2: separator
+    parentId: null,
+    initialData: null
+  });
+  const [showTreeQuickAdd, setShowTreeQuickAdd] = useState(false);
+  const [treeQuickAddParentId, setTreeQuickAddParentId] = useState(null);
+
   const [modalState, setModalState] = useState({
     show: false,
     mode: 'create', // 'create' | 'edit'
     customerData: null
   });
+
 
   // Tải danh sách khách hàng & số lượng cây trạng thái / nhóm
   const loadCustomersAndCounts = async (
@@ -141,12 +160,36 @@ export default function CustomerManagementView({ onSwitchToAccessControl, showNo
         setMetadata(res.data);
       }
     });
+
+    // Nạp icons từ SIMAGE
+    khachHangService.getIcons().then((res) => {
+      if (res && res.data) {
+        setTreeIcons(res.data);
+      }
+    });
   }, []);
+
+  // Tải danh mục cây (trạng thái hoặc nhóm khách hàng)
+  const loadTreeData = async (mode = treeMode) => {
+    try {
+      const res = await khachHangService.getTreeItems(mode);
+      if (res && res.data) {
+        setTreeItems(res.data);
+      }
+    } catch (err) {
+      console.error('Lỗi nạp cây:', err);
+    }
+  };
+
+  useEffect(() => {
+    loadTreeData(treeMode);
+  }, [treeMode]);
 
   // Tải lại khi thay đổi cây trạng thái / nhóm hoặc từ khóa tìm kiếm
   useEffect(() => {
     loadCustomersAndCounts(selectedTreeStatus, selectedGroupId, searchTerm, treeMode);
   }, [selectedTreeStatus, selectedGroupId, treeMode]);
+
 
   // Tải chi tiết các subtabs ở phần đáy khi thay đổi khách hàng được chọn
   useEffect(() => {
@@ -383,14 +426,16 @@ export default function CustomerManagementView({ onSwitchToAccessControl, showNo
   };
 
   // 6. Tự động giãn cột
-  // --- TREE CONTEXT MENU HANDLERS ---
+  // --- TREE CONTEXT MENU & CRUD ACTION HANDLERS ---
   const handleTreeContextMenu = (e, item) => {
     e.preventDefault();
     e.stopPropagation();
-    if (treeMode === 'trangThai') {
-      setSelectedTreeStatus(item.id);
-    } else {
-      setSelectedGroupId(item.id);
+    if (item && item.id) {
+      if (treeMode === 'trangThai') {
+        setSelectedTreeStatus(item.id);
+      } else {
+        setSelectedGroupId(item.id);
+      }
     }
 
     const menuWidth = 190;
@@ -409,30 +454,151 @@ export default function CustomerManagementView({ onSwitchToAccessControl, showNo
   const closeTreeContextMenu = () => {
     setTreeContextMenu(prev => ({ ...prev, visible: false }));
     setShowTreeSubThemMoi(false);
+    setShowTreeSubThemCon(false);
     setShowTreeSubSapXep(false);
   };
 
-  const handleTreeRename = () => {
-    const item = treeContextMenu.item;
+  // 1. Thêm trạng thái / nhóm
+  const handleOpenAddStatus = (parentId = null) => {
     closeTreeContextMenu();
-    if (!item) return;
-    const newName = prompt(`Đổi tên cho "${item.label}":`, item.label);
-    if (newName && newName.trim()) {
-      showNotification && showNotification(`Đã đổi tên thành "${newName.trim()}"`);
+    setTreeModal({
+      show: true,
+      mode: 'create',
+      itemType: 0,
+      parentId: parentId || null,
+      initialData: null
+    });
+  };
+
+  // 2. Thêm thư mục
+  const handleOpenAddFolder = (parentId = null) => {
+    closeTreeContextMenu();
+    setTreeModal({
+      show: true,
+      mode: 'create',
+      itemType: 1,
+      parentId: parentId || null,
+      initialData: null
+    });
+  };
+
+  // 3. Thêm phân cách
+  const handleAddSeparator = async (parentId = null) => {
+    closeTreeContextMenu();
+    try {
+      await khachHangService.createTreeItem({
+        mode: treeMode,
+        name: '—',
+        itemType: 2,
+        parentId: parentId || null
+      });
+      showNotification && showNotification('Đã thêm phân cách thành công!');
+      loadTreeData(treeMode);
+    } catch (err) {
+      console.error('Lỗi thêm phân cách:', err);
+      alert('Không thể thêm phân cách: ' + (err.message || 'Lỗi kết nối'));
     }
   };
 
-  const handleTreeDelete = () => {
-    const item = treeContextMenu.item;
+  // 4. Thêm nhanh
+  const handleOpenQuickAdd = (parentId = null) => {
     closeTreeContextMenu();
+    setTreeQuickAddParentId(parentId || null);
+    setShowTreeQuickAdd(true);
+  };
+
+  // 5. Chỉnh sửa mục cây
+  const handleOpenEditTreeItem = (itemParam = null) => {
+    closeTreeContextMenu();
+    const item = itemParam || treeContextMenu.item;
     if (!item) return;
-    if (item.id === 'all' || item.id === 'trash') {
-      alert(`Không thể xóa mục mặc định "${item.label}"!`);
+    if (item.id === 'all' || item.id === 'unset' || item.id === 'trash') {
+      alert(`Mục hệ thống "${item.label}" không thể chỉnh sửa!`);
       return;
     }
-    if (confirm(`Bạn có muốn xóa mục "${item.label}" không?`)) {
-      showNotification && showNotification(`Đã xóa mục "${item.label}"`);
+    setTreeModal({
+      show: true,
+      mode: 'edit',
+      itemType: item.itemType || 0,
+      parentId: item.parentId || null,
+      initialData: {
+        id: item.id,
+        name: item.label,
+        note: item.note || '',
+        simageId: item.simageId || '',
+        itemType: item.itemType || 0,
+        parentId: item.parentId || null
+      }
+    });
+  };
+
+  // 6. Xóa mục cây
+  const handleDeleteTreeItem = async (itemParam = null) => {
+    closeTreeContextMenu();
+    const item = itemParam || treeContextMenu.item;
+    if (!item) return;
+    if (item.id === 'all' || item.id === 'unset' || item.id === 'trash') {
+      alert(`Mục hệ thống "${item.label}" không thể xóa!`);
+      return;
     }
+    if (confirm(`Bạn có chắc chắn muốn xóa "${item.label}" vào thùng rác không?`)) {
+      try {
+        await khachHangService.deleteTreeItem(item.id, treeMode);
+        showNotification && showNotification(`Đã chuyển "${item.label}" vào thùng rác!`);
+        loadTreeData(treeMode);
+        loadCustomersAndCounts();
+      } catch (err) {
+        console.error('Lỗi xóa mục cây:', err);
+        alert('Lỗi xóa mục: ' + (err.message || 'Lỗi kết nối'));
+      }
+    }
+  };
+
+  // 7. Đổi tên nhanh
+  const handleTreeRename = async (itemParam = null) => {
+    closeTreeContextMenu();
+    const item = itemParam || treeContextMenu.item;
+    if (!item) return;
+    if (item.id === 'all' || item.id === 'unset' || item.id === 'trash') {
+      alert(`Mục hệ thống "${item.label}" không thể đổi tên!`);
+      return;
+    }
+    const newName = prompt(`Đổi tên cho "${item.label}":`, item.label);
+    if (newName && newName.trim() && newName.trim() !== item.label) {
+      try {
+        await khachHangService.updateTreeItem(item.id, {
+          mode: treeMode,
+          name: newName.trim(),
+          note: item.note || '',
+          simageId: item.simageId || ''
+        });
+        showNotification && showNotification(`Đã đổi tên thành "${newName.trim()}"`);
+        loadTreeData(treeMode);
+      } catch (err) {
+        alert('Lỗi đổi tên: ' + err.message);
+      }
+    }
+  };
+
+  // 8. Lưu từ TreeItemModal (Thêm mới / Chỉnh sửa)
+  const handleSaveTreeItem = async (payload) => {
+    if (payload.id && treeModal.mode === 'edit') {
+      await khachHangService.updateTreeItem(payload.id, payload);
+      showNotification && showNotification(`Đã cập nhật ${payload.name} thành công!`);
+    } else {
+      await khachHangService.createTreeItem(payload);
+      showNotification && showNotification(`Đã thêm ${payload.name} thành công!`);
+    }
+    loadTreeData(treeMode);
+    loadCustomersAndCounts();
+  };
+
+  // 9. Lưu từ TreeQuickAddModal (Thêm nhanh)
+  const handleSaveTreeQuickAdd = async (payload) => {
+    const res = await khachHangService.batchCreateTreeItems(payload);
+    showNotification && showNotification(res?.message || 'Đã thêm nhanh thành công!');
+    loadTreeData(treeMode);
+    loadCustomersAndCounts();
   };
 
   const handleTreeCopy = () => {
@@ -442,6 +608,7 @@ export default function CustomerManagementView({ onSwitchToAccessControl, showNo
     navigator.clipboard.writeText(item.label);
     showNotification && showNotification(`Đã sao chép "${item.label}" vào bộ nhớ tạm!`);
   };
+
 
   const handleMenuAutoFitCols = () => {
     closeContextMenu();
@@ -590,36 +757,91 @@ export default function CustomerManagementView({ onSwitchToAccessControl, showNo
     setShowFingerprintEnroll(true);
   };
 
-  // Định nghĩa các mục trên cây trạng thái
-  // Danh sách mục cây Trạng thái thẻ (DTRANGTHAIID)
-  const statusTreeItems = [
-    { id: 'all', label: 'Tất cả', icon: '🌐', count: counts.all },
-    { id: 'unset', label: 'Chưa thiết lập', icon: '🗂️', count: counts.unset },
-    { id: '1', label: 'Đang sử dụng', icon: '▶️', count: counts['1'] || 0, isGreen: true },
-    { id: '2', label: 'Bảo lưu', icon: '⏸️', count: counts['2'] || 0 },
-    { id: '0', label: 'Chưa kích hoạt', icon: '❌', count: counts['0'] || 0 },
-    { id: '3', label: 'Quá hạn', icon: '⚠️', count: counts['3'] || 0 },
-    { id: '4', label: 'Quá lần tập', icon: '⚠️', count: counts['4'] || 0 },
-    { id: 'trash', label: 'Thùng rác', icon: '🗑️', count: counts.trash || 0 }
-  ];
+  // Danh sách mục cây Trạng thái thẻ (DTRANGTHAI)
+  const statusTreeItems = useMemo(() => {
+    const list = [
+      { id: 'all', label: 'Tất cả', icon: '🌐', count: counts.all, isSpecial: true },
+      { id: 'unset', label: 'Chưa thiết lập', icon: '🗂️', count: counts.unset, isSpecial: true },
+    ];
 
-  // Danh sách mục cây Nhóm khách hàng (DNHOMKHACHHANGID - như trong TreeGridMg pageFolder)
-  const groupTreeItems = [
-    { id: 'all', label: 'Tất cả', icon: '🌐', count: groupCounts.all },
-    { id: 'unset', label: 'Chưa thiết lập', icon: '🗂️', count: groupCounts.unset },
-    ...groups.map(g => ({
-      id: g.id,
-      label: g.name,
-      icon: '📁',
-      count: g.count || 0
-    })),
-    { id: 'trash', label: 'Thùng rác', icon: '🗑️', count: groupCounts.trash || 0 }
-  ];
+    if (treeItems && treeItems.length > 0) {
+      treeItems.forEach(ti => {
+        let defaultIcon = '🏷️';
+        if (ti.name === 'Đang sử dụng') defaultIcon = '▶️';
+        else if (ti.name === 'Bảo lưu') defaultIcon = '⏸️';
+        else if (ti.name === 'Chưa kích hoạt') defaultIcon = '❌';
+        else if (ti.name === 'Quá hạn' || ti.name === 'Quá lần tập') defaultIcon = '⚠️';
+        else if (ti.itemType === 1) defaultIcon = '📁';
+
+        list.push({
+          id: ti.id,
+          label: ti.name,
+          icon: defaultIcon,
+          count: counts[ti.id] || 0,
+          isGreen: ti.name === 'Đang sử dụng',
+          itemType: ti.itemType,
+          parentId: ti.parentId,
+          simage: ti.simage,
+          simageId: ti.simageId,
+          note: ti.note
+        });
+      });
+    } else {
+      list.push(
+        { id: '1', label: 'Đang sử dụng', icon: '▶️', count: counts['1'] || 0, isGreen: true, itemType: 0 },
+        { id: '2', label: 'Bảo lưu', icon: '⏸️', count: counts['2'] || 0, itemType: 0 },
+        { id: '0', label: 'Chưa kích hoạt', icon: '❌', count: counts['0'] || 0, itemType: 0 },
+        { id: '3', label: 'Quá hạn', icon: '⚠️', count: counts['3'] || 0, itemType: 0 },
+        { id: '4', label: 'Quá lần tập', icon: '⚠️', count: counts['4'] || 0, itemType: 0 }
+      );
+    }
+
+    list.push({ id: 'trash', label: 'Thùng rác', icon: '🗑️', count: counts.trash || 0, isSpecial: true });
+    return list;
+  }, [treeItems, counts]);
+
+  // Danh sách mục cây Nhóm khách hàng (DNHOMKHACHHANG)
+  const groupTreeItems = useMemo(() => {
+    const list = [
+      { id: 'all', label: 'Tất cả', icon: '🌐', count: groupCounts.all, isSpecial: true },
+      { id: 'unset', label: 'Chưa thiết lập', icon: '🗂️', count: groupCounts.unset, isSpecial: true },
+    ];
+
+    if (treeItems && treeItems.length > 0) {
+      treeItems.forEach(ti => {
+        list.push({
+          id: ti.id,
+          label: ti.name,
+          icon: ti.itemType === 1 ? '📁' : '📂',
+          count: groupCounts[ti.id] || 0,
+          itemType: ti.itemType,
+          parentId: ti.parentId,
+          simage: ti.simage,
+          simageId: ti.simageId,
+          note: ti.note
+        });
+      });
+    } else {
+      groups.forEach(g => {
+        list.push({
+          id: g.id,
+          label: g.name,
+          icon: '📁',
+          count: g.count || 0,
+          itemType: 0
+        });
+      });
+    }
+
+    list.push({ id: 'trash', label: 'Thùng rác', icon: '🗑️', count: groupCounts.trash || 0, isSpecial: true });
+    return list;
+  }, [treeItems, groupCounts, groups]);
 
   const currentTreeList = treeMode === 'trangThai' ? statusTreeItems : groupTreeItems;
-  const filteredTreeItems = currentTreeList.filter(item =>
-    item.label.toLowerCase().includes(treeSearch.toLowerCase().trim())
-  );
+  const filteredTreeItems = currentTreeList.filter(item => {
+    if (item.itemType === 2) return true;
+    return (item.label || '').toLowerCase().includes(treeSearch.toLowerCase().trim());
+  });
 
   // Định nghĩa danh sách các tab ở phần đáy (14 tab khớp toàn bộ WinForms No1Lib)
   const bottomTabs = [
@@ -683,13 +905,36 @@ export default function CustomerManagementView({ onSwitchToAccessControl, showNo
           </div>
 
           <div className="cust-tree-toolbar">
-            <button className="cust-tree-btn" title="Thêm mới" onClick={handleAddNewCustomer}>
+            <button 
+              className="cust-tree-btn" 
+              title={treeMode === 'trangThai' ? 'Thêm trạng thái mới' : 'Thêm nhóm mới'} 
+              onClick={() => handleOpenAddStatus(null)}
+            >
               <i className="fa-solid fa-plus" style={{ color: '#16a34a' }}></i>
             </button>
-            <button className="cust-tree-btn" title="Chỉnh sửa" onClick={handleEditCustomer} disabled={!selectedCustomer}>
-              <i className="fa-solid fa-folder-open" style={{ color: '#f59e0b' }}></i>
+            <button 
+              className="cust-tree-btn" 
+              title="Chỉnh sửa mục đã chọn" 
+              onClick={() => {
+                const curId = treeMode === 'trangThai' ? selectedTreeStatus : selectedGroupId;
+                const found = currentTreeList.find(i => i.id === curId);
+                if (found) handleOpenEditTreeItem(found);
+              }}
+            >
+              <i className="fa-solid fa-pen-to-square" style={{ color: '#d97706' }}></i>
             </button>
-            <button className="cust-tree-btn" title="Làm mới cây danh mục" onClick={() => loadCustomersAndCounts()}>
+            <button 
+              className="cust-tree-btn" 
+              title="Thêm thư mục mới" 
+              onClick={() => handleOpenAddFolder(null)}
+            >
+              <i className="fa-solid fa-folder-plus" style={{ color: '#f59e0b' }}></i>
+            </button>
+            <button 
+              className="cust-tree-btn" 
+              title="Làm mới cây danh mục" 
+              onClick={() => { loadTreeData(treeMode); loadCustomersAndCounts(); }}
+            >
               <i className="fa-solid fa-rotate" style={{ color: '#0284c7' }}></i>
             </button>
             <input
@@ -701,8 +946,31 @@ export default function CustomerManagementView({ onSwitchToAccessControl, showNo
             />
           </div>
 
-          <div className="cust-tree-list">
+          <div 
+            className="cust-tree-list"
+            onContextMenu={(e) => handleTreeContextMenu(e, null)}
+          >
             {filteredTreeItems.map((item) => {
+              if (item.itemType === 2) {
+                return (
+                  <div
+                    key={item.id}
+                    className="cust-tree-separator"
+                    title="Đường phân cách"
+                    onContextMenu={(e) => handleTreeContextMenu(e, item)}
+                  >
+                    <div className="cust-tree-sep-line"></div>
+                  </div>
+                );
+              }
+
+              if (item.parentId && collapsedFolders[item.parentId]) {
+                return null;
+              }
+
+              const isChild = !!item.parentId;
+              const isFolder = item.itemType === 1;
+              const isCollapsed = !!collapsedFolders[item.id];
               const isActive = treeMode === 'trangThai'
                 ? selectedTreeStatus === item.id
                 : selectedGroupId === item.id;
@@ -711,6 +979,7 @@ export default function CustomerManagementView({ onSwitchToAccessControl, showNo
                 <div
                   key={item.id}
                   className={`cust-tree-item ${isActive ? 'active' : ''}`}
+                  style={isChild ? { paddingLeft: 22 } : {}}
                   onClick={() => {
                     if (treeMode === 'trangThai') {
                       setSelectedTreeStatus(item.id);
@@ -721,7 +990,29 @@ export default function CustomerManagementView({ onSwitchToAccessControl, showNo
                   onContextMenu={(e) => handleTreeContextMenu(e, item)}
                 >
                   <div className="cust-tree-label">
-                    <span>{item.icon}</span>
+                    {isFolder && (
+                      <span 
+                        className="cust-tree-toggle"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          setCollapsedFolders(prev => ({
+                            ...prev,
+                            [item.id]: !prev[item.id]
+                          }));
+                        }}
+                      >
+                        {isCollapsed ? '▸' : '▾'}
+                      </span>
+                    )}
+                    {item.simage ? (
+                      <img 
+                        src={`data:image/png;base64,${item.simage}`} 
+                        alt="" 
+                        className="cust-tree-icon-img"
+                      />
+                    ) : (
+                      <span>{item.icon}</span>
+                    )}
                     <span style={item.isGreen ? { color: '#16a34a', fontWeight: 600 } : {}}>{item.label}</span>
                   </div>
                   <span className="cust-tree-count">{item.count}</span>
@@ -730,6 +1021,7 @@ export default function CustomerManagementView({ onSwitchToAccessControl, showNo
             })}
           </div>
         </div>
+
 
         {/* RIGHT AREA: MASTER GRID + BOTTOM DETAIL TABS */}
         <div className="cust-right-pane">
@@ -2013,17 +2305,10 @@ export default function CustomerManagementView({ onSwitchToAccessControl, showNo
             <span className="wf-submenu-arrow">▶</span>
 
             {showTreeSubThemMoi && (
-              <div className="wf-submenu" style={{ width: 155 }}>
+              <div className="wf-submenu" style={{ width: 165 }}>
                 <div
                   className="wf-menu-item"
-                  onClick={() => {
-                    closeTreeContextMenu();
-                    const labelType = treeMode === 'trangThai' ? 'trạng thái' : 'nhóm';
-                    const name = prompt(`Nhập tên ${labelType} mới:`);
-                    if (name && name.trim()) {
-                      showNotification && showNotification(`Đã thêm ${labelType} "${name.trim()}"`);
-                    }
-                  }}
+                  onClick={() => handleOpenAddStatus(null)}
                 >
                   <span className="wf-menu-icon" style={{ color: '#16a34a', fontWeight: 'bold' }}>✚</span>
                   <span className="wf-menu-text">
@@ -2033,9 +2318,9 @@ export default function CustomerManagementView({ onSwitchToAccessControl, showNo
 
                 <div
                   className="wf-menu-item"
-                  onClick={() => { closeTreeContextMenu(); setShowExcelImport(true); }}
+                  onClick={() => handleOpenQuickAdd(null)}
                 >
-                  <span className="wf-menu-icon"></span>
+                  <span className="wf-menu-icon" style={{ color: '#0284c7' }}>⚡</span>
                   <span className="wf-menu-text">Thêm nhanh</span>
                 </div>
 
@@ -2043,21 +2328,15 @@ export default function CustomerManagementView({ onSwitchToAccessControl, showNo
 
                 <div
                   className="wf-menu-item"
-                  onClick={() => { closeTreeContextMenu(); showNotification && showNotification('Đã thêm phân cách'); }}
+                  onClick={() => handleAddSeparator(null)}
                 >
-                  <span className="wf-menu-icon"></span>
+                  <span className="wf-menu-icon">—</span>
                   <span className="wf-menu-text">Thêm phân cách</span>
                 </div>
 
                 <div
                   className="wf-menu-item"
-                  onClick={() => {
-                    closeTreeContextMenu();
-                    const name = prompt('Nhập tên thư mục mới:');
-                    if (name && name.trim()) {
-                      showNotification && showNotification(`Đã tạo thư mục "${name.trim()}"`);
-                    }
-                  }}
+                  onClick={() => handleOpenAddFolder(null)}
                 >
                   <span className="wf-menu-icon">📁</span>
                   <span className="wf-menu-text">Thêm thư mục</span>
@@ -2077,17 +2356,10 @@ export default function CustomerManagementView({ onSwitchToAccessControl, showNo
             <span className="wf-submenu-arrow">▶</span>
 
             {showTreeSubThemCon && (
-              <div className="wf-submenu" style={{ width: 155 }}>
+              <div className="wf-submenu" style={{ width: 165 }}>
                 <div
                   className="wf-menu-item"
-                  onClick={() => {
-                    closeTreeContextMenu();
-                    const labelType = treeMode === 'trangThai' ? 'trạng thái' : 'nhóm';
-                    const name = prompt(`Nhập tên ${labelType} con cho "${treeContextMenu.item?.label}":`);
-                    if (name && name.trim()) {
-                      showNotification && showNotification(`Đã thêm ${labelType} con "${name.trim()}"`);
-                    }
-                  }}
+                  onClick={() => handleOpenAddStatus(treeContextMenu.item?.id)}
                 >
                   <span className="wf-menu-icon" style={{ color: '#16a34a', fontWeight: 'bold' }}>✚</span>
                   <span className="wf-menu-text">
@@ -2097,9 +2369,9 @@ export default function CustomerManagementView({ onSwitchToAccessControl, showNo
 
                 <div
                   className="wf-menu-item"
-                  onClick={() => { closeTreeContextMenu(); setShowExcelImport(true); }}
+                  onClick={() => handleOpenQuickAdd(treeContextMenu.item?.id)}
                 >
-                  <span className="wf-menu-icon"></span>
+                  <span className="wf-menu-icon" style={{ color: '#0284c7' }}>⚡</span>
                   <span className="wf-menu-text">Thêm nhanh</span>
                 </div>
 
@@ -2107,13 +2379,15 @@ export default function CustomerManagementView({ onSwitchToAccessControl, showNo
 
                 <div
                   className="wf-menu-item"
-                  onClick={() => {
-                    closeTreeContextMenu();
-                    const name = prompt(`Nhập tên thư mục con cho "${treeContextMenu.item?.label}":`);
-                    if (name && name.trim()) {
-                      showNotification && showNotification(`Đã tạo thư mục con "${name.trim()}"`);
-                    }
-                  }}
+                  onClick={() => handleAddSeparator(treeContextMenu.item?.id)}
+                >
+                  <span className="wf-menu-icon">—</span>
+                  <span className="wf-menu-text">Thêm phân cách</span>
+                </div>
+
+                <div
+                  className="wf-menu-item"
+                  onClick={() => handleOpenAddFolder(treeContextMenu.item?.id)}
                 >
                   <span className="wf-menu-icon">📁</span>
                   <span className="wf-menu-text">Thêm thư mục</span>
@@ -2125,7 +2399,7 @@ export default function CustomerManagementView({ onSwitchToAccessControl, showNo
           {/* 3. Chỉnh sửa */}
           <div
             className="wf-menu-item"
-            onClick={handleTreeRename}
+            onClick={() => handleOpenEditTreeItem(treeContextMenu.item)}
           >
             <span className="wf-menu-icon" style={{ color: '#d97706' }}>✏️</span>
             <span className="wf-menu-text">Chỉnh sửa</span>
@@ -2177,7 +2451,7 @@ export default function CustomerManagementView({ onSwitchToAccessControl, showNo
           {/* 5. Refresh */}
           <div
             className="wf-menu-item"
-            onClick={() => { closeTreeContextMenu(); loadCustomersAndCounts(); }}
+            onClick={() => { closeTreeContextMenu(); loadTreeData(treeMode); loadCustomersAndCounts(); }}
           >
             <span className="wf-menu-icon" style={{ color: '#16a34a' }}>🔄</span>
             <span className="wf-menu-text">Refresh</span>
@@ -2199,7 +2473,7 @@ export default function CustomerManagementView({ onSwitchToAccessControl, showNo
           {/* 7. Mở rộng */}
           <div
             className="wf-menu-item"
-            onClick={() => { closeTreeContextMenu(); showNotification && showNotification('Đã mở rộng toàn bộ cây'); }}
+            onClick={() => { closeTreeContextMenu(); setCollapsedFolders({}); showNotification && showNotification('Đã mở rộng toàn bộ cây'); }}
           >
             <span className="wf-menu-icon"></span>
             <span className="wf-menu-text">Mở rộng</span>
@@ -2208,7 +2482,13 @@ export default function CustomerManagementView({ onSwitchToAccessControl, showNo
           {/* 8. Thu gọn */}
           <div
             className="wf-menu-item"
-            onClick={() => { closeTreeContextMenu(); showNotification && showNotification('Đã thu gọn toàn bộ cây'); }}
+            onClick={() => {
+              closeTreeContextMenu();
+              const allFolders = {};
+              treeItems.filter(t => t.itemType === 1).forEach(f => { allFolders[f.id] = true; });
+              setCollapsedFolders(allFolders);
+              showNotification && showNotification('Đã thu gọn toàn bộ cây');
+            }}
           >
             <span className="wf-menu-icon"></span>
             <span className="wf-menu-text">Thu gọn</span>
@@ -2219,7 +2499,7 @@ export default function CustomerManagementView({ onSwitchToAccessControl, showNo
           {/* 9. Xóa */}
           <div
             className="wf-menu-item"
-            onClick={handleTreeDelete}
+            onClick={() => handleDeleteTreeItem(treeContextMenu.item)}
           >
             <span className="wf-menu-icon" style={{ color: '#dc2626' }}>❌</span>
             <span className="wf-menu-text">Xóa</span>
@@ -2228,7 +2508,7 @@ export default function CustomerManagementView({ onSwitchToAccessControl, showNo
           {/* 10. Đổi tên */}
           <div
             className="wf-menu-item"
-            onClick={handleTreeRename}
+            onClick={() => handleTreeRename(treeContextMenu.item)}
           >
             <span className="wf-menu-icon"></span>
             <span className="wf-menu-text">Đổi tên</span>
@@ -2252,9 +2532,9 @@ export default function CustomerManagementView({ onSwitchToAccessControl, showNo
           {/* 12. Biểu tượng */}
           <div
             className="wf-menu-item"
-            onClick={() => { closeTreeContextMenu(); alert('Chọn biểu tượng cho mục này!'); }}
+            onClick={() => handleOpenEditTreeItem(treeContextMenu.item)}
           >
-            <span className="wf-menu-icon"></span>
+            <span className="wf-menu-icon">🖼️</span>
             <span className="wf-menu-text">Biểu tượng</span>
           </div>
 
@@ -2281,6 +2561,8 @@ export default function CustomerManagementView({ onSwitchToAccessControl, showNo
               <div style={{ marginBottom: 6 }}><strong>Mã / ID:</strong> {treeContextMenu.item?.id}</div>
               <div style={{ marginBottom: 6 }}><strong>Tên hiển thị:</strong> {treeContextMenu.item?.label}</div>
               <div style={{ marginBottom: 6 }}><strong>Chế độ cây:</strong> {treeMode === 'trangThai' ? 'Trạng thái thẻ' : 'Nhóm khách hàng'}</div>
+              <div style={{ marginBottom: 6 }}><strong>Loại mục:</strong> {treeContextMenu.item?.itemType === 1 ? 'Thư mục' : (treeContextMenu.item?.itemType === 2 ? 'Phân cách' : 'Bình thường')}</div>
+              <div style={{ marginBottom: 6 }}><strong>Ghi chú:</strong> {treeContextMenu.item?.note || '---'}</div>
               <div style={{ marginBottom: 6 }}><strong>Số lượng hiện tại:</strong> {treeContextMenu.item?.count || 0}</div>
               <div style={{ marginTop: 14, textAlign: 'right' }}>
                 <button className="tn-btn-primary" style={{ padding: '4px 16px', height: 26 }} onClick={() => setShowTreePropsDialog(false)}>Đóng</button>
@@ -2289,6 +2571,29 @@ export default function CustomerManagementView({ onSwitchToAccessControl, showNo
           </div>
         </div>
       )}
+
+      {/* MODAL THÊM / SỬA TRẠNG THÁI & THƯ MỤC (WINFORMS LOOK & FEEL) */}
+      <TreeItemModal
+        show={treeModal.show}
+        mode={treeModal.mode}
+        itemType={treeModal.itemType}
+        treeMode={treeMode}
+        parentId={treeModal.parentId}
+        initialData={treeModal.initialData}
+        icons={treeIcons}
+        onSave={handleSaveTreeItem}
+        onClose={() => setTreeModal(prev => ({ ...prev, show: false }))}
+      />
+
+      {/* MODAL THÊM NHANH TRẠNG THÁI / NHÓM HÀNG LOẠT */}
+      <TreeQuickAddModal
+        show={showTreeQuickAdd}
+        treeMode={treeMode}
+        parentId={treeQuickAddParentId}
+        onSave={handleSaveTreeQuickAdd}
+        onClose={() => setShowTreeQuickAdd(false)}
+      />
+
 </div>
   );
 }

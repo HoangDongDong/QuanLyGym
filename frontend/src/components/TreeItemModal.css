@@ -1,0 +1,308 @@
+/* ==========================================================================
+   TREE ITEM MODAL - EXACT WINFORMS LOOK & FEEL
+   Ref: media_1790500547536.png
+   ========================================================================== */
+
+.tree-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.45);
+  backdrop-filter: blur(2px);
+  z-index: 10005;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: treeModalFadeIn 0.12s ease-out;
+}
+
+.tree-modal-window {
+  width: 540px;
+  max-width: 95vw;
+  background: #f0f4f9;
+  border: 1px solid #7090b0;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+  border-radius: 4px;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+  font-size: 12px;
+  color: #1e293b;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Titlebar */
+.tree-modal-titlebar {
+  height: 28px;
+  background: #ffffff;
+  border-bottom: 1px solid #cbd5e1;
+  padding: 0 8px 0 10px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-weight: 600;
+  font-size: 12px;
+}
+
+.tree-modal-title {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: #1e293b;
+}
+
+.tree-modal-title .win-icon {
+  font-size: 12px;
+}
+
+.tree-modal-controls {
+  display: flex;
+  align-items: center;
+}
+
+.tree-modal-winbtn {
+  background: transparent;
+  border: none;
+  font-size: 11px;
+  color: #64748b;
+  cursor: pointer;
+  padding: 2px 6px;
+  border-radius: 2px;
+}
+
+.tree-modal-winbtn:hover {
+  background: #ef4444;
+  color: #ffffff;
+}
+
+/* Header Banner */
+.tree-modal-header {
+  height: 44px;
+  background: #ffffff;
+  border-bottom: 1px solid #d1d5db;
+  display: flex;
+  align-items: center;
+  padding: 0 14px;
+  gap: 12px;
+}
+
+.tree-modal-header-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.tree-modal-banner-title {
+  font-size: 13px;
+  font-weight: 700;
+  color: #0f172a;
+}
+
+/* Body */
+.tree-modal-body {
+  padding: 14px 18px 10px 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.tree-form-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.tree-form-row-note {
+  align-items: flex-start;
+}
+
+.tree-label {
+  width: 90px;
+  min-width: 90px;
+  font-size: 12px;
+  color: #1e293b;
+}
+
+.tree-label-img {
+  width: 32px;
+  min-width: 32px;
+  text-align: right;
+  margin-left: 6px;
+}
+
+.tree-input {
+  flex: 1;
+  height: 25px;
+  padding: 0 8px;
+  font-size: 12px;
+  border: 1px solid #7f9db9;
+  background: #ffffff;
+  outline: none;
+  border-radius: 1px;
+}
+
+.tree-input:focus {
+  border-color: #2563eb;
+  box-shadow: 0 0 0 1px #2563eb;
+}
+
+.tree-textarea {
+  flex: 1;
+  border: 1px solid #7f9db9;
+  background: #ffffff;
+  padding: 6px 8px;
+  font-size: 12px;
+  font-family: inherit;
+  resize: vertical;
+  outline: none;
+  min-height: 120px;
+  border-radius: 1px;
+}
+
+.tree-textarea:focus {
+  border-color: #2563eb;
+  box-shadow: 0 0 0 1px #2563eb;
+}
+
+/* Icon picker */
+.tree-icon-picker-container {
+  position: relative;
+}
+
+.tree-icon-selector {
+  width: 60px;
+  height: 25px;
+  background: #ffffff;
+  border: 1px solid #7f9db9;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 4px;
+  cursor: pointer;
+  border-radius: 1px;
+}
+
+.tree-icon-selector:hover {
+  border-color: #2563eb;
+}
+
+.tree-icon-preview {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+}
+
+.tree-icon-empty {
+  width: 14px;
+  height: 14px;
+  border: 1px dashed #cbd5e1;
+}
+
+.tree-icon-arrow {
+  font-size: 10px;
+  color: #64748b;
+}
+
+.tree-icon-dropdown-menu {
+  position: absolute;
+  top: 28px;
+  right: 0;
+  width: 220px;
+  max-height: 200px;
+  overflow-y: auto;
+  background: #ffffff;
+  border: 1px solid #94a3b8;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+  z-index: 10010;
+  padding: 6px;
+  border-radius: 2px;
+}
+
+.tree-icon-dropdown-none {
+  padding: 4px 6px;
+  font-size: 11px;
+  color: #64748b;
+  cursor: pointer;
+  border-bottom: 1px solid #f1f5f9;
+  margin-bottom: 4px;
+}
+
+.tree-icon-dropdown-none:hover {
+  background: #e2e8f0;
+  color: #0f172a;
+}
+
+.tree-icon-grid {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 4px;
+}
+
+.tree-icon-grid-item {
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid transparent;
+  cursor: pointer;
+  border-radius: 2px;
+}
+
+.tree-icon-grid-item:hover {
+  background: #e0f2fe;
+  border-color: #38bdf8;
+}
+
+.tree-icon-grid-item.selected {
+  background: #bae6fd;
+  border-color: #0284c7;
+}
+
+/* Footer */
+.tree-modal-footer {
+  height: 48px;
+  background: #f1f5f9;
+  border-top: 1px solid #d1d5db;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  padding: 0 16px;
+  gap: 8px;
+}
+
+.tree-btn {
+  min-width: 80px;
+  height: 26px;
+  padding: 0 12px;
+  font-size: 12px;
+  border: 1px solid #7f9db9;
+  background: linear-gradient(180deg, #ffffff 0%, #e3eaf3 100%);
+  color: #0f172a;
+  cursor: pointer;
+  border-radius: 2px;
+  font-family: inherit;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.tree-btn:hover {
+  background: linear-gradient(180deg, #f0f7ff 0%, #cbe0f8 100%);
+  border-color: #2563eb;
+}
+
+.tree-btn:active {
+  background: #b9d5f3;
+}
+
+.tree-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+@keyframes treeModalFadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}

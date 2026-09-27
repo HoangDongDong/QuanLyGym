@@ -83,5 +83,52 @@ export const khachHangService = {
   permanentDelete: async (id) => {
     const response = await api.delete(`/khachhang/${id}/permanent`);
     return response.data;
+  },
+
+  // Lấy danh sách icon từ SIMAGE
+  getIcons: async () => {
+    try {
+      const response = await api.get('/khachhang/icons');
+      return response.data;
+    } catch (error) {
+      console.error('Lỗi gọi API /khachhang/icons:', error);
+      return { success: false, data: [] };
+    }
+  },
+
+  // Lấy danh sách cây (trạng thái hoặc nhóm khách hàng)
+  getTreeItems: async (mode = 'trangThai') => {
+    try {
+      const response = await api.get(`/khachhang/tree-items?mode=${mode}`);
+      return response.data;
+    } catch (error) {
+      console.error(`Lỗi gọi API /khachhang/tree-items?mode=${mode}:`, error);
+      return { success: false, data: [] };
+    }
+  },
+
+  // Tạo một mục cây mới (trạng thái, thư mục, hoặc phân cách)
+  createTreeItem: async (data) => {
+    const response = await api.post('/khachhang/tree-item', data);
+    return response.data;
+  },
+
+  // Cập nhật mục cây
+  updateTreeItem: async (id, data) => {
+    const response = await api.put(`/khachhang/tree-item/${id}`, data);
+    return response.data;
+  },
+
+  // Xóa mục cây
+  deleteTreeItem: async (id, mode = 'trangThai') => {
+    const response = await api.delete(`/khachhang/tree-item/${id}?mode=${mode}`);
+    return response.data;
+  },
+
+  // Thêm nhanh hàng loạt mục cây
+  batchCreateTreeItems: async (data) => {
+    const response = await api.post('/khachhang/tree-items/batch', data);
+    return response.data;
   }
 };
+

@@ -266,9 +266,12 @@ public class KhachHangController : ControllerBase
                         {
                             counts["unset"] += cnt;
                         }
-                        else if (counts.ContainsKey(dTrangThaiId))
+                        else
                         {
-                            counts[dTrangThaiId] += cnt;
+                            if (counts.ContainsKey(dTrangThaiId))
+                                counts[dTrangThaiId] += cnt;
+                            else
+                                counts[dTrangThaiId] = cnt;
                         }
                     }
                 }
@@ -1442,4 +1445,245 @@ public class KhachHangController : ControllerBase
             return StatusCode(500, new { success = false, message = "Lá»—i khi xÃ³a vÄ©nh viá»…n: " + ex.Message });
         }
     }
+
+    // =========================================================================
+    // API QUẢN LÝ CÂY TRẠNG THÁI & NHÓM KHÁCH HÀNG (DTRANGTHAI, DNHOMKHACHHANG, SIMAGE)
+    // =========================================================================
+
+    [HttpGet("icons")]
+    public IActionResult GetIcons()
+    {
+        try
+        {
+            using var conn = new FbConnection(GetConnStr());
+            conn.Open();
+            var list = new List<object>();
+            using var cmd = conn.CreateCommand();
+            cmd.CommandText = "SELECT FIRST 120 ID, NAME, IMAGE FROM SIMAGE WHERE (STATUS <> -1 OR STATUS IS NULL) AND IMAGE IS NOT NULL ORDER BY NAME";
+            using var r = cmd.ExecuteReader();
+            while (r.Read())
+            {
+                var imgVal = r["IMAGE"];
+                string imgStr = "";
+                if (imgVal is byte[] b) imgStr = Convert.ToBase64String(b);
+                else if (imgVal is string s) imgStr = s;
+
+                list.Add(new
+                {
+                    id = r["ID"]?.ToString()?.Trim(),
+                    name = r["NAME"]?.ToString()?.Trim() ?? "",
+                    image = imgStr
+                });
+            }
+            return Ok(new { success = true, data = list });
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(500, new { success = false, message = "Lỗi nạp danh sách icon: " + ex.Message });
+        }
+    }
+
+    [HttpGet("tree-items")]
+    public IActionResult GetTreeItems([FromQuery] string mode = "trangThai")
+    {
+        try
+        {
+            var table = mode == "trangThai" ? "DTRANGTHAI" : "DNHOMKHACHHANG";
+            using var conn = new FbConnection(GetConnStr());
+            conn.Open();
+            var list = new List<object>();
+            using var cmd = conn.CreateCommand();
+            cmd.CommandText = $"SELECT t.ID, t.NAME, t.NOTE, t.STATUS, t.SORTORDER, t.PARENTID, t.ITEMTYPE, t.SIMAGEID, img.IMAGE AS SIMAGE_DATA FROM {table} t LEFT JOIN SIMAGE img ON t.SIMAGEID = img.ID WHERE (t.STATUS <> -1 OR t.STATUS IS NULL) ORDER BY t.SORTORDER, t.NAME";
+            using var r = cmd.ExecuteReader();
+            while (r.Read())
+            {
+                var imgVal = r["SIMAGE_DATA"];
+                string imgStr = "";
+                if (imgVal is byte[] b) imgStr = Convert.ToBase64String(b);
+                else if (imgVal is string s) imgStr = s;
+
+                list.Add(new
+                {
+                    id = r["ID"]?.ToString()?.Trim(),
+                    name = r["NAME"]?.ToString()?.Trim() ?? "",
+                    note = r["NOTE"]?.ToString()?.Trim() ?? "",
+                    status = r["STATUS"] is not DBNull ? Convert.ToInt32(r["STATUS"]) : 30,
+                    sortOrder = r["SORTORDER"]?.ToString()?.Trim() ?? "",
+                    parentId = r["PARENTID"]?.ToString()?.Trim() ?? "",
+                    itemType = r["ITEMTYPE"] is not DBNull ? Convert.ToInt32(r["ITEMTYPE"]) : 0,
+                    simageId = r["SIMAGEID"]?.ToString()?.Trim() ?? "",
+                    simage = imgStr
+                });
+            }
+            return Ok(new { success = true, data = list });
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(500, new { success = false, message = "Lỗi tải cây danh mục: " + ex.Message });
+        }
+    }
+
+    [HttpPost("tree-item")]
+    public IActionResult CreateTreeItem([FromBody] TreeItemRequest req)
+    {
+        try
+        {
+            var table = req.Mode == "trangThai" ? "DTRANGTHAI" : "DNHOMKHACHHANG";
+            using var conn = new FbConnection(GetConnStr());
+            conn.Open();
+
+            var newId = string.IsNullOrWhiteSpace(req.Id) ? Guid.NewGuid().ToString() : req.Id.Trim();
+            var name = req.ItemType == 2 ? "—" : (req.Name?.Trim() ?? "");
+
+            using var cmd = conn.CreateCommand();
+            cmd.CommandText = $@"
+                INSERT INTO {table} (
+                    ID, NAME, NOTE, STATUS, SORTORDER, PARENTID, ITEMTYPE, SIMAGEID, TIMECREATED, USERCREATEDID
+                ) VALUES (
+                    @id, @name, @note, 30, @sortOrder, @parentId, @itemType, @simageId, CURRENT_TIMESTAMP, @userId
+                )";
+
+            cmd.Parameters.AddWithValue("@id", newId);
+            cmd.Parameters.AddWithValue("@name", name);
+            cmd.Parameters.AddWithValue("@note", (object?)req.Note?.Trim() ?? DBNull.Value);
+            cmd.Parameters.AddWithValue("@sortOrder", "ZZZ" + DateTime.Now.ToString("HHmmss"));
+            cmd.Parameters.AddWithValue("@parentId", string.IsNullOrWhiteSpace(req.ParentId) ? (object)DBNull.Value : req.ParentId.Trim());
+            cmd.Parameters.AddWithValue("@itemType", req.ItemType);
+            cmd.Parameters.AddWithValue("@simageId", string.IsNullOrWhiteSpace(req.SimageId) ? (object)DBNull.Value : req.SimageId.Trim());
+            cmd.Parameters.AddWithValue("@userId", _adminUserId);
+
+            cmd.ExecuteNonQuery();
+            return Ok(new { success = true, id = newId, message = "Đã thêm thành công!" });
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(500, new { success = false, message = "Lỗi khi thêm: " + ex.Message });
+        }
+    }
+
+    [HttpPut("tree-item/{id}")]
+    public IActionResult UpdateTreeItem(string id, [FromBody] TreeItemRequest req)
+    {
+        try
+        {
+            var table = req.Mode == "trangThai" ? "DTRANGTHAI" : "DNHOMKHACHHANG";
+            using var conn = new FbConnection(GetConnStr());
+            conn.Open();
+
+            using var cmd = conn.CreateCommand();
+            cmd.CommandText = $@"
+                UPDATE {table} SET
+                    NAME = @name,
+                    NOTE = @note,
+                    SIMAGEID = @simageId,
+                    TIMEMODIFIED = CURRENT_TIMESTAMP,
+                    USERMODIFIEDID = @userId
+                WHERE ID = @id";
+
+            cmd.Parameters.AddWithValue("@id", id.Trim());
+            cmd.Parameters.AddWithValue("@name", req.Name?.Trim() ?? "");
+            cmd.Parameters.AddWithValue("@note", (object?)req.Note?.Trim() ?? DBNull.Value);
+            cmd.Parameters.AddWithValue("@simageId", string.IsNullOrWhiteSpace(req.SimageId) ? (object)DBNull.Value : req.SimageId.Trim());
+            cmd.Parameters.AddWithValue("@userId", _adminUserId);
+
+            int rows = cmd.ExecuteNonQuery();
+            return Ok(new { success = true, rowsAffected = rows, message = "Cập nhật thành công!" });
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(500, new { success = false, message = "Lỗi cập nhật: " + ex.Message });
+        }
+    }
+
+    [HttpDelete("tree-item/{id}")]
+    public IActionResult DeleteTreeItem(string id, [FromQuery] string mode = "trangThai")
+    {
+        try
+        {
+            var table = mode == "trangThai" ? "DTRANGTHAI" : "DNHOMKHACHHANG";
+            using var conn = new FbConnection(GetConnStr());
+            conn.Open();
+
+            using var cmd = conn.CreateCommand();
+            cmd.CommandText = $"UPDATE {table} SET STATUS = -1, TIMEMODIFIED = CURRENT_TIMESTAMP, USERMODIFIEDID = @userId WHERE ID = @id";
+            cmd.Parameters.AddWithValue("@id", id.Trim());
+            cmd.Parameters.AddWithValue("@userId", _adminUserId);
+
+            int rows = cmd.ExecuteNonQuery();
+            return Ok(new { success = true, rowsAffected = rows, message = "Đã chuyển vào thùng rác thành công!" });
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(500, new { success = false, message = "Lỗi xóa: " + ex.Message });
+        }
+    }
+
+    [HttpPost("tree-items/batch")]
+    public IActionResult BatchCreateTreeItems([FromBody] BatchTreeItemRequest req)
+    {
+        if (req.Names == null || req.Names.Count == 0)
+        {
+            return BadRequest(new { success = false, message = "Danh sách tên không được rỗng!" });
+        }
+
+        try
+        {
+            var table = req.Mode == "trangThai" ? "DTRANGTHAI" : "DNHOMKHACHHANG";
+            using var conn = new FbConnection(GetConnStr());
+            conn.Open();
+            using var trans = conn.BeginTransaction();
+
+            int count = 0;
+            int idx = 0;
+            foreach (var rawName in req.Names)
+            {
+                var name = rawName?.Trim();
+                if (string.IsNullOrWhiteSpace(name)) continue;
+
+                using var cmd = conn.CreateCommand();
+                cmd.Transaction = trans;
+                cmd.CommandText = $@"
+                    INSERT INTO {table} (
+                        ID, NAME, STATUS, SORTORDER, PARENTID, ITEMTYPE, TIMECREATED, USERCREATEDID
+                    ) VALUES (
+                        @id, @name, 30, @sortOrder, @parentId, 0, CURRENT_TIMESTAMP, @userId
+                    )";
+
+                cmd.Parameters.AddWithValue("@id", Guid.NewGuid().ToString());
+                cmd.Parameters.AddWithValue("@name", name);
+                cmd.Parameters.AddWithValue("@sortOrder", "ZZZ" + DateTime.Now.ToString("HHmmss") + idx.ToString("D2"));
+                cmd.Parameters.AddWithValue("@parentId", string.IsNullOrWhiteSpace(req.ParentId) ? (object)DBNull.Value : req.ParentId.Trim());
+                cmd.Parameters.AddWithValue("@userId", _adminUserId);
+
+                cmd.ExecuteNonQuery();
+                count++;
+                idx++;
+            }
+
+            trans.Commit();
+            return Ok(new { success = true, createdCount = count, message = $"Đã thêm nhanh {count} mục thành công!" });
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(500, new { success = false, message = "Lỗi thêm nhanh: " + ex.Message });
+        }
+    }
+}
+
+public class TreeItemRequest
+{
+    public string? Mode { get; set; }
+    public string? Id { get; set; }
+    public string? Name { get; set; }
+    public string? Note { get; set; }
+    public string? ParentId { get; set; }
+    public int ItemType { get; set; } = 0;
+    public string? SimageId { get; set; }
+}
+
+public class BatchTreeItemRequest
+{
+    public string? Mode { get; set; }
+    public string? ParentId { get; set; }
+    public List<string> Names { get; set; } = new();
 }
