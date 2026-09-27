@@ -1922,6 +1922,265 @@ public class KhachHangController : ControllerBase
             return StatusCode(500, new { success = false, message = "Lỗi thêm nhanh: " + ex.Message });
         }
     }
+
+    // =========================================================================
+    // 7. PHÂN QUYỀN NGƯỜI DÙNG & CẤU HÌNH HỆ THỐNG DANH MỤC KHÁCH HÀNG
+    // =========================================================================
+
+    [HttpGet("permissions")]
+    public IActionResult GetUserPermissions([FromQuery] string? username, [FromQuery] string? userId)
+    {
+        try
+        {
+            using var conn = new FbConnection(GetConnStr());
+            conn.Open();
+
+            bool isAdmin = false;
+            string? sgroupUserId = null;
+            string groupName = "Quản trị";
+
+            // 1. Kiểm tra tài khoản người dùng
+            if (!string.IsNullOrWhiteSpace(username) || !string.IsNullOrWhiteSpace(userId))
+            {
+                using var userCmd = conn.CreateCommand();
+                userCmd.CommandText = @"
+                    SELECT FIRST 1 u.ID, u.USERNAME, u.ISADMIN, u.SGROUPUSERID, g.NAME AS GROUPNAME
+                    FROM SUSER u
+                    LEFT JOIN SGROUPUSER g ON u.SGROUPUSERID = g.ID
+                    WHERE (u.STATUS IS NULL OR u.STATUS <> -1)
+                      AND (UPPER(u.USERNAME) = @u OR u.ID = @uid)";
+                userCmd.Parameters.AddWithValue("@u", username?.Trim().ToUpper() ?? "");
+                userCmd.Parameters.AddWithValue("@uid", userId?.Trim() ?? "");
+
+                using var r = userCmd.ExecuteReader();
+                if (r.Read())
+                {
+                    var uname = r["USERNAME"]?.ToString()?.Trim() ?? "";
+                    var isAdmVal = r["ISADMIN"] is not DBNull && Convert.ToInt32(r["ISADMIN"]) == 1;
+                    if (isAdmVal || uname.Equals("ADMIN", StringComparison.OrdinalIgnoreCase))
+                    {
+                        isAdmin = true;
+                    }
+                    sgroupUserId = r["SGROUPUSERID"]?.ToString()?.Trim();
+                    groupName = r["GROUPNAME"]?.ToString()?.Trim() ?? (isAdmin ? "Quản trị hệ thống" : "Nhân viên");
+                }
+            }
+            else
+            {
+                isAdmin = true;
+            }
+
+            // Nếu là Admin thì toàn quyền
+            if (isAdmin)
+            {
+                return Ok(new
+                {
+                    success = true,
+                    isAdmin = true,
+                    groupName = "Quản trị hệ thống (Toàn quyền)",
+                    canView = true,
+                    canAdd = true,
+                    canEdit = true,
+                    canDelete = true,
+                    canExport = true,
+                    canSyncDevice = true,
+                    canManageConfig = true,
+                    subtabs = new
+                    {
+                        baoGia = new { canView = true, canAdd = true, canEdit = true, canDelete = true },
+                        donHang = new { canView = true, canAdd = true, canEdit = true, canDelete = true },
+                        datHang = new { canView = true, canAdd = true, canEdit = true, canDelete = true },
+                        giaHanThe = new { canView = true, canAdd = true, canEdit = true, canDelete = true },
+                        baoLuuThe = new { canView = true, canAdd = true, canEdit = true, canDelete = true },
+                        doiLoaiThe = new { canView = true, canAdd = true, canEdit = true, canDelete = true },
+                        datCoc = new { canView = true, canAdd = true, canEdit = true, canDelete = true },
+                        thuCongNo = new { canView = true, canAdd = true, canEdit = true, canDelete = true }
+                    }
+                });
+            }
+
+            // Nếu không phải Admin, tra cứu quyền hạn trong SGROUPROLE theo SGROUPUSERID
+            var roleModes = new Dictionary<string, int>();
+            if (!string.IsNullOrWhiteSpace(sgroupUserId))
+            {
+                using var roleCmd = conn.CreateCommand();
+                roleCmd.CommandText = "SELECT SFUNCTIONID, MODE FROM SGROUPROLE WHERE SGROUPUSERID = @gid AND (STATUS IS NULL OR STATUS <> -1)";
+                roleCmd.Parameters.AddWithValue("@gid", sgroupUserId);
+                using var rRole = roleCmd.ExecuteReader();
+                while (rRole.Read())
+                {
+                    var fid = rRole["SFUNCTIONID"]?.ToString()?.Trim() ?? "";
+                    var m = rRole["MODE"] is not DBNull ? Convert.ToInt32(rRole["MODE"]) : 0;
+                    roleModes[fid] = m;
+                }
+            }
+
+            // Function ID Danh mục khách hàng: 36c3bad1-9d2e-4916-98e0-efb6c0e681e2
+            int custMode = roleModes.TryGetValue("36c3bad1-9d2e-4916-98e0-efb6c0e681e2", out var cm) ? cm : 0;
+            // Cho phép sao chép dữ liệu (Export / In): c320a6bd-7aaf-49c3-9015-2e7532f0a669
+            int copyMode = roleModes.TryGetValue("c320a6bd-7aaf-49c3-9015-2e7532f0a669", out var cpm) ? cpm : 0;
+            // Đẩy thông tin thẻ lên thiết bị: 0b994c59-2301-46cc-8f43-015b7b55f0e8
+            int syncMode = roleModes.TryGetValue("0b994c59-2301-46cc-8f43-015b7b55f0e8", out var sm) ? sm : 0;
+            // Cấu hình toàn hệ thống: 7
+            int cfgMode = roleModes.TryGetValue("7", out var cfm) ? cfm : 0;
+
+            bool canView = (custMode & 16) != 0 || custMode == 240;
+            bool canAdd = (custMode & 32) != 0 || custMode == 240;
+            bool canEdit = (custMode & 64) != 0 || custMode == 240;
+            bool canDelete = (custMode & 128) != 0 || custMode == 240;
+            bool canExport = (copyMode & 16) != 0 || copyMode == 240 || canView;
+            bool canSyncDevice = (syncMode & 16) != 0 || syncMode == 240;
+            bool canManageConfig = (cfgMode & 16) != 0 || cfgMode == 240;
+
+            Func<string, object> getSubtabPerm = (funcId) =>
+            {
+                int m = roleModes.TryGetValue(funcId, out var subM) ? subM : 0;
+                return new
+                {
+                    canView = (m & 16) != 0 || m == 240,
+                    canAdd = (m & 32) != 0 || m == 240,
+                    canEdit = (m & 64) != 0 || m == 240,
+                    canDelete = (m & 128) != 0 || m == 240
+                };
+            };
+
+            return Ok(new
+            {
+                success = true,
+                isAdmin = false,
+                groupName = groupName,
+                canView = canView,
+                canAdd = canAdd,
+                canEdit = canEdit,
+                canDelete = canDelete,
+                canExport = canExport,
+                canSyncDevice = canSyncDevice,
+                canManageConfig = canManageConfig,
+                subtabs = new
+                {
+                    baoGia = getSubtabPerm("7be6722c-aeed-486a-85ef-607b8b4c7407"),
+                    donHang = getSubtabPerm("db591d0e-d671-42d0-b3b1-f705345cc641"),
+                    datHang = getSubtabPerm("97487cfa-66f6-415e-9046-9a245c61f2ae"),
+                    giaHanThe = getSubtabPerm("f91ac379-3afd-455d-8d67-25c5d220c869"),
+                    baoLuuThe = getSubtabPerm("7e5dedef-7c46-473e-b7d2-64f980defc65"),
+                    doiLoaiThe = getSubtabPerm("42129259-1ac5-4600-bbaf-03b8e63bd2ec"),
+                    datCoc = getSubtabPerm("e3501b22-4374-4e7a-af19-b57a15a49fb5"),
+                    thuCongNo = getSubtabPerm("d5fd5371-a3a7-4247-ae44-68fd88812f90")
+                }
+            });
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(500, new { success = false, message = "Lỗi kiểm tra phân quyền: " + ex.Message });
+        }
+    }
+
+    [HttpGet("system-config")]
+    public IActionResult GetSystemConfig()
+    {
+        try
+        {
+            using var conn = new FbConnection(GetConnStr());
+            conn.Open();
+
+            var configList = new List<object>();
+            var configDict = new Dictionary<string, object?>();
+
+            using (var cmd = conn.CreateCommand())
+            {
+                cmd.CommandText = @"
+                    SELECT ID, NAME, CAPTION, CONTROLTYPE, DATATYPE, MOREDETAIL, NOTE
+                    FROM SCONFIG
+                    WHERE NAME IN (
+                        'ChoPhepTrungTenKhachHang',
+                        'ChoPhepNhapBangBanPhim',
+                        'GiaHanTheKhiThemKhachHang',
+                        'TuDongTaoXoaThe',
+                        'ChoPhepKhachNoGym',
+                        'CoPhanCaTap',
+                        'CoSuDungTheTheoLan',
+                        'SoNgayCanhBaoSapHetHan',
+                        'SoLanCanhBaoSapHet',
+                        'ThongBaoKhachDenNgaySinhNhat'
+                    )";
+                using var r = cmd.ExecuteReader();
+                while (r.Read())
+                {
+                    var name = r["NAME"]?.ToString()?.Trim() ?? "";
+                    var caption = r["CAPTION"]?.ToString()?.Trim() ?? "";
+                    var ctype = r["CONTROLTYPE"] is not DBNull ? Convert.ToInt32(r["CONTROLTYPE"]) : 9;
+                    var val = r["MOREDETAIL"]?.ToString()?.Trim() ?? "";
+
+                    object parsedVal = val;
+                    if (ctype == 9) // Boolean
+                    {
+                        parsedVal = val == "1" || val.Equals("true", StringComparison.OrdinalIgnoreCase);
+                    }
+                    else if (ctype == 3) // Integer
+                    {
+                        parsedVal = int.TryParse(val, out var intV) ? intV : 0;
+                    }
+
+                    configDict[name] = parsedVal;
+                    configList.Add(new
+                    {
+                        id = r["ID"]?.ToString()?.Trim(),
+                        name = name,
+                        caption = caption,
+                        controlType = ctype,
+                        value = parsedVal,
+                        rawValue = val
+                    });
+                }
+            }
+
+            return Ok(new
+            {
+                success = true,
+                configs = configDict,
+                items = configList
+            });
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(500, new { success = false, message = "Lỗi đọc cấu hình hệ thống: " + ex.Message });
+        }
+    }
+
+    [HttpPost("system-config")]
+    public IActionResult UpdateSystemConfig([FromBody] UpdateSystemConfigRequest req)
+    {
+        try
+        {
+            using var conn = new FbConnection(GetConnStr());
+            conn.Open();
+
+            foreach (var kvp in req.Configs)
+            {
+                using var cmd = conn.CreateCommand();
+                cmd.CommandText = @"
+                    UPDATE SCONFIG 
+                    SET MOREDETAIL = @val, 
+                        TIMEMODIFIED = CURRENT_TIMESTAMP,
+                        USERMODIFIEDID = '4f1466a0-0756-4ba9-afa8-053b96ca7569'
+                    WHERE NAME = @name";
+                cmd.Parameters.AddWithValue("@val", kvp.Value ?? "");
+                cmd.Parameters.AddWithValue("@name", kvp.Key);
+                cmd.ExecuteNonQuery();
+            }
+
+            return Ok(new { success = true, message = "Lưu cấu hình hệ thống thành công!" });
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(500, new { success = false, message = "Lỗi lưu cấu hình hệ thống: " + ex.Message });
+        }
+    }
+}
+
+public class UpdateSystemConfigRequest
+{
+    public Dictionary<string, string> Configs { get; set; } = new();
 }
 
 public class TreeItemRequest

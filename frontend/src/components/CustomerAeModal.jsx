@@ -19,6 +19,7 @@ export default function CustomerAeModal({
     tinhThanh: []
   },
   subtabsData = null,
+  systemConfigs = {},
   onSave,
   onClose,
   showNotification
@@ -343,11 +344,15 @@ export default function CustomerAeModal({
                 <div className="gym-main-fields">
                   {/* Mã khách (Loc: 140, 7) */}
                   <div className="gym-ae-row">
-                    <label className="gym-ae-label">Mã khách</label>
+                    <label className="gym-ae-label">
+                      Mã khách {systemConfigs?.ChoPhepNhapBangBanPhim === false && <span style={{ fontSize: 10, color: '#0284c7' }}>(Quẹt thẻ)</span>}
+                    </label>
                     <input
                       type="text"
                       className="gym-ae-input"
                       value={formData.maKhach}
+                      placeholder={systemConfigs?.ChoPhepNhapBangBanPhim === false ? "Vui lòng quẹt thẻ / quét mã vạch thiết bị..." : ""}
+                      readOnly={systemConfigs?.ChoPhepNhapBangBanPhim === false}
                       onChange={(e) => handleChange('maKhach', e.target.value)}
                     />
                   </div>

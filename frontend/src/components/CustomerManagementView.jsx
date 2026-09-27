@@ -1,6 +1,8 @@
 import React, { useState, useEffect, useRef, useMemo } from 'react';
 import { khachHangService } from '../services/khachHangService';
 import CustomerAeModal from './CustomerAeModal';
+import CustomerSystemConfigModal from './CustomerSystemConfigModal';
+import { authService } from '../services/authService';
 import * as XLSX from 'xlsx';
 import FastReportModal from './FastReportModal';
 import ExcelImportModal from './ExcelImportModal';
@@ -59,6 +61,33 @@ export default function CustomerManagementView({ onSwitchToAccessControl, showNo
   const [showExcelImport, setShowExcelImport] = useState(false);
   const [showDeviceSync, setShowDeviceSync] = useState(false);
   const [showFingerprintEnroll, setShowFingerprintEnroll] = useState(false);
+
+  // --- PHÂN QUYỀN NGƯỜI DÙNG & CẤU HÌNH HỆ THỐNG ---
+  const [currentUser, setCurrentUser] = useState(() => authService.getCurrentUser());
+  const [permissions, setPermissions] = useState({
+    canView: true,
+    canAdd: true,
+    canEdit: true,
+    canDelete: true,
+    canExport: true,
+    canSyncDevice: true,
+    canManageConfig: true,
+    userRoleName: 'Admin',
+    subtabs: {}
+  });
+  const [systemConfigs, setSystemConfigs] = useState({
+    ChoPhepTrungTenKhachHang: false,
+    ChoPhepNhapBangBanPhim: true,
+    GiaHanTheKhiThemKhachHang: false,
+    TuDongTaoXoaThe: false,
+    ChoPhepKhachNoGym: false,
+    CoPhanCaTap: false,
+    CoSuDungTheTheoLan: false,
+    SoNgayCanhBaoSapHetHan: 7,
+    SoLanCanhBaoSapHet: 3,
+    ThongBaoKhachDenNgaySinhNhat: true
+  });
+  const [showConfigModal, setShowConfigModal] = useState(false);
 
   // --- WINFORMS CONTEXT MENU STATES ---
   const [contextMenu, setContextMenu] = useState({
@@ -271,8 +300,112 @@ export default function CustomerManagementView({ onSwitchToAccessControl, showNo
     }
   };
 
-  // Nạp metadata khi khởi động
+  // Nạp metadata, icons, phân quyền và cấu hình khi khởi động
+  const loadPermissionsAndConfig = async () => {
+    try {
+      const user = authService.getCurrentUser();
+      if (user) setCurrentUser(user);
+      const permRes = await khachHangService.getUserPermissions(user?.username, user?.id);
+      if (permRes && permRes.data) {
+        setPermissions(permRes.data);
+      }
+    } catch (err) {
+      console.warn('Lỗi nạp phân quyền người dùng:', err);
+    }
+
+    try {
+      const cfgRes = await khachHangService.getSystemConfig();
+      if (cfgRes && cfgRes.data) {
+        setSystemConfigs(cfgRes.data);
+      }
+    } catch (err) {
+      console.warn('Lỗi nạp cấu hình hệ thống:', err);
+    }
+  };
+
+  const handleSaveSystemConfig = async (newConfigs) => {
+    try {
+      const res = await khachHangService.updateSystemConfig(newConfigs);
+      if (res && res.success) {
+        setSystemConfigs(newConfigs);
+        setShowConfigModal(false);
+        showNotification && showNotification('Đã cập nhật cấu hình hệ thống thành công!');
+      } else {
+        alert(res?.message || 'Không thể lưu cấu hình hệ thống');
+      }
+    } catch (err) {
+      console.error('Lỗi lưu cấu hình:', err);
+      alert('Lỗi kết nối khi lưu cấu hình hệ thống');
+    }
+  };
+
+  // Hàm kiểm tra các cảnh báo thẻ & sinh nhật theo Cấu hình hệ thống (SCONFIG)
+  const checkCustomerWarnings = (c) => {
+    const warnings = { isExpiring: false, daysLeft: null, isLowSessions: false, isBirthdayToday: false };
+    if (!c) return warnings;
+
+    // 1. Cảnh báo sắp hết hạn thẻ (SoNgayCanhBaoSapHetHan)
+    if (c.denNgay && Number(systemConfigs.SoNgayCanhBaoSapHetHan) > 0) {
+      try {
+        let parts;
+        if (c.denNgay.includes('/')) {
+          parts = c.denNgay.split('/');
+        } else if (c.denNgay.includes('-')) {
+          parts = c.denNgay.split('-');
+          if (parts[0].length === 4) parts = [parts[2], parts[1], parts[0]];
+        }
+        if (parts && parts.length === 3) {
+          const expDate = new Date(parseInt(parts[2]), parseInt(parts[1]) - 1, parseInt(parts[0]));
+          const now = new Date();
+          now.setHours(0, 0, 0, 0);
+          expDate.setHours(0, 0, 0, 0);
+          const diffDays = Math.ceil((expDate - now) / (1000 * 60 * 60 * 24));
+          if (diffDays >= 0 && diffDays <= Number(systemConfigs.SoNgayCanhBaoSapHetHan)) {
+            warnings.isExpiring = true;
+            warnings.daysLeft = diffDays;
+          }
+        }
+      } catch (e) {
+        // ignore date parse errors
+      }
+    }
+
+    // 2. Cảnh báo sắp hết số lần tập (SoLanCanhBaoSapHet)
+    if (Number(systemConfigs.SoLanCanhBaoSapHet) > 0 && c.conLai !== undefined && c.conLai !== null) {
+      const remaining = Number(c.conLai);
+      if (remaining > 0 && remaining <= Number(systemConfigs.SoLanCanhBaoSapHet)) {
+        warnings.isLowSessions = true;
+      }
+    }
+
+    // 3. Thông báo sinh nhật hôm nay (ThongBaoKhachDenNgaySinhNhat)
+    if (systemConfigs.ThongBaoKhachDenNgaySinhNhat && c.ngaySinh) {
+      try {
+        let parts;
+        if (c.ngaySinh.includes('/')) {
+          parts = c.ngaySinh.split('/');
+        } else if (c.ngaySinh.includes('-')) {
+          parts = c.ngaySinh.split('-');
+          if (parts[0].length === 4) parts = [parts[2], parts[1], parts[0]];
+        }
+        if (parts && parts.length >= 2) {
+          const birthDay = parseInt(parts[0], 10);
+          const birthMonth = parseInt(parts[1], 10);
+          const today = new Date();
+          if (birthDay === today.getDate() && birthMonth === (today.getMonth() + 1)) {
+            warnings.isBirthdayToday = true;
+          }
+        }
+      } catch (e) {
+        // ignore
+      }
+    }
+
+    return warnings;
+  };
+
   useEffect(() => {
+    loadPermissionsAndConfig();
     khachHangService.getMetadata().then((res) => {
       if (res && res.data) {
         setMetadata(res.data);
@@ -403,6 +536,10 @@ export default function CustomerManagementView({ onSwitchToAccessControl, showNo
 
   // Mở modal thêm mới khách hàng (DynamicAeForm Config.CreateAeForm('DKHACHHANG'))
   const handleAddNewCustomer = () => {
+    if (!permissions.canAdd) {
+      showNotification && showNotification('⚠️ Bạn không có quyền thêm mới khách hàng!');
+      return;
+    }
     setModalState({
       show: true,
       mode: 'create',
@@ -412,6 +549,10 @@ export default function CustomerManagementView({ onSwitchToAccessControl, showNo
 
   // Mở modal chỉnh sửa khách hàng
   const handleEditCustomer = () => {
+    if (!permissions.canEdit) {
+      showNotification && showNotification('⚠️ Bạn không có quyền chỉnh sửa khách hàng!');
+      return;
+    }
     if (!selectedCustomer) {
       showNotification && showNotification('Vui lòng chọn một khách hàng để chỉnh sửa!');
       return;
@@ -426,6 +567,10 @@ export default function CustomerManagementView({ onSwitchToAccessControl, showNo
 
   // Xóa vĩnh viễn khách hàng khỏi CSDL
   const handlePermanentDelete = async () => {
+    if (!permissions.canDelete) {
+      showNotification && showNotification('⚠️ Bạn không có quyền xóa khách hàng!');
+      return;
+    }
     if (!selectedCustomer) {
       showNotification && showNotification('Vui lòng chọn khách hàng cần xóa vĩnh viễn!');
       return;
@@ -586,11 +731,18 @@ export default function CustomerManagementView({ onSwitchToAccessControl, showNo
   // 1. Thêm mới bản ghi subtab
   const handleOpenAddSubtab = () => {
     const { tabId, tabLabel } = subtabContextMenu;
+    const currentTabId = tabId || activeBottomTab;
+    const tabPerm = permissions.subtabs?.[currentTabId];
+    if (tabPerm && !tabPerm.canAdd) {
+      showNotification && showNotification(`⚠️ Bạn không có quyền thêm mới bản ghi vào "${tabLabel || currentTabId}"!`);
+      closeSubtabContextMenu();
+      return;
+    }
     closeSubtabContextMenu();
     setSubtabAeModal({
       show: true,
       mode: 'create',
-      tabId: tabId || activeBottomTab,
+      tabId: currentTabId,
       tabLabel: tabLabel || (bottomTabs.find(t => t.id === activeBottomTab)?.label || 'Bản ghi'),
       initialData: null
     });
@@ -599,6 +751,13 @@ export default function CustomerManagementView({ onSwitchToAccessControl, showNo
   // 2. Chỉnh sửa bản ghi subtab
   const handleOpenEditSubtab = () => {
     const { tabId, tabLabel, item } = subtabContextMenu;
+    const currentTabId = tabId || activeBottomTab;
+    const tabPerm = permissions.subtabs?.[currentTabId];
+    if (tabPerm && !tabPerm.canEdit) {
+      showNotification && showNotification(`⚠️ Bạn không có quyền chỉnh sửa bản ghi trong "${tabLabel || currentTabId}"!`);
+      closeSubtabContextMenu();
+      return;
+    }
     closeSubtabContextMenu();
     if (!item) {
       showNotification && showNotification('Vui lòng chọn một dòng để chỉnh sửa!');
@@ -607,7 +766,7 @@ export default function CustomerManagementView({ onSwitchToAccessControl, showNo
     setSubtabAeModal({
       show: true,
       mode: 'edit',
-      tabId: tabId || activeBottomTab,
+      tabId: currentTabId,
       tabLabel: tabLabel || (bottomTabs.find(t => t.id === activeBottomTab)?.label || 'Bản ghi'),
       initialData: item
     });
@@ -675,6 +834,12 @@ export default function CustomerManagementView({ onSwitchToAccessControl, showNo
   // 8. Xóa bản ghi subtab
   const handleSubtabDelete = async () => {
     const { tabId, tabLabel, item } = subtabContextMenu;
+    const tabPerm = permissions.subtabs?.[tabId];
+    if (tabPerm && !tabPerm.canDelete) {
+      closeSubtabContextMenu();
+      showNotification && showNotification(`⚠️ Bạn không có quyền xóa bản ghi trong "${tabLabel || tabId}"!`);
+      return;
+    }
     closeSubtabContextMenu();
     if (!item || !item.id) {
       showNotification && showNotification('Vui lòng chọn một dòng để xóa!');
@@ -769,6 +934,10 @@ export default function CustomerManagementView({ onSwitchToAccessControl, showNo
   // 1. Thêm trạng thái / nhóm
   const handleOpenAddStatus = (parentId = null) => {
     closeTreeContextMenu();
+    if (!permissions.canAdd) {
+      showNotification && showNotification('⚠️ Bạn không có quyền thêm mục cây danh mục!');
+      return;
+    }
     setTreeModal({
       show: true,
       mode: 'create',
@@ -781,6 +950,10 @@ export default function CustomerManagementView({ onSwitchToAccessControl, showNo
   // 2. Thêm thư mục
   const handleOpenAddFolder = (parentId = null) => {
     closeTreeContextMenu();
+    if (!permissions.canAdd) {
+      showNotification && showNotification('⚠️ Bạn không có quyền thêm thư mục!');
+      return;
+    }
     setTreeModal({
       show: true,
       mode: 'create',
@@ -793,6 +966,10 @@ export default function CustomerManagementView({ onSwitchToAccessControl, showNo
   // 3. Thêm phân cách
   const handleAddSeparator = async (parentId = null) => {
     closeTreeContextMenu();
+    if (!permissions.canAdd) {
+      showNotification && showNotification('⚠️ Bạn không có quyền thêm phân cách!');
+      return;
+    }
     try {
       await khachHangService.createTreeItem({
         mode: treeMode,
@@ -811,6 +988,10 @@ export default function CustomerManagementView({ onSwitchToAccessControl, showNo
   // 4. Thêm nhanh
   const handleOpenQuickAdd = (parentId = null) => {
     closeTreeContextMenu();
+    if (!permissions.canAdd) {
+      showNotification && showNotification('⚠️ Bạn không có quyền thêm nhanh mục cây!');
+      return;
+    }
     setTreeQuickAddParentId(parentId || null);
     setShowTreeQuickAdd(true);
   };
@@ -818,6 +999,10 @@ export default function CustomerManagementView({ onSwitchToAccessControl, showNo
   // 5. Chỉnh sửa mục cây
   const handleOpenEditTreeItem = (itemParam = null) => {
     closeTreeContextMenu();
+    if (!permissions.canEdit) {
+      showNotification && showNotification('⚠️ Bạn không có quyền chỉnh sửa mục cây!');
+      return;
+    }
     const item = itemParam || treeContextMenu.item;
     if (!item) return;
     if (item.id === 'all' || item.id === 'unset' || item.id === 'trash') {
@@ -843,6 +1028,10 @@ export default function CustomerManagementView({ onSwitchToAccessControl, showNo
   // 6. Xóa mục cây
   const handleDeleteTreeItem = async (itemParam = null) => {
     closeTreeContextMenu();
+    if (!permissions.canDelete) {
+      showNotification && showNotification('⚠️ Bạn không có quyền xóa mục cây!');
+      return;
+    }
     const item = itemParam || treeContextMenu.item;
     if (!item) return;
     if (item.id === 'all' || item.id === 'unset' || item.id === 'trash') {
@@ -865,6 +1054,10 @@ export default function CustomerManagementView({ onSwitchToAccessControl, showNo
   // 7. Đổi tên nhanh
   const handleTreeRename = async (itemParam = null) => {
     closeTreeContextMenu();
+    if (!permissions.canEdit) {
+      showNotification && showNotification('⚠️ Bạn không có quyền đổi tên mục cây!');
+      return;
+    }
     const item = itemParam || treeContextMenu.item;
     if (!item) return;
     if (item.id === 'all' || item.id === 'unset' || item.id === 'trash') {
@@ -924,6 +1117,10 @@ export default function CustomerManagementView({ onSwitchToAccessControl, showNo
   };
 
   const handleDeleteCustomer = async () => {
+    if (!permissions.canDelete) {
+      showNotification && showNotification('⚠️ Bạn không có quyền xóa khách hàng!');
+      return;
+    }
     const target = selectedCustomer || (customers.length > 0 ? customers[0] : null);
     if (!target) {
       alert('Vui lòng chọn một khách hàng trong danh sách để xóa!');
@@ -951,6 +1148,10 @@ export default function CustomerManagementView({ onSwitchToAccessControl, showNo
 
   // Phục hồi khách hàng từ thùng rác
   const handleRestoreCustomer = async () => {
+    if (!permissions.canDelete) {
+      showNotification && showNotification('⚠️ Bạn không có quyền phục hồi khách hàng!');
+      return;
+    }
     if (!selectedCustomer) {
       showNotification && showNotification('Vui lòng chọn một khách hàng để phục hồi!');
       return;
@@ -973,15 +1174,53 @@ export default function CustomerManagementView({ onSwitchToAccessControl, showNo
   const handleSaveCustomer = async (data, id) => {
     try {
       if (modalState.mode === 'create') {
+        if (!permissions.canAdd) {
+          showNotification && showNotification('⚠️ Bạn không có quyền thêm mới khách hàng!');
+          return;
+        }
+
+        // Cấu hình: Kiểm tra trùng tên khách hàng (ChoPhepTrungTenKhachHang)
+        if (!systemConfigs.ChoPhepTrungTenKhachHang && data.name) {
+          const isDuplicate = customers.some(c => c.tenKhachHang?.trim().toLowerCase() === data.name.trim().toLowerCase());
+          if (isDuplicate) {
+            const confirmDup = window.confirm(
+              `⚠️ CẢNH BÁO CẤU HÌNH HỆ THỐNG:\nKhách hàng có tên "${data.name}" đã tồn tại trong danh mục!\n(Hệ thống đang cấu hình KHÔNG CHO PHÉP TRÙNG TÊN).\n\nBạn có chắc chắn muốn tiếp tục lưu không?`
+            );
+            if (!confirmDup) return;
+          }
+        }
+
         const res = await khachHangService.create(data);
         if (res && res.success) {
           showNotification && showNotification(`Đã thêm thành công khách hàng '${data.name}'!`);
           setModalState(prev => ({ ...prev, show: false }));
           loadCustomersAndCounts();
+
+          // Cấu hình: Tự động mở form Gia hạn thẻ khi thêm khách hàng (GiaHanTheKhiThemKhachHang)
+          if (systemConfigs.GiaHanTheKhiThemKhachHang) {
+            setTimeout(() => {
+              setActiveBottomTab('giaHanThe');
+              setSubtabAeModal({
+                show: true,
+                mode: 'create',
+                tabId: 'giaHanThe',
+                tabLabel: 'Gia hạn thẻ',
+                initialData: {
+                  khachHang: data.name,
+                  maThe: data.code || ''
+                }
+              });
+              showNotification && showNotification('Tự động mở form Gia hạn thẻ theo Cấu hình hệ thống!');
+            }, 450);
+          }
         } else {
           alert(`Lỗi: ${res?.message || 'Không thể thêm khách hàng'}`);
         }
       } else {
+        if (!permissions.canEdit) {
+          showNotification && showNotification('⚠️ Bạn không có quyền chỉnh sửa khách hàng!');
+          return;
+        }
         const targetId = id || selectedCustomerId;
         const res = await khachHangService.update(targetId, data);
         if (res && res.success) {
@@ -1004,6 +1243,10 @@ export default function CustomerManagementView({ onSwitchToAccessControl, showNo
 
   // Xuất danh sách ra file CSV / Excel
   const handleExportExcel = () => {
+    if (!permissions.canExport) {
+      showNotification && showNotification('⚠️ Bạn không có quyền xuất danh sách ra file Excel!');
+      return;
+    }
     const listToExport = customers.length > 0 ? customers : [
       { stt: 1, maThe: '999196', tenKhachHang: 'Nguyen Van Tuan Test AE', dienThoai: '0912345678', diaChi: 'Hà Nội', loaiThe: 'Gym Tháng', tuNgay: '2026-09-01', denNgay: '2026-10-01', soLan: 30, daTap: 5, conLai: 25, trangThai: 'Đang sử dụng' }
     ];
@@ -1041,18 +1284,34 @@ export default function CustomerManagementView({ onSwitchToAccessControl, showNo
   };
 
   const handlePrintReport = () => {
+    if (!permissions.canExport) {
+      showNotification && showNotification('⚠️ Bạn không có quyền in danh sách khách hàng!');
+      return;
+    }
     setShowFastReport(true);
   };
 
   const handleOpenExcelImport = () => {
+    if (!permissions.canAdd) {
+      showNotification && showNotification('⚠️ Bạn không có quyền nhập dữ liệu từ Excel!');
+      return;
+    }
     setShowExcelImport(true);
   };
 
   const handleOpenDeviceSync = () => {
+    if (!permissions.canSyncDevice) {
+      showNotification && showNotification('⚠️ Bạn không có quyền đồng bộ thiết bị!');
+      return;
+    }
     setShowDeviceSync(true);
   };
 
   const handleOpenFingerprintEnroll = () => {
+    if (!permissions.canSyncDevice) {
+      showNotification && showNotification('⚠️ Bạn không có quyền đăng ký vân tay thiết bị!');
+      return;
+    }
     const target = selectedCustomer || (customers.length > 0 ? customers[0] : null);
     if (!target) {
       alert('Vui lòng chọn một hội viên từ danh sách để đăng ký vân tay!');
@@ -1168,6 +1427,29 @@ export default function CustomerManagementView({ onSwitchToAccessControl, showNo
 
   const isInTrash = (treeMode === 'trangThai' && selectedTreeStatus === 'trash') ||
                     (treeMode === 'nhomKhach' && selectedGroupId === 'trash');
+
+  // Kiểm tra quyền xem danh mục khách hàng
+  if (permissions && permissions.canView === false) {
+    return (
+      <div className="cust-mgmt-container" style={{ padding: 40, textAlign: 'center', background: '#f8fafc', display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100%' }}>
+        <div style={{ maxWidth: 460, margin: '40px auto', background: '#fff', padding: '36px 30px', borderRadius: 8, border: '1px solid #e2e8f0', boxShadow: '0 4px 16px rgba(0,0,0,0.06)' }}>
+          <div style={{ fontSize: 52, color: '#dc2626', marginBottom: 14 }}>🔒</div>
+          <h2 style={{ fontSize: 18, color: '#1e293b', marginBottom: 10, fontWeight: 700 }}>Không Có Quyền Truy Cập</h2>
+          <p style={{ fontSize: 13, color: '#64748b', lineHeight: 1.6, marginBottom: 20 }}>
+            Tài khoản <strong>{currentUser?.username || 'hiện tại'}</strong> ({permissions.userRoleName || 'Người dùng'}) không có quyền xem Danh mục khách hàng & hội viên trong hệ thống.<br />
+            Vui lòng liên hệ Quản trị viên để được phân quyền chức năng này.
+          </p>
+          <button 
+            className="tn-btn-primary" 
+            style={{ padding: '8px 24px', fontSize: 13 }}
+            onClick={() => loadPermissionsAndConfig()}
+          >
+            <i className="fa-solid fa-rotate-right" style={{ marginRight: 6 }}></i> Thử lại
+          </button>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className={`cust-mgmt-container ${uiScale !== '100' ? `scale-${uiScale}` : ''}`}>
@@ -1335,41 +1617,60 @@ export default function CustomerManagementView({ onSwitchToAccessControl, showNo
         {/* RIGHT AREA: MASTER GRID + BOTTOM DETAIL TABS (KHUNG TÍM) */}
         <div className="cust-right-pane">
           <div className="cust-main-header">
-            <div style={{ display: 'flex', alignItems: 'center' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
               <span>Khách hàng</span>
               {isInTrash && (
-                <span style={{ fontSize: 12, color: '#dc2626', fontWeight: 600, marginLeft: 8 }}>
+                <span style={{ fontSize: 12, color: '#dc2626', fontWeight: 600 }}>
                   (Thùng rác - Bản ghi đã xóa)
                 </span>
               )}
+              {/* BADGE PHÂN QUYỀN NGƯỜI DÙNG TÂN AN PHÁT */}
+              <span className="cust-user-perm-badge" title="Quyền hạn truy cập của tài khoản trong hệ thống">
+                <i className="fa-solid fa-shield-halved"></i> {permissions.userRoleName || 'Admin'}
+                {permissions.canAdd && permissions.canEdit && permissions.canDelete ? ' (Toàn quyền)' : ' (Phân quyền)'}
+              </span>
             </div>
 
-            {/* BỘ NÚT CHUYỂN ĐỔI CỠ GIAO DIỆN MÁY TÍNH TO RÕ RÀNG */}
-            <div className="cust-scale-group" title="Tùy chỉnh cỡ giao diện to nhỏ cho máy tính">
-              <span className="cust-scale-label">
-                <i className="fa-solid fa-display"></i> Cỡ giao diện:
-              </span>
-              <button
-                className={`cust-scale-btn ${uiScale === '100' ? 'active' : ''}`}
-                onClick={() => handleSetUiScale('100')}
-                title="Cỡ chuẩn (100%)"
-              >
-                Chuẩn
-              </button>
-              <button
-                className={`cust-scale-btn ${uiScale === '110' ? 'active' : ''}`}
-                onClick={() => handleSetUiScale('110')}
-                title="To rõ nét cho màn hình vi tính (110%)"
-              >
-                To rõ (110%)
-              </button>
-              <button
-                className={`cust-scale-btn ${uiScale === '120' ? 'active' : ''}`}
-                onClick={() => handleSetUiScale('120')}
-                title="Rất to dễ nhìn & dễ bấm (120%)"
-              >
-                Cực to (120%)
-              </button>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+              {/* NÚT MỞ CẤU HÌNH HỆ THỐNG */}
+              {permissions.canManageConfig && (
+                <button
+                  className="cust-config-trigger-btn"
+                  onClick={() => setShowConfigModal(true)}
+                  title="Cài đặt cấu hình hệ thống Khách hàng & Thẻ Gym (SCONFIG)"
+                >
+                  <i className="fa-solid fa-gear"></i>
+                  <span>Cấu hình</span>
+                </button>
+              )}
+
+              {/* BỘ NÚT CHUYỂN ĐỔI CỠ GIAO DIỆN MÁY TÍNH TO RÕ RÀNG */}
+              <div className="cust-scale-group" title="Tùy chỉnh cỡ giao diện to nhỏ cho máy tính">
+                <span className="cust-scale-label">
+                  <i className="fa-solid fa-display"></i> Cỡ giao diện:
+                </span>
+                <button
+                  className={`cust-scale-btn ${uiScale === '100' ? 'active' : ''}`}
+                  onClick={() => handleSetUiScale('100')}
+                  title="Cỡ chuẩn (100%)"
+                >
+                  Chuẩn
+                </button>
+                <button
+                  className={`cust-scale-btn ${uiScale === '110' ? 'active' : ''}`}
+                  onClick={() => handleSetUiScale('110')}
+                  title="To rõ nét cho màn hình vi tính (110%)"
+                >
+                  To rõ (110%)
+                </button>
+                <button
+                  className={`cust-scale-btn ${uiScale === '120' ? 'active' : ''}`}
+                  onClick={() => handleSetUiScale('120')}
+                  title="Rất to dễ nhìn & dễ bấm (120%)"
+                >
+                  Cực to (120%)
+                </button>
+              </div>
             </div>
           </div>
 
@@ -1389,29 +1690,59 @@ export default function CustomerManagementView({ onSwitchToAccessControl, showNo
               />
             </div>
 
-            <button className="cust-ribbon-btn primary" onClick={handleAddNewCustomer} title="Thêm mới khách hàng (Phím tắt: Insert)">
+            <button
+              className="cust-ribbon-btn primary"
+              onClick={handleAddNewCustomer}
+              disabled={!permissions.canAdd}
+              style={!permissions.canAdd ? { opacity: 0.5, cursor: 'not-allowed' } : {}}
+              title={!permissions.canAdd ? "Bạn không có quyền thêm mới" : "Thêm mới khách hàng (Phím tắt: Insert)"}
+            >
               <i className="fa-solid fa-plus" style={{ color: '#16a34a' }}></i>
               <span>Thêm (Insert)</span>
             </button>
 
-            <button className="cust-ribbon-btn" onClick={handleEditCustomer} title="Chỉnh sửa thông tin khách hàng (Phím tắt: F4)">
+            <button
+              className="cust-ribbon-btn"
+              onClick={handleEditCustomer}
+              disabled={!permissions.canEdit}
+              style={!permissions.canEdit ? { opacity: 0.5, cursor: 'not-allowed' } : {}}
+              title={!permissions.canEdit ? "Bạn không có quyền chỉnh sửa" : "Chỉnh sửa thông tin khách hàng (Phím tắt: F4)"}
+            >
               <i className="fa-solid fa-pen" style={{ color: '#d97706' }}></i>
               <span>Sửa (F4)</span>
             </button>
 
             {isInTrash ? (
               <>
-                <button className="cust-ribbon-btn primary" onClick={handleRestoreCustomer} title="Phục hồi khách hàng đã xóa">
+                <button
+                  className="cust-ribbon-btn primary"
+                  onClick={handleRestoreCustomer}
+                  disabled={!permissions.canDelete}
+                  style={!permissions.canDelete ? { opacity: 0.5, cursor: 'not-allowed' } : {}}
+                  title={!permissions.canDelete ? "Bạn không có quyền phục hồi" : "Phục hồi khách hàng đã xóa"}
+                >
                   <i className="fa-solid fa-trash-arrow-up" style={{ color: '#16a34a' }}></i>
                   <span>Phục hồi</span>
                 </button>
-                <button className="cust-ribbon-btn danger" onClick={handlePermanentDelete} title="Xóa vĩnh viễn khỏi CSDL">
+                <button
+                  className="cust-ribbon-btn danger"
+                  onClick={handlePermanentDelete}
+                  disabled={!permissions.canDelete}
+                  style={!permissions.canDelete ? { opacity: 0.5, cursor: 'not-allowed' } : {}}
+                  title={!permissions.canDelete ? "Bạn không có quyền xóa vĩnh viễn" : "Xóa vĩnh viễn khỏi CSDL"}
+                >
                   <i className="fa-solid fa-fire" style={{ color: '#dc2626' }}></i>
                   <span>Xóa vĩnh viễn</span>
                 </button>
               </>
             ) : (
-              <button className="cust-ribbon-btn danger" onClick={handleDeleteCustomer} title="Xóa khách hàng vào thùng rác (Phím tắt: Del)">
+              <button
+                className="cust-ribbon-btn danger"
+                onClick={handleDeleteCustomer}
+                disabled={!permissions.canDelete}
+                style={!permissions.canDelete ? { opacity: 0.5, cursor: 'not-allowed' } : {}}
+                title={!permissions.canDelete ? "Bạn không có quyền xóa" : "Xóa khách hàng vào thùng rác (Phím tắt: Del)"}
+              >
                 <i className="fa-solid fa-xmark" style={{ color: '#dc2626' }}></i>
                 <span>Xóa (Del)</span>
               </button>
@@ -1419,29 +1750,59 @@ export default function CustomerManagementView({ onSwitchToAccessControl, showNo
 
             <div className="cust-ribbon-sep"></div>
 
-            <button className="cust-ribbon-btn" onClick={handleOpenExcelImport} title="Nhập danh sách hội viên từ Microsoft Excel (.xlsx, .csv)">
+            <button
+              className="cust-ribbon-btn"
+              onClick={handleOpenExcelImport}
+              disabled={!permissions.canAdd}
+              style={!permissions.canAdd ? { opacity: 0.5, cursor: 'not-allowed' } : {}}
+              title={!permissions.canAdd ? "Bạn không có quyền nhập excel" : "Nhập danh sách hội viên từ Microsoft Excel (.xlsx, .csv)"}
+            >
               <i className="fa-solid fa-file-excel" style={{ color: '#16a34a' }}></i>
               <span>Thêm excel</span>
             </button>
 
-            <button className="cust-ribbon-btn" onClick={handleExportExcel} title="Xuất dữ liệu danh sách khách hàng ra file Excel (.xlsx)">
+            <button
+              className="cust-ribbon-btn"
+              onClick={handleExportExcel}
+              disabled={!permissions.canExport}
+              style={!permissions.canExport ? { opacity: 0.5, cursor: 'not-allowed' } : {}}
+              title={!permissions.canExport ? "Bạn không có quyền xuất excel" : "Xuất dữ liệu danh sách khách hàng ra file Excel (.xlsx)"}
+            >
               <i className="fa-solid fa-file-export" style={{ color: '#0284c7' }}></i>
               <span>Xuất excel</span>
             </button>
 
-            <button className="cust-ribbon-btn" onClick={handlePrintReport} title="Chọn mẫu in và mở FastReport xem trước bản in">
+            <button
+              className="cust-ribbon-btn"
+              onClick={handlePrintReport}
+              disabled={!permissions.canExport}
+              style={!permissions.canExport ? { opacity: 0.5, cursor: 'not-allowed' } : {}}
+              title={!permissions.canExport ? "Bạn không có quyền in ấn" : "Chọn mẫu in và mở FastReport xem trước bản in"}
+            >
               <i className="fa-solid fa-print" style={{ color: '#475569' }}></i>
               <span>In</span>
             </button>
 
             <div className="cust-ribbon-sep"></div>
 
-            <button className="cust-ribbon-btn" onClick={handleOpenDeviceSync} title="Đồng bộ hội viên từ máy chấm công / cổng xoay vân tay">
+            <button
+              className="cust-ribbon-btn"
+              onClick={handleOpenDeviceSync}
+              disabled={!permissions.canSyncDevice}
+              style={!permissions.canSyncDevice ? { opacity: 0.5, cursor: 'not-allowed' } : {}}
+              title={!permissions.canSyncDevice ? "Bạn không có quyền đồng bộ thiết bị" : "Đồng bộ hội viên từ máy chấm công / cổng xoay vân tay"}
+            >
               <i className="fa-solid fa-globe" style={{ color: '#0284c7' }}></i>
               <span>Thêm từ thiết bị</span>
             </button>
 
-            <button className="cust-ribbon-btn" onClick={handleOpenFingerprintEnroll} title="Đăng ký mẫu vân tay cho hội viên đang chọn">
+            <button
+              className="cust-ribbon-btn"
+              onClick={handleOpenFingerprintEnroll}
+              disabled={!permissions.canSyncDevice}
+              style={!permissions.canSyncDevice ? { opacity: 0.5, cursor: 'not-allowed' } : {}}
+              title={!permissions.canSyncDevice ? "Bạn không có quyền đăng ký vân tay" : "Đăng ký mẫu vân tay cho hội viên đang chọn"}
+            >
               <i className="fa-solid fa-fingerprint" style={{ color: '#0284c7' }}></i>
               <span>Lấy vân tay từ thiết bị</span>
             </button>
@@ -1496,6 +1857,7 @@ export default function CustomerManagementView({ onSwitchToAccessControl, showNo
                     const isDangSuDung = c.trangThai?.toLowerCase().includes('đang sử dụng') ||
                                          c.trangThai?.toLowerCase().includes('hoạt động') ||
                                          c.dTrangThaiId === '30' || c.dTrangThaiId === '1';
+                    const warnings = checkCustomerWarnings(c);
                     return (
                       <tr
                         key={c.id}
@@ -1521,7 +1883,12 @@ export default function CustomerManagementView({ onSwitchToAccessControl, showNo
                           className={`font-semibold ${focusedCell?.rowId === c.id && focusedCell?.colKey === 'tenKhachHang' ? 'cust-cell-focused' : ''}`}
                           onContextMenu={(e) => handleCellContextMenu(e, c, 'tenKhachHang', 'Tên khách hàng', c.tenKhachHang)}
                         >
-                          {c.tenKhachHang}
+                          <span>{c.tenKhachHang}</span>
+                          {warnings.isBirthdayToday && (
+                            <span title="Hôm nay là ngày sinh nhật của hội viên!" style={{ marginLeft: 6, fontSize: 13, cursor: 'default' }}>
+                              🎂
+                            </span>
+                          )}
                         </td>
                         <td
                           className={focusedCell?.rowId === c.id && focusedCell?.colKey === 'diaChi' ? 'cust-cell-focused' : ''}
@@ -1551,7 +1918,12 @@ export default function CustomerManagementView({ onSwitchToAccessControl, showNo
                           className={focusedCell?.rowId === c.id && focusedCell?.colKey === 'denNgay' ? 'cust-cell-focused' : ''}
                           onContextMenu={(e) => handleCellContextMenu(e, c, 'denNgay', 'Đến ngày', c.denNgay)}
                         >
-                          {c.denNgay || ''}
+                          <span>{c.denNgay || ''}</span>
+                          {warnings.isExpiring && (
+                            <span className="badge-warning-pill badge-warning-expiring" title={`Thẻ sắp hết hạn trong ${warnings.daysLeft} ngày!`}>
+                              ⏰ {warnings.daysLeft === 0 ? 'Hết hạn hôm nay' : `Còn ${warnings.daysLeft} ngày`}
+                            </span>
+                          )}
                         </td>
                         <td
                           className={focusedCell?.rowId === c.id && focusedCell?.colKey === 'trangThai' ? 'cust-cell-focused' : ''}
@@ -1586,7 +1958,12 @@ export default function CustomerManagementView({ onSwitchToAccessControl, showNo
                           className={focusedCell?.rowId === c.id && focusedCell?.colKey === 'conLai' ? 'cust-cell-focused' : ''}
                           onContextMenu={(e) => handleCellContextMenu(e, c, 'conLai', 'Còn lại', c.conLai)}
                         >
-                          {c.conLai ?? 0}
+                          <span>{c.conLai ?? 0}</span>
+                          {warnings.isLowSessions && (
+                            <span className="badge-warning-pill badge-warning-sessions" title={`Sắp hết số lần tập! Còn ${c.conLai} buổi`}>
+                              ⚠️ Sắp hết
+                            </span>
+                          )}
                         </td>
                         <td
                           className={focusedCell?.rowId === c.id && focusedCell?.colKey === 'facebook' ? 'cust-cell-focused' : ''}
@@ -2392,6 +2769,7 @@ export default function CustomerManagementView({ onSwitchToAccessControl, showNo
         initialData={modalState.customerData}
         metadata={metadata}
         subtabsData={subtabsData}
+        systemConfigs={systemConfigs}
         onSave={handleSaveCustomer}
         onClose={() => setModalState(prev => ({ ...prev, show: false }))}
         showNotification={showNotification}
@@ -2439,6 +2817,15 @@ export default function CustomerManagementView({ onSwitchToAccessControl, showNo
         showNotification={showNotification}
       />
 
+      {/* 9. MODAL CẤU HÌNH HỆ THỐNG KHÁCH HÀNG & GYM (SCONFIG) */}
+      <CustomerSystemConfigModal
+        show={showConfigModal}
+        onClose={() => setShowConfigModal(false)}
+        currentConfigs={systemConfigs}
+        onSave={handleSaveSystemConfig}
+        showNotification={showNotification}
+      />
+
       {/* 5. BOTTOM STATUS BAR (DEVEXPRESS FOOTER STATUS) */}
       <div className="cust-statusbar">
         <div className="cust-statusbar-left">
@@ -2470,8 +2857,13 @@ export default function CustomerManagementView({ onSwitchToAccessControl, showNo
         >
           {/* 1. Thêm Khách hàng */}
           <div
-            className="wf-menu-item"
-            onClick={() => { closeContextMenu(); handleOpenAddModal(); }}
+            className={`wf-menu-item ${!permissions.canAdd ? 'disabled' : ''}`}
+            onClick={() => {
+              closeContextMenu();
+              if (permissions.canAdd) handleAddNewCustomer();
+              else showNotification && showNotification('⚠️ Bạn không có quyền thêm mới khách hàng!');
+            }}
+            style={!permissions.canAdd ? { opacity: 0.5 } : {}}
           >
             <span className="wf-menu-icon" style={{ color: '#16a34a', fontWeight: 'bold' }}>✚</span>
             <span className="wf-menu-text">Thêm Khách hàng</span>
@@ -2479,8 +2871,13 @@ export default function CustomerManagementView({ onSwitchToAccessControl, showNo
 
           {/* 2. Thêm nhanh (excel) */}
           <div
-            className="wf-menu-item"
-            onClick={() => { closeContextMenu(); setShowExcelImport(true); }}
+            className={`wf-menu-item ${!permissions.canAdd ? 'disabled' : ''}`}
+            onClick={() => {
+              closeContextMenu();
+              if (permissions.canAdd) setShowExcelImport(true);
+              else showNotification && showNotification('⚠️ Bạn không có quyền nhập excel!');
+            }}
+            style={!permissions.canAdd ? { opacity: 0.5 } : {}}
           >
             <span className="wf-menu-icon"></span>
             <span className="wf-menu-text">Thêm nhanh (excel)</span>
@@ -2488,8 +2885,13 @@ export default function CustomerManagementView({ onSwitchToAccessControl, showNo
 
           {/* 3. Cập nhật nhanh (excel) */}
           <div
-            className="wf-menu-item"
-            onClick={() => { closeContextMenu(); setShowExcelImport(true); }}
+            className={`wf-menu-item ${!permissions.canAdd ? 'disabled' : ''}`}
+            onClick={() => {
+              closeContextMenu();
+              if (permissions.canAdd) setShowExcelImport(true);
+              else showNotification && showNotification('⚠️ Bạn không có quyền cập nhật excel!');
+            }}
+            style={!permissions.canAdd ? { opacity: 0.5 } : {}}
           >
             <span className="wf-menu-icon"></span>
             <span className="wf-menu-text">Cập nhật nhanh (excel)</span>
@@ -2497,8 +2899,13 @@ export default function CustomerManagementView({ onSwitchToAccessControl, showNo
 
           {/* 4. Chỉnh sửa */}
           <div
-            className="wf-menu-item"
-            onClick={() => { closeContextMenu(); handleEditCustomer(); }}
+            className={`wf-menu-item ${!permissions.canEdit ? 'disabled' : ''}`}
+            onClick={() => {
+              closeContextMenu();
+              if (permissions.canEdit) handleEditCustomer();
+              else showNotification && showNotification('⚠️ Bạn không có quyền chỉnh sửa khách hàng!');
+            }}
+            style={!permissions.canEdit ? { opacity: 0.5 } : {}}
           >
             <span className="wf-menu-icon" style={{ color: '#d97706' }}>✏️</span>
             <span className="wf-menu-text">Chỉnh sửa</span>
@@ -2590,8 +2997,13 @@ export default function CustomerManagementView({ onSwitchToAccessControl, showNo
 
           {/* 12. Xóa */}
           <div
-            className="wf-menu-item"
-            onClick={() => { closeContextMenu(); handleDeleteCustomer(); }}
+            className={`wf-menu-item ${!permissions.canDelete ? 'disabled' : ''}`}
+            onClick={() => {
+              closeContextMenu();
+              if (permissions.canDelete) handleDeleteCustomer();
+              else showNotification && showNotification('⚠️ Bạn không có quyền xóa khách hàng!');
+            }}
+            style={!permissions.canDelete ? { opacity: 0.5 } : {}}
           >
             <span className="wf-menu-icon" style={{ color: '#dc2626' }}>❌</span>
             <span className="wf-menu-text">Xóa</span>

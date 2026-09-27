@@ -141,6 +141,28 @@ export const khachHangService = {
   batchCreateTreeItems: async (data) => {
     const response = await api.post('/khachhang/tree-items/batch', data);
     return response.data;
+  },
+
+  // 7. PHÂN QUYỀN & CẤU HÌNH HỆ THỐNG
+  // Lấy quyền hạn của người dùng đối với danh mục khách hàng và các subtabs
+  getUserPermissions: async (username, userId) => {
+    const params = new URLSearchParams();
+    if (username) params.append('username', username);
+    if (userId) params.append('userId', userId);
+    const response = await api.get(`/khachhang/permissions?${params.toString()}`);
+    return response.data;
+  },
+
+  // Lấy các tham số cấu hình hệ thống liên quan đến khách hàng & gym
+  getSystemConfig: async () => {
+    const response = await api.get('/khachhang/system-config');
+    return response.data;
+  },
+
+  // Cập nhật cấu hình hệ thống SCONFIG
+  updateSystemConfig: async (configs) => {
+    const response = await api.post('/khachhang/system-config', { configs });
+    return response.data;
   }
 };
 

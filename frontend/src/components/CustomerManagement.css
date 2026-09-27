@@ -3223,3 +3223,49 @@
 .wf-menu-item:hover .wf-submenu-arrow {
   color: #000000 !important;
 }
+
+/* USER PERMISSIONS & SYSTEM CONFIG STYLES */
+.cust-user-perm-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-size: 11.5px;
+  font-weight: 600;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+.cust-config-trigger-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  height: 26px;
+  padding: 0 9px;
+  background: #ffffff;
+  border: 1px solid #cbd5e1;
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: 600;
+  color: #1e3a8a;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.cust-config-trigger-btn:hover {
+  background: #e0f2fe;
+  border-color: #0284c7;
+  color: #0369a1;
+}
+
+.badge-warning-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  font-size: 10.5px;
+  font-weight: 700;
+  border-radius: 4px;
+  padding: 1px 5px;
+  line-height: 1.2;
+}
+
