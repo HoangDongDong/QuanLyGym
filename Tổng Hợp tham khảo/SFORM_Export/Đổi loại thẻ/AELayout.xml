@@ -1,0 +1,1293 @@
+
+  <Object type="No1Lib.Sys.No1UserControl, No1Lib.Sys, Version=1.0.0.0, Culture=neutral, PublicKeyToken=870be39b125434d2" name="No1UserControl1" children="Controls">
+    <Reference name="KryptonPanel1" />
+    <Property name="Size">570, 487</Property>
+    <Property name="DataBindings">
+      <Property name="DefaultDataSourceUpdateMode">OnValidation</Property>
+    </Property>
+    <Property name="Name">No1UserControl1</Property>
+  </Object>
+  <Object type="ComponentFactory.Krypton.Toolkit.KryptonPanel, ComponentFactory.Krypton.Toolkit, Version=4.1.6.0, Culture=neutral, PublicKeyToken=5fd520d36328f741" name="KryptonPanel1" children="Controls">
+    <Reference name="numTruTheCu" />
+    <Reference name="No1Label2147483637" />
+    <Reference name="numSONGAY" />
+    <Reference name="lblSONGAY" />
+    <Reference name="numSOTHANG" />
+    <Reference name="lblSOTHANG" />
+    <Reference name="txtDienThoai" />
+    <Reference name="lblDienThoai" />
+    <Reference name="txtDiaChi" />
+    <Reference name="lblDiaChi" />
+    <Reference name="Panel1" />
+    <Reference name="numLANTANGTHEM" />
+    <Reference name="lblLANTANGTHEM" />
+    <Reference name="numNGAYTANGTHEM" />
+    <Reference name="lblNGAYTANGTHEM" />
+    <Reference name="txtNOTE" />
+    <Reference name="lblNOTE" />
+    <Reference name="lueDCATAPID" />
+    <Reference name="lblDCATAPID" />
+    <Reference name="numTHANHTOAN" />
+    <Reference name="lblTHANHTOAN" />
+    <Reference name="numTONGCONG" />
+    <Reference name="lblTONGCONG" />
+    <Reference name="numTIENGIAMGIA" />
+    <Reference name="lblTIENGIAMGIA" />
+    <Reference name="numTILEGIAMGIA" />
+    <Reference name="lblTILEGIAMGIA" />
+    <Reference name="numSOTIEN" />
+    <Reference name="lblSOTIEN" />
+    <Reference name="dtDENNGAY" />
+    <Reference name="lblDENNGAY" />
+    <Reference name="dtTUNGAY" />
+    <Reference name="lblTUNGAY" />
+    <Reference name="lueDLOAITHEID" />
+    <Reference name="lblDLOAITHEID" />
+    <Reference name="numSOLAN" />
+    <Reference name="lblSOLAN" />
+    <Reference name="lueDKHACHHANGID" />
+    <Reference name="lblDKHACHHANGID" />
+    <Reference name="txtNAME" />
+    <Reference name="lblNAME" />
+    <Reference name="dtNGAY" />
+    <Reference name="lblNGAY" />
+    <Property name="Dock">Fill</Property>
+    <Property name="Size">570, 487</Property>
+    <Property name="TabIndex">0</Property>
+    <Property name="Location">0, 0</Property>
+    <Property name="DataBindings">
+      <Property name="DefaultDataSourceUpdateMode">OnValidation</Property>
+    </Property>
+    <Property name="Name">KryptonPanel1</Property>
+  </Object>
+  <Object type="No1Lib.Sys.AeController, No1Lib.Sys, Version=1.0.0.0, Culture=neutral, PublicKeyToken=870be39b125434d2" name="mapper">
+    <Property name="ID" />
+    <Property name="Maps">
+      <Item type="No1Lib.Sys.No1FieldMap, No1Lib.Sys, Version=1.0.0.0, Culture=neutral, PublicKeyToken=870be39b125434d2">
+        <ObjectEx>
+          <Property name="DataField">NAME</Property>
+          <Property name="AllowEmpty">False</Property>
+          <Property name="AllowDuplicate">False</Property>
+          <Property name="LabelControl">
+            <Reference name="lblNAME" />
+          </Property>
+          <Property name="EditControl">
+            <Reference name="txtNAME" />
+          </Property>
+        </ObjectEx>
+      </Item>
+      <Item type="No1Lib.Sys.No1FieldMap, No1Lib.Sys, Version=1.0.0.0, Culture=neutral, PublicKeyToken=870be39b125434d2">
+        <ObjectEx>
+          <Property name="DataField">NOTE</Property>
+          <Property name="LabelControl">
+            <Reference name="lblNOTE" />
+          </Property>
+          <Property name="EditControl">
+            <Reference name="txtNOTE" />
+          </Property>
+        </ObjectEx>
+      </Item>
+      <Item type="No1Lib.Sys.No1FieldMap, No1Lib.Sys, Version=1.0.0.0, Culture=neutral, PublicKeyToken=870be39b125434d2">
+        <ObjectEx>
+          <Property name="DataField">NGAY</Property>
+          <Property name="LabelControl">
+            <Reference name="lblNGAY" />
+          </Property>
+          <Property name="EditControl">
+            <Reference name="dtNGAY" />
+          </Property>
+        </ObjectEx>
+      </Item>
+      <Item type="No1Lib.Sys.No1FieldMap, No1Lib.Sys, Version=1.0.0.0, Culture=neutral, PublicKeyToken=870be39b125434d2">
+        <ObjectEx>
+          <Property name="DataField">DKHACHHANGID</Property>
+          <Property name="LabelControl">
+            <Reference name="lblDKHACHHANGID" />
+          </Property>
+          <Property name="EditControl">
+            <Reference name="lueDKHACHHANGID" />
+          </Property>
+        </ObjectEx>
+      </Item>
+      <Item type="No1Lib.Sys.No1FieldMap, No1Lib.Sys, Version=1.0.0.0, Culture=neutral, PublicKeyToken=870be39b125434d2">
+        <ObjectEx>
+          <Property name="DataField">SOLAN</Property>
+          <Property name="LabelControl">
+            <Reference name="lblSOLAN" />
+          </Property>
+          <Property name="EditControl">
+            <Reference name="numSOLAN" />
+          </Property>
+        </ObjectEx>
+      </Item>
+      <Item type="No1Lib.Sys.No1FieldMap, No1Lib.Sys, Version=1.0.0.0, Culture=neutral, PublicKeyToken=870be39b125434d2">
+        <ObjectEx>
+          <Property name="DataField">DLOAITHEID</Property>
+          <Property name="AllowEmpty">False</Property>
+          <Property name="LabelControl">
+            <Reference name="lblDLOAITHEID" />
+          </Property>
+          <Property name="EditControl">
+            <Reference name="lueDLOAITHEID" />
+          </Property>
+        </ObjectEx>
+      </Item>
+      <Item type="No1Lib.Sys.No1FieldMap, No1Lib.Sys, Version=1.0.0.0, Culture=neutral, PublicKeyToken=870be39b125434d2">
+        <ObjectEx>
+          <Property name="DataField">TUNGAY</Property>
+          <Property name="AllowEmpty">False</Property>
+          <Property name="LabelControl">
+            <Reference name="lblTUNGAY" />
+          </Property>
+          <Property name="EditControl">
+            <Reference name="dtTUNGAY" />
+          </Property>
+        </ObjectEx>
+      </Item>
+      <Item type="No1Lib.Sys.No1FieldMap, No1Lib.Sys, Version=1.0.0.0, Culture=neutral, PublicKeyToken=870be39b125434d2">
+        <ObjectEx>
+          <Property name="DataField">DENNGAY</Property>
+          <Property name="AllowEmpty">False</Property>
+          <Property name="LabelControl">
+            <Reference name="lblDENNGAY" />
+          </Property>
+          <Property name="EditControl">
+            <Reference name="dtDENNGAY" />
+          </Property>
+        </ObjectEx>
+      </Item>
+      <Item type="No1Lib.Sys.No1FieldMap, No1Lib.Sys, Version=1.0.0.0, Culture=neutral, PublicKeyToken=870be39b125434d2">
+        <ObjectEx>
+          <Property name="DataField">DLOAIGIAODICHID</Property>
+          <Property name="LabelControl" />
+          <Property name="EditControl" />
+        </ObjectEx>
+      </Item>
+      <Item type="No1Lib.Sys.No1FieldMap, No1Lib.Sys, Version=1.0.0.0, Culture=neutral, PublicKeyToken=870be39b125434d2">
+        <ObjectEx>
+          <Property name="DataField">LOAI</Property>
+          <Property name="LabelControl" />
+          <Property name="EditControl" />
+        </ObjectEx>
+      </Item>
+      <Item type="No1Lib.Sys.No1FieldMap, No1Lib.Sys, Version=1.0.0.0, Culture=neutral, PublicKeyToken=870be39b125434d2">
+        <ObjectEx>
+          <Property name="DataField">SOTIEN</Property>
+          <Property name="LabelControl">
+            <Reference name="lblSOTIEN" />
+          </Property>
+          <Property name="EditControl">
+            <Reference name="numSOTIEN" />
+          </Property>
+        </ObjectEx>
+      </Item>
+      <Item type="No1Lib.Sys.No1FieldMap, No1Lib.Sys, Version=1.0.0.0, Culture=neutral, PublicKeyToken=870be39b125434d2">
+        <ObjectEx>
+          <Property name="DataField">TILEGIAMGIA</Property>
+          <Property name="LabelControl">
+            <Reference name="lblTILEGIAMGIA" />
+          </Property>
+          <Property name="EditControl">
+            <Reference name="numTILEGIAMGIA" />
+          </Property>
+        </ObjectEx>
+      </Item>
+      <Item type="No1Lib.Sys.No1FieldMap, No1Lib.Sys, Version=1.0.0.0, Culture=neutral, PublicKeyToken=870be39b125434d2">
+        <ObjectEx>
+          <Property name="DataField">TIENGIAMGIA</Property>
+          <Property name="LabelControl">
+            <Reference name="lblTIENGIAMGIA" />
+          </Property>
+          <Property name="EditControl">
+            <Reference name="numTIENGIAMGIA" />
+          </Property>
+        </ObjectEx>
+      </Item>
+      <Item type="No1Lib.Sys.No1FieldMap, No1Lib.Sys, Version=1.0.0.0, Culture=neutral, PublicKeyToken=870be39b125434d2">
+        <ObjectEx>
+          <Property name="DataField">TONGCONG</Property>
+          <Property name="LabelControl">
+            <Reference name="lblTONGCONG" />
+          </Property>
+          <Property name="EditControl">
+            <Reference name="numTONGCONG" />
+          </Property>
+        </ObjectEx>
+      </Item>
+      <Item type="No1Lib.Sys.No1FieldMap, No1Lib.Sys, Version=1.0.0.0, Culture=neutral, PublicKeyToken=870be39b125434d2">
+        <ObjectEx>
+          <Property name="DataField">THANHTOAN</Property>
+          <Property name="LabelControl">
+            <Reference name="lblTHANHTOAN" />
+          </Property>
+          <Property name="EditControl">
+            <Reference name="numTHANHTOAN" />
+          </Property>
+        </ObjectEx>
+      </Item>
+      <Item type="No1Lib.Sys.No1FieldMap, No1Lib.Sys, Version=1.0.0.0, Culture=neutral, PublicKeyToken=870be39b125434d2">
+        <ObjectEx>
+          <Property name="DataField">KHUYENMAI</Property>
+          <Property name="LabelControl" />
+          <Property name="EditControl" />
+        </ObjectEx>
+      </Item>
+      <Item type="No1Lib.Sys.No1FieldMap, No1Lib.Sys, Version=1.0.0.0, Culture=neutral, PublicKeyToken=870be39b125434d2">
+        <ObjectEx>
+          <Property name="DataField">DCATAPID</Property>
+          <Property name="LabelControl">
+            <Reference name="lblDCATAPID" />
+          </Property>
+          <Property name="EditControl">
+            <Reference name="lueDCATAPID" />
+          </Property>
+        </ObjectEx>
+      </Item>
+      <Item type="No1Lib.Sys.No1FieldMap, No1Lib.Sys, Version=1.0.0.0, Culture=neutral, PublicKeyToken=870be39b125434d2">
+        <ObjectEx>
+          <Property name="DataField">NGAYTANGTHEM</Property>
+          <Property name="LabelControl">
+            <Reference name="lblNGAYTANGTHEM" />
+          </Property>
+          <Property name="EditControl">
+            <Reference name="numNGAYTANGTHEM" />
+          </Property>
+        </ObjectEx>
+      </Item>
+      <Item type="No1Lib.Sys.No1FieldMap, No1Lib.Sys, Version=1.0.0.0, Culture=neutral, PublicKeyToken=870be39b125434d2">
+        <ObjectEx>
+          <Property name="DataField">LANTANGTHEM</Property>
+          <Property name="LabelControl">
+            <Reference name="lblLANTANGTHEM" />
+          </Property>
+          <Property name="EditControl">
+            <Reference name="numLANTANGTHEM" />
+          </Property>
+        </ObjectEx>
+      </Item>
+      <Item type="No1Lib.Sys.No1FieldMap, No1Lib.Sys, Version=1.0.0.0, Culture=neutral, PublicKeyToken=870be39b125434d2">
+        <ObjectEx>
+          <Property name="DataField">SOTHANG</Property>
+          <Property name="LabelControl">
+            <Reference name="lblSOTHANG" />
+          </Property>
+          <Property name="EditControl">
+            <Reference name="numSOTHANG" />
+          </Property>
+        </ObjectEx>
+      </Item>
+      <Item type="No1Lib.Sys.No1FieldMap, No1Lib.Sys, Version=1.0.0.0, Culture=neutral, PublicKeyToken=870be39b125434d2">
+        <ObjectEx>
+          <Property name="DataField">SONGAY</Property>
+          <Property name="LabelControl">
+            <Reference name="lblSONGAY" />
+          </Property>
+          <Property name="EditControl">
+            <Reference name="numSONGAY" />
+          </Property>
+        </ObjectEx>
+      </Item>
+      <Item type="No1Lib.Sys.No1FieldMap, No1Lib.Sys, Version=1.0.0.0, Culture=neutral, PublicKeyToken=870be39b125434d2">
+        <ObjectEx>
+          <Property name="DataField">GIAMTHEOTIEN</Property>
+          <Property name="LabelControl" />
+          <Property name="EditControl" />
+        </ObjectEx>
+      </Item>
+      <Item type="No1Lib.Sys.No1FieldMap, No1Lib.Sys, Version=1.0.0.0, Culture=neutral, PublicKeyToken=870be39b125434d2">
+        <ObjectEx>
+          <Property name="DataField">DENNGAYTHUC</Property>
+          <Property name="LabelControl" />
+          <Property name="EditControl" />
+        </ObjectEx>
+      </Item>
+      <Item type="No1Lib.Sys.No1FieldMap, No1Lib.Sys, Version=1.0.0.0, Culture=neutral, PublicKeyToken=870be39b125434d2">
+        <ObjectEx>
+          <Property name="DataField">REFID</Property>
+          <Property name="LabelControl" />
+          <Property name="EditControl" />
+        </ObjectEx>
+      </Item>
+      <Item type="No1Lib.Sys.No1FieldMap, No1Lib.Sys, Version=1.0.0.0, Culture=neutral, PublicKeyToken=870be39b125434d2">
+        <ObjectEx>
+          <Property name="DataField">DATAP</Property>
+          <Property name="LabelControl" />
+          <Property name="EditControl" />
+        </ObjectEx>
+      </Item>
+      <Item type="No1Lib.Sys.No1FieldMap, No1Lib.Sys, Version=1.0.0.0, Culture=neutral, PublicKeyToken=870be39b125434d2">
+        <ObjectEx>
+          <Property name="DataField">DOANHSO</Property>
+          <Property name="LabelControl" />
+          <Property name="EditControl" />
+        </ObjectEx>
+      </Item>
+    </Property>
+    <Property name="Table">TGIAHANTHE</Property>
+    <Event name="AfterSave">mapper_AfterSave</Event>
+    <Event name="AfterFillData">mapper_AfterFillData</Event>
+    <Event name="OnCalculation">mapper_OnCalculation</Event>
+    <Event name="OnLoad">mapper_OnLoad</Event>
+    <Event name="CustomDictionaryForInvoice">mapper_CustomDictionaryForInvoice</Event>
+    <Event name="BeforeSave">mapper_BeforeSave</Event>
+  </Object>
+  <Object type="No1Lib.Sys.No1Label, No1Lib.Sys, Version=1.0.0.0, Culture=neutral, PublicKeyToken=870be39b125434d2" name="lblNGAY" children="Controls">
+    <Property name="TabIndex">0</Property>
+    <Property name="BackColor">Transparent</Property>
+    <Property name="AutoSize">True</Property>
+    <Property name="Size">41, 16</Property>
+    <Property name="Text">Ngày</Property>
+    <Property name="Font">Microsoft Sans Serif, 9.75pt</Property>
+    <Property name="Location">10, 13</Property>
+    <Property name="DataBindings">
+      <Property name="DefaultDataSourceUpdateMode">OnValidation</Property>
+    </Property>
+    <Property name="Name">lblNGAY</Property>
+  </Object>
+  <Object type="No1Lib.Sys.No1DatePicker, No1Lib.Sys, Version=1.0.0.0, Culture=neutral, PublicKeyToken=870be39b125434d2" name="dtNGAY" children="Controls">
+    <Property name="DateTime">
+    </Property>
+    <Property name="EditValue" />
+    <Property name="Size">104, 22</Property>
+    <Property name="Name">dtNGAY</Property>
+    <Property name="Font">Microsoft Sans Serif, 9.75pt</Property>
+    <Property name="Location">118, 10</Property>
+    <Property name="DataBindings">
+      <Property name="DefaultDataSourceUpdateMode">OnValidation</Property>
+    </Property>
+    <Property name="TabIndex">15</Property>
+  </Object>
+  <Object type="No1Lib.Sys.No1Label, No1Lib.Sys, Version=1.0.0.0, Culture=neutral, PublicKeyToken=870be39b125434d2" name="lblNAME" children="Controls">
+    <Property name="TabIndex">2</Property>
+    <Property name="BackColor">Transparent</Property>
+    <Property name="AutoSize">True</Property>
+    <Property name="Size">61, 16</Property>
+    <Property name="Text">Số phiếu</Property>
+    <Property name="Font">Microsoft Sans Serif, 9.75pt</Property>
+    <Property name="Location">333, 13</Property>
+    <Property name="DataBindings">
+      <Property name="DefaultDataSourceUpdateMode">OnValidation</Property>
+    </Property>
+    <Property name="Name">lblNAME</Property>
+  </Object>
+  <Object type="No1Lib.Sys.No1TextBox, No1Lib.Sys, Version=1.0.0.0, Culture=neutral, PublicKeyToken=870be39b125434d2" name="txtNAME" children="Controls">
+    <Property name="Size">154, 22</Property>
+    <Property name="Font">Microsoft Sans Serif, 9.75pt</Property>
+    <Property name="Name">txtNAME</Property>
+    <Property name="Location">407, 10</Property>
+    <Property name="DataBindings">
+      <Property name="DefaultDataSourceUpdateMode">OnValidation</Property>
+    </Property>
+    <Property name="TabIndex">16</Property>
+  </Object>
+  <Object type="No1Lib.Sys.No1Label, No1Lib.Sys, Version=1.0.0.0, Culture=neutral, PublicKeyToken=870be39b125434d2" name="lblDKHACHHANGID" children="Controls">
+    <Property name="TabIndex">4</Property>
+    <Property name="BackColor">Transparent</Property>
+    <Property name="AutoSize">True</Property>
+    <Property name="Size">78, 16</Property>
+    <Property name="Text">Khách hàng</Property>
+    <Property name="Font">Microsoft Sans Serif, 9.75pt</Property>
+    <Property name="Location">10, 39</Property>
+    <Property name="DataBindings">
+      <Property name="DefaultDataSourceUpdateMode">OnValidation</Property>
+    </Property>
+    <Property name="Name">lblDKHACHHANGID</Property>
+  </Object>
+  <Object type="No1Lib.Sys.No1GridLookup, No1Lib.Sys, Version=1.0.0.0, Culture=neutral, PublicKeyToken=870be39b125434d2" name="lueDKHACHHANGID" children="Controls">
+    <Property name="Size">443, 23</Property>
+    <Property name="DisplayText" />
+    <Property name="CardReaderColumn" />
+    <Property name="Font">Microsoft Sans Serif, 9.75pt</Property>
+    <Property name="TabIndex">0</Property>
+    <Property name="Name">lueDKHACHHANGID</Property>
+    <Property name="Location">118, 38</Property>
+    <Property name="DataBindings">
+      <Property name="DefaultDataSourceUpdateMode">OnValidation</Property>
+    </Property>
+    <Event name="OnEditValueChanged">lueDKHACHHANGID_OnEditValueChanged</Event>
+  </Object>
+  <Object type="No1Lib.Sys.No1Label, No1Lib.Sys, Version=1.0.0.0, Culture=neutral, PublicKeyToken=870be39b125434d2" name="lblSOLAN" children="Controls">
+    <Property name="TabIndex">6</Property>
+    <Property name="BackColor">Transparent</Property>
+    <Property name="AutoSize">True</Property>
+    <Property name="Size">46, 16</Property>
+    <Property name="Text">Số lần</Property>
+    <Property name="Font">Microsoft Sans Serif, 9.75pt</Property>
+    <Property name="Location">436, 296</Property>
+    <Property name="DataBindings">
+      <Property name="DefaultDataSourceUpdateMode">OnValidation</Property>
+    </Property>
+    <Property name="Name">lblSOLAN</Property>
+  </Object>
+  <Object type="No1Lib.Sys.No1NumericUpDown, No1Lib.Sys, Version=1.0.0.0, Culture=neutral, PublicKeyToken=870be39b125434d2" name="numSOLAN" children="Controls">
+    <Property name="EditValue">0</Property>
+    <Property name="Size">60, 22</Property>
+    <Property name="Location">501, 294</Property>
+    <Property name="ThousandsSeparator">True</Property>
+    <Property name="DecimalPlaces">2</Property>
+    <Property name="Name">numSOLAN</Property>
+    <Property name="Maximum">10000000000000000</Property>
+    <Property name="Font">Microsoft Sans Serif, 9.75pt</Property>
+    <Property name="DataBindings">
+      <Property name="DefaultDataSourceUpdateMode">OnValidation</Property>
+    </Property>
+    <Property name="Minimum">-10000000000000000</Property>
+    <Property name="TabIndex">5</Property>
+  </Object>
+  <Object type="No1Lib.Sys.No1Label, No1Lib.Sys, Version=1.0.0.0, Culture=neutral, PublicKeyToken=870be39b125434d2" name="lblDLOAITHEID" children="Controls">
+    <Property name="TabIndex">8</Property>
+    <Property name="BackColor">Transparent</Property>
+    <Property name="AutoSize">True</Property>
+    <Property name="Size">55, 16</Property>
+    <Property name="Text">Loại thẻ</Property>
+    <Property name="Font">Microsoft Sans Serif, 9.75pt</Property>
+    <Property name="Location">10, 267</Property>
+    <Property name="DataBindings">
+      <Property name="DefaultDataSourceUpdateMode">OnValidation</Property>
+    </Property>
+    <Property name="Name">lblDLOAITHEID</Property>
+  </Object>
+  <Object type="No1Lib.Sys.No1LookupEdit, No1Lib.Sys, Version=1.0.0.0, Culture=neutral, PublicKeyToken=870be39b125434d2" name="lueDLOAITHEID" children="Controls">
+    <Property name="Size">443, 23</Property>
+    <Property name="Font">Microsoft Sans Serif, 9.75pt</Property>
+    <Property name="Name">lueDLOAITHEID</Property>
+    <Property name="BackColor">White</Property>
+    <Property name="Location">118, 266</Property>
+    <Property name="DataBindings">
+      <Property name="DefaultDataSourceUpdateMode">OnValidation</Property>
+    </Property>
+    <Property name="TabIndex">2</Property>
+    <Event name="OnEditValueChanged">lueDLOAITHEID_OnEditValueChanged</Event>
+  </Object>
+  <Object type="No1Lib.Sys.No1Label, No1Lib.Sys, Version=1.0.0.0, Culture=neutral, PublicKeyToken=870be39b125434d2" name="lblTUNGAY" children="Controls">
+    <Property name="TabIndex">10</Property>
+    <Property name="BackColor">Transparent</Property>
+    <Property name="AutoSize">True</Property>
+    <Property name="Size">57, 16</Property>
+    <Property name="Text">Từ ngày</Property>
+    <Property name="Font">Microsoft Sans Serif, 9.75pt</Property>
+    <Property name="Location">10, 296</Property>
+    <Property name="DataBindings">
+      <Property name="DefaultDataSourceUpdateMode">OnValidation</Property>
+    </Property>
+    <Property name="Name">lblTUNGAY</Property>
+  </Object>
+  <Object type="No1Lib.Sys.No1DatePicker, No1Lib.Sys, Version=1.0.0.0, Culture=neutral, PublicKeyToken=870be39b125434d2" name="dtTUNGAY" children="Controls">
+    <Property name="DateTime">
+    </Property>
+    <Property name="EditValue" />
+    <Property name="Size">130, 22</Property>
+    <Property name="Name">dtTUNGAY</Property>
+    <Property name="Font">Microsoft Sans Serif, 9.75pt</Property>
+    <Property name="Location">118, 295</Property>
+    <Property name="DataBindings">
+      <Property name="DefaultDataSourceUpdateMode">OnValidation</Property>
+    </Property>
+    <Property name="Enabled">False</Property>
+    <Property name="TabIndex">3</Property>
+  </Object>
+  <Object type="No1Lib.Sys.No1Label, No1Lib.Sys, Version=1.0.0.0, Culture=neutral, PublicKeyToken=870be39b125434d2" name="lblDENNGAY" children="Controls">
+    <Property name="TabIndex">12</Property>
+    <Property name="BackColor">Transparent</Property>
+    <Property name="AutoSize">True</Property>
+    <Property name="Size">65, 16</Property>
+    <Property name="Text">Đến ngày</Property>
+    <Property name="Font">Microsoft Sans Serif, 9.75pt</Property>
+    <Property name="Location">262, 297</Property>
+    <Property name="DataBindings">
+      <Property name="DefaultDataSourceUpdateMode">OnValidation</Property>
+    </Property>
+    <Property name="Name">lblDENNGAY</Property>
+  </Object>
+  <Object type="No1Lib.Sys.No1DatePicker, No1Lib.Sys, Version=1.0.0.0, Culture=neutral, PublicKeyToken=870be39b125434d2" name="dtDENNGAY" children="Controls">
+    <Property name="DateTime">
+    </Property>
+    <Property name="EditValue" />
+    <Property name="Size">95, 22</Property>
+    <Property name="Name">dtDENNGAY</Property>
+    <Property name="Font">Microsoft Sans Serif, 9.75pt</Property>
+    <Property name="Location">333, 294</Property>
+    <Property name="DataBindings">
+      <Property name="DefaultDataSourceUpdateMode">OnValidation</Property>
+    </Property>
+    <Property name="TabIndex">4</Property>
+  </Object>
+  <Object type="No1Lib.Sys.No1Label, No1Lib.Sys, Version=1.0.0.0, Culture=neutral, PublicKeyToken=870be39b125434d2" name="lblSOTIEN" children="Controls">
+    <Property name="TabIndex">14</Property>
+    <Property name="BackColor">Transparent</Property>
+    <Property name="AutoSize">True</Property>
+    <Property name="Size">49, 16</Property>
+    <Property name="Text">Số tiền</Property>
+    <Property name="Font">Microsoft Sans Serif, 9.75pt</Property>
+    <Property name="Location">10, 353</Property>
+    <Property name="DataBindings">
+      <Property name="DefaultDataSourceUpdateMode">OnValidation</Property>
+    </Property>
+    <Property name="Name">lblSOTIEN</Property>
+  </Object>
+  <Object type="No1Lib.Sys.No1NumericUpDown, No1Lib.Sys, Version=1.0.0.0, Culture=neutral, PublicKeyToken=870be39b125434d2" name="numSOTIEN" children="Controls">
+    <Property name="EditValue">0</Property>
+    <Property name="Size">130, 22</Property>
+    <Property name="Location">118, 351</Property>
+    <Property name="ThousandsSeparator">True</Property>
+    <Property name="DecimalPlaces">2</Property>
+    <Property name="Name">numSOTIEN</Property>
+    <Property name="Maximum">10000000000000000</Property>
+    <Property name="Font">Microsoft Sans Serif, 9.75pt</Property>
+    <Property name="DataBindings">
+      <Property name="DefaultDataSourceUpdateMode">OnValidation</Property>
+    </Property>
+    <Property name="Minimum">-10000000000000000</Property>
+    <Property name="TabIndex">8</Property>
+  </Object>
+  <Object type="No1Lib.Sys.No1Label, No1Lib.Sys, Version=1.0.0.0, Culture=neutral, PublicKeyToken=870be39b125434d2" name="lblTILEGIAMGIA" children="Controls">
+    <Property name="TabIndex">16</Property>
+    <Property name="BackColor">Transparent</Property>
+    <Property name="AutoSize">True</Property>
+    <Property name="Size">62, 16</Property>
+    <Property name="Text">Giảm giá</Property>
+    <Property name="Font">Microsoft Sans Serif, 9.75pt</Property>
+    <Property name="Location">10, 380</Property>
+    <Property name="DataBindings">
+      <Property name="DefaultDataSourceUpdateMode">OnValidation</Property>
+    </Property>
+    <Property name="Name">lblTILEGIAMGIA</Property>
+  </Object>
+  <Object type="No1Lib.Sys.No1NumericUpDown, No1Lib.Sys, Version=1.0.0.0, Culture=neutral, PublicKeyToken=870be39b125434d2" name="numTILEGIAMGIA" children="Controls">
+    <Property name="EditValue">0</Property>
+    <Property name="Size">30, 22</Property>
+    <Property name="Location">118, 377</Property>
+    <Property name="ThousandsSeparator">True</Property>
+    <Property name="DecimalPlaces">2</Property>
+    <Property name="Name">numTILEGIAMGIA</Property>
+    <Property name="Maximum">10000000000000000</Property>
+    <Property name="Font">Microsoft Sans Serif, 9.75pt</Property>
+    <Property name="DataBindings">
+      <Property name="DefaultDataSourceUpdateMode">OnValidation</Property>
+    </Property>
+    <Property name="Minimum">-10000000000000000</Property>
+    <Property name="TabIndex">9</Property>
+    <Event name="OnEditValueChanged">numTILEGIAMGIA_OnEditValueChanged</Event>
+  </Object>
+  <Object type="No1Lib.Sys.No1Label, No1Lib.Sys, Version=1.0.0.0, Culture=neutral, PublicKeyToken=870be39b125434d2" name="lblTIENGIAMGIA" children="Controls">
+    <Property name="TabIndex">5</Property>
+    <Property name="BackColor">Transparent</Property>
+    <Property name="AutoSize">True</Property>
+    <Property name="Size">20, 16</Property>
+    <Property name="Text">%</Property>
+    <Property name="Font">Microsoft Sans Serif, 9.75pt</Property>
+    <Property name="Location">153, 380</Property>
+    <Property name="DataBindings">
+      <Property name="DefaultDataSourceUpdateMode">OnValidation</Property>
+    </Property>
+    <Property name="Name">lblTIENGIAMGIA</Property>
+  </Object>
+  <Object type="No1Lib.Sys.No1NumericUpDown, No1Lib.Sys, Version=1.0.0.0, Culture=neutral, PublicKeyToken=870be39b125434d2" name="numTIENGIAMGIA" children="Controls">
+    <Property name="EditValue">0</Property>
+    <Property name="Size">71, 22</Property>
+    <Property name="Location">177, 377</Property>
+    <Property name="ThousandsSeparator">True</Property>
+    <Property name="DecimalPlaces">2</Property>
+    <Property name="Name">numTIENGIAMGIA</Property>
+    <Property name="Maximum">10000000000000000</Property>
+    <Property name="Font">Microsoft Sans Serif, 9.75pt</Property>
+    <Property name="DataBindings">
+      <Property name="DefaultDataSourceUpdateMode">OnValidation</Property>
+    </Property>
+    <Property name="Minimum">-10000000000000000</Property>
+    <Property name="TabIndex">10</Property>
+    <Event name="OnEditValueChanged">numTIENGIAMGIA_OnEditValueChanged</Event>
+  </Object>
+  <Object type="No1Lib.Sys.No1Label, No1Lib.Sys, Version=1.0.0.0, Culture=neutral, PublicKeyToken=870be39b125434d2" name="lblTONGCONG" children="Controls">
+    <Property name="TabIndex">20</Property>
+    <Property name="BackColor">Transparent</Property>
+    <Property name="AutoSize">True</Property>
+    <Property name="Size">73, 16</Property>
+    <Property name="Text">Tổng cộng</Property>
+    <Property name="Font">Microsoft Sans Serif, 9.75pt</Property>
+    <Property name="Location">10, 405</Property>
+    <Property name="DataBindings">
+      <Property name="DefaultDataSourceUpdateMode">OnValidation</Property>
+    </Property>
+    <Property name="Name">lblTONGCONG</Property>
+  </Object>
+  <Object type="No1Lib.Sys.No1NumericUpDown, No1Lib.Sys, Version=1.0.0.0, Culture=neutral, PublicKeyToken=870be39b125434d2" name="numTONGCONG" children="Controls">
+    <Property name="EditValue">0</Property>
+    <Property name="Size">130, 22</Property>
+    <Property name="Location">118, 403</Property>
+    <Property name="ThousandsSeparator">True</Property>
+    <Property name="DecimalPlaces">2</Property>
+    <Property name="Name">numTONGCONG</Property>
+    <Property name="ReadOnly">True</Property>
+    <Property name="Maximum">10000000000000000</Property>
+    <Property name="Font">Microsoft Sans Serif, 9.75pt</Property>
+    <Property name="BackColor">255, 255, 192</Property>
+    <Property name="DataBindings">
+      <Property name="DefaultDataSourceUpdateMode">OnValidation</Property>
+    </Property>
+    <Property name="Minimum">-10000000000000000</Property>
+    <Property name="TabIndex">11</Property>
+  </Object>
+  <Object type="No1Lib.Sys.No1Label, No1Lib.Sys, Version=1.0.0.0, Culture=neutral, PublicKeyToken=870be39b125434d2" name="lblTHANHTOAN" children="Controls">
+    <Property name="TabIndex">22</Property>
+    <Property name="BackColor">Transparent</Property>
+    <Property name="AutoSize">True</Property>
+    <Property name="Size">75, 16</Property>
+    <Property name="Text">Thanh toán</Property>
+    <Property name="Font">Microsoft Sans Serif, 9.75pt</Property>
+    <Property name="Location">323, 405</Property>
+    <Property name="DataBindings">
+      <Property name="DefaultDataSourceUpdateMode">OnValidation</Property>
+    </Property>
+    <Property name="Name">lblTHANHTOAN</Property>
+  </Object>
+  <Object type="No1Lib.Sys.No1NumericUpDown, No1Lib.Sys, Version=1.0.0.0, Culture=neutral, PublicKeyToken=870be39b125434d2" name="numTHANHTOAN" children="Controls">
+    <Property name="EditValue">0</Property>
+    <Property name="Size">130, 22</Property>
+    <Property name="Location">431, 403</Property>
+    <Property name="ThousandsSeparator">True</Property>
+    <Property name="DecimalPlaces">2</Property>
+    <Property name="Name">numTHANHTOAN</Property>
+    <Property name="Maximum">10000000000000000</Property>
+    <Property name="Font">Microsoft Sans Serif, 9.75pt</Property>
+    <Property name="DataBindings">
+      <Property name="DefaultDataSourceUpdateMode">OnValidation</Property>
+    </Property>
+    <Property name="Minimum">-10000000000000000</Property>
+    <Property name="TabIndex">12</Property>
+  </Object>
+  <Object type="No1Lib.Sys.No1Label, No1Lib.Sys, Version=1.0.0.0, Culture=neutral, PublicKeyToken=870be39b125434d2" name="lblDCATAPID" children="Controls">
+    <Property name="TabIndex">26</Property>
+    <Property name="BackColor">Transparent</Property>
+    <Property name="AutoSize">True</Property>
+    <Property name="Size">47, 16</Property>
+    <Property name="Text">Ca tập</Property>
+    <Property name="Font">Microsoft Sans Serif, 9.75pt</Property>
+    <Property name="Location">10, 433</Property>
+    <Property name="DataBindings">
+      <Property name="DefaultDataSourceUpdateMode">OnValidation</Property>
+    </Property>
+    <Property name="Name">lblDCATAPID</Property>
+  </Object>
+  <Object type="No1Lib.Sys.No1LookupEdit, No1Lib.Sys, Version=1.0.0.0, Culture=neutral, PublicKeyToken=870be39b125434d2" name="lueDCATAPID" children="Controls">
+    <Property name="Size">443, 23</Property>
+    <Property name="Font">Microsoft Sans Serif, 9.75pt</Property>
+    <Property name="Name">lueDCATAPID</Property>
+    <Property name="BackColor">White</Property>
+    <Property name="Location">118, 430</Property>
+    <Property name="DataBindings">
+      <Property name="DefaultDataSourceUpdateMode">OnValidation</Property>
+    </Property>
+    <Property name="TabIndex">13</Property>
+  </Object>
+  <Object type="No1Lib.Sys.No1Label, No1Lib.Sys, Version=1.0.0.0, Culture=neutral, PublicKeyToken=870be39b125434d2" name="lblNOTE" children="Controls">
+    <Property name="TabIndex">28</Property>
+    <Property name="BackColor">Transparent</Property>
+    <Property name="AutoSize">True</Property>
+    <Property name="Size">52, 16</Property>
+    <Property name="Text">Ghi chú</Property>
+    <Property name="Font">Microsoft Sans Serif, 9.75pt</Property>
+    <Property name="Location">10, 460</Property>
+    <Property name="DataBindings">
+      <Property name="DefaultDataSourceUpdateMode">OnValidation</Property>
+    </Property>
+    <Property name="Name">lblNOTE</Property>
+  </Object>
+  <Object type="No1Lib.Sys.No1TextBox, No1Lib.Sys, Version=1.0.0.0, Culture=neutral, PublicKeyToken=870be39b125434d2" name="txtNOTE" children="Controls">
+    <Property name="Size">443, 22</Property>
+    <Property name="Font">Microsoft Sans Serif, 9.75pt</Property>
+    <Property name="Name">txtNOTE</Property>
+    <Property name="Location">118, 457</Property>
+    <Property name="DataBindings">
+      <Property name="DefaultDataSourceUpdateMode">OnValidation</Property>
+    </Property>
+    <Property name="TabIndex">14</Property>
+  </Object>
+  <Object type="No1Lib.Sys.No1Label, No1Lib.Sys, Version=1.0.0.0, Culture=neutral, PublicKeyToken=870be39b125434d2" name="lblNGAYTANGTHEM" children="Controls">
+    <Property name="TabIndex">29</Property>
+    <Property name="BackColor">Transparent</Property>
+    <Property name="AutoSize">True</Property>
+    <Property name="Size">102, 16</Property>
+    <Property name="Text">Ngày tặng thêm</Property>
+    <Property name="Font">Microsoft Sans Serif, 9.75pt</Property>
+    <Property name="Location">10, 325</Property>
+    <Property name="DataBindings">
+      <Property name="DefaultDataSourceUpdateMode">OnValidation</Property>
+    </Property>
+    <Property name="Name">lblNGAYTANGTHEM</Property>
+  </Object>
+  <Object type="No1Lib.Sys.No1NumericUpDown, No1Lib.Sys, Version=1.0.0.0, Culture=neutral, PublicKeyToken=870be39b125434d2" name="numNGAYTANGTHEM" children="Controls">
+    <Property name="EditValue">0</Property>
+    <Property name="Size">130, 22</Property>
+    <Property name="Location">118, 323</Property>
+    <Property name="ThousandsSeparator">True</Property>
+    <Property name="DecimalPlaces">2</Property>
+    <Property name="Name">numNGAYTANGTHEM</Property>
+    <Property name="Maximum">10000000000000000</Property>
+    <Property name="Font">Microsoft Sans Serif, 9.75pt</Property>
+    <Property name="DataBindings">
+      <Property name="DefaultDataSourceUpdateMode">OnValidation</Property>
+    </Property>
+    <Property name="Minimum">-10000000000000000</Property>
+    <Property name="TabIndex">6</Property>
+    <Event name="OnEditValueChanged">numNGAYTANGTHEM_OnEditValueChanged</Event>
+  </Object>
+  <Object type="No1Lib.Sys.No1Label, No1Lib.Sys, Version=1.0.0.0, Culture=neutral, PublicKeyToken=870be39b125434d2" name="lblLANTANGTHEM" children="Controls">
+    <Property name="TabIndex">31</Property>
+    <Property name="BackColor">Transparent</Property>
+    <Property name="AutoSize">True</Property>
+    <Property name="Size">91, 16</Property>
+    <Property name="Text">Lần tặng thêm</Property>
+    <Property name="Font">Microsoft Sans Serif, 9.75pt</Property>
+    <Property name="Location">404, 326</Property>
+    <Property name="DataBindings">
+      <Property name="DefaultDataSourceUpdateMode">OnValidation</Property>
+    </Property>
+    <Property name="Name">lblLANTANGTHEM</Property>
+  </Object>
+  <Object type="No1Lib.Sys.No1NumericUpDown, No1Lib.Sys, Version=1.0.0.0, Culture=neutral, PublicKeyToken=870be39b125434d2" name="numLANTANGTHEM" children="Controls">
+    <Property name="EditValue">0</Property>
+    <Property name="Size">60, 22</Property>
+    <Property name="Location">501, 324</Property>
+    <Property name="ThousandsSeparator">True</Property>
+    <Property name="DecimalPlaces">2</Property>
+    <Property name="Name">numLANTANGTHEM</Property>
+    <Property name="Maximum">10000000000000000</Property>
+    <Property name="Font">Microsoft Sans Serif, 9.75pt</Property>
+    <Property name="DataBindings">
+      <Property name="DefaultDataSourceUpdateMode">OnValidation</Property>
+    </Property>
+    <Property name="Minimum">-10000000000000000</Property>
+    <Property name="TabIndex">7</Property>
+    <Event name="OnEditValueChanged">numLANTANGTHEM_OnEditValueChanged</Event>
+  </Object>
+  <Object type="System.Windows.Forms.Panel, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" name="Panel1" children="Controls">
+    <Reference name="numSOLANRef" />
+    <Reference name="No1Label2147483636" />
+    <Reference name="numTienGiamRef" />
+    <Reference name="lueCaTapRef" />
+    <Reference name="No1Label2147483638" />
+    <Reference name="dtNgayRef" />
+    <Reference name="numTiLeGiamRef" />
+    <Reference name="No1Label2147483641" />
+    <Reference name="numSoTienRef" />
+    <Reference name="No1Label2147483640" />
+    <Reference name="No1Label2147483639" />
+    <Reference name="No1Label2147483646" />
+    <Reference name="numTONGCONGRef" />
+    <Reference name="No1Label2147483645" />
+    <Reference name="No1Label2147483642" />
+    <Reference name="lueLoaiTheRef" />
+    <Reference name="dtDenNgayRef" />
+    <Reference name="No1Label2147483644" />
+    <Reference name="No1Label2147483643" />
+    <Reference name="dtTuNgayRef" />
+    <Property name="Enabled">False</Property>
+    <Property name="Size">443, 165</Property>
+    <Property name="BackColor">224, 224, 224</Property>
+    <Property name="TabIndex">1</Property>
+    <Property name="Location">118, 95</Property>
+    <Property name="DataBindings">
+      <Property name="DefaultDataSourceUpdateMode">OnValidation</Property>
+    </Property>
+    <Property name="Name">Panel1</Property>
+  </Object>
+  <Object type="No1Lib.Sys.No1FieldMapper, No1Lib.Sys, Version=1.0.0.0, Culture=neutral, PublicKeyToken=870be39b125434d2" name="theCu">
+    <Property name="ID" />
+    <Property name="Maps">
+      <Item type="No1Lib.Sys.No1FieldMap, No1Lib.Sys, Version=1.0.0.0, Culture=neutral, PublicKeyToken=870be39b125434d2">
+        <ObjectEx>
+          <Property name="DataField">NGAY</Property>
+          <Property name="LabelControl">
+            <Reference name="No1Label2147483646" />
+          </Property>
+          <Property name="EditControl">
+            <Reference name="dtNgayRef" />
+          </Property>
+        </ObjectEx>
+      </Item>
+      <Item type="No1Lib.Sys.No1FieldMap, No1Lib.Sys, Version=1.0.0.0, Culture=neutral, PublicKeyToken=870be39b125434d2">
+        <ObjectEx>
+          <Property name="DataField">DLOAITHEID</Property>
+          <Property name="LabelControl">
+            <Reference name="No1Label2147483645" />
+          </Property>
+          <Property name="EditControl">
+            <Reference name="lueLoaiTheRef" />
+          </Property>
+        </ObjectEx>
+      </Item>
+      <Item type="No1Lib.Sys.No1FieldMap, No1Lib.Sys, Version=1.0.0.0, Culture=neutral, PublicKeyToken=870be39b125434d2">
+        <ObjectEx>
+          <Property name="DataField">TUNGAY</Property>
+          <Property name="LabelControl">
+            <Reference name="No1Label2147483644" />
+          </Property>
+          <Property name="EditControl">
+            <Reference name="dtTuNgayRef" />
+          </Property>
+        </ObjectEx>
+      </Item>
+      <Item type="No1Lib.Sys.No1FieldMap, No1Lib.Sys, Version=1.0.0.0, Culture=neutral, PublicKeyToken=870be39b125434d2">
+        <ObjectEx>
+          <Property name="DataField">DENNGAY</Property>
+          <Property name="LabelControl">
+            <Reference name="No1Label2147483643" />
+          </Property>
+          <Property name="EditControl">
+            <Reference name="dtDenNgayRef" />
+          </Property>
+        </ObjectEx>
+      </Item>
+      <Item type="No1Lib.Sys.No1FieldMap, No1Lib.Sys, Version=1.0.0.0, Culture=neutral, PublicKeyToken=870be39b125434d2">
+        <ObjectEx>
+          <Property name="DataField">TONGCONG</Property>
+          <Property name="LabelControl">
+            <Reference name="No1Label2147483642" />
+          </Property>
+          <Property name="EditControl">
+            <Reference name="numTONGCONGRef" />
+          </Property>
+        </ObjectEx>
+      </Item>
+      <Item type="No1Lib.Sys.No1FieldMap, No1Lib.Sys, Version=1.0.0.0, Culture=neutral, PublicKeyToken=870be39b125434d2">
+        <ObjectEx>
+          <Property name="DataField">DCATAPID</Property>
+          <Property name="LabelControl">
+            <Reference name="No1Label2147483641" />
+          </Property>
+          <Property name="EditControl">
+            <Reference name="lueCaTapRef" />
+          </Property>
+        </ObjectEx>
+      </Item>
+      <Item type="No1Lib.Sys.No1FieldMap, No1Lib.Sys, Version=1.0.0.0, Culture=neutral, PublicKeyToken=870be39b125434d2">
+        <ObjectEx>
+          <Property name="DataField">SOTIEN</Property>
+          <Property name="LabelControl">
+            <Reference name="No1Label2147483640" />
+          </Property>
+          <Property name="EditControl">
+            <Reference name="numSoTienRef" />
+          </Property>
+        </ObjectEx>
+      </Item>
+      <Item type="No1Lib.Sys.No1FieldMap, No1Lib.Sys, Version=1.0.0.0, Culture=neutral, PublicKeyToken=870be39b125434d2">
+        <ObjectEx>
+          <Property name="DataField">TILEGIAMGIA</Property>
+          <Property name="LabelControl">
+            <Reference name="No1Label2147483639" />
+          </Property>
+          <Property name="EditControl">
+            <Reference name="numTiLeGiamRef" />
+          </Property>
+        </ObjectEx>
+      </Item>
+      <Item type="No1Lib.Sys.No1FieldMap, No1Lib.Sys, Version=1.0.0.0, Culture=neutral, PublicKeyToken=870be39b125434d2">
+        <ObjectEx>
+          <Property name="DataField">TIENGIAMGIA</Property>
+          <Property name="LabelControl">
+            <Reference name="No1Label2147483638" />
+          </Property>
+          <Property name="EditControl">
+            <Reference name="numTienGiamRef" />
+          </Property>
+        </ObjectEx>
+      </Item>
+      <Item type="No1Lib.Sys.No1FieldMap, No1Lib.Sys, Version=1.0.0.0, Culture=neutral, PublicKeyToken=870be39b125434d2">
+        <ObjectEx>
+          <Property name="DataField">SOLAN</Property>
+          <Property name="LabelControl">
+            <Reference name="No1Label2147483636" />
+          </Property>
+          <Property name="EditControl">
+            <Reference name="numSOLANRef" />
+          </Property>
+        </ObjectEx>
+      </Item>
+    </Property>
+    <Property name="Table">TGIAHANTHE</Property>
+  </Object>
+  <Object type="No1Lib.Sys.No1Label, No1Lib.Sys, Version=1.0.0.0, Culture=neutral, PublicKeyToken=870be39b125434d2" name="No1Label2147483646" children="Controls">
+    <Property name="TabIndex">33</Property>
+    <Property name="BackColor">Transparent</Property>
+    <Property name="AutoSize">True</Property>
+    <Property name="Size">32, 13</Property>
+    <Property name="Text">Ngày</Property>
+    <Property name="Location">7, 6</Property>
+    <Property name="DataBindings">
+      <Property name="DefaultDataSourceUpdateMode">OnValidation</Property>
+    </Property>
+    <Property name="Name">No1Label2147483646</Property>
+  </Object>
+  <Object type="No1Lib.Sys.No1DatePicker, No1Lib.Sys, Version=1.0.0.0, Culture=neutral, PublicKeyToken=870be39b125434d2" name="dtNgayRef" children="Controls">
+    <Property name="DateTime">
+    </Property>
+    <Property name="EditValue" />
+    <Property name="Size">95, 20</Property>
+    <Property name="Name">dtNgayRef</Property>
+    <Property name="Location">71, 3</Property>
+    <Property name="DataBindings">
+      <Property name="DefaultDataSourceUpdateMode">OnValidation</Property>
+    </Property>
+    <Property name="TabIndex">0</Property>
+  </Object>
+  <Object type="No1Lib.Sys.No1Label, No1Lib.Sys, Version=1.0.0.0, Culture=neutral, PublicKeyToken=870be39b125434d2" name="No1Label2147483645" children="Controls">
+    <Property name="TabIndex">35</Property>
+    <Property name="BackColor">Transparent</Property>
+    <Property name="AutoSize">True</Property>
+    <Property name="Size">45, 13</Property>
+    <Property name="Text">Loại thẻ</Property>
+    <Property name="Location">7, 33</Property>
+    <Property name="DataBindings">
+      <Property name="DefaultDataSourceUpdateMode">OnValidation</Property>
+    </Property>
+    <Property name="Name">No1Label2147483645</Property>
+  </Object>
+  <Object type="No1Lib.Sys.No1LookupEdit, No1Lib.Sys, Version=1.0.0.0, Culture=neutral, PublicKeyToken=870be39b125434d2" name="lueLoaiTheRef" children="Controls">
+    <Property name="Size">351, 21</Property>
+    <Property name="Name">lueLoaiTheRef</Property>
+    <Property name="BackColor">White</Property>
+    <Property name="Location">71, 30</Property>
+    <Property name="DataBindings">
+      <Property name="DefaultDataSourceUpdateMode">OnValidation</Property>
+    </Property>
+    <Property name="TabIndex">1</Property>
+  </Object>
+  <Object type="No1Lib.Sys.No1Label, No1Lib.Sys, Version=1.0.0.0, Culture=neutral, PublicKeyToken=870be39b125434d2" name="No1Label2147483644" children="Controls">
+    <Property name="TabIndex">37</Property>
+    <Property name="BackColor">Transparent</Property>
+    <Property name="AutoSize">True</Property>
+    <Property name="Size">46, 13</Property>
+    <Property name="Text">Từ ngày</Property>
+    <Property name="Location">7, 60</Property>
+    <Property name="DataBindings">
+      <Property name="DefaultDataSourceUpdateMode">OnValidation</Property>
+    </Property>
+    <Property name="Name">No1Label2147483644</Property>
+  </Object>
+  <Object type="No1Lib.Sys.No1DatePicker, No1Lib.Sys, Version=1.0.0.0, Culture=neutral, PublicKeyToken=870be39b125434d2" name="dtTuNgayRef" children="Controls">
+    <Property name="DateTime">
+    </Property>
+    <Property name="EditValue" />
+    <Property name="Size">95, 20</Property>
+    <Property name="Name">dtTuNgayRef</Property>
+    <Property name="Location">71, 57</Property>
+    <Property name="DataBindings">
+      <Property name="DefaultDataSourceUpdateMode">OnValidation</Property>
+    </Property>
+    <Property name="TabIndex">2</Property>
+  </Object>
+  <Object type="No1Lib.Sys.No1Label, No1Lib.Sys, Version=1.0.0.0, Culture=neutral, PublicKeyToken=870be39b125434d2" name="No1Label2147483643" children="Controls">
+    <Property name="TabIndex">39</Property>
+    <Property name="BackColor">Transparent</Property>
+    <Property name="AutoSize">True</Property>
+    <Property name="Size">53, 13</Property>
+    <Property name="Text">Đến ngày</Property>
+    <Property name="Location">263, 60</Property>
+    <Property name="DataBindings">
+      <Property name="DefaultDataSourceUpdateMode">OnValidation</Property>
+    </Property>
+    <Property name="Name">No1Label2147483643</Property>
+  </Object>
+  <Object type="No1Lib.Sys.No1DatePicker, No1Lib.Sys, Version=1.0.0.0, Culture=neutral, PublicKeyToken=870be39b125434d2" name="dtDenNgayRef" children="Controls">
+    <Property name="DateTime">
+    </Property>
+    <Property name="EditValue" />
+    <Property name="Size">95, 20</Property>
+    <Property name="Name">dtDenNgayRef</Property>
+    <Property name="Location">327, 57</Property>
+    <Property name="DataBindings">
+      <Property name="DefaultDataSourceUpdateMode">OnValidation</Property>
+    </Property>
+    <Property name="TabIndex">3</Property>
+  </Object>
+  <Object type="No1Lib.Sys.No1Label, No1Lib.Sys, Version=1.0.0.0, Culture=neutral, PublicKeyToken=870be39b125434d2" name="No1Label2147483642" children="Controls">
+    <Property name="TabIndex">41</Property>
+    <Property name="BackColor">Transparent</Property>
+    <Property name="AutoSize">True</Property>
+    <Property name="Size">32, 13</Property>
+    <Property name="Text">Cộng</Property>
+    <Property name="Location">7, 112</Property>
+    <Property name="DataBindings">
+      <Property name="DefaultDataSourceUpdateMode">OnValidation</Property>
+    </Property>
+    <Property name="Name">No1Label2147483642</Property>
+  </Object>
+  <Object type="No1Lib.Sys.No1NumericUpDown, No1Lib.Sys, Version=1.0.0.0, Culture=neutral, PublicKeyToken=870be39b125434d2" name="numTONGCONGRef" children="Controls">
+    <Property name="EditValue">0</Property>
+    <Property name="Size">95, 20</Property>
+    <Property name="Location">71, 109</Property>
+    <Property name="ThousandsSeparator">True</Property>
+    <Property name="DecimalPlaces">2</Property>
+    <Property name="Name">numTONGCONGRef</Property>
+    <Property name="Maximum">10000000000000000</Property>
+    <Property name="DataBindings">
+      <Property name="DefaultDataSourceUpdateMode">OnValidation</Property>
+    </Property>
+    <Property name="Minimum">-10000000000000000</Property>
+    <Property name="TabIndex">6</Property>
+  </Object>
+  <Object type="No1Lib.Sys.No1Label, No1Lib.Sys, Version=1.0.0.0, Culture=neutral, PublicKeyToken=870be39b125434d2" name="No1Label2147483641" children="Controls">
+    <Property name="TabIndex">43</Property>
+    <Property name="BackColor">Transparent</Property>
+    <Property name="AutoSize">True</Property>
+    <Property name="Size">38, 13</Property>
+    <Property name="Text">Ca tập</Property>
+    <Property name="Location">7, 139</Property>
+    <Property name="DataBindings">
+      <Property name="DefaultDataSourceUpdateMode">OnValidation</Property>
+    </Property>
+    <Property name="Name">No1Label2147483641</Property>
+  </Object>
+  <Object type="No1Lib.Sys.No1LookupEdit, No1Lib.Sys, Version=1.0.0.0, Culture=neutral, PublicKeyToken=870be39b125434d2" name="lueCaTapRef" children="Controls">
+    <Property name="Size">351, 21</Property>
+    <Property name="Name">lueCaTapRef</Property>
+    <Property name="BackColor">White</Property>
+    <Property name="Location">72, 136</Property>
+    <Property name="DataBindings">
+      <Property name="DefaultDataSourceUpdateMode">OnValidation</Property>
+    </Property>
+    <Property name="TabIndex">7</Property>
+  </Object>
+  <Object type="No1Lib.Sys.No1Label, No1Lib.Sys, Version=1.0.0.0, Culture=neutral, PublicKeyToken=870be39b125434d2" name="No1Label2147483640" children="Controls">
+    <Property name="TabIndex">32</Property>
+    <Property name="BackColor">Transparent</Property>
+    <Property name="AutoSize">True</Property>
+    <Property name="Size">40, 13</Property>
+    <Property name="Text">Số tiền</Property>
+    <Property name="Location">7, 85</Property>
+    <Property name="DataBindings">
+      <Property name="DefaultDataSourceUpdateMode">OnValidation</Property>
+    </Property>
+    <Property name="Name">No1Label2147483640</Property>
+  </Object>
+  <Object type="No1Lib.Sys.No1NumericUpDown, No1Lib.Sys, Version=1.0.0.0, Culture=neutral, PublicKeyToken=870be39b125434d2" name="numSoTienRef" children="Controls">
+    <Property name="EditValue">0</Property>
+    <Property name="Size">95, 20</Property>
+    <Property name="Location">71, 83</Property>
+    <Property name="ThousandsSeparator">True</Property>
+    <Property name="DecimalPlaces">2</Property>
+    <Property name="Name">numSoTienRef</Property>
+    <Property name="Maximum">10000000000000000</Property>
+    <Property name="DataBindings">
+      <Property name="DefaultDataSourceUpdateMode">OnValidation</Property>
+    </Property>
+    <Property name="Minimum">-10000000000000000</Property>
+    <Property name="TabIndex">4</Property>
+  </Object>
+  <Object type="No1Lib.Sys.No1Label, No1Lib.Sys, Version=1.0.0.0, Culture=neutral, PublicKeyToken=870be39b125434d2" name="No1Label2147483639" children="Controls">
+    <Property name="TabIndex">34</Property>
+    <Property name="BackColor">Transparent</Property>
+    <Property name="AutoSize">True</Property>
+    <Property name="Size">48, 13</Property>
+    <Property name="Text">Giảm giá</Property>
+    <Property name="Location">193, 85</Property>
+    <Property name="DataBindings">
+      <Property name="DefaultDataSourceUpdateMode">OnValidation</Property>
+    </Property>
+    <Property name="Name">No1Label2147483639</Property>
+  </Object>
+  <Object type="No1Lib.Sys.No1NumericUpDown, No1Lib.Sys, Version=1.0.0.0, Culture=neutral, PublicKeyToken=870be39b125434d2" name="numTiLeGiamRef" children="Controls">
+    <Property name="EditValue">0</Property>
+    <Property name="Size">41, 20</Property>
+    <Property name="Location">259, 83</Property>
+    <Property name="ThousandsSeparator">True</Property>
+    <Property name="DecimalPlaces">2</Property>
+    <Property name="Name">numTiLeGiamRef</Property>
+    <Property name="Maximum">10000000000000000</Property>
+    <Property name="DataBindings">
+      <Property name="DefaultDataSourceUpdateMode">OnValidation</Property>
+    </Property>
+    <Property name="Minimum">-10000000000000000</Property>
+    <Property name="TabIndex">1</Property>
+  </Object>
+  <Object type="No1Lib.Sys.No1Label, No1Lib.Sys, Version=1.0.0.0, Culture=neutral, PublicKeyToken=870be39b125434d2" name="No1Label2147483638" children="Controls">
+    <Property name="TabIndex">36</Property>
+    <Property name="BackColor">Transparent</Property>
+    <Property name="AutoSize">True</Property>
+    <Property name="Size">15, 13</Property>
+    <Property name="Text">%</Property>
+    <Property name="Location">306, 85</Property>
+    <Property name="DataBindings">
+      <Property name="DefaultDataSourceUpdateMode">OnValidation</Property>
+    </Property>
+    <Property name="Name">No1Label2147483638</Property>
+  </Object>
+  <Object type="No1Lib.Sys.No1NumericUpDown, No1Lib.Sys, Version=1.0.0.0, Culture=neutral, PublicKeyToken=870be39b125434d2" name="numTienGiamRef" children="Controls">
+    <Property name="EditValue">0</Property>
+    <Property name="Size">95, 20</Property>
+    <Property name="Location">327, 83</Property>
+    <Property name="ThousandsSeparator">True</Property>
+    <Property name="DecimalPlaces">2</Property>
+    <Property name="Name">numTienGiamRef</Property>
+    <Property name="Maximum">10000000000000000</Property>
+    <Property name="DataBindings">
+      <Property name="DefaultDataSourceUpdateMode">OnValidation</Property>
+    </Property>
+    <Property name="Minimum">-10000000000000000</Property>
+    <Property name="TabIndex">5</Property>
+  </Object>
+  <Object type="No1Lib.Sys.No1TextBox, No1Lib.Sys, Version=1.0.0.0, Culture=neutral, PublicKeyToken=870be39b125434d2" name="txtDienThoai" children="Controls">
+    <Property name="Size">154, 22</Property>
+    <Property name="ReadOnly">True</Property>
+    <Property name="TabStop">False</Property>
+    <Property name="Font">Microsoft Sans Serif, 9.75pt</Property>
+    <Property name="Name">txtDienThoai</Property>
+    <Property name="Location">407, 67</Property>
+    <Property name="DataBindings">
+      <Property name="DefaultDataSourceUpdateMode">OnValidation</Property>
+    </Property>
+    <Property name="TabIndex">49</Property>
+  </Object>
+  <Object type="No1Lib.Sys.No1Label, No1Lib.Sys, Version=1.0.0.0, Culture=neutral, PublicKeyToken=870be39b125434d2" name="lblDienThoai" children="Controls">
+    <Property name="TabIndex">51</Property>
+    <Property name="BackColor">Transparent</Property>
+    <Property name="AutoSize">True</Property>
+    <Property name="Size">67, 16</Property>
+    <Property name="Text">Điện thoại</Property>
+    <Property name="Font">Microsoft Sans Serif, 9.75pt</Property>
+    <Property name="Location">327, 70</Property>
+    <Property name="DataBindings">
+      <Property name="DefaultDataSourceUpdateMode">OnValidation</Property>
+    </Property>
+    <Property name="Name">lblDienThoai</Property>
+  </Object>
+  <Object type="No1Lib.Sys.No1TextBox, No1Lib.Sys, Version=1.0.0.0, Culture=neutral, PublicKeyToken=870be39b125434d2" name="txtDiaChi" children="Controls">
+    <Property name="Size">166, 22</Property>
+    <Property name="ReadOnly">True</Property>
+    <Property name="TabStop">False</Property>
+    <Property name="Font">Microsoft Sans Serif, 9.75pt</Property>
+    <Property name="Name">txtDiaChi</Property>
+    <Property name="Location">118, 67</Property>
+    <Property name="DataBindings">
+      <Property name="DefaultDataSourceUpdateMode">OnValidation</Property>
+    </Property>
+    <Property name="TabIndex">48</Property>
+  </Object>
+  <Object type="No1Lib.Sys.No1Label, No1Lib.Sys, Version=1.0.0.0, Culture=neutral, PublicKeyToken=870be39b125434d2" name="lblDiaChi" children="Controls">
+    <Property name="TabIndex">50</Property>
+    <Property name="BackColor">Transparent</Property>
+    <Property name="AutoSize">True</Property>
+    <Property name="Size">48, 16</Property>
+    <Property name="Text">Địa chỉ</Property>
+    <Property name="Font">Microsoft Sans Serif, 9.75pt</Property>
+    <Property name="Location">10, 69</Property>
+    <Property name="DataBindings">
+      <Property name="DefaultDataSourceUpdateMode">OnValidation</Property>
+    </Property>
+    <Property name="Name">lblDiaChi</Property>
+  </Object>
+  <Object type="No1Lib.Sys.No1Label, No1Lib.Sys, Version=1.0.0.0, Culture=neutral, PublicKeyToken=870be39b125434d2" name="lblSOTHANG" children="Controls">
+    <Property name="TabIndex">52</Property>
+    <Property name="BackColor">Transparent</Property>
+    <Property name="AutoSize">True</Property>
+    <Property name="Size">50, 13</Property>
+    <Property name="Visible">False</Property>
+    <Property name="Text">Số tháng</Property>
+    <Property name="Location">606, 356</Property>
+    <Property name="DataBindings">
+      <Property name="DefaultDataSourceUpdateMode">OnValidation</Property>
+    </Property>
+    <Property name="Name">lblSOTHANG</Property>
+  </Object>
+  <Object type="No1Lib.Sys.No1NumericUpDown, No1Lib.Sys, Version=1.0.0.0, Culture=neutral, PublicKeyToken=870be39b125434d2" name="numSOTHANG" children="Controls">
+    <Property name="EditValue">0</Property>
+    <Property name="Size">95, 20</Property>
+    <Property name="Location">661, 353</Property>
+    <Property name="ThousandsSeparator">True</Property>
+    <Property name="DecimalPlaces">2</Property>
+    <Property name="Name">numSOTHANG</Property>
+    <Property name="Maximum">10000000000000000</Property>
+    <Property name="DataBindings">
+      <Property name="DefaultDataSourceUpdateMode">OnValidation</Property>
+    </Property>
+    <Property name="Minimum">-10000000000000000</Property>
+    <Property name="TabIndex">0</Property>
+    <Property name="Visible">False</Property>
+  </Object>
+  <Object type="No1Lib.Sys.No1Label, No1Lib.Sys, Version=1.0.0.0, Culture=neutral, PublicKeyToken=870be39b125434d2" name="lblSONGAY" children="Controls">
+    <Property name="TabIndex">54</Property>
+    <Property name="BackColor">Transparent</Property>
+    <Property name="AutoSize">True</Property>
+    <Property name="Size">46, 13</Property>
+    <Property name="Visible">False</Property>
+    <Property name="Text">Số ngày</Property>
+    <Property name="Location">606, 383</Property>
+    <Property name="DataBindings">
+      <Property name="DefaultDataSourceUpdateMode">OnValidation</Property>
+    </Property>
+    <Property name="Name">lblSONGAY</Property>
+  </Object>
+  <Object type="No1Lib.Sys.No1NumericUpDown, No1Lib.Sys, Version=1.0.0.0, Culture=neutral, PublicKeyToken=870be39b125434d2" name="numSONGAY" children="Controls">
+    <Property name="EditValue">0</Property>
+    <Property name="Size">95, 20</Property>
+    <Property name="Location">661, 380</Property>
+    <Property name="ThousandsSeparator">True</Property>
+    <Property name="DecimalPlaces">2</Property>
+    <Property name="Name">numSONGAY</Property>
+    <Property name="Maximum">10000000000000000</Property>
+    <Property name="DataBindings">
+      <Property name="DefaultDataSourceUpdateMode">OnValidation</Property>
+    </Property>
+    <Property name="Minimum">-10000000000000000</Property>
+    <Property name="TabIndex">1</Property>
+    <Property name="Visible">False</Property>
+  </Object>
+  <Object type="No1Lib.Sys.No1NumericUpDown, No1Lib.Sys, Version=1.0.0.0, Culture=neutral, PublicKeyToken=870be39b125434d2" name="numTruTheCu" children="Controls">
+    <Property name="TabStop">False</Property>
+    <Property name="EditValue">0</Property>
+    <Property name="Size">130, 22</Property>
+    <Property name="Location">431, 377</Property>
+    <Property name="ThousandsSeparator">True</Property>
+    <Property name="DecimalPlaces">2</Property>
+    <Property name="Name">numTruTheCu</Property>
+    <Property name="ReadOnly">True</Property>
+    <Property name="Maximum">10000000000000000</Property>
+    <Property name="Font">Microsoft Sans Serif, 9.75pt</Property>
+    <Property name="BackColor">255, 255, 192</Property>
+    <Property name="DataBindings">
+      <Property name="DefaultDataSourceUpdateMode">OnValidation</Property>
+    </Property>
+    <Property name="Minimum">-10000000000000000</Property>
+    <Property name="TabIndex">55</Property>
+  </Object>
+  <Object type="No1Lib.Sys.No1Label, No1Lib.Sys, Version=1.0.0.0, Culture=neutral, PublicKeyToken=870be39b125434d2" name="No1Label2147483637" children="Controls">
+    <Property name="TabIndex">56</Property>
+    <Property name="BackColor">Transparent</Property>
+    <Property name="AutoSize">True</Property>
+    <Property name="Size">66, 16</Property>
+    <Property name="Text">Trừ thẻ cũ</Property>
+    <Property name="Font">Microsoft Sans Serif, 9.75pt</Property>
+    <Property name="Location">328, 379</Property>
+    <Property name="DataBindings">
+      <Property name="DefaultDataSourceUpdateMode">OnValidation</Property>
+    </Property>
+    <Property name="Name">No1Label2147483637</Property>
+  </Object>
+  <Object type="No1Lib.Sys.No1Label, No1Lib.Sys, Version=1.0.0.0, Culture=neutral, PublicKeyToken=870be39b125434d2" name="No1Label2147483636" children="Controls">
+    <Property name="TabIndex">57</Property>
+    <Property name="BackColor">Transparent</Property>
+    <Property name="AutoSize">True</Property>
+    <Property name="Size">37, 13</Property>
+    <Property name="Text">Số lần</Property>
+    <Property name="Location">193, 111</Property>
+    <Property name="DataBindings">
+      <Property name="DefaultDataSourceUpdateMode">OnValidation</Property>
+    </Property>
+    <Property name="Name">No1Label2147483636</Property>
+  </Object>
+  <Object type="No1Lib.Sys.No1NumericUpDown, No1Lib.Sys, Version=1.0.0.0, Culture=neutral, PublicKeyToken=870be39b125434d2" name="numSOLANRef" children="Controls">
+    <Property name="EditValue">0</Property>
+    <Property name="Size">41, 20</Property>
+    <Property name="Location">259, 110</Property>
+    <Property name="ThousandsSeparator">True</Property>
+    <Property name="DecimalPlaces">2</Property>
+    <Property name="Name">numSOLANRef</Property>
+    <Property name="Maximum">10000000000000000</Property>
+    <Property name="DataBindings">
+      <Property name="DefaultDataSourceUpdateMode">OnValidation</Property>
+    </Property>
+    <Property name="Minimum">-10000000000000000</Property>
+    <Property name="TabIndex">0</Property>
+  </Object>

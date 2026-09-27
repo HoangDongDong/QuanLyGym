@@ -1,0 +1,629 @@
+
+  <Object type="System.Windows.Forms.UserControl, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" name="Form_1" children="Controls">
+    <Reference name="KryptonPanel1" />
+    <Property name="Size">527, 379</Property>
+    <Property name="DataBindings">
+      <Property name="DefaultDataSourceUpdateMode">OnValidation</Property>
+    </Property>
+    <Property name="Name">Form_1</Property>
+  </Object>
+  <Object type="No1Lib.Sys.AeController, No1Lib.Sys, Version=1.0.0.0, Culture=neutral, PublicKeyToken=870be39b125434d2" name="mapper">
+    <Property name="ID" />
+    <Property name="Maps">
+      <Item type="No1Lib.Sys.No1FieldMap, No1Lib.Sys, Version=1.0.0.0, Culture=neutral, PublicKeyToken=870be39b125434d2">
+        <ObjectEx>
+          <Property name="DataField">NAME</Property>
+          <Property name="AllowEmpty">False</Property>
+          <Property name="AllowDuplicate">False</Property>
+          <Property name="LabelControl">
+            <Reference name="lblNAME" />
+          </Property>
+          <Property name="EditControl">
+            <Reference name="txtNAME" />
+          </Property>
+        </ObjectEx>
+      </Item>
+      <Item type="No1Lib.Sys.No1FieldMap, No1Lib.Sys, Version=1.0.0.0, Culture=neutral, PublicKeyToken=870be39b125434d2">
+        <ObjectEx>
+          <Property name="DataField">NOTE</Property>
+          <Property name="LabelControl">
+            <Reference name="lblNOTE" />
+          </Property>
+          <Property name="EditControl">
+            <Reference name="txtNOTE" />
+          </Property>
+        </ObjectEx>
+      </Item>
+      <Item type="No1Lib.Sys.No1FieldMap, No1Lib.Sys, Version=1.0.0.0, Culture=neutral, PublicKeyToken=870be39b125434d2">
+        <ObjectEx>
+          <Property name="DataField">NGAY</Property>
+          <Property name="LabelControl">
+            <Reference name="lblNGAY" />
+          </Property>
+          <Property name="EditControl">
+            <Reference name="dtNGAY" />
+          </Property>
+        </ObjectEx>
+      </Item>
+      <Item type="No1Lib.Sys.No1FieldMap, No1Lib.Sys, Version=1.0.0.0, Culture=neutral, PublicKeyToken=870be39b125434d2">
+        <ObjectEx>
+          <Property name="DataField">TENDOITUONG</Property>
+          <Property name="LabelControl">
+            <Reference name="lblTENDOITUONG" />
+          </Property>
+          <Property name="EditControl">
+            <Reference name="txtTENDOITUONG" />
+          </Property>
+        </ObjectEx>
+      </Item>
+      <Item type="No1Lib.Sys.No1FieldMap, No1Lib.Sys, Version=1.0.0.0, Culture=neutral, PublicKeyToken=870be39b125434d2">
+        <ObjectEx>
+          <Property name="DataField">DIACHI</Property>
+          <Property name="LabelControl">
+            <Reference name="lblDIACHI" />
+          </Property>
+          <Property name="EditControl">
+            <Reference name="txtDIACHI" />
+          </Property>
+        </ObjectEx>
+      </Item>
+      <Item type="No1Lib.Sys.No1FieldMap, No1Lib.Sys, Version=1.0.0.0, Culture=neutral, PublicKeyToken=870be39b125434d2">
+        <ObjectEx>
+          <Property name="DataField">DNHANVIENID</Property>
+          <Property name="LabelControl">
+            <Reference name="lblDNHANVIENID" />
+          </Property>
+          <Property name="EditControl">
+            <Reference name="lueDNHANVIENID" />
+          </Property>
+        </ObjectEx>
+      </Item>
+      <Item type="No1Lib.Sys.No1FieldMap, No1Lib.Sys, Version=1.0.0.0, Culture=neutral, PublicKeyToken=870be39b125434d2">
+        <ObjectEx>
+          <Property name="DataField">DKHACHHANGID</Property>
+          <Property name="LabelControl">
+            <Reference name="lblDKHACHHANGID" />
+          </Property>
+          <Property name="EditControl">
+            <Reference name="lueDKHACHHANGID" />
+          </Property>
+        </ObjectEx>
+      </Item>
+      <Item type="No1Lib.Sys.No1FieldMap, No1Lib.Sys, Version=1.0.0.0, Culture=neutral, PublicKeyToken=870be39b125434d2">
+        <ObjectEx>
+          <Property name="DataField">LOAI</Property>
+          <Property name="LabelControl" />
+          <Property name="EditControl" />
+        </ObjectEx>
+      </Item>
+      <Item type="No1Lib.Sys.No1FieldMap, No1Lib.Sys, Version=1.0.0.0, Culture=neutral, PublicKeyToken=870be39b125434d2">
+        <ObjectEx>
+          <Property name="DataField">LOAIDOITUONG</Property>
+          <Property name="LabelControl">
+            <Reference name="lblLOAIDOITUONG" />
+          </Property>
+          <Property name="EditControl">
+            <Reference name="cboLOAIDOITUONG" />
+          </Property>
+        </ObjectEx>
+      </Item>
+      <Item type="No1Lib.Sys.No1FieldMap, No1Lib.Sys, Version=1.0.0.0, Culture=neutral, PublicKeyToken=870be39b125434d2">
+        <ObjectEx>
+          <Property name="DataField">DLYDOTHUCHIID</Property>
+          <Property name="LabelControl">
+            <Reference name="lblDLYDOTHUCHIID" />
+          </Property>
+          <Property name="EditControl">
+            <Reference name="lueDLYDOTHUCHIID" />
+          </Property>
+        </ObjectEx>
+      </Item>
+      <Item type="No1Lib.Sys.No1FieldMap, No1Lib.Sys, Version=1.0.0.0, Culture=neutral, PublicKeyToken=870be39b125434d2">
+        <ObjectEx>
+          <Property name="DataField">DIENGIAI</Property>
+          <Property name="LabelControl">
+            <Reference name="lblDIENGIAI" />
+          </Property>
+          <Property name="EditControl">
+            <Reference name="txtDIENGIAI" />
+          </Property>
+        </ObjectEx>
+      </Item>
+      <Item type="No1Lib.Sys.No1FieldMap, No1Lib.Sys, Version=1.0.0.0, Culture=neutral, PublicKeyToken=870be39b125434d2">
+        <ObjectEx>
+          <Property name="DataField">CHUNGTUGOC</Property>
+          <Property name="LabelControl">
+            <Reference name="lblCHUNGTUGOC" />
+          </Property>
+          <Property name="EditControl">
+            <Reference name="txtCHUNGTUGOC" />
+          </Property>
+        </ObjectEx>
+      </Item>
+      <Item type="No1Lib.Sys.No1FieldMap, No1Lib.Sys, Version=1.0.0.0, Culture=neutral, PublicKeyToken=870be39b125434d2">
+        <ObjectEx>
+          <Property name="DataField">THU</Property>
+          <Property name="AllowEmpty">False</Property>
+          <Property name="LabelControl">
+            <Reference name="lblTHU" />
+          </Property>
+          <Property name="EditControl">
+            <Reference name="numTHU" />
+          </Property>
+        </ObjectEx>
+      </Item>
+      <Item type="No1Lib.Sys.No1FieldMap, No1Lib.Sys, Version=1.0.0.0, Culture=neutral, PublicKeyToken=870be39b125434d2">
+        <ObjectEx>
+          <Property name="DataField">DNHACUNGCAPID</Property>
+          <Property name="LabelControl">
+            <Reference name="lblDNHACUNGCAPID" />
+          </Property>
+          <Property name="EditControl">
+            <Reference name="lueDNHACUNGCAPID" />
+          </Property>
+        </ObjectEx>
+      </Item>
+      <Item type="No1Lib.Sys.No1FieldMap, No1Lib.Sys, Version=1.0.0.0, Culture=neutral, PublicKeyToken=870be39b125434d2">
+        <ObjectEx>
+          <Property name="DataField">CHUYENKHOAN</Property>
+          <Property name="LabelControl" />
+          <Property name="EditControl">
+            <Reference name="chkCHUYENKHOAN" />
+          </Property>
+        </ObjectEx>
+      </Item>
+      <Item type="No1Lib.Sys.No1FieldMap, No1Lib.Sys, Version=1.0.0.0, Culture=neutral, PublicKeyToken=870be39b125434d2">
+        <ObjectEx>
+          <Property name="DataField">TDATHANGID</Property>
+          <Property name="LabelControl" />
+          <Property name="EditControl" />
+        </ObjectEx>
+      </Item>
+      <Item type="No1Lib.Sys.No1FieldMap, No1Lib.Sys, Version=1.0.0.0, Culture=neutral, PublicKeyToken=870be39b125434d2">
+        <ObjectEx>
+          <Property name="DataField">DCUAHANGID</Property>
+          <Property name="AllowEmpty">False</Property>
+          <Property name="LabelControl">
+            <Reference name="lblDCUAHANGID" />
+          </Property>
+          <Property name="EditControl">
+            <Reference name="lueDCUAHANGID" />
+          </Property>
+        </ObjectEx>
+      </Item>
+      <Item type="No1Lib.Sys.No1FieldMap, No1Lib.Sys, Version=1.0.0.0, Culture=neutral, PublicKeyToken=870be39b125434d2">
+        <ObjectEx>
+          <Property name="DataField">KHONGTHAYDOICONGNO</Property>
+          <Property name="LabelControl" />
+          <Property name="EditControl">
+            <Reference name="chkKHONGTHAYDOICONGNO" />
+          </Property>
+        </ObjectEx>
+      </Item>
+      <Item type="No1Lib.Sys.No1FieldMap, No1Lib.Sys, Version=1.0.0.0, Culture=neutral, PublicKeyToken=870be39b125434d2">
+        <ObjectEx>
+          <Property name="DataField">DTAIKHOANNGANHANGID</Property>
+          <Property name="LabelControl" />
+          <Property name="EditControl">
+            <Reference name="lueDTAIKHOANNGANHANGID" />
+          </Property>
+        </ObjectEx>
+      </Item>
+      <Item type="No1Lib.Sys.No1FieldMap, No1Lib.Sys, Version=1.0.0.0, Culture=neutral, PublicKeyToken=870be39b125434d2">
+        <ObjectEx>
+          <Property name="DataField">DTHETRATRUOCID</Property>
+          <Property name="LabelControl" />
+          <Property name="EditControl" />
+        </ObjectEx>
+      </Item>
+    </Property>
+    <Property name="Table">TTHUCHI</Property>
+    <Event name="OnSetValue">mapper_OnSetValue</Event>
+    <Event name="AfterFillData">mapper_AfterFillData</Event>
+    <Event name="BeforeSave">mapper_BeforeSave</Event>
+  </Object>
+  <Object type="ComponentFactory.Krypton.Toolkit.KryptonPanel, ComponentFactory.Krypton.Toolkit, Version=4.1.6.0, Culture=neutral, PublicKeyToken=5fd520d36328f741" name="KryptonPanel1" children="Controls">
+    <Reference name="lueDTAIKHOANNGANHANGID" />
+    <Reference name="chkKHONGTHAYDOICONGNO" />
+    <Reference name="lueDCUAHANGID" />
+    <Reference name="lblDCUAHANGID" />
+    <Reference name="chkCHUYENKHOAN" />
+    <Reference name="lueDNHACUNGCAPID" />
+    <Reference name="lblDNHACUNGCAPID" />
+    <Reference name="numTHU" />
+    <Reference name="lblTHU" />
+    <Reference name="txtNOTE" />
+    <Reference name="lblNOTE" />
+    <Reference name="txtCHUNGTUGOC" />
+    <Reference name="lblCHUNGTUGOC" />
+    <Reference name="txtDIENGIAI" />
+    <Reference name="lblDIENGIAI" />
+    <Reference name="lueDLYDOTHUCHIID" />
+    <Reference name="lblDLYDOTHUCHIID" />
+    <Reference name="cboLOAIDOITUONG" />
+    <Reference name="lblLOAIDOITUONG" />
+    <Reference name="lueDKHACHHANGID" />
+    <Reference name="lblDKHACHHANGID" />
+    <Reference name="lueDNHANVIENID" />
+    <Reference name="lblDNHANVIENID" />
+    <Reference name="txtDIACHI" />
+    <Reference name="lblDIACHI" />
+    <Reference name="txtTENDOITUONG" />
+    <Reference name="lblTENDOITUONG" />
+    <Reference name="txtNAME" />
+    <Reference name="lblNAME" />
+    <Reference name="dtNGAY" />
+    <Reference name="lblNGAY" />
+    <Property name="Dock">Fill</Property>
+    <Property name="Size">527, 379</Property>
+    <Property name="TabIndex">0</Property>
+    <Property name="Location">0, 0</Property>
+    <Property name="DataBindings">
+      <Property name="DefaultDataSourceUpdateMode">OnValidation</Property>
+    </Property>
+    <Property name="Name">KryptonPanel1</Property>
+  </Object>
+  <Object type="No1Lib.Sys.No1NumericUpDown, No1Lib.Sys, Version=1.0.0.0, Culture=neutral, PublicKeyToken=870be39b125434d2" name="numTHU" children="Controls">
+    <Property name="EditValue">0</Property>
+    <Property name="Size">94, 20</Property>
+    <Property name="Location">91, 252</Property>
+    <Property name="ThousandsSeparator">True</Property>
+    <Property name="DecimalPlaces">2</Property>
+    <Property name="Name">numTHU</Property>
+    <Property name="Maximum">1000000000000</Property>
+    <Property name="DataBindings">
+      <Property name="DefaultDataSourceUpdateMode">OnValidation</Property>
+    </Property>
+    <Property name="Minimum">-1000000000000</Property>
+    <Property name="TabIndex">9</Property>
+  </Object>
+  <Object type="No1Lib.Sys.No1Label, No1Lib.Sys, Version=1.0.0.0, Culture=neutral, PublicKeyToken=870be39b125434d2" name="lblTHU" children="Controls">
+    <Property name="TabIndex">21</Property>
+    <Property name="BackColor">Transparent</Property>
+    <Property name="AutoSize">True</Property>
+    <Property name="Size">43, 13</Property>
+    <Property name="Text">Số tiền:</Property>
+    <Property name="Location">12, 254</Property>
+    <Property name="DataBindings">
+      <Property name="DefaultDataSourceUpdateMode">OnValidation</Property>
+    </Property>
+    <Property name="Name">lblTHU</Property>
+  </Object>
+  <Object type="No1Lib.Sys.No1TextBox, No1Lib.Sys, Version=1.0.0.0, Culture=neutral, PublicKeyToken=870be39b125434d2" name="txtNOTE" children="Controls">
+    <Property name="Size">305, 20</Property>
+    <Property name="Name">txtNOTE</Property>
+    <Property name="Location">91, 350</Property>
+    <Property name="DataBindings">
+      <Property name="DefaultDataSourceUpdateMode">OnValidation</Property>
+    </Property>
+    <Property name="TabIndex">15</Property>
+  </Object>
+  <Object type="No1Lib.Sys.No1Label, No1Lib.Sys, Version=1.0.0.0, Culture=neutral, PublicKeyToken=870be39b125434d2" name="lblNOTE" children="Controls">
+    <Property name="TabIndex">20</Property>
+    <Property name="BackColor">Transparent</Property>
+    <Property name="AutoSize">True</Property>
+    <Property name="Size">44, 13</Property>
+    <Property name="Text">Ghi chú</Property>
+    <Property name="Location">11, 353</Property>
+    <Property name="DataBindings">
+      <Property name="DefaultDataSourceUpdateMode">OnValidation</Property>
+    </Property>
+    <Property name="Name">lblNOTE</Property>
+  </Object>
+  <Object type="No1Lib.Sys.No1TextBox, No1Lib.Sys, Version=1.0.0.0, Culture=neutral, PublicKeyToken=870be39b125434d2" name="txtCHUNGTUGOC" children="Controls">
+    <Property name="Size">305, 20</Property>
+    <Property name="Name">txtCHUNGTUGOC</Property>
+    <Property name="Location">90, 91</Property>
+    <Property name="DataBindings">
+      <Property name="DefaultDataSourceUpdateMode">OnValidation</Property>
+    </Property>
+    <Property name="TabIndex">2</Property>
+  </Object>
+  <Object type="No1Lib.Sys.No1Label, No1Lib.Sys, Version=1.0.0.0, Culture=neutral, PublicKeyToken=870be39b125434d2" name="lblCHUNGTUGOC" children="Controls">
+    <Property name="TabIndex">18</Property>
+    <Property name="BackColor">Transparent</Property>
+    <Property name="AutoSize">True</Property>
+    <Property name="Size">71, 13</Property>
+    <Property name="Text">Chứng từ gốc</Property>
+    <Property name="Location">10, 94</Property>
+    <Property name="DataBindings">
+      <Property name="DefaultDataSourceUpdateMode">OnValidation</Property>
+    </Property>
+    <Property name="Name">lblCHUNGTUGOC</Property>
+  </Object>
+  <Object type="No1Lib.Sys.No1TextBox, No1Lib.Sys, Version=1.0.0.0, Culture=neutral, PublicKeyToken=870be39b125434d2" name="txtDIENGIAI" children="Controls">
+    <Property name="Size">305, 20</Property>
+    <Property name="Name">txtDIENGIAI</Property>
+    <Property name="Location">90, 64</Property>
+    <Property name="DataBindings">
+      <Property name="DefaultDataSourceUpdateMode">OnValidation</Property>
+    </Property>
+    <Property name="TabIndex">1</Property>
+  </Object>
+  <Object type="No1Lib.Sys.No1Label, No1Lib.Sys, Version=1.0.0.0, Culture=neutral, PublicKeyToken=870be39b125434d2" name="lblDIENGIAI" children="Controls">
+    <Property name="TabIndex">16</Property>
+    <Property name="BackColor">Transparent</Property>
+    <Property name="AutoSize">True</Property>
+    <Property name="Size">51, 13</Property>
+    <Property name="Text">Lý do thu</Property>
+    <Property name="Location">10, 67</Property>
+    <Property name="DataBindings">
+      <Property name="DefaultDataSourceUpdateMode">OnValidation</Property>
+    </Property>
+    <Property name="Name">lblDIENGIAI</Property>
+  </Object>
+  <Object type="No1Lib.Sys.No1LookupEdit, No1Lib.Sys, Version=1.0.0.0, Culture=neutral, PublicKeyToken=870be39b125434d2" name="lueDLYDOTHUCHIID" children="Controls">
+    <Property name="Size">305, 21</Property>
+    <Property name="Name">lueDLYDOTHUCHIID</Property>
+    <Property name="BackColor">White</Property>
+    <Property name="Location">90, 37</Property>
+    <Property name="DataBindings">
+      <Property name="DefaultDataSourceUpdateMode">OnValidation</Property>
+    </Property>
+    <Property name="TabIndex">0</Property>
+    <Event name="CustomLoadData">lueDLYDOTHUCHIID_CustomLoadData</Event>
+  </Object>
+  <Object type="No1Lib.Sys.No1Label, No1Lib.Sys, Version=1.0.0.0, Culture=neutral, PublicKeyToken=870be39b125434d2" name="lblDLYDOTHUCHIID" children="Controls">
+    <Property name="TabIndex">14</Property>
+    <Property name="BackColor">Transparent</Property>
+    <Property name="AutoSize">True</Property>
+    <Property name="Size">51, 13</Property>
+    <Property name="Text">Phân loại</Property>
+    <Property name="Location">10, 40</Property>
+    <Property name="DataBindings">
+      <Property name="DefaultDataSourceUpdateMode">OnValidation</Property>
+    </Property>
+    <Property name="Name">lblDLYDOTHUCHIID</Property>
+  </Object>
+  <Object type="No1Lib.Sys.No1ComboBox, No1Lib.Sys, Version=1.0.0.0, Culture=neutral, PublicKeyToken=870be39b125434d2" name="cboLOAIDOITUONG" children="Controls">
+    <Property name="DropDownStyle">DropDownList</Property>
+    <Property name="EditValue">-1</Property>
+    <Property name="Size">117, 21</Property>
+    <Property name="Name">cboLOAIDOITUONG</Property>
+    <Property name="Items">
+      <Item type="System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">Đối tượng khác</Item>
+      <Item type="System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">Nhân viên</Item>
+      <Item type="System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">Khách hàng</Item>
+      <Item type="System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">Nhà cung cấp</Item>
+    </Property>
+    <Property name="Location">401, 117</Property>
+    <Property name="DataBindings">
+      <Property name="DefaultDataSourceUpdateMode">OnValidation</Property>
+    </Property>
+    <Property name="TabIndex">4</Property>
+    <Property name="LockEvent">False</Property>
+    <Event name="SelectedIndexChanged">cboLOAIDOITUONG_SelectedIndexChanged</Event>
+  </Object>
+  <Object type="No1Lib.Sys.No1Label, No1Lib.Sys, Version=1.0.0.0, Culture=neutral, PublicKeyToken=870be39b125434d2" name="lblLOAIDOITUONG" children="Controls">
+    <Property name="TabIndex">12</Property>
+    <Property name="BackColor">Transparent</Property>
+    <Property name="AutoSize">True</Property>
+    <Property name="Size">75, 13</Property>
+    <Property name="Text">Loại đối tượng</Property>
+    <Property name="Location">401, 98</Property>
+    <Property name="DataBindings">
+      <Property name="DefaultDataSourceUpdateMode">OnValidation</Property>
+    </Property>
+    <Property name="Name">lblLOAIDOITUONG</Property>
+  </Object>
+  <Object type="No1Lib.Sys.No1GridLookup, No1Lib.Sys, Version=1.0.0.0, Culture=neutral, PublicKeyToken=870be39b125434d2" name="lueDKHACHHANGID" children="Controls">
+    <Property name="Size">305, 21</Property>
+    <Property name="DisplayText" />
+    <Property name="CardReaderColumn" />
+    <Property name="TabIndex">7</Property>
+    <Property name="Name">lueDKHACHHANGID</Property>
+    <Property name="Location">90, 197</Property>
+    <Property name="DataBindings">
+      <Property name="DefaultDataSourceUpdateMode">OnValidation</Property>
+    </Property>
+    <Property name="Enabled">False</Property>
+    <Event name="OnEditValueChanged">lueDKHACHHANGID_OnEditValueChanged</Event>
+  </Object>
+  <Object type="No1Lib.Sys.No1Label, No1Lib.Sys, Version=1.0.0.0, Culture=neutral, PublicKeyToken=870be39b125434d2" name="lblDKHACHHANGID" children="Controls">
+    <Property name="TabIndex">10</Property>
+    <Property name="BackColor">Transparent</Property>
+    <Property name="AutoSize">True</Property>
+    <Property name="Size">65, 13</Property>
+    <Property name="Text">Khách hàng</Property>
+    <Property name="Location">10, 201</Property>
+    <Property name="DataBindings">
+      <Property name="DefaultDataSourceUpdateMode">OnValidation</Property>
+    </Property>
+    <Property name="Name">lblDKHACHHANGID</Property>
+  </Object>
+  <Object type="No1Lib.Sys.No1LookupEdit, No1Lib.Sys, Version=1.0.0.0, Culture=neutral, PublicKeyToken=870be39b125434d2" name="lueDNHANVIENID" children="Controls">
+    <Property name="Size">305, 21</Property>
+    <Property name="Name">lueDNHANVIENID</Property>
+    <Property name="BackColor">White</Property>
+    <Property name="Location">91, 170</Property>
+    <Property name="DataBindings">
+      <Property name="DefaultDataSourceUpdateMode">OnValidation</Property>
+    </Property>
+    <Property name="Enabled">False</Property>
+    <Property name="TabIndex">6</Property>
+    <Event name="OnEditValueChanged">lueDNHANVIENID_OnEditValueChanged</Event>
+  </Object>
+  <Object type="No1Lib.Sys.No1Label, No1Lib.Sys, Version=1.0.0.0, Culture=neutral, PublicKeyToken=870be39b125434d2" name="lblDNHANVIENID" children="Controls">
+    <Property name="TabIndex">8</Property>
+    <Property name="BackColor">Transparent</Property>
+    <Property name="AutoSize">True</Property>
+    <Property name="Size">56, 13</Property>
+    <Property name="Text">Nhân viên</Property>
+    <Property name="Location">10, 174</Property>
+    <Property name="DataBindings">
+      <Property name="DefaultDataSourceUpdateMode">OnValidation</Property>
+    </Property>
+    <Property name="Name">lblDNHANVIENID</Property>
+  </Object>
+  <Object type="No1Lib.Sys.No1TextBox, No1Lib.Sys, Version=1.0.0.0, Culture=neutral, PublicKeyToken=870be39b125434d2" name="txtDIACHI" children="Controls">
+    <Property name="Size">305, 20</Property>
+    <Property name="Name">txtDIACHI</Property>
+    <Property name="Location">90, 144</Property>
+    <Property name="DataBindings">
+      <Property name="DefaultDataSourceUpdateMode">OnValidation</Property>
+    </Property>
+    <Property name="TabIndex">5</Property>
+  </Object>
+  <Object type="No1Lib.Sys.No1Label, No1Lib.Sys, Version=1.0.0.0, Culture=neutral, PublicKeyToken=870be39b125434d2" name="lblDIACHI" children="Controls">
+    <Property name="TabIndex">6</Property>
+    <Property name="BackColor">Transparent</Property>
+    <Property name="AutoSize">True</Property>
+    <Property name="Size">40, 13</Property>
+    <Property name="Text">Địa chỉ</Property>
+    <Property name="Location">10, 147</Property>
+    <Property name="DataBindings">
+      <Property name="DefaultDataSourceUpdateMode">OnValidation</Property>
+    </Property>
+    <Property name="Name">lblDIACHI</Property>
+  </Object>
+  <Object type="No1Lib.Sys.No1TextBox, No1Lib.Sys, Version=1.0.0.0, Culture=neutral, PublicKeyToken=870be39b125434d2" name="txtTENDOITUONG" children="Controls">
+    <Property name="Size">305, 20</Property>
+    <Property name="Name">txtTENDOITUONG</Property>
+    <Property name="Location">90, 117</Property>
+    <Property name="DataBindings">
+      <Property name="DefaultDataSourceUpdateMode">OnValidation</Property>
+    </Property>
+    <Property name="TabIndex">3</Property>
+  </Object>
+  <Object type="No1Lib.Sys.No1Label, No1Lib.Sys, Version=1.0.0.0, Culture=neutral, PublicKeyToken=870be39b125434d2" name="lblTENDOITUONG" children="Controls">
+    <Property name="TabIndex">4</Property>
+    <Property name="BackColor">Transparent</Property>
+    <Property name="AutoSize">True</Property>
+    <Property name="Size">74, 13</Property>
+    <Property name="Text">Tên đối tượng</Property>
+    <Property name="Location">10, 120</Property>
+    <Property name="DataBindings">
+      <Property name="DefaultDataSourceUpdateMode">OnValidation</Property>
+    </Property>
+    <Property name="Name">lblTENDOITUONG</Property>
+  </Object>
+  <Object type="No1Lib.Sys.No1TextBox, No1Lib.Sys, Version=1.0.0.0, Culture=neutral, PublicKeyToken=870be39b125434d2" name="txtNAME" children="Controls">
+    <Property name="Size">134, 20</Property>
+    <Property name="Name">txtNAME</Property>
+    <Property name="Location">261, 10</Property>
+    <Property name="DataBindings">
+      <Property name="DefaultDataSourceUpdateMode">OnValidation</Property>
+    </Property>
+    <Property name="TabIndex">17</Property>
+  </Object>
+  <Object type="No1Lib.Sys.No1Label, No1Lib.Sys, Version=1.0.0.0, Culture=neutral, PublicKeyToken=870be39b125434d2" name="lblNAME" children="Controls">
+    <Property name="TabIndex">2</Property>
+    <Property name="BackColor">Transparent</Property>
+    <Property name="AutoSize">True</Property>
+    <Property name="Size">49, 13</Property>
+    <Property name="Text">Số phiếu</Property>
+    <Property name="Location">191, 13</Property>
+    <Property name="DataBindings">
+      <Property name="DefaultDataSourceUpdateMode">OnValidation</Property>
+    </Property>
+    <Property name="Name">lblNAME</Property>
+  </Object>
+  <Object type="No1Lib.Sys.No1DatePicker, No1Lib.Sys, Version=1.0.0.0, Culture=neutral, PublicKeyToken=870be39b125434d2" name="dtNGAY" children="Controls">
+    <Property name="DateTime">
+    </Property>
+    <Property name="EditValue" />
+    <Property name="Size">95, 20</Property>
+    <Property name="Name">dtNGAY</Property>
+    <Property name="Location">90, 10</Property>
+    <Property name="DataBindings">
+      <Property name="DefaultDataSourceUpdateMode">OnValidation</Property>
+    </Property>
+    <Property name="TabIndex">16</Property>
+  </Object>
+  <Object type="No1Lib.Sys.No1Label, No1Lib.Sys, Version=1.0.0.0, Culture=neutral, PublicKeyToken=870be39b125434d2" name="lblNGAY" children="Controls">
+    <Property name="TabIndex">0</Property>
+    <Property name="BackColor">Transparent</Property>
+    <Property name="AutoSize">True</Property>
+    <Property name="Size">32, 13</Property>
+    <Property name="Text">Ngày</Property>
+    <Property name="Location">10, 13</Property>
+    <Property name="DataBindings">
+      <Property name="DefaultDataSourceUpdateMode">OnValidation</Property>
+    </Property>
+    <Property name="Name">lblNGAY</Property>
+  </Object>
+  <Object type="No1Lib.Sys.No1Label, No1Lib.Sys, Version=1.0.0.0, Culture=neutral, PublicKeyToken=870be39b125434d2" name="lblDNHACUNGCAPID" children="Controls">
+    <Property name="TabIndex">22</Property>
+    <Property name="BackColor">Transparent</Property>
+    <Property name="AutoSize">True</Property>
+    <Property name="Size">75, 13</Property>
+    <Property name="Text">Nhà cung cấp</Property>
+    <Property name="Location">12, 225</Property>
+    <Property name="DataBindings">
+      <Property name="DefaultDataSourceUpdateMode">OnValidation</Property>
+    </Property>
+    <Property name="Name">lblDNHACUNGCAPID</Property>
+  </Object>
+  <Object type="No1Lib.Sys.No1GridLookup, No1Lib.Sys, Version=1.0.0.0, Culture=neutral, PublicKeyToken=870be39b125434d2" name="lueDNHACUNGCAPID" children="Controls">
+    <Property name="Size">306, 21</Property>
+    <Property name="DisplayText" />
+    <Property name="CardReaderColumn" />
+    <Property name="TabIndex">8</Property>
+    <Property name="Name">lueDNHACUNGCAPID</Property>
+    <Property name="Location">90, 225</Property>
+    <Property name="DataBindings">
+      <Property name="DefaultDataSourceUpdateMode">OnValidation</Property>
+    </Property>
+    <Event name="OnEditValueChanged">lueDNHACUNGCAPID_OnEditValueChanged</Event>
+  </Object>
+  <Object type="No1Lib.Sys.No1CheckBox, No1Lib.Sys, Version=1.0.0.0, Culture=neutral, PublicKeyToken=870be39b125434d2" name="chkCHUYENKHOAN" children="Controls">
+    <Property name="Size">130, 17</Property>
+    <Property name="Text">Chuyển vào tài khoản</Property>
+    <Property name="Name">chkCHUYENKHOAN</Property>
+    <Property name="UseVisualStyleBackColor">False</Property>
+    <Property name="BackColor">Transparent</Property>
+    <Property name="Location">92, 278</Property>
+    <Property name="DataBindings">
+      <Property name="DefaultDataSourceUpdateMode">OnValidation</Property>
+    </Property>
+    <Property name="TabIndex">11</Property>
+    <Property name="AutoSize">True</Property>
+    <Event name="OnEditValueChanged">chkCHUYENKHOAN_OnEditValueChanged</Event>
+    <Event name="CheckedChanged">chkCHUYENKHOAN_CheckedChanged</Event>
+  </Object>
+  <Object type="No1Lib.Sys.No1Label, No1Lib.Sys, Version=1.0.0.0, Culture=neutral, PublicKeyToken=870be39b125434d2" name="lblDCUAHANGID" children="Controls">
+    <Property name="TabIndex">23</Property>
+    <Property name="BackColor">Transparent</Property>
+    <Property name="AutoSize">True</Property>
+    <Property name="Size">53, 13</Property>
+    <Property name="Text">Cửa hàng</Property>
+    <Property name="Location">12, 304</Property>
+    <Property name="DataBindings">
+      <Property name="DefaultDataSourceUpdateMode">OnValidation</Property>
+    </Property>
+    <Property name="Name">lblDCUAHANGID</Property>
+  </Object>
+  <Object type="No1Lib.Sys.No1LookupEdit, No1Lib.Sys, Version=1.0.0.0, Culture=neutral, PublicKeyToken=870be39b125434d2" name="lueDCUAHANGID" children="Controls">
+    <Property name="Size">304, 21</Property>
+    <Property name="Name">lueDCUAHANGID</Property>
+    <Property name="BackColor">White</Property>
+    <Property name="Location">92, 300</Property>
+    <Property name="DataBindings">
+      <Property name="DefaultDataSourceUpdateMode">OnValidation</Property>
+    </Property>
+    <Property name="TabIndex">13</Property>
+    <Event name="CustomLoadData">lueDCUAHANGID_CustomLoadData</Event>
+  </Object>
+  <Object type="No1Lib.Sys.No1CheckBox, No1Lib.Sys, Version=1.0.0.0, Culture=neutral, PublicKeyToken=870be39b125434d2" name="chkKHONGTHAYDOICONGNO" children="Controls">
+    <Property name="Size">140, 17</Property>
+    <Property name="Text">Không thay đổi công nợ</Property>
+    <Property name="Name">chkKHONGTHAYDOICONGNO</Property>
+    <Property name="UseVisualStyleBackColor">False</Property>
+    <Property name="BackColor">Transparent</Property>
+    <Property name="Location">91, 327</Property>
+    <Property name="DataBindings">
+      <Property name="DefaultDataSourceUpdateMode">OnValidation</Property>
+    </Property>
+    <Property name="TabIndex">14</Property>
+    <Property name="AutoSize">True</Property>
+  </Object>
+  <Object type="No1Lib.Sys.No1LookupEdit, No1Lib.Sys, Version=1.0.0.0, Culture=neutral, PublicKeyToken=870be39b125434d2" name="lueDTAIKHOANNGANHANGID" children="Controls">
+    <Property name="Size">168, 21</Property>
+    <Property name="Name">lueDTAIKHOANNGANHANGID</Property>
+    <Property name="BackColor">White</Property>
+    <Property name="Location">228, 274</Property>
+    <Property name="DataBindings">
+      <Property name="DefaultDataSourceUpdateMode">OnValidation</Property>
+    </Property>
+    <Property name="TabIndex">12</Property>
+  </Object>

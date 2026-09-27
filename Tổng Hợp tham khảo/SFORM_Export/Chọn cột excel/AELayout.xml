@@ -1,0 +1,89 @@
+
+  <Object type="No1Lib.Sys.No1Form, No1Lib.Sys, Version=1.0.0.0, Culture=neutral, PublicKeyToken=870be39b125434d2" name="form" children="Controls">
+    <Reference name="KryptonPanel1" />
+    <Property name="CancelButton">
+      <Reference name="btnCancel" />
+    </Property>
+    <Property name="Name">form</Property>
+    <Property name="ShowIcon">False</Property>
+    <Property name="MinimizeBox">False</Property>
+    <Property name="StartPosition">CenterScreen</Property>
+    <Property name="ShowInTaskbar">False</Property>
+    <Property name="Text">Thêm từ excel</Property>
+    <Property name="MaximizeBox">False</Property>
+    <Property name="AcceptButton">
+      <Reference name="btnOK" />
+    </Property>
+    <Property name="ClientSize">384, 439</Property>
+    <Property name="DataBindings">
+      <Property name="DefaultDataSourceUpdateMode">OnValidation</Property>
+    </Property>
+    <Property name="FormBorderStyle">FixedDialog</Property>
+  </Object>
+  <Object type="ComponentFactory.Krypton.Toolkit.KryptonPanel, ComponentFactory.Krypton.Toolkit, Version=4.1.6.0, Culture=neutral, PublicKeyToken=5fd520d36328f741" name="KryptonPanel1" children="Controls">
+    <Reference name="btnCancel" />
+    <Reference name="btnOK" />
+    <Reference name="grConfig" />
+    <Property name="Dock">Fill</Property>
+    <Property name="Size">384, 439</Property>
+    <Property name="TabIndex">0</Property>
+    <Property name="Location">0, 0</Property>
+    <Property name="DataBindings">
+      <Property name="DefaultDataSourceUpdateMode">OnValidation</Property>
+    </Property>
+    <Property name="Name">KryptonPanel1</Property>
+  </Object>
+  <Object type="System.Windows.Forms.Button, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" name="btnCancel" children="Controls">
+    <Property name="TabIndex">5</Property>
+    <Property name="Name">btnCancel</Property>
+    <Property name="Size">75, 28</Property>
+    <Property name="UseVisualStyleBackColor">True</Property>
+    <Property name="Text">Cancel</Property>
+    <Property name="Location">306, 405</Property>
+    <Property name="DataBindings">
+      <Property name="DefaultDataSourceUpdateMode">OnValidation</Property>
+    </Property>
+    <Property name="DialogResult">Cancel</Property>
+  </Object>
+  <Object type="System.Windows.Forms.Button, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" name="btnOK" children="Controls">
+    <Property name="TabIndex">4</Property>
+    <Property name="Name">btnOK</Property>
+    <Property name="Size">75, 28</Property>
+    <Property name="UseVisualStyleBackColor">True</Property>
+    <Property name="Text">OK</Property>
+    <Property name="Location">225, 405</Property>
+    <Property name="DataBindings">
+      <Property name="DefaultDataSourceUpdateMode">OnValidation</Property>
+    </Property>
+    <Event name="Click">btnOK_Click</Event>
+  </Object>
+  <Object type="System.Windows.Forms.DataGridView, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" name="grConfig" children="Controls">
+    <Property name="BorderStyle">Fixed3D</Property>
+    <Property name="AllowUserToAddRows">False</Property>
+    <Property name="Columns">
+      <Item type="System.Windows.Forms.DataGridViewTextBoxColumn, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+        <Reference name="colExcel" />
+      </Item>
+    </Property>
+    <Property name="AutoSizeColumnsMode">Fill</Property>
+    <Property name="Name">grConfig</Property>
+    <Property name="Size">382, 396</Property>
+    <Property name="SelectionMode">FullRowSelect</Property>
+    <Property name="BackgroundColor">White</Property>
+    <Property name="DataBindings">
+      <Property name="DefaultDataSourceUpdateMode">OnValidation</Property>
+    </Property>
+    <Property name="Location">1, 3</Property>
+    <Property name="AllowUserToResizeRows">False</Property>
+    <Property name="RowHeadersVisible">False</Property>
+    <Property name="TabIndex">3</Property>
+    <Property name="AllowUserToDeleteRows">False</Property>
+    <Property name="RowHeadersWidthSizeMode">DisableResizing</Property>
+    <Property name="ColumnHeadersHeightSizeMode">AutoSize</Property>
+  </Object>
+  <Object type="System.Windows.Forms.DataGridViewTextBoxColumn, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" name="colExcel">
+    <Property name="DataPropertyName">EXCEL</Property>
+    <Property name="HeaderText">Cột excel</Property>
+    <Property name="Name">colExcel</Property>
+    <Property name="ReadOnly">True</Property>
+  </Object>

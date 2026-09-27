@@ -1,0 +1,74 @@
+
+  <Object type="No1Lib.Sys.No1Form, No1Lib.Sys, Version=1.0.0.0, Culture=neutral, PublicKeyToken=870be39b125434d2" name="form" children="Controls">
+    <Reference name="KryptonPanel1" />
+    <Property name="CancelButton">
+      <Reference name="btnCancel" />
+    </Property>
+    <Property name="Name">form</Property>
+    <Property name="MinimizeBox">False</Property>
+    <Property name="StartPosition">CenterScreen</Property>
+    <Property name="Text">CHỌN ĐƠN VỊ TÍNH</Property>
+    <Property name="MaximizeBox">False</Property>
+    <Property name="AcceptButton">
+      <Reference name="btnOK" />
+    </Property>
+    <Property name="ClientSize">375, 212</Property>
+    <Property name="DataBindings">
+      <Property name="DefaultDataSourceUpdateMode">OnValidation</Property>
+    </Property>
+    <Property name="FormBorderStyle">FixedDialog</Property>
+  </Object>
+  <Object type="ComponentFactory.Krypton.Toolkit.KryptonPanel, ComponentFactory.Krypton.Toolkit, Version=4.1.6.0, Culture=neutral, PublicKeyToken=5fd520d36328f741" name="KryptonPanel1" children="Controls">
+    <Reference name="lstData" />
+    <Reference name="btnOK" />
+    <Reference name="btnCancel" />
+    <Property name="Dock">Fill</Property>
+    <Property name="Size">375, 212</Property>
+    <Property name="TabIndex">0</Property>
+    <Property name="Location">0, 0</Property>
+    <Property name="DataBindings">
+      <Property name="DefaultDataSourceUpdateMode">OnValidation</Property>
+    </Property>
+    <Property name="Name">KryptonPanel1</Property>
+  </Object>
+  <Object type="System.Windows.Forms.Button, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" name="btnOK" children="Controls">
+    <Property name="TabIndex">3</Property>
+    <Property name="Anchor">Bottom, Right</Property>
+    <Property name="Name">btnOK</Property>
+    <Property name="Enabled">False</Property>
+    <Property name="Size">75, 30</Property>
+    <Property name="UseVisualStyleBackColor">True</Property>
+    <Property name="Text">Chấp nhận</Property>
+    <Property name="Location">216, 173</Property>
+    <Property name="DataBindings">
+      <Property name="DefaultDataSourceUpdateMode">OnValidation</Property>
+    </Property>
+    <Property name="DialogResult">OK</Property>
+  </Object>
+  <Object type="System.Windows.Forms.Button, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" name="btnCancel" children="Controls">
+    <Property name="TabIndex">4</Property>
+    <Property name="Anchor">Bottom, Right</Property>
+    <Property name="Name">btnCancel</Property>
+    <Property name="Size">75, 30</Property>
+    <Property name="UseVisualStyleBackColor">True</Property>
+    <Property name="Text">Thoát</Property>
+    <Property name="Location">297, 173</Property>
+    <Property name="DataBindings">
+      <Property name="DefaultDataSourceUpdateMode">OnValidation</Property>
+    </Property>
+    <Property name="DialogResult">Cancel</Property>
+  </Object>
+  <Object type="System.Windows.Forms.ListBox, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" name="lstData" children="Controls">
+    <Property name="FormattingEnabled">True</Property>
+    <Property name="Size">369, 164</Property>
+    <Property name="DataBindings">
+      <Property name="DefaultDataSourceUpdateMode">OnValidation</Property>
+    </Property>
+    <Property name="ItemHeight">20</Property>
+    <Property name="Name">lstData</Property>
+    <Property name="Location">3, 3</Property>
+    <Property name="TabIndex">5</Property>
+    <Property name="Font">Microsoft Sans Serif, 12pt</Property>
+    <Event name="MouseDoubleClick">lstData_MouseDoubleClick</Event>
+    <Event name="SelectedIndexChanged">lstData_SelectedIndexChanged</Event>
+  </Object>

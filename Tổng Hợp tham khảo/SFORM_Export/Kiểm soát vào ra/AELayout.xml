@@ -1,0 +1,813 @@
+
+  <Object type="No1Lib.Sys.No1UserControl, No1Lib.Sys, Version=1.0.0.0, Culture=neutral, PublicKeyToken=870be39b125434d2" name="No1UserControl1" children="Controls">
+    <Reference name="lblTieuDeCaTap" />
+    <Reference name="lblCaTap" />
+    <Reference name="lblLuyY" />
+    <Reference name="lblError" />
+    <Reference name="tabMain" />
+    <Reference name="lblTapHomNay" />
+    <Reference name="Label2147483632" />
+    <Reference name="Label2147483636" />
+    <Reference name="label7" />
+    <Reference name="lblSoLanCon" />
+    <Reference name="Label2147483634" />
+    <Reference name="lblNgaySinh" />
+    <Reference name="Label2147483637" />
+    <Reference name="lblDienThoai" />
+    <Reference name="Label2147483639" />
+    <Reference name="lblMay" />
+    <Reference name="btnNhap" />
+    <Reference name="txtMaThe" />
+    <Reference name="Label2147483642" />
+    <Reference name="lblLanToi" />
+    <Reference name="Label2147483645" />
+    <Reference name="lblSoNgayCon" />
+    <Reference name="label6" />
+    <Reference name="label1" />
+    <Reference name="lblLoai" />
+    <Reference name="label2" />
+    <Reference name="label10" />
+    <Reference name="ptImage" />
+    <Reference name="lblNhom" />
+    <Reference name="label3" />
+    <Reference name="label8" />
+    <Reference name="lblDenNgay" />
+    <Reference name="lblTenKhach" />
+    <Reference name="lblTuNgay" />
+    <Reference name="lblDiaChi" />
+    <Reference name="label5" />
+    <Property name="Size">1242, 727</Property>
+    <Property name="DataBindings">
+      <Property name="DefaultDataSourceUpdateMode">OnValidation</Property>
+    </Property>
+    <Property name="Name">No1UserControl1</Property>
+    <Event name="OnTabClosing">No1UserControl1_OnTabClosing</Event>
+    <Event name="OnInit">No1UserControl1_OnInit</Event>
+  </Object>
+  <Object type="System.Windows.Forms.Label, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" name="lblError" children="Controls">
+    <Property name="TabIndex">27</Property>
+    <Property name="BackColor">Red</Property>
+    <Property name="Anchor">Bottom, Left, Right</Property>
+    <Property name="TextAlign">TopCenter</Property>
+    <Property name="Size">1212, 31</Property>
+    <Property name="Visible">False</Property>
+    <Property name="Text">KHÔNG THỂ XÁC THỰC</Property>
+    <Property name="Font">Microsoft Sans Serif, 20.25pt, style=Bold</Property>
+    <Property name="ForeColor">255, 255, 128</Property>
+    <Property name="Location">18, 685</Property>
+    <Property name="DataBindings">
+      <Property name="DefaultDataSourceUpdateMode">OnValidation</Property>
+    </Property>
+    <Property name="Name">lblError</Property>
+  </Object>
+  <Object type="System.Windows.Forms.Label, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" name="lblSoNgayCon" children="Controls">
+    <Property name="TabIndex">37</Property>
+    <Property name="BackColor">Transparent</Property>
+    <Property name="AutoSize">True</Property>
+    <Property name="Size">148, 29</Property>
+    <Property name="Text">{SỐ NGÀY}</Property>
+    <Property name="Font">Microsoft Sans Serif, 18pt, style=Bold</Property>
+    <Property name="Location">247, 359</Property>
+    <Property name="DataBindings">
+      <Property name="DefaultDataSourceUpdateMode">OnValidation</Property>
+    </Property>
+    <Property name="Name">lblSoNgayCon</Property>
+  </Object>
+  <Object type="System.Windows.Forms.Label, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" name="label6" children="Controls">
+    <Property name="TabIndex">36</Property>
+    <Property name="BackColor">Transparent</Property>
+    <Property name="AutoSize">True</Property>
+    <Property name="Size">199, 29</Property>
+    <Property name="Text">SỐ NGÀY CÒN:</Property>
+    <Property name="Font">Microsoft Sans Serif, 18pt, style=Bold</Property>
+    <Property name="ForeColor">Maroon</Property>
+    <Property name="Location">15, 359</Property>
+    <Property name="DataBindings">
+      <Property name="DefaultDataSourceUpdateMode">OnValidation</Property>
+    </Property>
+    <Property name="Name">label6</Property>
+  </Object>
+  <Object type="System.Windows.Forms.Label, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" name="label1" children="Controls">
+    <Property name="TabIndex">21</Property>
+    <Property name="BackColor">Transparent</Property>
+    <Property name="AutoSize">True</Property>
+    <Property name="Size">215, 31</Property>
+    <Property name="Text">KHÁCH HÀNG:</Property>
+    <Property name="Font">Microsoft Sans Serif, 20.25pt, style=Bold</Property>
+    <Property name="ForeColor">Maroon</Property>
+    <Property name="Location">15, 54</Property>
+    <Property name="DataBindings">
+      <Property name="DefaultDataSourceUpdateMode">OnValidation</Property>
+    </Property>
+    <Property name="Name">label1</Property>
+  </Object>
+  <Object type="System.Windows.Forms.Label, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" name="lblLoai" children="Controls">
+    <Property name="TabIndex">35</Property>
+    <Property name="BackColor">Transparent</Property>
+    <Property name="AutoSize">True</Property>
+    <Property name="Size">149, 29</Property>
+    <Property name="Text">{LOẠI THẺ}</Property>
+    <Property name="Font">Microsoft Sans Serif, 18pt, style=Bold</Property>
+    <Property name="Location">189, 306</Property>
+    <Property name="DataBindings">
+      <Property name="DefaultDataSourceUpdateMode">OnValidation</Property>
+    </Property>
+    <Property name="Name">lblLoai</Property>
+  </Object>
+  <Object type="System.Windows.Forms.Label, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" name="label2" children="Controls">
+    <Property name="TabIndex">22</Property>
+    <Property name="BackColor">Transparent</Property>
+    <Property name="AutoSize">True</Property>
+    <Property name="Size">111, 29</Property>
+    <Property name="Text">ĐỊA CHỈ:</Property>
+    <Property name="Font">Microsoft Sans Serif, 18pt, style=Bold</Property>
+    <Property name="ForeColor">Maroon</Property>
+    <Property name="Location">15, 102</Property>
+    <Property name="DataBindings">
+      <Property name="DefaultDataSourceUpdateMode">OnValidation</Property>
+    </Property>
+    <Property name="Name">label2</Property>
+  </Object>
+  <Object type="System.Windows.Forms.Label, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" name="label10" children="Controls">
+    <Property name="TabIndex">34</Property>
+    <Property name="BackColor">Transparent</Property>
+    <Property name="AutoSize">True</Property>
+    <Property name="Size">136, 29</Property>
+    <Property name="Text">LOẠI THẺ:</Property>
+    <Property name="Font">Microsoft Sans Serif, 18pt, style=Bold</Property>
+    <Property name="ForeColor">Maroon</Property>
+    <Property name="Location">15, 306</Property>
+    <Property name="DataBindings">
+      <Property name="DefaultDataSourceUpdateMode">OnValidation</Property>
+    </Property>
+    <Property name="Name">label10</Property>
+  </Object>
+  <Object type="System.Windows.Forms.PictureBox, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" name="ptImage" children="Controls">
+    <Property name="BackColor">Transparent</Property>
+    <Property name="TabIndex">23</Property>
+    <Property name="SizeMode">Zoom</Property>
+    <Property name="Size">264, 260</Property>
+    <Property name="BorderStyle">FixedSingle</Property>
+    <Property name="Location">541, 250</Property>
+    <Property name="TabStop">False</Property>
+    <Property name="Name">ptImage</Property>
+    <Property name="DataBindings">
+      <Property name="DefaultDataSourceUpdateMode">OnValidation</Property>
+    </Property>
+  </Object>
+  <Object type="System.Windows.Forms.Label, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" name="lblNhom" children="Controls">
+    <Property name="TabIndex">33</Property>
+    <Property name="BackColor">Transparent</Property>
+    <Property name="AutoSize">True</Property>
+    <Property name="Size">205, 29</Property>
+    <Property name="Text">{NHÓM KHÁCH}</Property>
+    <Property name="Font">Microsoft Sans Serif, 18pt, style=Bold</Property>
+    <Property name="Location">187, 250</Property>
+    <Property name="DataBindings">
+      <Property name="DefaultDataSourceUpdateMode">OnValidation</Property>
+    </Property>
+    <Property name="Name">lblNhom</Property>
+  </Object>
+  <Object type="System.Windows.Forms.Label, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" name="label3" children="Controls">
+    <Property name="TabIndex">24</Property>
+    <Property name="BackColor">Transparent</Property>
+    <Property name="AutoSize">True</Property>
+    <Property name="Size">73, 29</Property>
+    <Property name="Text">ẢNH:</Property>
+    <Property name="Font">Microsoft Sans Serif, 18pt, style=Bold</Property>
+    <Property name="ForeColor">Maroon</Property>
+    <Property name="Location">451, 250</Property>
+    <Property name="DataBindings">
+      <Property name="DefaultDataSourceUpdateMode">OnValidation</Property>
+    </Property>
+    <Property name="Name">label3</Property>
+  </Object>
+  <Object type="System.Windows.Forms.Label, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" name="label8" children="Controls">
+    <Property name="TabIndex">32</Property>
+    <Property name="BackColor">Transparent</Property>
+    <Property name="AutoSize">True</Property>
+    <Property name="Size">98, 29</Property>
+    <Property name="Text">NHÓM:</Property>
+    <Property name="Font">Microsoft Sans Serif, 18pt, style=Bold</Property>
+    <Property name="ForeColor">Maroon</Property>
+    <Property name="Location">15, 250</Property>
+    <Property name="DataBindings">
+      <Property name="DefaultDataSourceUpdateMode">OnValidation</Property>
+    </Property>
+    <Property name="Name">label8</Property>
+  </Object>
+  <Object type="System.Windows.Forms.Label, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" name="lblDenNgay" children="Controls">
+    <Property name="TabIndex">31</Property>
+    <Property name="BackColor">Transparent</Property>
+    <Property name="AutoSize">True</Property>
+    <Property name="Size">165, 29</Property>
+    <Property name="Text">{ĐẾN NGÀY}</Property>
+    <Property name="Font">Microsoft Sans Serif, 18pt, style=Bold</Property>
+    <Property name="Location">650, 198</Property>
+    <Property name="DataBindings">
+      <Property name="DefaultDataSourceUpdateMode">OnValidation</Property>
+    </Property>
+    <Property name="Name">lblDenNgay</Property>
+  </Object>
+  <Object type="System.Windows.Forms.Label, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" name="label7" children="Controls">
+    <Property name="TabIndex">30</Property>
+    <Property name="BackColor">Transparent</Property>
+    <Property name="AutoSize">True</Property>
+    <Property name="Size">152, 29</Property>
+    <Property name="Text">ĐẾN NGÀY:</Property>
+    <Property name="Font">Microsoft Sans Serif, 18pt, style=Bold</Property>
+    <Property name="ForeColor">Maroon</Property>
+    <Property name="Location">454, 198</Property>
+    <Property name="DataBindings">
+      <Property name="DefaultDataSourceUpdateMode">OnValidation</Property>
+    </Property>
+    <Property name="Name">label7</Property>
+  </Object>
+  <Object type="System.Windows.Forms.Label, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" name="lblTenKhach" children="Controls">
+    <Property name="TabIndex">25</Property>
+    <Property name="BackColor">Transparent</Property>
+    <Property name="AutoSize">True</Property>
+    <Property name="Size">201, 31</Property>
+    <Property name="Text">{TÊN KHÁCH}</Property>
+    <Property name="Font">Microsoft Sans Serif, 20.25pt, style=Bold</Property>
+    <Property name="Location">236, 54</Property>
+    <Property name="DataBindings">
+      <Property name="DefaultDataSourceUpdateMode">OnValidation</Property>
+    </Property>
+    <Property name="Name">lblTenKhach</Property>
+  </Object>
+  <Object type="System.Windows.Forms.Label, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" name="lblTuNgay" children="Controls">
+    <Property name="TabIndex">29</Property>
+    <Property name="BackColor">Transparent</Property>
+    <Property name="AutoSize">True</Property>
+    <Property name="Size">146, 29</Property>
+    <Property name="Text">{TỪ NGÀY}</Property>
+    <Property name="Font">Microsoft Sans Serif, 18pt, style=Bold</Property>
+    <Property name="Location">191, 198</Property>
+    <Property name="DataBindings">
+      <Property name="DefaultDataSourceUpdateMode">OnValidation</Property>
+    </Property>
+    <Property name="Name">lblTuNgay</Property>
+  </Object>
+  <Object type="System.Windows.Forms.Label, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" name="lblDiaChi" children="Controls">
+    <Property name="TabIndex">26</Property>
+    <Property name="BackColor">Transparent</Property>
+    <Property name="AutoSize">True</Property>
+    <Property name="Size">124, 29</Property>
+    <Property name="Text">{ĐỊA CHỈ}</Property>
+    <Property name="Font">Microsoft Sans Serif, 18pt, style=Bold</Property>
+    <Property name="Location">187, 102</Property>
+    <Property name="DataBindings">
+      <Property name="DefaultDataSourceUpdateMode">OnValidation</Property>
+    </Property>
+    <Property name="Name">lblDiaChi</Property>
+  </Object>
+  <Object type="System.Windows.Forms.Label, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" name="label5" children="Controls">
+    <Property name="TabIndex">28</Property>
+    <Property name="BackColor">Transparent</Property>
+    <Property name="AutoSize">True</Property>
+    <Property name="Size">133, 29</Property>
+    <Property name="Text">TỪ NGÀY:</Property>
+    <Property name="Font">Microsoft Sans Serif, 18pt, style=Bold</Property>
+    <Property name="ForeColor">Maroon</Property>
+    <Property name="Location">15, 198</Property>
+    <Property name="DataBindings">
+      <Property name="DefaultDataSourceUpdateMode">OnValidation</Property>
+    </Property>
+    <Property name="Name">label5</Property>
+  </Object>
+  <Object type="System.Windows.Forms.Label, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" name="lblLanToi" children="Controls">
+    <Property name="TabIndex">39</Property>
+    <Property name="BackColor">Transparent</Property>
+    <Property name="AutoSize">True</Property>
+    <Property name="Size">133, 29</Property>
+    <Property name="Text">{LẦN TỚI}</Property>
+    <Property name="Font">Microsoft Sans Serif, 18pt, style=Bold</Property>
+    <Property name="Location">236, 407</Property>
+    <Property name="DataBindings">
+      <Property name="DefaultDataSourceUpdateMode">OnValidation</Property>
+    </Property>
+    <Property name="Name">lblLanToi</Property>
+  </Object>
+  <Object type="System.Windows.Forms.Label, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" name="Label2147483645" children="Controls">
+    <Property name="TabIndex">38</Property>
+    <Property name="BackColor">Transparent</Property>
+    <Property name="AutoSize">True</Property>
+    <Property name="Size">174, 29</Property>
+    <Property name="Text">SỐ LẦN ĐẾN:</Property>
+    <Property name="Font">Microsoft Sans Serif, 18pt, style=Bold</Property>
+    <Property name="ForeColor">Maroon</Property>
+    <Property name="Location">15, 407</Property>
+    <Property name="DataBindings">
+      <Property name="DefaultDataSourceUpdateMode">OnValidation</Property>
+    </Property>
+    <Property name="Name">Label2147483645</Property>
+  </Object>
+  <Object type="System.Windows.Forms.TextBox, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" name="txtMaThe" children="Controls">
+    <Property name="Size">176, 31</Property>
+    <Property name="DataBindings">
+      <Property name="DefaultDataSourceUpdateMode">OnValidation</Property>
+    </Property>
+    <Property name="Font">Microsoft Sans Serif, 15.75pt</Property>
+    <Property name="Name">txtMaThe</Property>
+    <Property name="Location">188, 9</Property>
+    <Property name="TabIndex">0</Property>
+    <Event name="KeyPress">txtMaThe_KeyPress</Event>
+  </Object>
+  <Object type="System.Windows.Forms.Label, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" name="Label2147483642" children="Controls">
+    <Property name="TabIndex">46</Property>
+    <Property name="BackColor">Transparent</Property>
+    <Property name="AutoSize">True</Property>
+    <Property name="Size">131, 31</Property>
+    <Property name="Text">MÃ THẺ:</Property>
+    <Property name="Font">Microsoft Sans Serif, 20.25pt, style=Bold</Property>
+    <Property name="ForeColor">Maroon</Property>
+    <Property name="Location">18, 9</Property>
+    <Property name="DataBindings">
+      <Property name="DefaultDataSourceUpdateMode">OnValidation</Property>
+    </Property>
+    <Property name="Name">Label2147483642</Property>
+  </Object>
+  <Object type="System.Windows.Forms.Button, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" name="btnRefresh" children="Controls">
+    <Property name="TabIndex">5</Property>
+    <Property name="Dock">Bottom</Property>
+    <Property name="Name">btnRefresh</Property>
+    <Property name="Size">417, 31</Property>
+    <Property name="UseVisualStyleBackColor">True</Property>
+    <Property name="Text">Refresh</Property>
+    <Property name="Location">0, 663</Property>
+    <Property name="DataBindings">
+      <Property name="DefaultDataSourceUpdateMode">OnValidation</Property>
+    </Property>
+    <Event name="Click">btnRefresh_Click</Event>
+  </Object>
+  <Object type="System.Windows.Forms.Button, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" name="btnNhap" children="Controls">
+    <Property name="TabIndex">1</Property>
+    <Property name="Name">btnNhap</Property>
+    <Property name="Size">75, 31</Property>
+    <Property name="UseVisualStyleBackColor">True</Property>
+    <Property name="Text">NHẬP</Property>
+    <Property name="Location">370, 9</Property>
+    <Property name="DataBindings">
+      <Property name="DefaultDataSourceUpdateMode">OnValidation</Property>
+    </Property>
+    <Event name="Click">btnNhap_Click</Event>
+  </Object>
+  <Object type="System.Windows.Forms.Timer, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" name="tmrHideMessage">
+    <Property name="Interval">10000</Property>
+    <Event name="Tick">Timer1_Tick</Event>
+  </Object>
+  <Object type="System.Windows.Forms.Label, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" name="Label2147483639" children="Controls">
+    <Property name="TabIndex">53</Property>
+    <Property name="BackColor">Transparent</Property>
+    <Property name="AutoSize">True</Property>
+    <Property name="Size">84, 31</Property>
+    <Property name="Text">MÁY:</Property>
+    <Property name="Font">Microsoft Sans Serif, 20.25pt, style=Bold</Property>
+    <Property name="ForeColor">Maroon</Property>
+    <Property name="Location">451, 9</Property>
+    <Property name="DataBindings">
+      <Property name="DefaultDataSourceUpdateMode">OnValidation</Property>
+    </Property>
+    <Property name="Name">Label2147483639</Property>
+  </Object>
+  <Object type="System.Windows.Forms.Label, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" name="lblMay" children="Controls">
+    <Property name="TabIndex">54</Property>
+    <Property name="BackColor">Transparent</Property>
+    <Property name="AutoSize">True</Property>
+    <Property name="Size">201, 31</Property>
+    <Property name="Text">{TÊN KHÁCH}</Property>
+    <Property name="Font">Microsoft Sans Serif, 20.25pt, style=Bold</Property>
+    <Property name="Location">541, 9</Property>
+    <Property name="DataBindings">
+      <Property name="DefaultDataSourceUpdateMode">OnValidation</Property>
+    </Property>
+    <Property name="Name">lblMay</Property>
+  </Object>
+  <Object type="No1Lib.Sys.DataSearch, No1Lib.Sys, Version=1.0.0.0, Culture=neutral, PublicKeyToken=870be39b125434d2" name="grChiTiet" children="Controls">
+    <Property name="ViewConfig">
+      <Binary>AAEAAAD/////AQAAAAAAAAAPAQAAAO0KAAACPERvY3VtZW50RWxlbWVudD4NCiAgPERhdGE+DQogICAgPENIRUNLRUQ+dHJ1ZTwvQ0hFQ0tFRD4NCiAgICA8Q09MSUQ+MDFkZTMxZmQtYWYwYS00YThmLTliMGItYjk5MmQ0YWEzNzQ0PC9DT0xJRD4NCiAgICA8VEFCTEVJRD4wNmJjZTMwYy1jMjg4LTRhODItYmY1Ni0zMzEzNzk0YTA4Zjg8L1RBQkxFSUQ+DQogICAgPFRPVEFMIC8+DQogICAgPFNPUlQgLz4NCiAgICA8Q09ORElUSU9OIC8+DQogICAgPE5PVEVNUFRZPmZhbHNlPC9OT1RFTVBUWT4NCiAgICA8Tk9URFVQTElDQVRFPmZhbHNlPC9OT1REVVBMSUNBVEU+DQogICAgPEZPUk1VTEEgLz4NCiAgICA8UEFSQU1JRCAvPg0KICAgIDxDQVBUSU9OIC8+DQogICAgPEtIT05HVEFPQ09UPmZhbHNlPC9LSE9OR1RBT0NPVD4NCiAgICA8UkVBRE9OTFk+ZmFsc2U8L1JFQURPTkxZPg0KICAgIDxSRVBMQUNFIC8+DQogICAgPEFMSUFTIC8+DQogICAgPENVU1RPTUZJRUxEPkZhbHNlPC9DVVNUT01GSUVMRD4NCiAgICA8Q1VTVE9NQ09MVFlQRSAvPg0KICAgIDxTRUxFQ1RPUkRFUiAvPg0KICA8L0RhdGE+DQogIDxEYXRhPg0KICAgIDxDSEVDS0VEPnRydWU8L0NIRUNLRUQ+DQogICAgPENPTElEPmUzNWExMjMzLWQ1ODctNDg4OC1iMjA0LTczYTU0NzhkMjIzZDwvQ09MSUQ+DQogICAgPFRBQkxFSUQ+MDZiY2UzMGMtYzI4OC00YTgyLWJmNTYtMzMxMzc5NGEwOGY4PC9UQUJMRUlEPg0KICAgIDxUT1RBTCAvPg0KICAgIDxTT1JUIC8+DQogICAgPENPTkRJVElPTiAvPg0KICAgIDxOT1RFTVBUWT5mYWxzZTwvTk9URU1QVFk+DQogICAgPE5PVERVUExJQ0FURT5mYWxzZTwvTk9URFVQTElDQVRFPg0KICAgIDxGT1JNVUxBIC8+DQogICAgPFBBUkFNSUQgLz4NCiAgICA8Q0FQVElPTiAvPg0KICAgIDxLSE9OR1RBT0NPVD5mYWxzZTwvS0hPTkdUQU9DT1Q+DQogICAgPFJFQURPTkxZPmZhbHNlPC9SRUFET05MWT4NCiAgICA8UkVQTEFDRSAvPg0KICAgIDxBTElBUyAvPg0KICAgIDxDVVNUT01GSUVMRD5GYWxzZTwvQ1VTVE9NRklFTEQ+DQogICAgPENVU1RPTUNPTFRZUEUgLz4NCiAgICA8U0VMRUNUT1JERVIgLz4NCiAgPC9EYXRhPg0KICA8RGF0YT4NCiAgICA8Q0hFQ0tFRD50cnVlPC9DSEVDS0VEPg0KICAgIDxDT0xJRD5jYjg3NGNiMi1jMjBlLTQ1OTItYjgyZi03MTE3YmRhZDdiN2M8L0NPTElEPg0KICAgIDxUQUJMRUlEPjA2YmNlMzBjLWMyODgtNGE4Mi1iZjU2LTMzMTM3OTRhMDhmODwvVEFCTEVJRD4NCiAgICA8VE9UQUwgLz4NCiAgICA8U09SVCAvPg0KICAgIDxDT05ESVRJT04gLz4NCiAgICA8Tk9URU1QVFk+ZmFsc2U8L05PVEVNUFRZPg0KICAgIDxOT1REVVBMSUNBVEU+ZmFsc2U8L05PVERVUExJQ0FURT4NCiAgICA8Rk9STVVMQSAvPg0KICAgIDxQQVJBTUlEIC8+DQogICAgPENBUFRJT04gLz4NCiAgICA8S0hPTkdUQU9DT1Q+dHJ1ZTwvS0hPTkdUQU9DT1Q+DQogICAgPFJFQURPTkxZPmZhbHNlPC9SRUFET05MWT4NCiAgICA8UkVQTEFDRSAvPg0KICAgIDxBTElBUyAvPg0KICAgIDxDVVNUT01GSUVMRD5GYWxzZTwvQ1VTVE9NRklFTEQ+DQogICAgPENVU1RPTUNPTFRZUEUgLz4NCiAgICA8U0VMRUNUT1JERVIgLz4NCiAgPC9EYXRhPg0KICA8RGF0YT4NCiAgICA8Q0hFQ0tFRD50cnVlPC9DSEVDS0VEPg0KICAgIDxDT0xJRD5hMzY1OTRmMy00M2YwLTQ5ODYtOGYzNS05YjZlZWZhZjIxYmI8L0NPTElEPg0KICAgIDxUQUJMRUlEPjVmY2M1NzFhLTY2MmQtNDk1My1hODNmLTYwMDRjNzMyZjQzOTwvVEFCTEVJRD4NCiAgICA8VE9UQUwgLz4NCiAgICA8U09SVCAvPg0KICAgIDxDT05ESVRJT04gLz4NCiAgICA8Tk9URU1QVFk+ZmFsc2U8L05PVEVNUFRZPg0KICAgIDxOT1REVVBMSUNBVEU+ZmFsc2U8L05PVERVUExJQ0FURT4NCiAgICA8Rk9STVVMQSAvPg0KICAgIDxQQVJBTUlEIC8+DQogICAgPENBUFRJT04+S2jDoWNoIGjDoG5nPC9DQVBUSU9OPg0KICAgIDxLSE9OR1RBT0NPVD5mYWxzZTwvS0hPTkdUQU9DT1Q+DQogICAgPFJFQURPTkxZPmZhbHNlPC9SRUFET05MWT4NCiAgICA8UkVQTEFDRSAvPg0KICAgIDxBTElBUyAvPg0KICAgIDxDVVNUT01GSUVMRD5GYWxzZTwvQ1VTVE9NRklFTEQ+DQogICAgPENVU1RPTUNPTFRZUEUgLz4NCiAgICA8U0VMRUNUT1JERVIgLz4NCiAgICA8UEFSRU5USUQ+Y2I4NzRjYjItYzIwZS00NTkyLWI4MmYtNzExN2JkYWQ3YjdjPC9QQVJFTlRJRD4NCiAgPC9EYXRhPg0KICA8RGF0YT4NCiAgICA8Q0hFQ0tFRD50cnVlPC9DSEVDS0VEPg0KICAgIDxDT0xJRD5iMmYwOGE1Yi1mMDZmLTRiODItOTFiMy02NzE3MTUwZDIxMDY8L0NPTElEPg0KICAgIDxUQUJMRUlEPjVmY2M1NzFhLTY2MmQtNDk1My1hODNmLTYwMDRjNzMyZjQzOTwvVEFCTEVJRD4NCiAgICA8VE9UQUwgLz4NCiAgICA8U09SVCAvPg0KICAgIDxDT05ESVRJT04gLz4NCiAgICA8Tk9URU1QVFk+ZmFsc2U8L05PVEVNUFRZPg0KICAgIDxOT1REVVBMSUNBVEU+ZmFsc2U8L05PVERVUExJQ0FURT4NCiAgICA8Rk9STVVMQSAvPg0KICAgIDxQQVJBTUlEIC8+DQogICAgPENBUFRJT04gLz4NCiAgICA8S0hPTkdUQU9DT1Q+ZmFsc2U8L0tIT05HVEFPQ09UPg0KICAgIDxSRUFET05MWT5mYWxzZTwvUkVBRE9OTFk+DQogICAgPFJFUExBQ0UgLz4NCiAgICA8QUxJQVMgLz4NCiAgICA8Q1VTVE9NRklFTEQ+RmFsc2U8L0NVU1RPTUZJRUxEPg0KICAgIDxDVVNUT01DT0xUWVBFIC8+DQogICAgPFNFTEVDVE9SREVSIC8+DQogICAgPFBBUkVOVElEPmNiODc0Y2IyLWMyMGUtNDU5Mi1iODJmLTcxMTdiZGFkN2I3YzwvUEFSRU5USUQ+DQogIDwvRGF0YT4NCjwvRG9jdW1lbnRFbGVtZW50Pgs=</Binary>
+    </Property>
+    <Property name="BorderStyle">Fixed3D</Property>
+    <Property name="AllowUserToAddRows">False</Property>
+    <Property name="CellBorderStyle">SingleVertical</Property>
+    <Property name="AlternatingRowsDefaultCellStyle">
+      <InstanceDescriptor member="AAEAAAD/////AQAAAAAAAAAEAQAAAC9TeXN0ZW0uUmVmbGVjdGlvbi5NZW1iZXJJbmZvU2VyaWFsaXphdGlvbkhvbGRlcgYAAAAETmFtZQxBc3NlbWJseU5hbWUJQ2xhc3NOYW1lCVNpZ25hdHVyZQpNZW1iZXJUeXBlEEdlbmVyaWNBcmd1bWVudHMBAQEBAAMIDVN5c3RlbS5UeXBlW10GAgAAAAUuY3RvcgYDAAAAV1N5c3RlbS5XaW5kb3dzLkZvcm1zLCBWZXJzaW9uPTIuMC4wLjAsIEN1bHR1cmU9bmV1dHJhbCwgUHVibGljS2V5VG9rZW49Yjc3YTVjNTYxOTM0ZTA4OQYEAAAAKlN5c3RlbS5XaW5kb3dzLkZvcm1zLkRhdGFHcmlkVmlld0NlbGxTdHlsZQYFAAAADFZvaWQgLmN0b3IoKQEAAAAKCw==">
+        <Property name="BackColor">229, 247, 252</Property>
+      </InstanceDescriptor>
+    </Property>
+    <Property name="Name">grChiTiet</Property>
+    <Property name="AllowUserToOrderColumns">True</Property>
+    <Property name="SelectionMode">FullRowSelect</Property>
+    <Property name="DataBindings">
+      <Property name="DefaultDataSourceUpdateMode">OnValidation</Property>
+    </Property>
+    <Property name="GUID">3fd486ff-75b2-404f-a3a8-411941dd0a0f</Property>
+    <Property name="Dock">Fill</Property>
+    <Property name="AllowSameItem" />
+    <Property name="ShowCellToolTips">False</Property>
+    <Property name="Location">0, 34</Property>
+    <Property name="DeleteButton" />
+    <Property name="AllowUserToResizeRows">False</Property>
+    <Property name="ReadOnly">True</Property>
+    <Property name="TabIndex">4</Property>
+    <Property name="AllowUserToDeleteRows">False</Property>
+    <Property name="EditButton" />
+    <Property name="RowHeadersWidthSizeMode">DisableResizing</Property>
+    <Property name="ColumnHeadersHeightSizeMode">AutoSize</Property>
+    <Property name="SearchTextBox">
+      <Reference name="txtTim" />
+    </Property>
+    <Property name="BackgroundColor">White</Property>
+    <Property name="Size">417, 629</Property>
+    <Property name="AllowQuickAddItem">False</Property>
+    <Event name="CustomLoadData">grChiTiet_CustomLoadData</Event>
+  </Object>
+  <Object type="No1Lib.Sys.No1TextBox, No1Lib.Sys, Version=1.0.0.0, Culture=neutral, PublicKeyToken=870be39b125434d2" name="txtTim" children="Controls">
+    <Property name="Size">370, 20</Property>
+    <Property name="Anchor">Top, Left, Right</Property>
+    <Property name="Name">txtTim</Property>
+    <Property name="Location">40, 6</Property>
+    <Property name="DataBindings">
+      <Property name="DefaultDataSourceUpdateMode">OnValidation</Property>
+    </Property>
+    <Property name="TabIndex">3</Property>
+  </Object>
+  <Object type="System.Windows.Forms.Label, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" name="Label2147483637" children="Controls">
+    <Property name="TabIndex">60</Property>
+    <Property name="BackColor">Transparent</Property>
+    <Property name="AutoSize">True</Property>
+    <Property name="Size">166, 29</Property>
+    <Property name="Text">ĐIỆN THOẠI:</Property>
+    <Property name="Font">Microsoft Sans Serif, 18pt, style=Bold</Property>
+    <Property name="ForeColor">Maroon</Property>
+    <Property name="Location">15, 149</Property>
+    <Property name="DataBindings">
+      <Property name="DefaultDataSourceUpdateMode">OnValidation</Property>
+    </Property>
+    <Property name="Name">Label2147483637</Property>
+  </Object>
+  <Object type="System.Windows.Forms.Label, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" name="lblDienThoai" children="Controls">
+    <Property name="TabIndex">61</Property>
+    <Property name="BackColor">Transparent</Property>
+    <Property name="AutoSize">True</Property>
+    <Property name="Size">124, 29</Property>
+    <Property name="Text">{ĐỊA CHỈ}</Property>
+    <Property name="Font">Microsoft Sans Serif, 18pt, style=Bold</Property>
+    <Property name="Location">211, 149</Property>
+    <Property name="DataBindings">
+      <Property name="DefaultDataSourceUpdateMode">OnValidation</Property>
+    </Property>
+    <Property name="Name">lblDienThoai</Property>
+  </Object>
+  <Object type="System.Windows.Forms.Label, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" name="Label2147483636" children="Controls">
+    <Property name="TabIndex">62</Property>
+    <Property name="BackColor">Transparent</Property>
+    <Property name="AutoSize">True</Property>
+    <Property name="Size">159, 29</Property>
+    <Property name="Text">NGÀY SINH:</Property>
+    <Property name="Font">Microsoft Sans Serif, 18pt, style=Bold</Property>
+    <Property name="ForeColor">Maroon</Property>
+    <Property name="Location">451, 149</Property>
+    <Property name="DataBindings">
+      <Property name="DefaultDataSourceUpdateMode">OnValidation</Property>
+    </Property>
+    <Property name="Name">Label2147483636</Property>
+  </Object>
+  <Object type="System.Windows.Forms.Label, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" name="lblNgaySinh" children="Controls">
+    <Property name="TabIndex">63</Property>
+    <Property name="BackColor">Transparent</Property>
+    <Property name="AutoSize">True</Property>
+    <Property name="Size">172, 29</Property>
+    <Property name="Text">{NGÀY SINH}</Property>
+    <Property name="Font">Microsoft Sans Serif, 18pt, style=Bold</Property>
+    <Property name="Location">648, 149</Property>
+    <Property name="DataBindings">
+      <Property name="DefaultDataSourceUpdateMode">OnValidation</Property>
+    </Property>
+    <Property name="Name">lblNgaySinh</Property>
+  </Object>
+  <Object type="System.Windows.Forms.Label, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" name="lblSoLanCon" children="Controls">
+    <Property name="TabIndex">65</Property>
+    <Property name="BackColor">Transparent</Property>
+    <Property name="AutoSize">True</Property>
+    <Property name="Size">146, 29</Property>
+    <Property name="Text">{LẦN CÒN}</Property>
+    <Property name="Font">Microsoft Sans Serif, 18pt, style=Bold</Property>
+    <Property name="Location">237, 458</Property>
+    <Property name="DataBindings">
+      <Property name="DefaultDataSourceUpdateMode">OnValidation</Property>
+    </Property>
+    <Property name="Name">lblSoLanCon</Property>
+  </Object>
+  <Object type="System.Windows.Forms.Label, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" name="Label2147483634" children="Controls">
+    <Property name="TabIndex">64</Property>
+    <Property name="BackColor">Transparent</Property>
+    <Property name="AutoSize">True</Property>
+    <Property name="Size">177, 29</Property>
+    <Property name="Text">SỐ LẦN CÒN:</Property>
+    <Property name="Font">Microsoft Sans Serif, 18pt, style=Bold</Property>
+    <Property name="ForeColor">Maroon</Property>
+    <Property name="Location">15, 458</Property>
+    <Property name="DataBindings">
+      <Property name="DefaultDataSourceUpdateMode">OnValidation</Property>
+    </Property>
+    <Property name="Name">Label2147483634</Property>
+  </Object>
+  <Object type="System.Windows.Forms.Label, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" name="lblTapHomNay" children="Controls">
+    <Property name="TabIndex">67</Property>
+    <Property name="BackColor">Transparent</Property>
+    <Property name="AutoSize">True</Property>
+    <Property name="Size">208, 29</Property>
+    <Property name="Text">{TẬP HÔM NAY}</Property>
+    <Property name="Font">Microsoft Sans Serif, 18pt, style=Bold</Property>
+    <Property name="Location">240, 499</Property>
+    <Property name="DataBindings">
+      <Property name="DefaultDataSourceUpdateMode">OnValidation</Property>
+    </Property>
+    <Property name="Name">lblTapHomNay</Property>
+  </Object>
+  <Object type="System.Windows.Forms.Label, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" name="Label2147483632" children="Controls">
+    <Property name="TabIndex">66</Property>
+    <Property name="BackColor">Transparent</Property>
+    <Property name="AutoSize">True</Property>
+    <Property name="Size">195, 29</Property>
+    <Property name="Text">TẬP HÔM NAY:</Property>
+    <Property name="Font">Microsoft Sans Serif, 18pt, style=Bold</Property>
+    <Property name="ForeColor">Maroon</Property>
+    <Property name="Location">16, 499</Property>
+    <Property name="DataBindings">
+      <Property name="DefaultDataSourceUpdateMode">OnValidation</Property>
+    </Property>
+    <Property name="Name">Label2147483632</Property>
+  </Object>
+  <Object type="System.Windows.Forms.Timer, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" name="tmrFocusTextBox">
+    <Property name="Enabled">True</Property>
+    <Property name="Interval">500</Property>
+    <Event name="Tick">tmrFocusTextBox_Tick</Event>
+  </Object>
+  <Object type="ComponentFactory.Krypton.Navigator.KryptonNavigator, ComponentFactory.Krypton.Navigator, Version=4.1.6.0, Culture=neutral, PublicKeyToken=5fd520d36328f741" name="tabMain" children="Controls">
+    <Property name="Anchor">Top, Bottom, Left, Right</Property>
+    <Property name="Size">418, 721</Property>
+    <Property name="Text">KryptonNavigator1</Property>
+    <Property name="Pages">
+      <Item type="ComponentFactory.Krypton.Navigator.KryptonPage, ComponentFactory.Krypton.Navigator, Version=4.1.6.0, Culture=neutral, PublicKeyToken=5fd520d36328f741">
+        <Reference name="pageMayVanTay" />
+      </Item>
+      <Item type="ComponentFactory.Krypton.Navigator.KryptonPage, ComponentFactory.Krypton.Navigator, Version=4.1.6.0, Culture=neutral, PublicKeyToken=5fd520d36328f741">
+        <Reference name="pageTapTrongNgay" />
+      </Item>
+    </Property>
+    <Property name="DataBindings">
+      <Property name="DefaultDataSourceUpdateMode">OnValidation</Property>
+    </Property>
+    <Property name="SelectedIndex">0</Property>
+    <Property name="Name">tabMain</Property>
+    <Property name="TabIndex">68</Property>
+    <Property name="Location">821, 3</Property>
+    <Property name="Button">
+      <Property name="CloseButtonDisplay">Hide</Property>
+      <Property name="ButtonDisplayLogic">None</Property>
+    </Property>
+  </Object>
+  <Object type="ComponentFactory.Krypton.Navigator.KryptonPage, ComponentFactory.Krypton.Navigator, Version=4.1.6.0, Culture=neutral, PublicKeyToken=5fd520d36328f741" name="pageMayVanTay" children="Controls">
+    <Reference name="lblLoiKetNoi" />
+    <Reference name="lblKetNoi" />
+    <Reference name="progressBar" />
+    <Reference name="grMayVanTay" />
+    <Reference name="btnKetNoi" />
+    <Property name="LastVisibleSet">True</Property>
+    <Property name="MinimumSize">50, 50</Property>
+    <Property name="DataBindings">
+      <Property name="DefaultDataSourceUpdateMode">OnValidation</Property>
+    </Property>
+    <Property name="Name">pageMayVanTay</Property>
+    <Property name="AutoHiddenSlideSize">200, 200</Property>
+    <Property name="UniqueName">95059F5DC6E24738D5A2D5EB86859540</Property>
+    <Property name="Text">Máy vân tay</Property>
+    <Property name="Flags">65534</Property>
+    <Property name="ToolTipTitle">Page ToolTip</Property>
+    <Property name="Size">416, 694</Property>
+  </Object>
+  <Object type="ComponentFactory.Krypton.Navigator.KryptonPage, ComponentFactory.Krypton.Navigator, Version=4.1.6.0, Culture=neutral, PublicKeyToken=5fd520d36328f741" name="pageTapTrongNgay" children="Controls">
+    <Reference name="grChiTiet" />
+    <Reference name="KryptonPanel1" />
+    <Reference name="btnRefresh" />
+    <Property name="LastVisibleSet">True</Property>
+    <Property name="MinimumSize">50, 50</Property>
+    <Property name="DataBindings">
+      <Property name="DefaultDataSourceUpdateMode">OnValidation</Property>
+    </Property>
+    <Property name="Name">pageTapTrongNgay</Property>
+    <Property name="AutoHiddenSlideSize">200, 200</Property>
+    <Property name="UniqueName">27BCDA875ADA45835DB38A5263F114FB</Property>
+    <Property name="Text">Tập trong ngày</Property>
+    <Property name="Flags">65534</Property>
+    <Property name="ToolTipTitle">Page ToolTip</Property>
+    <Property name="Size">417, 694</Property>
+  </Object>
+  <Object type="ComponentFactory.Krypton.Toolkit.KryptonPanel, ComponentFactory.Krypton.Toolkit, Version=4.1.6.0, Culture=neutral, PublicKeyToken=5fd520d36328f741" name="KryptonPanel1" children="Controls">
+    <Reference name="lblLoc" />
+    <Reference name="txtTim" />
+    <Property name="Dock">Top</Property>
+    <Property name="Size">417, 34</Property>
+    <Property name="TabIndex">6</Property>
+    <Property name="Location">0, 0</Property>
+    <Property name="DataBindings">
+      <Property name="DefaultDataSourceUpdateMode">OnValidation</Property>
+    </Property>
+    <Property name="Name">KryptonPanel1</Property>
+  </Object>
+  <Object type="System.Windows.Forms.Label, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" name="lblLoc" children="Controls">
+    <Property name="TabIndex">4</Property>
+    <Property name="BackColor">Transparent</Property>
+    <Property name="AutoSize">True</Property>
+    <Property name="Size">25, 13</Property>
+    <Property name="Text">Lọc</Property>
+    <Property name="Location">9, 10</Property>
+    <Property name="DataBindings">
+      <Property name="DefaultDataSourceUpdateMode">OnValidation</Property>
+    </Property>
+    <Property name="Name">lblLoc</Property>
+  </Object>
+  <Object type="No1Lib.Sys.MiscDataGridView, No1Lib.Sys, Version=1.0.0.0, Culture=neutral, PublicKeyToken=870be39b125434d2" name="grMayVanTay" children="Controls">
+    <Property name="BorderStyle">Fixed3D</Property>
+    <Property name="AllowUserToAddRows">False</Property>
+    <Property name="Columns">
+      <Item type="System.Windows.Forms.DataGridViewTextBoxColumn, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+        <Reference name="colTenMay" />
+      </Item>
+      <Item type="System.Windows.Forms.DataGridViewTextBoxColumn, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+        <Reference name="Ip" />
+      </Item>
+      <Item type="System.Windows.Forms.DataGridViewTextBoxColumn, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+        <Reference name="Port" />
+      </Item>
+      <Item type="System.Windows.Forms.DataGridViewTextBoxColumn, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+        <Reference name="colTrangThai" />
+      </Item>
+    </Property>
+    <Property name="CellBorderStyle">SingleVertical</Property>
+    <Property name="AlternatingRowsDefaultCellStyle">
+      <InstanceDescriptor member="AAEAAAD/////AQAAAAAAAAAEAQAAAC9TeXN0ZW0uUmVmbGVjdGlvbi5NZW1iZXJJbmZvU2VyaWFsaXphdGlvbkhvbGRlcgYAAAAETmFtZQxBc3NlbWJseU5hbWUJQ2xhc3NOYW1lCVNpZ25hdHVyZQpNZW1iZXJUeXBlEEdlbmVyaWNBcmd1bWVudHMBAQEBAAMIDVN5c3RlbS5UeXBlW10GAgAAAAUuY3RvcgYDAAAAV1N5c3RlbS5XaW5kb3dzLkZvcm1zLCBWZXJzaW9uPTIuMC4wLjAsIEN1bHR1cmU9bmV1dHJhbCwgUHVibGljS2V5VG9rZW49Yjc3YTVjNTYxOTM0ZTA4OQYEAAAAKlN5c3RlbS5XaW5kb3dzLkZvcm1zLkRhdGFHcmlkVmlld0NlbGxTdHlsZQYFAAAADFZvaWQgLmN0b3IoKQEAAAAKCw==">
+        <Property name="BackColor">229, 247, 252</Property>
+      </InstanceDescriptor>
+    </Property>
+    <Property name="Name">grMayVanTay</Property>
+    <Property name="AllowUserToOrderColumns">True</Property>
+    <Property name="Size">416, 656</Property>
+    <Property name="SelectionMode">FullRowSelect</Property>
+    <Property name="BackgroundColor">White</Property>
+    <Property name="DataBindings">
+      <Property name="DefaultDataSourceUpdateMode">OnValidation</Property>
+    </Property>
+    <Property name="GUID">681a48bb-07c2-4bb6-b51f-c0eab9b0a669</Property>
+    <Property name="Dock">Fill</Property>
+    <Property name="ShowCellToolTips">False</Property>
+    <Property name="Location">0, 0</Property>
+    <Property name="DeleteButton" />
+    <Property name="AllowUserToResizeRows">False</Property>
+    <Property name="TabIndex">0</Property>
+    <Property name="ReadOnly">True</Property>
+    <Property name="AllowUserToDeleteRows">False</Property>
+    <Property name="EditButton" />
+    <Property name="RowHeadersWidthSizeMode">DisableResizing</Property>
+    <Property name="ColumnHeadersHeightSizeMode">AutoSize</Property>
+    <Property name="SearchTextBox" />
+    <Event name="CellMouseClick">grMayVanTay_CellMouseClick</Event>
+    <Event name="CellPainting">grMayVanTay_CellPainting</Event>
+  </Object>
+  <Object type="System.Windows.Forms.Button, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" name="btnKetNoi" children="Controls">
+    <Property name="TabIndex">1</Property>
+    <Property name="BackColor">Red</Property>
+    <Property name="Dock">Bottom</Property>
+    <Property name="Name">btnKetNoi</Property>
+    <Property name="Size">416, 38</Property>
+    <Property name="UseVisualStyleBackColor">False</Property>
+    <Property name="FlatStyle">Flat</Property>
+    <Property name="Visible">False</Property>
+    <Property name="Text">Kết nối máy vân tay</Property>
+    <Property name="Font">Microsoft Sans Serif, 12pt, style=Bold</Property>
+    <Property name="ForeColor">Yellow</Property>
+    <Property name="Location">0, 656</Property>
+    <Property name="DataBindings">
+      <Property name="DefaultDataSourceUpdateMode">OnValidation</Property>
+    </Property>
+    <Event name="Click">btnKetNoi_Click</Event>
+  </Object>
+  <Object type="System.Windows.Forms.ProgressBar, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" name="progressBar" children="Controls">
+    <Property name="DataBindings">
+      <Property name="DefaultDataSourceUpdateMode">OnValidation</Property>
+    </Property>
+    <Property name="Anchor">Top, Left, Right</Property>
+    <Property name="Size">301, 23</Property>
+    <Property name="Visible">False</Property>
+    <Property name="TabIndex">2</Property>
+    <Property name="Location">63, 202</Property>
+    <Property name="Style">Marquee</Property>
+    <Property name="Name">progressBar</Property>
+  </Object>
+  <Object type="System.Windows.Forms.DataGridViewTextBoxColumn, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" name="colTenMay">
+    <Property name="DataPropertyName">MAY</Property>
+    <Property name="HeaderText">Máy</Property>
+    <Property name="Name">colTenMay</Property>
+    <Property name="ReadOnly">True</Property>
+  </Object>
+  <Object type="System.Windows.Forms.DataGridViewTextBoxColumn, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" name="Ip">
+    <Property name="DataPropertyName">IP</Property>
+    <Property name="HeaderText">Địa chỉ</Property>
+    <Property name="Name">Ip</Property>
+    <Property name="ReadOnly">True</Property>
+  </Object>
+  <Object type="System.Windows.Forms.DataGridViewTextBoxColumn, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" name="Port">
+    <Property name="DataPropertyName">PORT</Property>
+    <Property name="HeaderText">Cổng</Property>
+    <Property name="Name">Port</Property>
+    <Property name="ReadOnly">True</Property>
+  </Object>
+  <Object type="System.Windows.Forms.DataGridViewTextBoxColumn, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" name="colTrangThai">
+    <Property name="DataPropertyName">TRANGTHAI</Property>
+    <Property name="HeaderText">Trạng thái</Property>
+    <Property name="Name">colTrangThai</Property>
+    <Property name="ReadOnly">True</Property>
+  </Object>
+  <Object type="System.Windows.Forms.Label, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" name="lblKetNoi" children="Controls">
+    <Property name="TabIndex">3</Property>
+    <Property name="BackColor">White</Property>
+    <Property name="Anchor">Top, Left, Right</Property>
+    <Property name="TextAlign">MiddleCenter</Property>
+    <Property name="Size">300, 23</Property>
+    <Property name="Visible">False</Property>
+    <Property name="Text">ĐANG KẾT NỐI MÁY VÂN TAY...</Property>
+    <Property name="Font">Microsoft Sans Serif, 12pt, style=Bold</Property>
+    <Property name="ForeColor">Red</Property>
+    <Property name="Location">63, 169</Property>
+    <Property name="DataBindings">
+      <Property name="DefaultDataSourceUpdateMode">OnValidation</Property>
+    </Property>
+    <Property name="Name">lblKetNoi</Property>
+  </Object>
+  <Object type="System.Windows.Forms.Label, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" name="lblLuyY" children="Controls">
+    <Property name="TabIndex">69</Property>
+    <Property name="BackColor">Transparent</Property>
+    <Property name="AutoSize">True</Property>
+    <Property name="Size">744, 25</Property>
+    <Property name="Text">(Lưu ý: nếu bạn chạy nhiều máy trong hệ thống, chỉ một máy mở cửa sổ này)</Property>
+    <Property name="Font">Microsoft Sans Serif, 15.75pt</Property>
+    <Property name="Location">16, 543</Property>
+    <Property name="DataBindings">
+      <Property name="DefaultDataSourceUpdateMode">OnValidation</Property>
+    </Property>
+    <Property name="Name">lblLuyY</Property>
+  </Object>
+  <Object type="System.Windows.Forms.Timer, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" name="tmrHideNote">
+    <Property name="Enabled">True</Property>
+    <Property name="Interval">5000</Property>
+    <Event name="Tick">tmrHideNote_Tick</Event>
+  </Object>
+  <Object type="System.Windows.Forms.Timer, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" name="trmPing">
+    <Property name="Interval">2000</Property>
+    <Event name="Tick">trmPing_Tick</Event>
+  </Object>
+  <Object type="System.Windows.Forms.Label, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" name="lblLoiKetNoi" children="Controls">
+    <Property name="TabIndex">4</Property>
+    <Property name="BackColor">Red</Property>
+    <Property name="Dock">Bottom</Property>
+    <Property name="TextAlign">MiddleCenter</Property>
+    <Property name="Size">416, 56</Property>
+    <Property name="Visible">False</Property>
+    <Property name="Font">Microsoft Sans Serif, 15.75pt</Property>
+    <Property name="ForeColor">White</Property>
+    <Property name="Location">0, 600</Property>
+    <Property name="DataBindings">
+      <Property name="DefaultDataSourceUpdateMode">OnValidation</Property>
+    </Property>
+    <Property name="Name">lblLoiKetNoi</Property>
+  </Object>
+  <Object type="System.Windows.Forms.Label, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" name="lblTieuDeCaTap" children="Controls">
+    <Property name="TabIndex">70</Property>
+    <Property name="BackColor">Transparent</Property>
+    <Property name="AutoSize">True</Property>
+    <Property name="Size">111, 29</Property>
+    <Property name="Text">CA TẬP:</Property>
+    <Property name="Font">Microsoft Sans Serif, 18pt, style=Bold</Property>
+    <Property name="ForeColor">Maroon</Property>
+    <Property name="Location">454, 102</Property>
+    <Property name="DataBindings">
+      <Property name="DefaultDataSourceUpdateMode">OnValidation</Property>
+    </Property>
+    <Property name="Name">lblTieuDeCaTap</Property>
+  </Object>
+  <Object type="System.Windows.Forms.Label, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" name="lblCaTap" children="Controls">
+    <Property name="TabIndex">71</Property>
+    <Property name="BackColor">Transparent</Property>
+    <Property name="AutoSize">True</Property>
+    <Property name="Size">124, 29</Property>
+    <Property name="Text">{CA TẬP}</Property>
+    <Property name="Font">Microsoft Sans Serif, 18pt, style=Bold</Property>
+    <Property name="Location">650, 102</Property>
+    <Property name="DataBindings">
+      <Property name="DefaultDataSourceUpdateMode">OnValidation</Property>
+    </Property>
+    <Property name="Name">lblCaTap</Property>
+  </Object>

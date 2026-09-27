@@ -1,0 +1,407 @@
+
+  <Object type="No1Lib.Sys.No1UserControl, No1Lib.Sys, Version=1.0.0.0, Culture=neutral, PublicKeyToken=870be39b125434d2" name="No1UserControl1" children="Controls">
+    <Reference name="KryptonPanel1" />
+    <Property name="Size">400, 257</Property>
+    <Property name="DataBindings">
+      <Property name="DefaultDataSourceUpdateMode">OnValidation</Property>
+    </Property>
+    <Property name="Name">No1UserControl1</Property>
+  </Object>
+  <Object type="ComponentFactory.Krypton.Toolkit.KryptonPanel, ComponentFactory.Krypton.Toolkit, Version=4.1.6.0, Culture=neutral, PublicKeyToken=5fd520d36328f741" name="KryptonPanel1" children="Controls">
+    <Reference name="grMain" />
+    <Reference name="No1Label2147483646" />
+    <Reference name="lueDNHANVIENID" />
+    <Reference name="lblDNHANVIENID" />
+    <Reference name="lueSGROUPUSERID" />
+    <Reference name="lblSGROUPUSERID" />
+    <Reference name="txtEMAIL" />
+    <Reference name="lblEMAIL" />
+    <Reference name="txtUSERNAME" />
+    <Reference name="lblUSERNAME" />
+    <Reference name="txtPASSWORD" />
+    <Reference name="lblPASSWORD" />
+    <Reference name="txtNAME" />
+    <Reference name="lblNAME" />
+    <Property name="Dock">Fill</Property>
+    <Property name="Size">400, 257</Property>
+    <Property name="TabIndex">0</Property>
+    <Property name="Location">0, 0</Property>
+    <Property name="DataBindings">
+      <Property name="DefaultDataSourceUpdateMode">OnValidation</Property>
+    </Property>
+    <Property name="Name">KryptonPanel1</Property>
+  </Object>
+  <Object type="No1Lib.Sys.AeController, No1Lib.Sys, Version=1.0.0.0, Culture=neutral, PublicKeyToken=870be39b125434d2" name="mapper">
+    <Property name="ID" />
+    <Property name="Maps">
+      <Item type="No1Lib.Sys.No1FieldMap, No1Lib.Sys, Version=1.0.0.0, Culture=neutral, PublicKeyToken=870be39b125434d2">
+        <ObjectEx>
+          <Property name="DataField">ISADMIN</Property>
+          <Property name="LabelControl" />
+          <Property name="EditControl" />
+        </ObjectEx>
+      </Item>
+      <Item type="No1Lib.Sys.No1FieldMap, No1Lib.Sys, Version=1.0.0.0, Culture=neutral, PublicKeyToken=870be39b125434d2">
+        <ObjectEx>
+          <Property name="DataField">SSL</Property>
+          <Property name="LabelControl" />
+          <Property name="EditControl" />
+        </ObjectEx>
+      </Item>
+      <Item type="No1Lib.Sys.No1FieldMap, No1Lib.Sys, Version=1.0.0.0, Culture=neutral, PublicKeyToken=870be39b125434d2">
+        <ObjectEx>
+          <Property name="DataField">PORT</Property>
+          <Property name="LabelControl" />
+          <Property name="EditControl" />
+        </ObjectEx>
+      </Item>
+      <Item type="No1Lib.Sys.No1FieldMap, No1Lib.Sys, Version=1.0.0.0, Culture=neutral, PublicKeyToken=870be39b125434d2">
+        <ObjectEx>
+          <Property name="DataField">NAME</Property>
+          <Property name="AllowEmpty">False</Property>
+          <Property name="AllowDuplicate">False</Property>
+          <Property name="LabelControl">
+            <Reference name="lblNAME" />
+          </Property>
+          <Property name="EditControl">
+            <Reference name="txtNAME" />
+          </Property>
+        </ObjectEx>
+      </Item>
+      <Item type="No1Lib.Sys.No1FieldMap, No1Lib.Sys, Version=1.0.0.0, Culture=neutral, PublicKeyToken=870be39b125434d2">
+        <ObjectEx>
+          <Property name="DataField">NOTE</Property>
+          <Property name="LabelControl" />
+          <Property name="EditControl" />
+        </ObjectEx>
+      </Item>
+      <Item type="No1Lib.Sys.No1FieldMap, No1Lib.Sys, Version=1.0.0.0, Culture=neutral, PublicKeyToken=870be39b125434d2">
+        <ObjectEx>
+          <Property name="DataField">PASSWORD</Property>
+          <Property name="LabelControl">
+            <Reference name="lblPASSWORD" />
+          </Property>
+          <Property name="EditControl">
+            <Reference name="txtPASSWORD" />
+          </Property>
+        </ObjectEx>
+      </Item>
+      <Item type="No1Lib.Sys.No1FieldMap, No1Lib.Sys, Version=1.0.0.0, Culture=neutral, PublicKeyToken=870be39b125434d2">
+        <ObjectEx>
+          <Property name="DataField">USERNAME</Property>
+          <Property name="AllowEmpty">False</Property>
+          <Property name="AllowDuplicate">False</Property>
+          <Property name="LabelControl">
+            <Reference name="lblUSERNAME" />
+          </Property>
+          <Property name="EditControl">
+            <Reference name="txtUSERNAME" />
+          </Property>
+        </ObjectEx>
+      </Item>
+      <Item type="No1Lib.Sys.No1FieldMap, No1Lib.Sys, Version=1.0.0.0, Culture=neutral, PublicKeyToken=870be39b125434d2">
+        <ObjectEx>
+          <Property name="DataField">EMAIL</Property>
+          <Property name="LabelControl">
+            <Reference name="lblEMAIL" />
+          </Property>
+          <Property name="EditControl">
+            <Reference name="txtEMAIL" />
+          </Property>
+        </ObjectEx>
+      </Item>
+      <Item type="No1Lib.Sys.No1FieldMap, No1Lib.Sys, Version=1.0.0.0, Culture=neutral, PublicKeyToken=870be39b125434d2">
+        <ObjectEx>
+          <Property name="DataField">SGROUPUSERID</Property>
+          <Property name="AllowEmpty">False</Property>
+          <Property name="LabelControl">
+            <Reference name="lblSGROUPUSERID" />
+          </Property>
+          <Property name="EditControl">
+            <Reference name="lueSGROUPUSERID" />
+          </Property>
+        </ObjectEx>
+      </Item>
+      <Item type="No1Lib.Sys.No1FieldMap, No1Lib.Sys, Version=1.0.0.0, Culture=neutral, PublicKeyToken=870be39b125434d2">
+        <ObjectEx>
+          <Property name="DataField">SMTP</Property>
+          <Property name="LabelControl" />
+          <Property name="EditControl" />
+        </ObjectEx>
+      </Item>
+      <Item type="No1Lib.Sys.No1FieldMap, No1Lib.Sys, Version=1.0.0.0, Culture=neutral, PublicKeyToken=870be39b125434d2">
+        <ObjectEx>
+          <Property name="DataField">PASS</Property>
+          <Property name="LabelControl" />
+          <Property name="EditControl" />
+        </ObjectEx>
+      </Item>
+      <Item type="No1Lib.Sys.No1FieldMap, No1Lib.Sys, Version=1.0.0.0, Culture=neutral, PublicKeyToken=870be39b125434d2">
+        <ObjectEx>
+          <Property name="DataField">VIETINPUT</Property>
+          <Property name="LabelControl" />
+          <Property name="EditControl" />
+        </ObjectEx>
+      </Item>
+      <Item type="No1Lib.Sys.No1FieldMap, No1Lib.Sys, Version=1.0.0.0, Culture=neutral, PublicKeyToken=870be39b125434d2">
+        <ObjectEx>
+          <Property name="DataField">INPUTMODE</Property>
+          <Property name="LabelControl" />
+          <Property name="EditControl" />
+        </ObjectEx>
+      </Item>
+      <Item type="No1Lib.Sys.No1FieldMap, No1Lib.Sys, Version=1.0.0.0, Culture=neutral, PublicKeyToken=870be39b125434d2">
+        <ObjectEx>
+          <Property name="DataField">AUTOID</Property>
+          <Property name="LabelControl" />
+          <Property name="EditControl" />
+        </ObjectEx>
+      </Item>
+      <Item type="No1Lib.Sys.No1FieldMap, No1Lib.Sys, Version=1.0.0.0, Culture=neutral, PublicKeyToken=870be39b125434d2">
+        <ObjectEx>
+          <Property name="DataField">SIMAGEID</Property>
+          <Property name="LabelControl" />
+          <Property name="EditControl" />
+        </ObjectEx>
+      </Item>
+      <Item type="No1Lib.Sys.No1FieldMap, No1Lib.Sys, Version=1.0.0.0, Culture=neutral, PublicKeyToken=870be39b125434d2">
+        <ObjectEx>
+          <Property name="DataField">PARENTID</Property>
+          <Property name="LabelControl" />
+          <Property name="EditControl" />
+        </ObjectEx>
+      </Item>
+      <Item type="No1Lib.Sys.No1FieldMap, No1Lib.Sys, Version=1.0.0.0, Culture=neutral, PublicKeyToken=870be39b125434d2">
+        <ObjectEx>
+          <Property name="DataField">PARENTDIR</Property>
+          <Property name="LabelControl" />
+          <Property name="EditControl" />
+        </ObjectEx>
+      </Item>
+      <Item type="No1Lib.Sys.No1FieldMap, No1Lib.Sys, Version=1.0.0.0, Culture=neutral, PublicKeyToken=870be39b125434d2">
+        <ObjectEx>
+          <Property name="DataField">SORTORDER</Property>
+          <Property name="LabelControl" />
+          <Property name="EditControl" />
+        </ObjectEx>
+      </Item>
+      <Item type="No1Lib.Sys.No1FieldMap, No1Lib.Sys, Version=1.0.0.0, Culture=neutral, PublicKeyToken=870be39b125434d2">
+        <ObjectEx>
+          <Property name="DataField">ITEMTYPE</Property>
+          <Property name="LabelControl" />
+          <Property name="EditControl" />
+        </ObjectEx>
+      </Item>
+      <Item type="No1Lib.Sys.No1FieldMap, No1Lib.Sys, Version=1.0.0.0, Culture=neutral, PublicKeyToken=870be39b125434d2">
+        <ObjectEx>
+          <Property name="DataField">DNHANVIENID</Property>
+          <Property name="LabelControl">
+            <Reference name="lblDNHANVIENID" />
+          </Property>
+          <Property name="EditControl">
+            <Reference name="lueDNHANVIENID" />
+          </Property>
+        </ObjectEx>
+      </Item>
+    </Property>
+    <Property name="Table">SUSER</Property>
+    <Event name="AfterSave">mapper_AfterSave</Event>
+    <Event name="AfterFillData">mapper_AfterFillData</Event>
+    <Event name="BeforeSave">mapper_BeforeSave</Event>
+  </Object>
+  <Object type="No1Lib.Sys.No1Label, No1Lib.Sys, Version=1.0.0.0, Culture=neutral, PublicKeyToken=870be39b125434d2" name="lblNAME" children="Controls">
+    <Property name="TabIndex">0</Property>
+    <Property name="BackColor">Transparent</Property>
+    <Property name="AutoSize">True</Property>
+    <Property name="Size">54, 13</Property>
+    <Property name="Text">Họ và tên</Property>
+    <Property name="Location">8, 36</Property>
+    <Property name="DataBindings">
+      <Property name="DefaultDataSourceUpdateMode">OnValidation</Property>
+    </Property>
+    <Property name="Name">lblNAME</Property>
+  </Object>
+  <Object type="No1Lib.Sys.No1TextBox, No1Lib.Sys, Version=1.0.0.0, Culture=neutral, PublicKeyToken=870be39b125434d2" name="txtNAME" children="Controls">
+    <Property name="Size">289, 20</Property>
+    <Property name="Name">txtNAME</Property>
+    <Property name="Location">104, 33</Property>
+    <Property name="DataBindings">
+      <Property name="DefaultDataSourceUpdateMode">OnValidation</Property>
+    </Property>
+    <Property name="TabIndex">1</Property>
+  </Object>
+  <Object type="No1Lib.Sys.No1Label, No1Lib.Sys, Version=1.0.0.0, Culture=neutral, PublicKeyToken=870be39b125434d2" name="lblPASSWORD" children="Controls">
+    <Property name="TabIndex">2</Property>
+    <Property name="BackColor">Transparent</Property>
+    <Property name="AutoSize">True</Property>
+    <Property name="Size">52, 13</Property>
+    <Property name="Text">Mật khẩu</Property>
+    <Property name="Location">8, 91</Property>
+    <Property name="DataBindings">
+      <Property name="DefaultDataSourceUpdateMode">OnValidation</Property>
+    </Property>
+    <Property name="Name">lblPASSWORD</Property>
+  </Object>
+  <Object type="No1Lib.Sys.No1TextBox, No1Lib.Sys, Version=1.0.0.0, Culture=neutral, PublicKeyToken=870be39b125434d2" name="txtPASSWORD" children="Controls">
+    <Property name="PasswordChar">*</Property>
+    <Property name="UseSystemPasswordChar">True</Property>
+    <Property name="Size">289, 20</Property>
+    <Property name="Name">txtPASSWORD</Property>
+    <Property name="Location">104, 88</Property>
+    <Property name="DataBindings">
+      <Property name="DefaultDataSourceUpdateMode">OnValidation</Property>
+    </Property>
+    <Property name="TabIndex">3</Property>
+  </Object>
+  <Object type="No1Lib.Sys.No1Label, No1Lib.Sys, Version=1.0.0.0, Culture=neutral, PublicKeyToken=870be39b125434d2" name="lblUSERNAME" children="Controls">
+    <Property name="TabIndex">4</Property>
+    <Property name="BackColor">Transparent</Property>
+    <Property name="AutoSize">True</Property>
+    <Property name="Size">55, 13</Property>
+    <Property name="Text">Tài khoản</Property>
+    <Property name="Location">8, 62</Property>
+    <Property name="DataBindings">
+      <Property name="DefaultDataSourceUpdateMode">OnValidation</Property>
+    </Property>
+    <Property name="Name">lblUSERNAME</Property>
+  </Object>
+  <Object type="No1Lib.Sys.No1TextBox, No1Lib.Sys, Version=1.0.0.0, Culture=neutral, PublicKeyToken=870be39b125434d2" name="txtUSERNAME" children="Controls">
+    <Property name="Size">289, 20</Property>
+    <Property name="Name">txtUSERNAME</Property>
+    <Property name="Location">104, 59</Property>
+    <Property name="DataBindings">
+      <Property name="DefaultDataSourceUpdateMode">OnValidation</Property>
+    </Property>
+    <Property name="TabIndex">2</Property>
+  </Object>
+  <Object type="No1Lib.Sys.No1Label, No1Lib.Sys, Version=1.0.0.0, Culture=neutral, PublicKeyToken=870be39b125434d2" name="lblEMAIL" children="Controls">
+    <Property name="TabIndex">6</Property>
+    <Property name="BackColor">Transparent</Property>
+    <Property name="AutoSize">True</Property>
+    <Property name="Size">32, 13</Property>
+    <Property name="Text">Email</Property>
+    <Property name="Location">8, 117</Property>
+    <Property name="DataBindings">
+      <Property name="DefaultDataSourceUpdateMode">OnValidation</Property>
+    </Property>
+    <Property name="Name">lblEMAIL</Property>
+  </Object>
+  <Object type="No1Lib.Sys.No1TextBox, No1Lib.Sys, Version=1.0.0.0, Culture=neutral, PublicKeyToken=870be39b125434d2" name="txtEMAIL" children="Controls">
+    <Property name="Size">289, 20</Property>
+    <Property name="Name">txtEMAIL</Property>
+    <Property name="Location">104, 114</Property>
+    <Property name="DataBindings">
+      <Property name="DefaultDataSourceUpdateMode">OnValidation</Property>
+    </Property>
+    <Property name="TabIndex">4</Property>
+  </Object>
+  <Object type="No1Lib.Sys.No1Label, No1Lib.Sys, Version=1.0.0.0, Culture=neutral, PublicKeyToken=870be39b125434d2" name="lblSGROUPUSERID" children="Controls">
+    <Property name="TabIndex">8</Property>
+    <Property name="BackColor">Transparent</Property>
+    <Property name="AutoSize">True</Property>
+    <Property name="Size">91, 13</Property>
+    <Property name="Text">Nhóm người dùng</Property>
+    <Property name="Location">8, 144</Property>
+    <Property name="DataBindings">
+      <Property name="DefaultDataSourceUpdateMode">OnValidation</Property>
+    </Property>
+    <Property name="Name">lblSGROUPUSERID</Property>
+  </Object>
+  <Object type="No1Lib.Sys.No1LookupEdit, No1Lib.Sys, Version=1.0.0.0, Culture=neutral, PublicKeyToken=870be39b125434d2" name="lueSGROUPUSERID" children="Controls">
+    <Property name="Size">289, 21</Property>
+    <Property name="Name">lueSGROUPUSERID</Property>
+    <Property name="BackColor">White</Property>
+    <Property name="Location">104, 141</Property>
+    <Property name="DataBindings">
+      <Property name="DefaultDataSourceUpdateMode">OnValidation</Property>
+    </Property>
+    <Property name="TabIndex">5</Property>
+  </Object>
+  <Object type="No1Lib.Sys.No1Label, No1Lib.Sys, Version=1.0.0.0, Culture=neutral, PublicKeyToken=870be39b125434d2" name="lblDNHANVIENID" children="Controls">
+    <Property name="TabIndex">10</Property>
+    <Property name="BackColor">Transparent</Property>
+    <Property name="AutoSize">True</Property>
+    <Property name="Size">56, 13</Property>
+    <Property name="Text">Nhân viên</Property>
+    <Property name="Location">8, 9</Property>
+    <Property name="DataBindings">
+      <Property name="DefaultDataSourceUpdateMode">OnValidation</Property>
+    </Property>
+    <Property name="Name">lblDNHANVIENID</Property>
+  </Object>
+  <Object type="No1Lib.Sys.No1LookupEdit, No1Lib.Sys, Version=1.0.0.0, Culture=neutral, PublicKeyToken=870be39b125434d2" name="lueDNHANVIENID" children="Controls">
+    <Property name="Size">289, 21</Property>
+    <Property name="Name">lueDNHANVIENID</Property>
+    <Property name="BackColor">White</Property>
+    <Property name="Location">104, 6</Property>
+    <Property name="DataBindings">
+      <Property name="DefaultDataSourceUpdateMode">OnValidation</Property>
+    </Property>
+    <Property name="TabIndex">0</Property>
+    <Event name="OnEditValueChanged">lueDNHANVIENID_OnEditValueChanged</Event>
+  </Object>
+  <Object type="No1Lib.Sys.No1Label, No1Lib.Sys, Version=1.0.0.0, Culture=neutral, PublicKeyToken=870be39b125434d2" name="No1Label2147483646" children="Controls">
+    <Property name="TabIndex">11</Property>
+    <Property name="BackColor">Transparent</Property>
+    <Property name="AutoSize">True</Property>
+    <Property name="Size">94, 13</Property>
+    <Property name="Text">Cửa hàng truy cập</Property>
+    <Property name="Location">8, 175</Property>
+    <Property name="DataBindings">
+      <Property name="DefaultDataSourceUpdateMode">OnValidation</Property>
+    </Property>
+    <Property name="Name">No1Label2147483646</Property>
+  </Object>
+  <Object type="No1Lib.Sys.MiscDataGridView, No1Lib.Sys, Version=1.0.0.0, Culture=neutral, PublicKeyToken=870be39b125434d2" name="grMain" children="Controls">
+    <Property name="BorderStyle">Fixed3D</Property>
+    <Property name="AllowUserToAddRows">False</Property>
+    <Property name="Columns">
+      <Item type="System.Windows.Forms.DataGridViewTextBoxColumn, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+        <Reference name="colCuaHang" />
+      </Item>
+      <Item type="System.Windows.Forms.DataGridViewCheckBoxColumn, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+        <Reference name="colTruyCap" />
+      </Item>
+    </Property>
+    <Property name="CellBorderStyle">SingleVertical</Property>
+    <Property name="AlternatingRowsDefaultCellStyle">
+      <InstanceDescriptor member="AAEAAAD/////AQAAAAAAAAAEAQAAAC9TeXN0ZW0uUmVmbGVjdGlvbi5NZW1iZXJJbmZvU2VyaWFsaXphdGlvbkhvbGRlcgYAAAAETmFtZQxBc3NlbWJseU5hbWUJQ2xhc3NOYW1lCVNpZ25hdHVyZQpNZW1iZXJUeXBlEEdlbmVyaWNBcmd1bWVudHMBAQEBAAMIDVN5c3RlbS5UeXBlW10GAgAAAAUuY3RvcgYDAAAAV1N5c3RlbS5XaW5kb3dzLkZvcm1zLCBWZXJzaW9uPTIuMC4wLjAsIEN1bHR1cmU9bmV1dHJhbCwgUHVibGljS2V5VG9rZW49Yjc3YTVjNTYxOTM0ZTA4OQYEAAAAKlN5c3RlbS5XaW5kb3dzLkZvcm1zLkRhdGFHcmlkVmlld0NlbGxTdHlsZQYFAAAADFZvaWQgLmN0b3IoKQEAAAAKCw==">
+        <Property name="BackColor">229, 247, 252</Property>
+      </InstanceDescriptor>
+    </Property>
+    <Property name="AutoSizeColumnsMode">Fill</Property>
+    <Property name="Name">grMain</Property>
+    <Property name="AllowUserToOrderColumns">True</Property>
+    <Property name="Size">293, 83</Property>
+    <Property name="SelectionMode">FullRowSelect</Property>
+    <Property name="BackgroundColor">White</Property>
+    <Property name="DataBindings">
+      <Property name="DefaultDataSourceUpdateMode">OnValidation</Property>
+    </Property>
+    <Property name="GUID">6e3597b6-2914-400c-828a-1e8739018452</Property>
+    <Property name="ShowCellToolTips">False</Property>
+    <Property name="Location">104, 168</Property>
+    <Property name="DeleteButton" />
+    <Property name="AllowUserToResizeRows">False</Property>
+    <Property name="RowHeadersVisible">False</Property>
+    <Property name="TabIndex">6</Property>
+    <Property name="AllowUserToDeleteRows">False</Property>
+    <Property name="EditButton" />
+    <Property name="RowHeadersWidthSizeMode">DisableResizing</Property>
+    <Property name="ColumnHeadersHeightSizeMode">AutoSize</Property>
+    <Property name="SearchTextBox" />
+    <Event name="CellMouseClick">grMain_CellMouseClick</Event>
+  </Object>
+  <Object type="System.Windows.Forms.DataGridViewTextBoxColumn, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" name="colCuaHang">
+    <Property name="DataPropertyName">CUAHANG</Property>
+    <Property name="HeaderText">Cửa hàng</Property>
+    <Property name="Name">colCuaHang</Property>
+    <Property name="FillWeight">150</Property>
+    <Property name="ReadOnly">True</Property>
+  </Object>
+  <Object type="System.Windows.Forms.DataGridViewCheckBoxColumn, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" name="colTruyCap">
+    <Property name="DataPropertyName">TRUYCAP</Property>
+    <Property name="HeaderText">Truy cập</Property>
+    <Property name="Name">colTruyCap</Property>
+    <Property name="ReadOnly">True</Property>
+  </Object>

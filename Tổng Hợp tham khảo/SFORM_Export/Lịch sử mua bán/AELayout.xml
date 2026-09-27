@@ -1,0 +1,156 @@
+
+  <Object type="No1Lib.Sys.No1Form, No1Lib.Sys, Version=1.0.0.0, Culture=neutral, PublicKeyToken=870be39b125434d2" name="form" children="Controls">
+    <Reference name="KryptonPanel1" />
+    <Property name="CancelButton">
+      <Reference name="btnThoat" />
+    </Property>
+    <Property name="Name">form</Property>
+    <Property name="StartPosition">CenterScreen</Property>
+    <Property name="Text">LỊCH SỬ BÁN HÀNG</Property>
+    <Property name="ClientSize">526, 440</Property>
+    <Property name="DataBindings">
+      <Property name="DefaultDataSourceUpdateMode">OnValidation</Property>
+    </Property>
+  </Object>
+  <Object type="ComponentFactory.Krypton.Toolkit.KryptonPanel, ComponentFactory.Krypton.Toolkit, Version=4.1.6.0, Culture=neutral, PublicKeyToken=5fd520d36328f741" name="KryptonPanel1" children="Controls">
+    <Reference name="txtLoc" />
+    <Reference name="Label2147483646" />
+    <Reference name="lblTenHang" />
+    <Reference name="btnThoat" />
+    <Reference name="grMain" />
+    <Property name="Dock">Fill</Property>
+    <Property name="Size">526, 440</Property>
+    <Property name="TabIndex">0</Property>
+    <Property name="Location">0, 0</Property>
+    <Property name="DataBindings">
+      <Property name="DefaultDataSourceUpdateMode">OnValidation</Property>
+    </Property>
+    <Property name="Name">KryptonPanel1</Property>
+  </Object>
+  <Object type="No1Lib.Sys.MiscDataGridView, No1Lib.Sys, Version=1.0.0.0, Culture=neutral, PublicKeyToken=870be39b125434d2" name="grMain" children="Controls">
+    <Property name="BorderStyle">Fixed3D</Property>
+    <Property name="AllowUserToAddRows">False</Property>
+    <Property name="Columns">
+      <Item type="No1Lib.Sys.CalendarColumn, No1Lib.Sys, Version=1.0.0.0, Culture=neutral, PublicKeyToken=870be39b125434d2">
+        <Reference name="colNgay" />
+      </Item>
+      <Item type="System.Windows.Forms.DataGridViewTextBoxColumn, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+        <Reference name="colGio" />
+      </Item>
+      <Item type="System.Windows.Forms.DataGridViewTextBoxColumn, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+        <Reference name="colKhachHang" />
+      </Item>
+      <Item type="No1Lib.Sys.NumericDataGridViewColumn, No1Lib.Sys, Version=1.0.0.0, Culture=neutral, PublicKeyToken=870be39b125434d2">
+        <Reference name="colDonGia" />
+      </Item>
+    </Property>
+    <Property name="CellBorderStyle">SingleVertical</Property>
+    <Property name="AlternatingRowsDefaultCellStyle">
+      <InstanceDescriptor member="AAEAAAD/////AQAAAAAAAAAEAQAAAC9TeXN0ZW0uUmVmbGVjdGlvbi5NZW1iZXJJbmZvU2VyaWFsaXphdGlvbkhvbGRlcgYAAAAETmFtZQxBc3NlbWJseU5hbWUJQ2xhc3NOYW1lCVNpZ25hdHVyZQpNZW1iZXJUeXBlEEdlbmVyaWNBcmd1bWVudHMBAQEBAAMIDVN5c3RlbS5UeXBlW10GAgAAAAUuY3RvcgYDAAAAV1N5c3RlbS5XaW5kb3dzLkZvcm1zLCBWZXJzaW9uPTIuMC4wLjAsIEN1bHR1cmU9bmV1dHJhbCwgUHVibGljS2V5VG9rZW49Yjc3YTVjNTYxOTM0ZTA4OQYEAAAAKlN5c3RlbS5XaW5kb3dzLkZvcm1zLkRhdGFHcmlkVmlld0NlbGxTdHlsZQYFAAAADFZvaWQgLmN0b3IoKQEAAAAKCw==">
+        <Property name="BackColor">229, 247, 252</Property>
+      </InstanceDescriptor>
+    </Property>
+    <Property name="Name">grMain</Property>
+    <Property name="AllowUserToOrderColumns">True</Property>
+    <Property name="Size">518, 344</Property>
+    <Property name="Anchor">Top, Bottom, Left, Right</Property>
+    <Property name="SelectionMode">FullRowSelect</Property>
+    <Property name="BackgroundColor">White</Property>
+    <Property name="DataBindings">
+      <Property name="DefaultDataSourceUpdateMode">OnValidation</Property>
+    </Property>
+    <Property name="GUID">62708919-34fc-4a3f-b651-9bafdb0776af</Property>
+    <Property name="Location">3, 59</Property>
+    <Property name="DeleteButton" />
+    <Property name="AllowUserToResizeRows">False</Property>
+    <Property name="TabIndex">1</Property>
+    <Property name="ReadOnly">True</Property>
+    <Property name="AllowUserToDeleteRows">False</Property>
+    <Property name="EditButton" />
+    <Property name="RowHeadersWidthSizeMode">DisableResizing</Property>
+    <Property name="ColumnHeadersHeightSizeMode">AutoSize</Property>
+    <Property name="SearchTextBox">
+      <Reference name="txtLoc" />
+    </Property>
+  </Object>
+  <Object type="System.Windows.Forms.Button, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" name="btnThoat" children="Controls">
+    <Property name="TabIndex">2</Property>
+    <Property name="Anchor">Bottom, Right</Property>
+    <Property name="Name">btnThoat</Property>
+    <Property name="Size">75, 28</Property>
+    <Property name="UseVisualStyleBackColor">True</Property>
+    <Property name="Text">Thoát</Property>
+    <Property name="Location">446, 407</Property>
+    <Property name="DataBindings">
+      <Property name="DefaultDataSourceUpdateMode">OnValidation</Property>
+    </Property>
+    <Property name="DialogResult">Cancel</Property>
+  </Object>
+  <Object type="System.Windows.Forms.Label, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" name="lblTenHang" children="Controls">
+    <Property name="TabIndex">2</Property>
+    <Property name="BackColor">Transparent</Property>
+    <Property name="Anchor">Top, Left, Right</Property>
+    <Property name="Size">518, 23</Property>
+    <Property name="Text">Tên mặt hàng:</Property>
+    <Property name="Font">Microsoft Sans Serif, 11.25pt, style=Bold</Property>
+    <Property name="Location">3, 7</Property>
+    <Property name="DataBindings">
+      <Property name="DefaultDataSourceUpdateMode">OnValidation</Property>
+    </Property>
+    <Property name="Name">lblTenHang</Property>
+  </Object>
+  <Object type="No1Lib.Sys.CalendarColumn, No1Lib.Sys, Version=1.0.0.0, Culture=neutral, PublicKeyToken=870be39b125434d2" name="colNgay">
+    <Property name="DataPropertyName">NGAY</Property>
+    <Property name="SortMode">Automatic</Property>
+    <Property name="HeaderText">Ngày</Property>
+    <Property name="Name">colNgay</Property>
+    <Property name="ReadOnly">True</Property>
+  </Object>
+  <Object type="System.Windows.Forms.DataGridViewTextBoxColumn, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" name="colGio">
+    <Property name="DataPropertyName">GIO</Property>
+    <Property name="HeaderText">Giờ</Property>
+    <Property name="Name">colGio</Property>
+    <Property name="Width">70</Property>
+    <Property name="ReadOnly">True</Property>
+  </Object>
+  <Object type="System.Windows.Forms.DataGridViewTextBoxColumn, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" name="colKhachHang">
+    <Property name="DataPropertyName">KHACHHANG</Property>
+    <Property name="HeaderText">Khách hàng</Property>
+    <Property name="Name">colKhachHang</Property>
+    <Property name="Width">200</Property>
+    <Property name="ReadOnly">True</Property>
+  </Object>
+  <Object type="No1Lib.Sys.NumericDataGridViewColumn, No1Lib.Sys, Version=1.0.0.0, Culture=neutral, PublicKeyToken=870be39b125434d2" name="colDonGia">
+    <Property name="DataPropertyName">DONGIA</Property>
+    <Property name="DefaultCellStyle">
+      <InstanceDescriptor member="AAEAAAD/////AQAAAAAAAAAEAQAAAC9TeXN0ZW0uUmVmbGVjdGlvbi5NZW1iZXJJbmZvU2VyaWFsaXphdGlvbkhvbGRlcgYAAAAETmFtZQxBc3NlbWJseU5hbWUJQ2xhc3NOYW1lCVNpZ25hdHVyZQpNZW1iZXJUeXBlEEdlbmVyaWNBcmd1bWVudHMBAQEBAAMIDVN5c3RlbS5UeXBlW10GAgAAAAUuY3RvcgYDAAAAV1N5c3RlbS5XaW5kb3dzLkZvcm1zLCBWZXJzaW9uPTIuMC4wLjAsIEN1bHR1cmU9bmV1dHJhbCwgUHVibGljS2V5VG9rZW49Yjc3YTVjNTYxOTM0ZTA4OQYEAAAAKlN5c3RlbS5XaW5kb3dzLkZvcm1zLkRhdGFHcmlkVmlld0NlbGxTdHlsZQYFAAAADFZvaWQgLmN0b3IoKQEAAAAKCw==">
+        <Property name="Alignment">MiddleRight</Property>
+        <Property name="Format">N2</Property>
+      </InstanceDescriptor>
+    </Property>
+    <Property name="DecimalLength">2</Property>
+    <Property name="HeaderText">Đơn giá</Property>
+    <Property name="Name">colDonGia</Property>
+    <Property name="ReadOnly">True</Property>
+  </Object>
+  <Object type="System.Windows.Forms.Label, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" name="Label2147483646" children="Controls">
+    <Property name="TabIndex">3</Property>
+    <Property name="BackColor">Transparent</Property>
+    <Property name="AutoSize">True</Property>
+    <Property name="Size">62, 13</Property>
+    <Property name="Text">Lọc dữ liệu:</Property>
+    <Property name="Location">3, 36</Property>
+    <Property name="DataBindings">
+      <Property name="DefaultDataSourceUpdateMode">OnValidation</Property>
+    </Property>
+    <Property name="Name">Label2147483646</Property>
+  </Object>
+  <Object type="No1Lib.Sys.No1TextBox, No1Lib.Sys, Version=1.0.0.0, Culture=neutral, PublicKeyToken=870be39b125434d2" name="txtLoc" children="Controls">
+    <Property name="Size">100, 20</Property>
+    <Property name="Name">txtLoc</Property>
+    <Property name="Location">71, 33</Property>
+    <Property name="DataBindings">
+      <Property name="DefaultDataSourceUpdateMode">OnValidation</Property>
+    </Property>
+    <Property name="TabIndex">0</Property>
+  </Object>

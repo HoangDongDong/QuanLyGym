@@ -1,0 +1,415 @@
+
+  <Object type="No1Lib.Sys.No1Form, No1Lib.Sys, Version=1.0.0.0, Culture=neutral, PublicKeyToken=870be39b125434d2" name="No1Form1" children="Controls">
+    <Reference name="KryptonPanel1" />
+    <Property name="CancelButton">
+      <Reference name="btnCancel" />
+    </Property>
+    <Property name="Name">No1Form1</Property>
+    <Property name="ShowIcon">False</Property>
+    <Property name="MinimizeBox">False</Property>
+    <Property name="StartPosition">CenterScreen</Property>
+    <Property name="ShowInTaskbar">False</Property>
+    <Property name="Text">Nhập số lượng</Property>
+    <Property name="MaximizeBox">False</Property>
+    <Property name="AcceptButton">
+      <Reference name="btnOK" />
+    </Property>
+    <Property name="ClientSize">400, 443</Property>
+    <Property name="DataBindings">
+      <Property name="DefaultDataSourceUpdateMode">OnValidation</Property>
+    </Property>
+    <Property name="FormBorderStyle">FixedDialog</Property>
+  </Object>
+  <Object type="ComponentFactory.Krypton.Toolkit.KryptonPanel, ComponentFactory.Krypton.Toolkit, Version=4.1.6.0, Culture=neutral, PublicKeyToken=5fd520d36328f741" name="KryptonPanel1" children="Controls">
+    <Reference name="txtKichThuoc" />
+    <Reference name="lblKichThuoc" />
+    <Reference name="lblDVTChan" />
+    <Reference name="spSLChan" />
+    <Reference name="lblDVTLe" />
+    <Reference name="numCK" />
+    <Reference name="spSoLuong" />
+    <Reference name="label3" />
+    <Reference name="lblDonGia" />
+    <Reference name="lblItem" />
+    <Reference name="label2" />
+    <Reference name="btnOK" />
+    <Reference name="btnCancel" />
+    <Reference name="panel1" />
+    <Reference name="grHanSuDung" />
+    <Reference name="grKichThuoc" />
+    <Property name="Dock">Fill</Property>
+    <Property name="Size">400, 443</Property>
+    <Property name="TabIndex">0</Property>
+    <Property name="Location">0, 0</Property>
+    <Property name="DataBindings">
+      <Property name="DefaultDataSourceUpdateMode">OnValidation</Property>
+    </Property>
+    <Property name="Name">KryptonPanel1</Property>
+  </Object>
+  <Object type="System.Windows.Forms.Panel, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" name="panel1" children="Controls">
+    <Reference name="label1" />
+    <Property name="Dock">Top</Property>
+    <Property name="Size">400, 39</Property>
+    <Property name="BackColor">White</Property>
+    <Property name="TabIndex">8</Property>
+    <Property name="Location">0, 0</Property>
+    <Property name="DataBindings">
+      <Property name="DefaultDataSourceUpdateMode">OnValidation</Property>
+    </Property>
+    <Property name="Name">panel1</Property>
+  </Object>
+  <Object type="System.Windows.Forms.Label, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" name="label1" children="Controls">
+    <Property name="TabIndex">1</Property>
+    <Property name="AutoSize">True</Property>
+    <Property name="Size">170, 13</Property>
+    <Property name="Text">Nhập số lượng cho mặt hàng</Property>
+    <Property name="Font">Microsoft Sans Serif, 8.25pt, style=Bold</Property>
+    <Property name="Location">12, 11</Property>
+    <Property name="DataBindings">
+      <Property name="DefaultDataSourceUpdateMode">OnValidation</Property>
+    </Property>
+    <Property name="Name">label1</Property>
+  </Object>
+  <Object type="System.Windows.Forms.Label, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" name="label3" children="Controls">
+    <Property name="TabIndex">20</Property>
+    <Property name="BackColor">Transparent</Property>
+    <Property name="AutoSize">True</Property>
+    <Property name="Size">62, 20</Property>
+    <Property name="Text">CK (%):</Property>
+    <Property name="Font">Microsoft Sans Serif, 12pt</Property>
+    <Property name="Location">20, 186</Property>
+    <Property name="DataBindings">
+      <Property name="DefaultDataSourceUpdateMode">OnValidation</Property>
+    </Property>
+    <Property name="Name">label3</Property>
+  </Object>
+  <Object type="System.Windows.Forms.Label, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" name="lblDonGia" children="Controls">
+    <Property name="TabIndex">19</Property>
+    <Property name="BackColor">Transparent</Property>
+    <Property name="TextAlign">MiddleLeft</Property>
+    <Property name="Size">376, 30</Property>
+    <Property name="Text">Đơn giá:</Property>
+    <Property name="Font">Microsoft Sans Serif, 14.25pt, style=Bold</Property>
+    <Property name="ForeColor">Navy</Property>
+    <Property name="Location">12, 100</Property>
+    <Property name="DataBindings">
+      <Property name="DefaultDataSourceUpdateMode">OnValidation</Property>
+    </Property>
+    <Property name="Name">lblDonGia</Property>
+  </Object>
+  <Object type="System.Windows.Forms.Label, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" name="lblItem" children="Controls">
+    <Property name="TabIndex">18</Property>
+    <Property name="BackColor">Transparent</Property>
+    <Property name="TextAlign">MiddleLeft</Property>
+    <Property name="Size">376, 50</Property>
+    <Property name="Text">Mặt hàng:</Property>
+    <Property name="Font">Microsoft Sans Serif, 14.25pt, style=Bold</Property>
+    <Property name="ForeColor">Navy</Property>
+    <Property name="Location">12, 47</Property>
+    <Property name="DataBindings">
+      <Property name="DefaultDataSourceUpdateMode">OnValidation</Property>
+    </Property>
+    <Property name="Name">lblItem</Property>
+  </Object>
+  <Object type="System.Windows.Forms.Label, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" name="label2" children="Controls">
+    <Property name="TabIndex">17</Property>
+    <Property name="BackColor">Transparent</Property>
+    <Property name="AutoSize">True</Property>
+    <Property name="Size">76, 20</Property>
+    <Property name="Text">Số lượng:</Property>
+    <Property name="Font">Microsoft Sans Serif, 12pt</Property>
+    <Property name="Location">20, 150</Property>
+    <Property name="DataBindings">
+      <Property name="DefaultDataSourceUpdateMode">OnValidation</Property>
+    </Property>
+    <Property name="Name">label2</Property>
+  </Object>
+  <Object type="System.Windows.Forms.Button, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" name="btnOK" children="Controls">
+    <Property name="TabIndex">5</Property>
+    <Property name="Anchor">Bottom, Right</Property>
+    <Property name="Name">btnOK</Property>
+    <Property name="Size">115, 30</Property>
+    <Property name="UseVisualStyleBackColor">True</Property>
+    <Property name="Text">Ghi dữ liệu</Property>
+    <Property name="Font">Microsoft Sans Serif, 9.75pt</Property>
+    <Property name="Location">192, 401</Property>
+    <Property name="DataBindings">
+      <Property name="DefaultDataSourceUpdateMode">OnValidation</Property>
+    </Property>
+    <Event name="Click">btnOK_Click</Event>
+  </Object>
+  <Object type="System.Windows.Forms.Button, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" name="btnCancel" children="Controls">
+    <Property name="TabIndex">6</Property>
+    <Property name="Anchor">Bottom, Right</Property>
+    <Property name="Name">btnCancel</Property>
+    <Property name="Size">75, 30</Property>
+    <Property name="UseVisualStyleBackColor">True</Property>
+    <Property name="Text">Thoát</Property>
+    <Property name="Font">Microsoft Sans Serif, 9.75pt</Property>
+    <Property name="Location">313, 401</Property>
+    <Property name="DataBindings">
+      <Property name="DefaultDataSourceUpdateMode">OnValidation</Property>
+    </Property>
+    <Property name="DialogResult">Cancel</Property>
+  </Object>
+  <Object type="No1Lib.Sys.No1NumericUpDown, No1Lib.Sys, Version=1.0.0.0, Culture=neutral, PublicKeyToken=870be39b125434d2" name="spSoLuong" children="Controls">
+    <Property name="EditValue">1</Property>
+    <Property name="Size">69, 26</Property>
+    <Property name="Location">116, 148</Property>
+    <Property name="ThousandsSeparator">True</Property>
+    <Property name="DecimalPlaces">2</Property>
+    <Property name="Name">spSoLuong</Property>
+    <Property name="Maximum">1000000000000</Property>
+    <Property name="Font">Microsoft Sans Serif, 12pt</Property>
+    <Property name="DataBindings">
+      <Property name="DefaultDataSourceUpdateMode">OnValidation</Property>
+    </Property>
+    <Property name="Minimum">-1000000000000</Property>
+    <Property name="TabIndex">0</Property>
+    <Property name="Value">1</Property>
+  </Object>
+  <Object type="No1Lib.Sys.No1NumericUpDown, No1Lib.Sys, Version=1.0.0.0, Culture=neutral, PublicKeyToken=870be39b125434d2" name="numCK" children="Controls">
+    <Property name="EditValue">0</Property>
+    <Property name="Size">69, 26</Property>
+    <Property name="Location">116, 184</Property>
+    <Property name="ThousandsSeparator">True</Property>
+    <Property name="DecimalPlaces">2</Property>
+    <Property name="Name">numCK</Property>
+    <Property name="Maximum">1000000000000</Property>
+    <Property name="Font">Microsoft Sans Serif, 12pt</Property>
+    <Property name="DataBindings">
+      <Property name="DefaultDataSourceUpdateMode">OnValidation</Property>
+    </Property>
+    <Property name="Minimum">-1000000000000</Property>
+    <Property name="TabIndex">2</Property>
+    <Property name="EnterKeyNextControl">False</Property>
+  </Object>
+  <Object type="No1Lib.Sys.No1NumericUpDown, No1Lib.Sys, Version=1.0.0.0, Culture=neutral, PublicKeyToken=870be39b125434d2" name="spSLChan" children="Controls">
+    <Property name="EditValue">1</Property>
+    <Property name="Size">69, 26</Property>
+    <Property name="Location">268, 148</Property>
+    <Property name="ThousandsSeparator">True</Property>
+    <Property name="DecimalPlaces">2</Property>
+    <Property name="Name">spSLChan</Property>
+    <Property name="Maximum">1000000000000</Property>
+    <Property name="Font">Microsoft Sans Serif, 12pt</Property>
+    <Property name="DataBindings">
+      <Property name="DefaultDataSourceUpdateMode">OnValidation</Property>
+    </Property>
+    <Property name="Minimum">-1000000000000</Property>
+    <Property name="TabIndex">1</Property>
+    <Property name="Value">1</Property>
+  </Object>
+  <Object type="System.Windows.Forms.Label, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" name="lblDVTLe" children="Controls">
+    <Property name="TabIndex">22</Property>
+    <Property name="BackColor">Transparent</Property>
+    <Property name="AutoSize">True</Property>
+    <Property name="Size">50, 20</Property>
+    <Property name="Text">thùng</Property>
+    <Property name="Font">Microsoft Sans Serif, 12pt</Property>
+    <Property name="Location">191, 150</Property>
+    <Property name="DataBindings">
+      <Property name="DefaultDataSourceUpdateMode">OnValidation</Property>
+    </Property>
+    <Property name="Name">lblDVTLe</Property>
+  </Object>
+  <Object type="System.Windows.Forms.Label, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" name="lblDVTChan" children="Controls">
+    <Property name="TabIndex">23</Property>
+    <Property name="BackColor">Transparent</Property>
+    <Property name="AutoSize">True</Property>
+    <Property name="Size">36, 20</Property>
+    <Property name="Text">hộp</Property>
+    <Property name="Font">Microsoft Sans Serif, 12pt</Property>
+    <Property name="Location">343, 150</Property>
+    <Property name="DataBindings">
+      <Property name="DefaultDataSourceUpdateMode">OnValidation</Property>
+    </Property>
+    <Property name="Name">lblDVTChan</Property>
+  </Object>
+  <Object type="No1Lib.Sys.MiscDataGridView, No1Lib.Sys, Version=1.0.0.0, Culture=neutral, PublicKeyToken=870be39b125434d2" name="grKichThuoc" children="Controls">
+    <Property name="RowTemplate">
+      <Property name="DefaultCellStyle">
+        <Property name="Font">Microsoft Sans Serif, 11.25pt</Property>
+      </Property>
+      <Property name="Height">26</Property>
+    </Property>
+    <Property name="BorderStyle">Fixed3D</Property>
+    <Property name="AllowUserToAddRows">False</Property>
+    <Property name="Columns">
+      <Item type="System.Windows.Forms.DataGridViewTextBoxColumn, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+        <Reference name="colKichThuoc" />
+      </Item>
+      <Item type="No1Lib.Sys.NumericDataGridViewColumn, No1Lib.Sys, Version=1.0.0.0, Culture=neutral, PublicKeyToken=870be39b125434d2">
+        <Reference name="colTon" />
+      </Item>
+    </Property>
+    <Property name="CellBorderStyle">SingleVertical</Property>
+    <Property name="AlternatingRowsDefaultCellStyle">
+      <InstanceDescriptor member="AAEAAAD/////AQAAAAAAAAAEAQAAAC9TeXN0ZW0uUmVmbGVjdGlvbi5NZW1iZXJJbmZvU2VyaWFsaXphdGlvbkhvbGRlcgYAAAAETmFtZQxBc3NlbWJseU5hbWUJQ2xhc3NOYW1lCVNpZ25hdHVyZQpNZW1iZXJUeXBlEEdlbmVyaWNBcmd1bWVudHMBAQEBAAMIDVN5c3RlbS5UeXBlW10GAgAAAAUuY3RvcgYDAAAAV1N5c3RlbS5XaW5kb3dzLkZvcm1zLCBWZXJzaW9uPTIuMC4wLjAsIEN1bHR1cmU9bmV1dHJhbCwgUHVibGljS2V5VG9rZW49Yjc3YTVjNTYxOTM0ZTA4OQYEAAAAKlN5c3RlbS5XaW5kb3dzLkZvcm1zLkRhdGFHcmlkVmlld0NlbGxTdHlsZQYFAAAADFZvaWQgLmN0b3IoKQEAAAAKCw==">
+        <Property name="BackColor">229, 247, 252</Property>
+      </InstanceDescriptor>
+    </Property>
+    <Property name="AutoSizeColumnsMode">Fill</Property>
+    <Property name="ColumnHeadersDefaultCellStyle">
+      <InstanceDescriptor member="AAEAAAD/////AQAAAAAAAAAEAQAAAC9TeXN0ZW0uUmVmbGVjdGlvbi5NZW1iZXJJbmZvU2VyaWFsaXphdGlvbkhvbGRlcgYAAAAETmFtZQxBc3NlbWJseU5hbWUJQ2xhc3NOYW1lCVNpZ25hdHVyZQpNZW1iZXJUeXBlEEdlbmVyaWNBcmd1bWVudHMBAQEBAAMIDVN5c3RlbS5UeXBlW10GAgAAAAUuY3RvcgYDAAAAV1N5c3RlbS5XaW5kb3dzLkZvcm1zLCBWZXJzaW9uPTIuMC4wLjAsIEN1bHR1cmU9bmV1dHJhbCwgUHVibGljS2V5VG9rZW49Yjc3YTVjNTYxOTM0ZTA4OQYEAAAAKlN5c3RlbS5XaW5kb3dzLkZvcm1zLkRhdGFHcmlkVmlld0NlbGxTdHlsZQYFAAAADFZvaWQgLmN0b3IoKQEAAAAKCw==">
+        <Property name="Alignment">MiddleLeft</Property>
+        <Property name="BackColor">Control</Property>
+        <Property name="Font">Microsoft Sans Serif, 11.25pt</Property>
+        <Property name="ForeColor">WindowText</Property>
+        <Property name="SelectionBackColor">Highlight</Property>
+        <Property name="SelectionForeColor">HighlightText</Property>
+        <Property name="WrapMode">True</Property>
+      </InstanceDescriptor>
+    </Property>
+    <Property name="Name">grKichThuoc</Property>
+    <Property name="AllowUserToOrderColumns">True</Property>
+    <Property name="Size">368, 177</Property>
+    <Property name="SelectionMode">FullRowSelect</Property>
+    <Property name="BackgroundColor">White</Property>
+    <Property name="DataBindings">
+      <Property name="DefaultDataSourceUpdateMode">OnValidation</Property>
+    </Property>
+    <Property name="GUID">c7a3315a-7246-4242-8f13-5845b7ad08cf</Property>
+    <Property name="ShowCellToolTips">False</Property>
+    <Property name="Location">20, 216</Property>
+    <Property name="DeleteButton" />
+    <Property name="AllowUserToResizeRows">False</Property>
+    <Property name="RowHeadersVisible">False</Property>
+    <Property name="TabIndex">4</Property>
+    <Property name="ReadOnly">True</Property>
+    <Property name="AllowUserToDeleteRows">False</Property>
+    <Property name="EditButton" />
+    <Property name="RowsDefaultCellStyle">
+      <InstanceDescriptor member="AAEAAAD/////AQAAAAAAAAAEAQAAAC9TeXN0ZW0uUmVmbGVjdGlvbi5NZW1iZXJJbmZvU2VyaWFsaXphdGlvbkhvbGRlcgYAAAAETmFtZQxBc3NlbWJseU5hbWUJQ2xhc3NOYW1lCVNpZ25hdHVyZQpNZW1iZXJUeXBlEEdlbmVyaWNBcmd1bWVudHMBAQEBAAMIDVN5c3RlbS5UeXBlW10GAgAAAAUuY3RvcgYDAAAAV1N5c3RlbS5XaW5kb3dzLkZvcm1zLCBWZXJzaW9uPTIuMC4wLjAsIEN1bHR1cmU9bmV1dHJhbCwgUHVibGljS2V5VG9rZW49Yjc3YTVjNTYxOTM0ZTA4OQYEAAAAKlN5c3RlbS5XaW5kb3dzLkZvcm1zLkRhdGFHcmlkVmlld0NlbGxTdHlsZQYFAAAADFZvaWQgLmN0b3IoKQEAAAAKCw==">
+        <Property name="Font">Microsoft Sans Serif, 11.25pt</Property>
+      </InstanceDescriptor>
+    </Property>
+    <Property name="RowHeadersWidthSizeMode">DisableResizing</Property>
+    <Property name="Visible">False</Property>
+    <Property name="ColumnHeadersHeightSizeMode">AutoSize</Property>
+    <Property name="SearchTextBox">
+      <Reference name="txtKichThuoc" />
+    </Property>
+    <Event name="CellMouseDoubleClick">grKichThuoc_CellMouseDoubleClick</Event>
+  </Object>
+  <Object type="System.Windows.Forms.DataGridViewTextBoxColumn, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" name="colKichThuoc">
+    <Property name="DataPropertyName">KICHTHUOC</Property>
+    <Property name="HeaderText">Kích thước</Property>
+    <Property name="Name">colKichThuoc</Property>
+    <Property name="ReadOnly">True</Property>
+  </Object>
+  <Object type="No1Lib.Sys.NumericDataGridViewColumn, No1Lib.Sys, Version=1.0.0.0, Culture=neutral, PublicKeyToken=870be39b125434d2" name="colTon">
+    <Property name="DataPropertyName">TON</Property>
+    <Property name="DefaultCellStyle">
+      <InstanceDescriptor member="AAEAAAD/////AQAAAAAAAAAEAQAAAC9TeXN0ZW0uUmVmbGVjdGlvbi5NZW1iZXJJbmZvU2VyaWFsaXphdGlvbkhvbGRlcgYAAAAETmFtZQxBc3NlbWJseU5hbWUJQ2xhc3NOYW1lCVNpZ25hdHVyZQpNZW1iZXJUeXBlEEdlbmVyaWNBcmd1bWVudHMBAQEBAAMIDVN5c3RlbS5UeXBlW10GAgAAAAUuY3RvcgYDAAAAV1N5c3RlbS5XaW5kb3dzLkZvcm1zLCBWZXJzaW9uPTIuMC4wLjAsIEN1bHR1cmU9bmV1dHJhbCwgUHVibGljS2V5VG9rZW49Yjc3YTVjNTYxOTM0ZTA4OQYEAAAAKlN5c3RlbS5XaW5kb3dzLkZvcm1zLkRhdGFHcmlkVmlld0NlbGxTdHlsZQYFAAAADFZvaWQgLmN0b3IoKQEAAAAKCw==">
+        <Property name="Alignment">MiddleRight</Property>
+        <Property name="Format">N2</Property>
+      </InstanceDescriptor>
+    </Property>
+    <Property name="DecimalLength">2</Property>
+    <Property name="HeaderText">Tồn</Property>
+    <Property name="Name">colTon</Property>
+    <Property name="ReadOnly">True</Property>
+  </Object>
+  <Object type="No1Lib.Sys.No1TextBox, No1Lib.Sys, Version=1.0.0.0, Culture=neutral, PublicKeyToken=870be39b125434d2" name="txtKichThuoc" children="Controls">
+    <Property name="Size">69, 26</Property>
+    <Property name="Font">Microsoft Sans Serif, 12pt</Property>
+    <Property name="Name">txtKichThuoc</Property>
+    <Property name="Location">268, 184</Property>
+    <Property name="DataBindings">
+      <Property name="DefaultDataSourceUpdateMode">OnValidation</Property>
+    </Property>
+    <Property name="TabIndex">3</Property>
+    <Property name="Visible">False</Property>
+  </Object>
+  <Object type="System.Windows.Forms.Label, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" name="lblKichThuoc" children="Controls">
+    <Property name="TabIndex">28</Property>
+    <Property name="BackColor">Transparent</Property>
+    <Property name="AutoSize">True</Property>
+    <Property name="Size">67, 20</Property>
+    <Property name="Visible">False</Property>
+    <Property name="Text">K.thước:</Property>
+    <Property name="Font">Microsoft Sans Serif, 12pt</Property>
+    <Property name="Location">192, 186</Property>
+    <Property name="DataBindings">
+      <Property name="DefaultDataSourceUpdateMode">OnValidation</Property>
+    </Property>
+    <Property name="Name">lblKichThuoc</Property>
+  </Object>
+  <Object type="No1Lib.Sys.MiscDataGridView, No1Lib.Sys, Version=1.0.0.0, Culture=neutral, PublicKeyToken=870be39b125434d2" name="grHanSuDung" children="Controls">
+    <Property name="RowTemplate">
+      <Property name="DefaultCellStyle">
+        <Property name="Font">Microsoft Sans Serif, 12pt</Property>
+      </Property>
+    </Property>
+    <Property name="BorderStyle">Fixed3D</Property>
+    <Property name="AllowUserToAddRows">False</Property>
+    <Property name="Columns">
+      <Item type="No1Lib.Sys.CalendarColumn, No1Lib.Sys, Version=1.0.0.0, Culture=neutral, PublicKeyToken=870be39b125434d2">
+        <Reference name="colHanSuDung" />
+      </Item>
+      <Item type="No1Lib.Sys.NumericDataGridViewColumn, No1Lib.Sys, Version=1.0.0.0, Culture=neutral, PublicKeyToken=870be39b125434d2">
+        <Reference name="colTon2" />
+      </Item>
+    </Property>
+    <Property name="CellBorderStyle">SingleVertical</Property>
+    <Property name="AlternatingRowsDefaultCellStyle">
+      <InstanceDescriptor member="AAEAAAD/////AQAAAAAAAAAEAQAAAC9TeXN0ZW0uUmVmbGVjdGlvbi5NZW1iZXJJbmZvU2VyaWFsaXphdGlvbkhvbGRlcgYAAAAETmFtZQxBc3NlbWJseU5hbWUJQ2xhc3NOYW1lCVNpZ25hdHVyZQpNZW1iZXJUeXBlEEdlbmVyaWNBcmd1bWVudHMBAQEBAAMIDVN5c3RlbS5UeXBlW10GAgAAAAUuY3RvcgYDAAAAV1N5c3RlbS5XaW5kb3dzLkZvcm1zLCBWZXJzaW9uPTIuMC4wLjAsIEN1bHR1cmU9bmV1dHJhbCwgUHVibGljS2V5VG9rZW49Yjc3YTVjNTYxOTM0ZTA4OQYEAAAAKlN5c3RlbS5XaW5kb3dzLkZvcm1zLkRhdGFHcmlkVmlld0NlbGxTdHlsZQYFAAAADFZvaWQgLmN0b3IoKQEAAAAKCw==">
+        <Property name="BackColor">229, 247, 252</Property>
+      </InstanceDescriptor>
+    </Property>
+    <Property name="AutoSizeColumnsMode">Fill</Property>
+    <Property name="ColumnHeadersDefaultCellStyle">
+      <InstanceDescriptor member="AAEAAAD/////AQAAAAAAAAAEAQAAAC9TeXN0ZW0uUmVmbGVjdGlvbi5NZW1iZXJJbmZvU2VyaWFsaXphdGlvbkhvbGRlcgYAAAAETmFtZQxBc3NlbWJseU5hbWUJQ2xhc3NOYW1lCVNpZ25hdHVyZQpNZW1iZXJUeXBlEEdlbmVyaWNBcmd1bWVudHMBAQEBAAMIDVN5c3RlbS5UeXBlW10GAgAAAAUuY3RvcgYDAAAAV1N5c3RlbS5XaW5kb3dzLkZvcm1zLCBWZXJzaW9uPTIuMC4wLjAsIEN1bHR1cmU9bmV1dHJhbCwgUHVibGljS2V5VG9rZW49Yjc3YTVjNTYxOTM0ZTA4OQYEAAAAKlN5c3RlbS5XaW5kb3dzLkZvcm1zLkRhdGFHcmlkVmlld0NlbGxTdHlsZQYFAAAADFZvaWQgLmN0b3IoKQEAAAAKCw==">
+        <Property name="Alignment">MiddleLeft</Property>
+        <Property name="BackColor">Control</Property>
+        <Property name="Font">Microsoft Sans Serif, 12pt</Property>
+        <Property name="ForeColor">WindowText</Property>
+        <Property name="SelectionBackColor">Highlight</Property>
+        <Property name="SelectionForeColor">HighlightText</Property>
+        <Property name="WrapMode">True</Property>
+      </InstanceDescriptor>
+    </Property>
+    <Property name="Name">grHanSuDung</Property>
+    <Property name="AllowUserToOrderColumns">True</Property>
+    <Property name="Size">368, 179</Property>
+    <Property name="SelectionMode">FullRowSelect</Property>
+    <Property name="BackgroundColor">White</Property>
+    <Property name="DataBindings">
+      <Property name="DefaultDataSourceUpdateMode">OnValidation</Property>
+    </Property>
+    <Property name="GUID">127d5d47-11bc-4448-87f7-80d40f880c4f</Property>
+    <Property name="ShowCellToolTips">False</Property>
+    <Property name="Location">20, 216</Property>
+    <Property name="DeleteButton" />
+    <Property name="AllowUserToResizeRows">False</Property>
+    <Property name="TabIndex">29</Property>
+    <Property name="ReadOnly">True</Property>
+    <Property name="AllowUserToDeleteRows">False</Property>
+    <Property name="EditButton" />
+    <Property name="RowHeadersWidthSizeMode">DisableResizing</Property>
+    <Property name="Visible">False</Property>
+    <Property name="ColumnHeadersHeightSizeMode">AutoSize</Property>
+    <Property name="SearchTextBox" />
+    <Event name="CellMouseDoubleClick">grHanSuDung_CellMouseDoubleClick</Event>
+  </Object>
+  <Object type="No1Lib.Sys.CalendarColumn, No1Lib.Sys, Version=1.0.0.0, Culture=neutral, PublicKeyToken=870be39b125434d2" name="colHanSuDung">
+    <Property name="DataPropertyName">HANSUDUNG</Property>
+    <Property name="SortMode">Automatic</Property>
+    <Property name="HeaderText">Hạn dùng</Property>
+    <Property name="Name">colHanSuDung</Property>
+    <Property name="ReadOnly">True</Property>
+  </Object>
+  <Object type="No1Lib.Sys.NumericDataGridViewColumn, No1Lib.Sys, Version=1.0.0.0, Culture=neutral, PublicKeyToken=870be39b125434d2" name="colTon2">
+    <Property name="DataPropertyName">TON</Property>
+    <Property name="DefaultCellStyle">
+      <InstanceDescriptor member="AAEAAAD/////AQAAAAAAAAAEAQAAAC9TeXN0ZW0uUmVmbGVjdGlvbi5NZW1iZXJJbmZvU2VyaWFsaXphdGlvbkhvbGRlcgYAAAAETmFtZQxBc3NlbWJseU5hbWUJQ2xhc3NOYW1lCVNpZ25hdHVyZQpNZW1iZXJUeXBlEEdlbmVyaWNBcmd1bWVudHMBAQEBAAMIDVN5c3RlbS5UeXBlW10GAgAAAAUuY3RvcgYDAAAAV1N5c3RlbS5XaW5kb3dzLkZvcm1zLCBWZXJzaW9uPTIuMC4wLjAsIEN1bHR1cmU9bmV1dHJhbCwgUHVibGljS2V5VG9rZW49Yjc3YTVjNTYxOTM0ZTA4OQYEAAAAKlN5c3RlbS5XaW5kb3dzLkZvcm1zLkRhdGFHcmlkVmlld0NlbGxTdHlsZQYFAAAADFZvaWQgLmN0b3IoKQEAAAAKCw==">
+        <Property name="Alignment">MiddleRight</Property>
+        <Property name="Format">N2</Property>
+      </InstanceDescriptor>
+    </Property>
+    <Property name="DecimalLength">2</Property>
+    <Property name="HeaderText">Tồn</Property>
+    <Property name="Name">colTon2</Property>
+    <Property name="ReadOnly">True</Property>
+  </Object>

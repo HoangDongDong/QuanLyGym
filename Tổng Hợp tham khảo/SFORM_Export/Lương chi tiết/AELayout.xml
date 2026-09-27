@@ -1,0 +1,397 @@
+
+  <Object type="No1Lib.Sys.No1Form, No1Lib.Sys, Version=1.0.0.0, Culture=neutral, PublicKeyToken=870be39b125434d2" name="form" children="Controls">
+    <Reference name="KryptonPanel1" />
+    <Property name="Name">form</Property>
+    <Property name="MinimizeBox">False</Property>
+    <Property name="StartPosition">CenterScreen</Property>
+    <Property name="Text">CHI TIẾT LƯƠNG</Property>
+    <Property name="MaximizeBox">False</Property>
+    <Property name="ClientSize">506, 447</Property>
+    <Property name="DataBindings">
+      <Property name="DefaultDataSourceUpdateMode">OnValidation</Property>
+    </Property>
+    <Property name="FormBorderStyle">FixedDialog</Property>
+  </Object>
+  <Object type="ComponentFactory.Krypton.Toolkit.KryptonPanel, ComponentFactory.Krypton.Toolkit, Version=4.1.6.0, Culture=neutral, PublicKeyToken=5fd520d36328f741" name="KryptonPanel1" children="Controls">
+    <Reference name="btnThoat" />
+    <Reference name="tabMain" />
+    <Reference name="panel1" />
+    <Property name="Dock">Fill</Property>
+    <Property name="Size">506, 447</Property>
+    <Property name="TabIndex">0</Property>
+    <Property name="Location">0, 0</Property>
+    <Property name="DataBindings">
+      <Property name="DefaultDataSourceUpdateMode">OnValidation</Property>
+    </Property>
+    <Property name="Name">KryptonPanel1</Property>
+  </Object>
+  <Object type="System.Windows.Forms.Panel, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" name="panel1" children="Controls">
+    <Reference name="lblThang" />
+    <Reference name="lblNhanVien" />
+    <Property name="Dock">Top</Property>
+    <Property name="Size">506, 50</Property>
+    <Property name="BackColor">White</Property>
+    <Property name="TabIndex">5</Property>
+    <Property name="Location">0, 0</Property>
+    <Property name="DataBindings">
+      <Property name="DefaultDataSourceUpdateMode">OnValidation</Property>
+    </Property>
+    <Property name="Name">panel1</Property>
+  </Object>
+  <Object type="System.Windows.Forms.Label, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" name="lblThang" children="Controls">
+    <Property name="TabIndex">2</Property>
+    <Property name="AutoSize">True</Property>
+    <Property name="Size">69, 13</Property>
+    <Property name="Text">Nhân viên:</Property>
+    <Property name="Font">Microsoft Sans Serif, 8.25pt, style=Bold</Property>
+    <Property name="Location">10, 31</Property>
+    <Property name="DataBindings">
+      <Property name="DefaultDataSourceUpdateMode">OnValidation</Property>
+    </Property>
+    <Property name="Name">lblThang</Property>
+  </Object>
+  <Object type="System.Windows.Forms.Label, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" name="lblNhanVien" children="Controls">
+    <Property name="TabIndex">1</Property>
+    <Property name="AutoSize">True</Property>
+    <Property name="Size">69, 13</Property>
+    <Property name="Text">Nhân viên:</Property>
+    <Property name="Font">Microsoft Sans Serif, 8.25pt, style=Bold</Property>
+    <Property name="Location">10, 6</Property>
+    <Property name="DataBindings">
+      <Property name="DefaultDataSourceUpdateMode">OnValidation</Property>
+    </Property>
+    <Property name="Name">lblNhanVien</Property>
+  </Object>
+  <Object type="ComponentFactory.Krypton.Navigator.KryptonNavigator, ComponentFactory.Krypton.Navigator, Version=4.1.6.0, Culture=neutral, PublicKeyToken=5fd520d36328f741" name="tabMain" children="Controls">
+    <Property name="Size">500, 348</Property>
+    <Property name="Text">KryptonNavigator1</Property>
+    <Property name="Pages">
+      <Item type="ComponentFactory.Krypton.Navigator.KryptonPage, ComponentFactory.Krypton.Navigator, Version=4.1.6.0, Culture=neutral, PublicKeyToken=5fd520d36328f741">
+        <Reference name="pageTamUng" />
+      </Item>
+      <Item type="ComponentFactory.Krypton.Navigator.KryptonPage, ComponentFactory.Krypton.Navigator, Version=4.1.6.0, Culture=neutral, PublicKeyToken=5fd520d36328f741">
+        <Reference name="pageThuongPhat" />
+      </Item>
+    </Property>
+    <Property name="DataBindings">
+      <Property name="DefaultDataSourceUpdateMode">OnValidation</Property>
+    </Property>
+    <Property name="SelectedIndex">0</Property>
+    <Property name="Name">tabMain</Property>
+    <Property name="TabIndex">6</Property>
+    <Property name="Location">3, 56</Property>
+    <Property name="Button">
+      <Property name="CloseButtonDisplay">Hide</Property>
+      <Property name="ButtonDisplayLogic">None</Property>
+    </Property>
+  </Object>
+  <Object type="ComponentFactory.Krypton.Navigator.KryptonPage, ComponentFactory.Krypton.Navigator, Version=4.1.6.0, Culture=neutral, PublicKeyToken=5fd520d36328f741" name="pageTamUng" children="Controls">
+    <Reference name="grTamUng" />
+    <Reference name="toolStrip1" />
+    <Property name="LastVisibleSet">True</Property>
+    <Property name="MinimumSize">50, 50</Property>
+    <Property name="DataBindings">
+      <Property name="DefaultDataSourceUpdateMode">OnValidation</Property>
+    </Property>
+    <Property name="Name">pageTamUng</Property>
+    <Property name="AutoHiddenSlideSize">200, 200</Property>
+    <Property name="UniqueName">52D8F72A046B48C1F391E85F93EDEC50</Property>
+    <Property name="Text">Tạm ứng</Property>
+    <Property name="Flags">65534</Property>
+    <Property name="ToolTipTitle">Page ToolTip</Property>
+    <Property name="Size">498, 321</Property>
+  </Object>
+  <Object type="ComponentFactory.Krypton.Navigator.KryptonPage, ComponentFactory.Krypton.Navigator, Version=4.1.6.0, Culture=neutral, PublicKeyToken=5fd520d36328f741" name="pageThuongPhat" children="Controls">
+    <Reference name="grThuongPhat" />
+    <Reference name="toolStrip2" />
+    <Property name="LastVisibleSet">True</Property>
+    <Property name="MinimumSize">50, 50</Property>
+    <Property name="DataBindings">
+      <Property name="DefaultDataSourceUpdateMode">OnValidation</Property>
+    </Property>
+    <Property name="Name">pageThuongPhat</Property>
+    <Property name="AutoHiddenSlideSize">200, 200</Property>
+    <Property name="UniqueName">9AE602072A1144F0B18BF5E9B8B5F6F4</Property>
+    <Property name="Text">Thưởng-phạt</Property>
+    <Property name="Flags">65534</Property>
+    <Property name="ToolTipTitle">Page ToolTip</Property>
+    <Property name="Size">498, 321</Property>
+  </Object>
+  <Object type="System.Windows.Forms.Button, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" name="btnThoat" children="Controls">
+    <Property name="TabIndex">7</Property>
+    <Property name="Name">btnThoat</Property>
+    <Property name="Size">75, 27</Property>
+    <Property name="UseVisualStyleBackColor">True</Property>
+    <Property name="Text">Thoát</Property>
+    <Property name="Location">427, 412</Property>
+    <Property name="DataBindings">
+      <Property name="DefaultDataSourceUpdateMode">OnValidation</Property>
+    </Property>
+    <Property name="DialogResult">Cancel</Property>
+  </Object>
+  <Object type="System.Windows.Forms.ToolStrip, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" name="toolStrip1" children="Controls">
+    <Property name="Text">toolStrip1</Property>
+    <Property name="Size">498, 25</Property>
+    <Property name="DataBindings">
+      <Property name="DefaultDataSourceUpdateMode">OnValidation</Property>
+    </Property>
+    <Property name="Name">toolStrip1</Property>
+    <Property name="Items">
+      <Item type="System.Windows.Forms.ToolStripButton, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+        <Reference name="tsbThemTamUng" />
+      </Item>
+      <Item type="System.Windows.Forms.ToolStripButton, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+        <Reference name="tsbSuaTamUng" />
+      </Item>
+      <Item type="System.Windows.Forms.ToolStripButton, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+        <Reference name="tsbXoaTamUng" />
+      </Item>
+      <Item type="System.Windows.Forms.Design.DesignerToolStripControlHost, System.Design, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+        <ObjectEx>
+          <Property name="CausesValidation">False</Property>
+          <Property name="RightToLeft">No</Property>
+          <Property name="Size">31, 25</Property>
+          <Property name="Text">miniToolStrip</Property>
+          <Property name="Margin">0, 0, 0, 0</Property>
+          <Property name="Name">
+          </Property>
+          <Property name="Visible">False</Property>
+        </ObjectEx>
+      </Item>
+    </Property>
+    <Property name="Location">0, 0</Property>
+    <Property name="TabIndex">2</Property>
+    <Property name="Font">Segoe UI, 9pt</Property>
+  </Object>
+  <Object type="System.Windows.Forms.ToolStripButton, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" name="tsbThemTamUng">
+    <Property name="Image">
+      <Binary>iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAFYSURBVDhPtZG7L4NhFMaPSzpI0Y9Wqm1CigjVRNOJusQl4lbqliAiahMTu81i6GIQ32AhdY+FmOseHAmDpDYjf8XjvF9Ck6Ya3+Akv+SX877Pkzd5if5t9h06HTrYQLnp2bNz9HMZcx9LIHHTeYrbefJ9AQrl5gu2NR55m0ckGQWJmy/Y0rjvZRq9z1Mg8ewFuk2nTbmURtfjODruR5HpjFTmZzZsHH6dRTdPQIU6H8aMYPPlAJou+tF2O4zWmyG0XIcRuho0nCSTKlgvZvXU9ruIgQqoYP1pCJUHAQN3vAGuHR88cT+8R0GQZFIFsUKdYlZOx3Pih+vYh0xnpDJZZ83KzvM6lJ3VgsTN/8Kqle2JGpQmqkHi5gtWCrjkqQoae0Hi5gsWLawlvVCQ+F8K8uWSW2gUgtSTs0szuWygXO2IAkKFYMlUmCvLIsEpuH6hXPY2Ie+74AvGtKxvWfujRgAAAABJRU5ErkJggg==</Binary>
+    </Property>
+    <Property name="Size">58, 22</Property>
+    <Property name="Name">tsbThemTamUng</Property>
+    <Property name="ImageTransparentColor">Magenta</Property>
+    <Property name="Text">Thêm</Property>
+  </Object>
+  <Object type="System.Windows.Forms.ToolStripButton, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" name="tsbSuaTamUng">
+    <Property name="Image">
+      <Binary>iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAFWSURBVDhPY2CgJ5jJwMA/m4Hh/EIGhv/LGBjmk2T3zJkz+ScBNd+ss/v/f3fo/5M2ov/XEmsIWPO06eeXdxX9/7/O4//3HKH//1vk/q8DuoSgK2CaDx059r9/0pT/C9M9//8sFv1/z5X1/xqgi/AaMDONgX96gdL5vv7u/7v27vt/7MSp/8VlFf+7g63/LwdqXgUME5wGgDWnMpw/ONPk/6GlQf9LSwv+z5g1539zW8d/H9/A8y4uocRpvrTW7f+BaQb/F1Rp/I+JCiNP87p6yf+98Sz/k9yFSLcZpjnbjeF8mguRfoY5m2jNoJCckcwQv65Z6/+tPclgP5OkGWTApASG82fWpf5/eWXy/yPz3MB+JuhsWBwaGhrKJ/iogjUfXZX6f2KeCvGaQYZEBnv2p6Wl/Y9wV/1f5M1wPs+VIR5vgKGnnmA/l/+5uRn/27t6CKdtNM0AE4HaRdDCVfMAAAAASUVORK5CYII=</Binary>
+    </Property>
+    <Property name="Size">46, 22</Property>
+    <Property name="Enabled">False</Property>
+    <Property name="Name">tsbSuaTamUng</Property>
+    <Property name="ImageTransparentColor">Magenta</Property>
+    <Property name="Text">Sửa</Property>
+  </Object>
+  <Object type="System.Windows.Forms.ToolStripButton, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" name="tsbXoaTamUng">
+    <Property name="Image">
+      <Binary>iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAG6SURBVDhPzZJLKERhHMUPI3e6kzuGucYzs6MsvFK2Y0NSVthRiBAbgx0l5JWS18L7/Vh41ISEjZVMyTvFQtOkJAtsPK9zi5rJmGbp1q/v+/c/53z3+98L/JtnEciaB+wqC0CfpxebAxKoaySrS0CZm2aKxnerVXmsqvo8SEtzqrWrYBromA8MPJwBdmaBbAXwcwuYYOIoTfs03xUXK478/NcVWT4fBlIXJGl8Nz7+egywjQCxf45tkOIBoJOr/cBiebjIzf3YiItzbCcmOvqBNRLu08y7GdTDkK3k5CfyOqTVnvpkVEWtgExW5yIjb21m80uPIByPGo03XRrNsU8hjUDvjCw7d2NiPjoF4ZR1CVnuF8UrruteQ6xA+YBOd2U3mZRJSXI2AHU/Bm562zWaM2raPIZUcro1vPeRLL/t6fXP3NsqAIOruBpoJpvE8iukFOgeF0XndUiIUu/vf0JzqqeT+Pe0kI4mIMCtX8TTLw2GzxVRvOe+y9td2a/NBFJcNdFJQGEBQ/KAbROQwaaZhBE9CSLBRCZRUUB6ApDjGiCxMJKIb1SjatARLRG+V7VWtepsQr1+EV+bX+P5f4HS4B/EAAAAAElFTkSuQmCC</Binary>
+    </Property>
+    <Property name="Size">47, 22</Property>
+    <Property name="Enabled">False</Property>
+    <Property name="Name">tsbXoaTamUng</Property>
+    <Property name="ImageTransparentColor">Magenta</Property>
+    <Property name="Text">Xóa</Property>
+  </Object>
+  <Object type="No1Lib.Sys.No1DataGrid, No1Lib.Sys, Version=1.0.0.0, Culture=neutral, PublicKeyToken=870be39b125434d2" name="grTamUng" children="Controls">
+    <Property name="RefreshButton" />
+    <Property name="AddButton">
+      <Reference name="tsbThemTamUng" />
+    </Property>
+    <Property name="Dock">Fill</Property>
+    <Property name="ShowPropertiesMenu">False</Property>
+    <Property name="Size">498, 296</Property>
+    <Property name="ShowSetValue">False</Property>
+    <Property name="DeleteButton">
+      <Reference name="tsbXoaTamUng" />
+    </Property>
+    <Property name="Location">0, 25</Property>
+    <Property name="AllowAdding">True</Property>
+    <Property name="AllowDeleting">True</Property>
+    <Property name="EditButton">
+      <Reference name="tsbSuaTamUng" />
+    </Property>
+    <Property name="PrintButton" />
+    <Property name="GUID">4e3a351f-fdc9-4f94-9faa-1f40bd126735</Property>
+    <Property name="Name">grTamUng</Property>
+    <Property name="TabIndex">3</Property>
+    <Property name="Columns">
+      <Item type="No1Lib.Sys.No1GridColumn, No1Lib.Sys, Version=1.0.0.0, Culture=neutral, PublicKeyToken=870be39b125434d2">
+        <ObjectEx>
+          <Property name="DataField">NAME</Property>
+          <Property name="Caption">Số phiếu</Property>
+          <Property name="AllowEmpty">False</Property>
+          <Property name="AllowHidden">False</Property>
+          <Property name="ShowOnQuickAddAsMultiValue">True</Property>
+          <Property name="Value" />
+          <Property name="AllowDuplicate">False</Property>
+        </ObjectEx>
+      </Item>
+      <Item type="No1Lib.Sys.No1GridColumn, No1Lib.Sys, Version=1.0.0.0, Culture=neutral, PublicKeyToken=870be39b125434d2">
+        <ObjectEx>
+          <Property name="DataField">NGAY</Property>
+          <Property name="Caption">Ngày</Property>
+          <Property name="Value" />
+        </ObjectEx>
+      </Item>
+      <Item type="No1Lib.Sys.No1GridColumn, No1Lib.Sys, Version=1.0.0.0, Culture=neutral, PublicKeyToken=870be39b125434d2">
+        <ObjectEx>
+          <Property name="DataField">CHI</Property>
+          <Property name="Caption">Số tiền tạm ứng</Property>
+          <Property name="Value" />
+        </ObjectEx>
+      </Item>
+    </Property>
+    <Property name="sFunctionID">
+    </Property>
+    <Property name="Table">TTHUCHI</Property>
+    <Property name="DataBindings">
+      <Property name="DefaultDataSourceUpdateMode">OnValidation</Property>
+    </Property>
+    <Property name="RealDelete">True</Property>
+    <Event name="AfterCreatedEditForm">grTamUng_AfterCreatedEditForm</Event>
+    <Event name="CustomLoadData">grTamUng_CustomLoadData</Event>
+    <Event name="CustomAeForm">grTamUng_CustomAeForm</Event>
+    <Event name="OnEditDataChanged">grTamUng_OnEditDataChanged</Event>
+  </Object>
+  <Object type="System.Windows.Forms.ToolStrip, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" name="toolStrip2" children="Controls">
+    <Property name="Text">toolStrip1</Property>
+    <Property name="Size">498, 25</Property>
+    <Property name="DataBindings">
+      <Property name="DefaultDataSourceUpdateMode">OnValidation</Property>
+    </Property>
+    <Property name="Name">toolStrip2</Property>
+    <Property name="Items">
+      <Item type="System.Windows.Forms.ToolStripButton, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+        <Reference name="tsbThemThuongPhat" />
+      </Item>
+      <Item type="System.Windows.Forms.ToolStripButton, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+        <Reference name="tsbSuaThuongPhat" />
+      </Item>
+      <Item type="System.Windows.Forms.ToolStripButton, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+        <Reference name="tsbXoaThuongPhat" />
+      </Item>
+      <Item type="System.Windows.Forms.Design.DesignerToolStripControlHost, System.Design, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+        <ObjectEx>
+          <Property name="CausesValidation">False</Property>
+          <Property name="RightToLeft">No</Property>
+          <Property name="Size">31, 25</Property>
+          <Property name="Text">miniToolStrip</Property>
+          <Property name="Margin">0, 0, 0, 0</Property>
+          <Property name="Name">
+          </Property>
+          <Property name="Visible">False</Property>
+        </ObjectEx>
+      </Item>
+    </Property>
+    <Property name="Location">0, 0</Property>
+    <Property name="TabIndex">3</Property>
+    <Property name="Font">Segoe UI, 9pt</Property>
+  </Object>
+  <Object type="System.Windows.Forms.ToolStripButton, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" name="tsbThemThuongPhat">
+    <Property name="Image">
+      <Binary>iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAFYSURBVDhPtZG7L4NhFMaPSzpI0Y9Wqm1CigjVRNOJusQl4lbqliAiahMTu81i6GIQ32AhdY+FmOseHAmDpDYjf8XjvF9Ck6Ya3+Akv+SX877Pkzd5if5t9h06HTrYQLnp2bNz9HMZcx9LIHHTeYrbefJ9AQrl5gu2NR55m0ckGQWJmy/Y0rjvZRq9z1Mg8ewFuk2nTbmURtfjODruR5HpjFTmZzZsHH6dRTdPQIU6H8aMYPPlAJou+tF2O4zWmyG0XIcRuho0nCSTKlgvZvXU9ruIgQqoYP1pCJUHAQN3vAGuHR88cT+8R0GQZFIFsUKdYlZOx3Pih+vYh0xnpDJZZ83KzvM6lJ3VgsTN/8Kqle2JGpQmqkHi5gtWCrjkqQoae0Hi5gsWLawlvVCQ+F8K8uWSW2gUgtSTs0szuWygXO2IAkKFYMlUmCvLIsEpuH6hXPY2Ie+74AvGtKxvWfujRgAAAABJRU5ErkJggg==</Binary>
+    </Property>
+    <Property name="Size">58, 22</Property>
+    <Property name="Name">tsbThemThuongPhat</Property>
+    <Property name="ImageTransparentColor">Magenta</Property>
+    <Property name="Text">Thêm</Property>
+  </Object>
+  <Object type="System.Windows.Forms.ToolStripButton, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" name="tsbSuaThuongPhat">
+    <Property name="Image">
+      <Binary>iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAFWSURBVDhPY2CgJ5jJwMA/m4Hh/EIGhv/LGBjmk2T3zJkz+ScBNd+ss/v/f3fo/5M2ov/XEmsIWPO06eeXdxX9/7/O4//3HKH//1vk/q8DuoSgK2CaDx059r9/0pT/C9M9//8sFv1/z5X1/xqgi/AaMDONgX96gdL5vv7u/7v27vt/7MSp/8VlFf+7g63/LwdqXgUME5wGgDWnMpw/ONPk/6GlQf9LSwv+z5g1539zW8d/H9/A8y4uocRpvrTW7f+BaQb/F1Rp/I+JCiNP87p6yf+98Sz/k9yFSLcZpjnbjeF8mguRfoY5m2jNoJCckcwQv65Z6/+tPclgP5OkGWTApASG82fWpf5/eWXy/yPz3MB+JuhsWBwaGhrKJ/iogjUfXZX6f2KeCvGaQYZEBnv2p6Wl/Y9wV/1f5M1wPs+VIR5vgKGnnmA/l/+5uRn/27t6CKdtNM0AE4HaRdDCVfMAAAAASUVORK5CYII=</Binary>
+    </Property>
+    <Property name="Size">46, 22</Property>
+    <Property name="Enabled">False</Property>
+    <Property name="Name">tsbSuaThuongPhat</Property>
+    <Property name="ImageTransparentColor">Magenta</Property>
+    <Property name="Text">Sửa</Property>
+  </Object>
+  <Object type="System.Windows.Forms.ToolStripButton, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" name="tsbXoaThuongPhat">
+    <Property name="Image">
+      <Binary>iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAG6SURBVDhPzZJLKERhHMUPI3e6kzuGucYzs6MsvFK2Y0NSVthRiBAbgx0l5JWS18L7/Vh41ISEjZVMyTvFQtOkJAtsPK9zi5rJmGbp1q/v+/c/53z3+98L/JtnEciaB+wqC0CfpxebAxKoaySrS0CZm2aKxnerVXmsqvo8SEtzqrWrYBromA8MPJwBdmaBbAXwcwuYYOIoTfs03xUXK478/NcVWT4fBlIXJGl8Nz7+egywjQCxf45tkOIBoJOr/cBiebjIzf3YiItzbCcmOvqBNRLu08y7GdTDkK3k5CfyOqTVnvpkVEWtgExW5yIjb21m80uPIByPGo03XRrNsU8hjUDvjCw7d2NiPjoF4ZR1CVnuF8UrruteQ6xA+YBOd2U3mZRJSXI2AHU/Bm562zWaM2raPIZUcro1vPeRLL/t6fXP3NsqAIOruBpoJpvE8iukFOgeF0XndUiIUu/vf0JzqqeT+Pe0kI4mIMCtX8TTLw2GzxVRvOe+y9td2a/NBFJcNdFJQGEBQ/KAbROQwaaZhBE9CSLBRCZRUUB6ApDjGiCxMJKIb1SjatARLRG+V7VWtepsQr1+EV+bX+P5f4HS4B/EAAAAAElFTkSuQmCC</Binary>
+    </Property>
+    <Property name="Size">47, 22</Property>
+    <Property name="Enabled">False</Property>
+    <Property name="Name">tsbXoaThuongPhat</Property>
+    <Property name="ImageTransparentColor">Magenta</Property>
+    <Property name="Text">Xóa</Property>
+  </Object>
+  <Object type="No1Lib.Sys.No1DataGrid, No1Lib.Sys, Version=1.0.0.0, Culture=neutral, PublicKeyToken=870be39b125434d2" name="grThuongPhat" children="Controls">
+    <Property name="RefreshButton" />
+    <Property name="AddButton">
+      <Reference name="tsbThemThuongPhat" />
+    </Property>
+    <Property name="Dock">Fill</Property>
+    <Property name="ShowPropertiesMenu">False</Property>
+    <Property name="Size">498, 296</Property>
+    <Property name="ShowSetValue">False</Property>
+    <Property name="DeleteButton">
+      <Reference name="tsbXoaThuongPhat" />
+    </Property>
+    <Property name="Location">0, 25</Property>
+    <Property name="AllowAdding">True</Property>
+    <Property name="AllowDeleting">True</Property>
+    <Property name="EditButton">
+      <Reference name="tsbSuaThuongPhat" />
+    </Property>
+    <Property name="PrintButton" />
+    <Property name="GUID">3ca69ad1-d207-4d89-8e1f-a0b2f3043b04</Property>
+    <Property name="Name">grThuongPhat</Property>
+    <Property name="TabIndex">4</Property>
+    <Property name="Columns">
+      <Item type="No1Lib.Sys.No1GridColumn, No1Lib.Sys, Version=1.0.0.0, Culture=neutral, PublicKeyToken=870be39b125434d2">
+        <ObjectEx>
+          <Property name="DataField">NAME</Property>
+          <Property name="Caption">Số phiếu</Property>
+          <Property name="AllowEmpty">False</Property>
+          <Property name="AllowHidden">False</Property>
+          <Property name="ShowOnQuickAddAsMultiValue">True</Property>
+          <Property name="Value" />
+          <Property name="AllowDuplicate">False</Property>
+        </ObjectEx>
+      </Item>
+      <Item type="No1Lib.Sys.No1GridColumn, No1Lib.Sys, Version=1.0.0.0, Culture=neutral, PublicKeyToken=870be39b125434d2">
+        <ObjectEx>
+          <Property name="ColumnType">DateTime</Property>
+          <Property name="DataField">NGAY</Property>
+          <Property name="Caption">Ngày</Property>
+          <Property name="Value" />
+        </ObjectEx>
+      </Item>
+      <Item type="No1Lib.Sys.No1GridColumn, No1Lib.Sys, Version=1.0.0.0, Culture=neutral, PublicKeyToken=870be39b125434d2">
+        <ObjectEx>
+          <Property name="ColumnType">NumericUpDown</Property>
+          <Property name="DataField">THUONG</Property>
+          <Property name="Caption">Thưởng</Property>
+          <Property name="Value" />
+        </ObjectEx>
+      </Item>
+      <Item type="No1Lib.Sys.No1GridColumn, No1Lib.Sys, Version=1.0.0.0, Culture=neutral, PublicKeyToken=870be39b125434d2">
+        <ObjectEx>
+          <Property name="ColumnType">NumericUpDown</Property>
+          <Property name="DataField">PHAT</Property>
+          <Property name="Caption">Phạt</Property>
+          <Property name="Value" />
+        </ObjectEx>
+      </Item>
+      <Item type="No1Lib.Sys.No1GridColumn, No1Lib.Sys, Version=1.0.0.0, Culture=neutral, PublicKeyToken=870be39b125434d2">
+        <ObjectEx>
+          <Property name="ColumnType">ComboMenu</Property>
+          <Property name="DataField">DLYDOTHUONGPHATID</Property>
+          <Property name="Caption">Lý do</Property>
+          <Property name="RefTable">DLYDOTHUONGPHAT</Property>
+          <Property name="Value" />
+        </ObjectEx>
+      </Item>
+    </Property>
+    <Property name="sFunctionID">
+    </Property>
+    <Property name="Table">TTHUONGPHAT</Property>
+    <Property name="DataBindings">
+      <Property name="DefaultDataSourceUpdateMode">OnValidation</Property>
+    </Property>
+    <Property name="RealDelete">True</Property>
+    <Event name="AfterCreatedEditForm">grThuongPhat_AfterCreatedEditForm</Event>
+    <Event name="CustomLoadData">grThuongPhat_CustomLoadData</Event>
+    <Event name="OnEditDataChanged">grThuongPhat_OnEditDataChanged</Event>
+  </Object>

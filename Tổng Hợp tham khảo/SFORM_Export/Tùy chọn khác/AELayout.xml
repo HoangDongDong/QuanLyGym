@@ -1,0 +1,71 @@
+
+  <Object type="No1Lib.Sys.No1Form, No1Lib.Sys, Version=1.0.0.0, Culture=neutral, PublicKeyToken=870be39b125434d2" name="No1Form1" children="Controls">
+    <Reference name="KryptonPanel1" />
+    <Property name="CancelButton">
+      <Reference name="btnCancel" />
+    </Property>
+    <Property name="Name">No1Form1</Property>
+    <Property name="MinimizeBox">False</Property>
+    <Property name="StartPosition">CenterScreen</Property>
+    <Property name="Text">TÙY CHỌN KHÁC</Property>
+    <Property name="MaximizeBox">False</Property>
+    <Property name="AcceptButton">
+      <Reference name="btnOK" />
+    </Property>
+    <Property name="ClientSize">384, 262</Property>
+    <Property name="DataBindings">
+      <Property name="DefaultDataSourceUpdateMode">OnValidation</Property>
+    </Property>
+    <Property name="FormBorderStyle">FixedDialog</Property>
+    <Event name="Load">No1Form1_Load</Event>
+  </Object>
+  <Object type="ComponentFactory.Krypton.Toolkit.KryptonPanel, ComponentFactory.Krypton.Toolkit, Version=4.1.6.0, Culture=neutral, PublicKeyToken=5fd520d36328f741" name="KryptonPanel1" children="Controls">
+    <Reference name="chkKhongCapNhat" />
+    <Reference name="btnOK" />
+    <Reference name="btnCancel" />
+    <Property name="Dock">Fill</Property>
+    <Property name="Size">384, 262</Property>
+    <Property name="TabIndex">0</Property>
+    <Property name="Location">0, 0</Property>
+    <Property name="DataBindings">
+      <Property name="DefaultDataSourceUpdateMode">OnValidation</Property>
+    </Property>
+    <Property name="Name">KryptonPanel1</Property>
+  </Object>
+  <Object type="System.Windows.Forms.Button, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" name="btnOK" children="Controls">
+    <Property name="TabIndex">3</Property>
+    <Property name="Name">btnOK</Property>
+    <Property name="Size">75, 32</Property>
+    <Property name="UseVisualStyleBackColor">True</Property>
+    <Property name="Text">Chấp nhận</Property>
+    <Property name="Location">216, 218</Property>
+    <Property name="DataBindings">
+      <Property name="DefaultDataSourceUpdateMode">OnValidation</Property>
+    </Property>
+    <Event name="Click">btnOK_Click</Event>
+  </Object>
+  <Object type="System.Windows.Forms.Button, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" name="btnCancel" children="Controls">
+    <Property name="TabIndex">2</Property>
+    <Property name="Name">btnCancel</Property>
+    <Property name="Size">75, 32</Property>
+    <Property name="UseVisualStyleBackColor">True</Property>
+    <Property name="Text">Hủy bỏ</Property>
+    <Property name="Location">297, 218</Property>
+    <Property name="DataBindings">
+      <Property name="DefaultDataSourceUpdateMode">OnValidation</Property>
+    </Property>
+    <Property name="DialogResult">Cancel</Property>
+  </Object>
+  <Object type="System.Windows.Forms.CheckBox, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" name="chkKhongCapNhat" children="Controls">
+    <Property name="UseVisualStyleBackColor">False</Property>
+    <Property name="BackColor">Transparent</Property>
+    <Property name="Size">242, 17</Property>
+    <Property name="TabIndex">4</Property>
+    <Property name="Text">Không cập nhật thông tin vào ra trên máy này</Property>
+    <Property name="Location">12, 12</Property>
+    <Property name="DataBindings">
+      <Property name="DefaultDataSourceUpdateMode">OnValidation</Property>
+    </Property>
+    <Property name="Name">chkKhongCapNhat</Property>
+    <Property name="AutoSize">True</Property>
+  </Object>

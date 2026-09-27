@@ -1,0 +1,486 @@
+/* ==========================================================================
+   TÂN AN PHÁT GYM - CYBER FUTURISTIC LOGIN INTERFACE
+   ========================================================================== */
+
+.cyber-login-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(3, 7, 18, 0.78);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 99999;
+  padding: 16px;
+  animation: cyberFadeIn 0.25s ease-out;
+}
+
+.cyber-login-overlay.fullscreen-mode {
+  background: #040914;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+  z-index: 999999;
+  padding: 16px;
+}
+
+@keyframes cyberFadeIn {
+  from { opacity: 0; transform: scale(0.98); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+.cyber-login-container {
+  display: grid;
+  grid-template-columns: 1.18fr 0.95fr;
+  width: 980px;
+  max-width: 96vw;
+  min-height: 520px;
+  max-height: 92vh;
+  background: #091222;
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 0 25px 60px -15px rgba(0, 0, 0, 0.8),
+              0 0 35px rgba(0, 210, 255, 0.12),
+              inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(0, 229, 255, 0.18);
+  position: relative;
+}
+
+/* Close button on modal */
+.cyber-modal-close-btn {
+  position: absolute;
+  top: 16px;
+  right: 18px;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: rgba(15, 27, 46, 0.7);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: #94a3b8;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 100;
+  transition: all 0.2s ease;
+  font-size: 14px;
+}
+.cyber-modal-close-btn:hover {
+  background: rgba(239, 68, 68, 0.2);
+  color: #ef4444;
+  border-color: rgba(239, 68, 68, 0.4);
+  transform: rotate(90deg);
+}
+
+/* ================= 1. LEFT HERO PANEL ================= */
+.cyber-login-hero {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 40px 36px;
+  background: linear-gradient(180deg, rgba(6, 15, 28, 0.75) 0%, rgba(4, 11, 20, 0.9) 100%),
+              url('/images/gym_entrance.jpg') center center / cover no-repeat;
+  border-right: 1px solid rgba(0, 229, 255, 0.12);
+  overflow: hidden;
+}
+
+/* Ambient glow orb behind left side */
+.cyber-login-hero::before {
+  content: '';
+  position: absolute;
+  top: -40px;
+  left: -40px;
+  width: 320px;
+  height: 320px;
+  background: radial-gradient(circle, rgba(0, 229, 255, 0.16) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+.hero-header-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 14px;
+}
+
+.wave-icon-wrap {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #00e5ff;
+  font-size: 18px;
+  filter: drop-shadow(0 0 6px rgba(0, 229, 255, 0.6));
+}
+
+.badge-flow-text {
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 1.2px;
+  color: #00e5ff;
+  text-transform: uppercase;
+  text-shadow: 0 0 10px rgba(0, 229, 255, 0.4);
+}
+
+.hero-main-title {
+  font-size: 38px;
+  font-weight: 900;
+  color: #ffffff;
+  letter-spacing: 0.5px;
+  line-height: 1.15;
+  margin-bottom: 12px;
+  text-shadow: 0 2px 14px rgba(0, 0, 0, 0.8);
+}
+
+.hero-sub-desc {
+  font-size: 13.5px;
+  color: #9cb0c8;
+  line-height: 1.5;
+  max-width: 440px;
+  margin-bottom: 24px;
+}
+
+/* 3 Feature Glass Cards */
+.hero-features-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+}
+
+.feature-glass-card {
+  background: rgba(10, 22, 39, 0.65);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(0, 229, 255, 0.14);
+  border-radius: 12px;
+  padding: 14px 12px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+  transition: transform 0.2s ease, border-color 0.2s ease;
+}
+
+.feature-glass-card:hover {
+  transform: translateY(-2px);
+  border-color: rgba(0, 229, 255, 0.35);
+}
+
+.card-top-meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+
+.card-top-icon {
+  color: #00e5ff;
+  font-size: 15px;
+}
+
+.card-chip {
+  font-size: 9.5px;
+  font-weight: 800;
+  padding: 2px 6px;
+  border-radius: 10px;
+  background: rgba(0, 229, 255, 0.12);
+  color: #00e5ff;
+  letter-spacing: 0.4px;
+  text-transform: uppercase;
+}
+
+.card-stat-number {
+  font-size: 22px;
+  font-weight: 800;
+  color: #ffffff;
+  letter-spacing: -0.3px;
+  margin-bottom: 4px;
+  line-height: 1.1;
+}
+
+.card-stat-label {
+  font-size: 11px;
+  color: #8da1b9;
+  font-weight: 500;
+  line-height: 1.3;
+}
+
+/* ================= 2. RIGHT FORM PANEL ================= */
+.cyber-login-form-side {
+  background: #08101e;
+  padding: 42px 36px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  overflow-y: auto;
+}
+
+/* Input Fields */
+.cyber-field-group {
+  margin-bottom: 18px;
+}
+
+.field-label-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+
+.field-title {
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.8px;
+  color: #8da1b9;
+  text-transform: uppercase;
+}
+
+.fast-pass-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 9.5px;
+  font-weight: 800;
+  letter-spacing: 0.6px;
+  color: #00e5ff;
+  background: rgba(0, 229, 255, 0.1);
+  border: 1px solid rgba(0, 229, 255, 0.25);
+  padding: 2px 8px;
+  border-radius: 12px;
+  text-transform: uppercase;
+}
+
+.forgot-pass-link {
+  font-size: 11.5px;
+  font-weight: 600;
+  color: #00e5ff;
+  text-decoration: none;
+  cursor: pointer;
+  transition: color 0.15s;
+}
+.forgot-pass-link:hover {
+  text-decoration: underline;
+  color: #38bdf8;
+}
+
+.cyber-input-wrap {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: #0d182b;
+  border: 1px solid #1a2a44;
+  border-radius: 9px;
+  height: 48px;
+  padding: 0 14px;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.cyber-input-wrap:focus-within {
+  border-color: #00e5ff;
+  box-shadow: 0 0 0 3px rgba(0, 229, 255, 0.15);
+}
+
+.input-left-icon {
+  color: #64748b;
+  font-size: 15px;
+  flex-shrink: 0;
+}
+
+.cyber-input {
+  border: none;
+  background: transparent;
+  color: #ffffff;
+  font-size: 14px;
+  font-weight: 500;
+  width: 100%;
+  outline: none;
+}
+.cyber-input::placeholder {
+  color: #556680;
+}
+
+.password-toggle-btn {
+  background: transparent;
+  border: none;
+  color: #64748b;
+  cursor: pointer;
+  padding: 4px;
+  font-size: 15px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: color 0.15s;
+}
+.password-toggle-btn:hover {
+  color: #00e5ff;
+}
+
+/* Checkbox */
+.remember-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 16px 0 22px;
+  cursor: pointer;
+  user-select: none;
+}
+
+.custom-checkbox {
+  width: 17px;
+  height: 17px;
+  border-radius: 4px;
+  background: #00d2ff;
+  border: 1px solid #00d2ff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+.custom-checkbox.unchecked {
+  background: #0d182b;
+  border-color: #334155;
+}
+.custom-checkbox i {
+  font-size: 11px;
+  color: #021a24;
+  font-weight: 900;
+}
+
+.remember-label-text {
+  font-size: 12.5px;
+  color: #8da1b9;
+  font-weight: 500;
+}
+
+/* Primary Button */
+.btn-submit-cyber {
+  width: 100%;
+  height: 48px;
+  border-radius: 9px;
+  background: linear-gradient(90deg, #00d2ff 0%, #00b4d8 100%);
+  border: none;
+  color: #021a24;
+  font-size: 14.5px;
+  font-weight: 800;
+  letter-spacing: 0.5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  cursor: pointer;
+  box-shadow: 0 4px 18px rgba(0, 210, 255, 0.35);
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  margin-bottom: 12px;
+}
+.btn-submit-cyber:hover:not(:disabled) {
+  box-shadow: 0 6px 24px rgba(0, 210, 255, 0.5);
+  transform: translateY(-1px);
+}
+.btn-submit-cyber:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+/* Secondary Biometric Button */
+.btn-biometric-cyber {
+  width: 100%;
+  height: 46px;
+  border-radius: 9px;
+  background: rgba(13, 24, 43, 0.8);
+  border: 1px solid rgba(0, 229, 255, 0.25);
+  color: #00e5ff;
+  font-size: 13px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  margin-bottom: 0;
+}
+.btn-biometric-cyber:hover {
+  background: rgba(0, 229, 255, 0.1);
+  border-color: #00e5ff;
+  box-shadow: 0 0 16px rgba(0, 229, 255, 0.2);
+}
+
+/* Biometric Scan Simulation Modal Overlay */
+.biometric-scan-pulse {
+  padding: 10px 14px;
+  margin-bottom: 14px;
+  border-radius: 8px;
+  background: rgba(0, 229, 255, 0.1);
+  border: 1px solid rgba(0, 229, 255, 0.3);
+  color: #00e5ff;
+  font-size: 12px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  animation: pulseScan 1.2s infinite;
+}
+@keyframes pulseScan {
+  0% { box-shadow: 0 0 0 0 rgba(0, 229, 255, 0.4); }
+  70% { box-shadow: 0 0 0 8px rgba(0, 229, 255, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(0, 229, 255, 0); }
+}
+
+.error-banner-cyber {
+  padding: 8px 12px;
+  margin-bottom: 12px;
+  border-radius: 6px;
+  background: rgba(239, 68, 68, 0.15);
+  border: 1px solid rgba(239, 68, 68, 0.3);
+  color: #fca5a5;
+  font-size: 11.5px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* ================= RESPONSIVE ON PHONES & TABLETS ================= */
+@media (max-width: 880px) {
+  .cyber-login-container {
+    grid-template-columns: 1fr;
+    max-height: 94vh;
+    overflow-y: auto;
+  }
+
+  .cyber-login-hero {
+    padding: 24px 20px;
+    border-right: none;
+    border-bottom: 1px solid rgba(0, 229, 255, 0.12);
+  }
+
+  .hero-main-title {
+    font-size: 26px;
+  }
+
+  .hero-sub-desc {
+    font-size: 12px;
+    margin-bottom: 16px;
+  }
+
+  .hero-features-grid {
+    gap: 8px;
+  }
+
+  .feature-glass-card {
+    padding: 10px 8px;
+  }
+
+  .card-stat-number {
+    font-size: 18px;
+  }
+
+  .card-stat-label {
+    font-size: 10px;
+  }
+
+  .cyber-login-form-side {
+    padding: 28px 20px;
+  }
+}

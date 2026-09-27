@@ -1,0 +1,88 @@
+
+  <Object type="No1Lib.Sys.No1Form, No1Lib.Sys, Version=1.0.0.0, Culture=neutral, PublicKeyToken=870be39b125434d2" name="No1Form1" children="Controls">
+    <Reference name="KryptonPanel1" />
+    <Property name="ControlBox">False</Property>
+    <Property name="Name">No1Form1</Property>
+    <Property name="ShowIcon">False</Property>
+    <Property name="MinimizeBox">False</Property>
+    <Property name="StartPosition">CenterScreen</Property>
+    <Property name="ShowInTaskbar">False</Property>
+    <Property name="Text">Đang thực hiện</Property>
+    <Property name="MaximizeBox">False</Property>
+    <Property name="ClientSize">490, 135</Property>
+    <Property name="DataBindings">
+      <Property name="DefaultDataSourceUpdateMode">OnValidation</Property>
+    </Property>
+    <Property name="FormBorderStyle">FixedDialog</Property>
+    <Event name="Shown">No1Form1_Shown</Event>
+  </Object>
+  <Object type="ComponentFactory.Krypton.Toolkit.KryptonPanel, ComponentFactory.Krypton.Toolkit, Version=4.1.6.0, Culture=neutral, PublicKeyToken=5fd520d36328f741" name="KryptonPanel1" children="Controls">
+    <Reference name="lblThoiGian" />
+    <Reference name="lblChiTiet" />
+    <Reference name="prProcessing" />
+    <Reference name="lblInfo" />
+    <Reference name="prMain" />
+    <Property name="Dock">Fill</Property>
+    <Property name="Size">490, 135</Property>
+    <Property name="TabIndex">0</Property>
+    <Property name="Location">0, 0</Property>
+    <Property name="DataBindings">
+      <Property name="DefaultDataSourceUpdateMode">OnValidation</Property>
+    </Property>
+    <Property name="Name">KryptonPanel1</Property>
+  </Object>
+  <Object type="System.Windows.Forms.ProgressBar, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" name="prMain" children="Controls">
+    <Property name="DataBindings">
+      <Property name="DefaultDataSourceUpdateMode">OnValidation</Property>
+    </Property>
+    <Property name="Anchor">Top, Left, Right</Property>
+    <Property name="Size">466, 23</Property>
+    <Property name="TabIndex">0</Property>
+    <Property name="Location">12, 41</Property>
+    <Property name="Name">prMain</Property>
+  </Object>
+  <Object type="System.Windows.Forms.Label, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" name="lblInfo" children="Controls">
+    <Property name="TabIndex">1</Property>
+    <Property name="BackColor">Transparent</Property>
+    <Property name="Anchor">Top, Left, Right</Property>
+    <Property name="Size">466, 23</Property>
+    <Property name="Text">Vui lòng chờ, hệ thống đang thực hiện các tác vụ</Property>
+    <Property name="Location">12, 15</Property>
+    <Property name="DataBindings">
+      <Property name="DefaultDataSourceUpdateMode">OnValidation</Property>
+    </Property>
+    <Property name="Name">lblInfo</Property>
+  </Object>
+  <Object type="System.Windows.Forms.ProgressBar, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" name="prProcessing" children="Controls">
+    <Property name="DataBindings">
+      <Property name="DefaultDataSourceUpdateMode">OnValidation</Property>
+    </Property>
+    <Property name="Anchor">Top, Left, Right</Property>
+    <Property name="Size">466, 5</Property>
+    <Property name="TabIndex">2</Property>
+    <Property name="Location">12, 67</Property>
+    <Property name="Style">Marquee</Property>
+    <Property name="Name">prProcessing</Property>
+  </Object>
+  <Object type="System.Windows.Forms.Label, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" name="lblChiTiet" children="Controls">
+    <Property name="TabIndex">3</Property>
+    <Property name="BackColor">Transparent</Property>
+    <Property name="Anchor">Top, Left, Right</Property>
+    <Property name="Size">466, 23</Property>
+    <Property name="Location">12, 78</Property>
+    <Property name="DataBindings">
+      <Property name="DefaultDataSourceUpdateMode">OnValidation</Property>
+    </Property>
+    <Property name="Name">lblChiTiet</Property>
+  </Object>
+  <Object type="System.Windows.Forms.Label, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" name="lblThoiGian" children="Controls">
+    <Property name="TabIndex">4</Property>
+    <Property name="BackColor">Transparent</Property>
+    <Property name="Size">466, 23</Property>
+    <Property name="Text">Thời gian: 0 giây</Property>
+    <Property name="Location">12, 101</Property>
+    <Property name="DataBindings">
+      <Property name="DefaultDataSourceUpdateMode">OnValidation</Property>
+    </Property>
+    <Property name="Name">lblThoiGian</Property>
+  </Object>

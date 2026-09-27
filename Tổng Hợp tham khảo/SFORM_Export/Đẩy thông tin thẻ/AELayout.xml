@@ -1,0 +1,157 @@
+
+  <Object type="No1Lib.Sys.No1Form, No1Lib.Sys, Version=1.0.0.0, Culture=neutral, PublicKeyToken=870be39b125434d2" name="No1Form1" children="Controls">
+    <Reference name="KryptonPanel1" />
+    <Property name="CancelButton">
+      <Reference name="btnHuyBo" />
+    </Property>
+    <Property name="Name">No1Form1</Property>
+    <Property name="MinimizeBox">False</Property>
+    <Property name="StartPosition">CenterScreen</Property>
+    <Property name="Text">ĐẨY THÔNG TIN THẺ LÊN THIẾT BỊ</Property>
+    <Property name="MaximizeBox">False</Property>
+    <Property name="AcceptButton">
+      <Reference name="btnOK" />
+    </Property>
+    <Property name="ClientSize">510, 304</Property>
+    <Property name="DataBindings">
+      <Property name="DefaultDataSourceUpdateMode">OnValidation</Property>
+    </Property>
+    <Property name="FormBorderStyle">FixedDialog</Property>
+    <Event name="OnInit">No1Form1_OnInit</Event>
+  </Object>
+  <Object type="ComponentFactory.Krypton.Toolkit.KryptonPanel, ComponentFactory.Krypton.Toolkit, Version=4.1.6.0, Culture=neutral, PublicKeyToken=5fd520d36328f741" name="KryptonPanel1" children="Controls">
+    <Reference name="chkXoaTheQuaHan" />
+    <Reference name="progressBar" />
+    <Reference name="txtNoiDung" />
+    <Reference name="chkCapNhatThe" />
+    <Reference name="chkCapNhatNhom" />
+    <Reference name="chkXoaTatGiaoDichVaoRa" />
+    <Reference name="Label1" />
+    <Reference name="btnHuyBo" />
+    <Reference name="btnOK" />
+    <Property name="Dock">Fill</Property>
+    <Property name="Size">510, 304</Property>
+    <Property name="TabIndex">0</Property>
+    <Property name="Location">0, 0</Property>
+    <Property name="DataBindings">
+      <Property name="DefaultDataSourceUpdateMode">OnValidation</Property>
+    </Property>
+    <Property name="Name">KryptonPanel1</Property>
+  </Object>
+  <Object type="System.Windows.Forms.Button, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" name="btnOK" children="Controls">
+    <Property name="TabIndex">0</Property>
+    <Property name="Name">btnOK</Property>
+    <Property name="Size">98, 30</Property>
+    <Property name="UseVisualStyleBackColor">True</Property>
+    <Property name="Text">Thực hiện</Property>
+    <Property name="Location">298, 262</Property>
+    <Property name="DataBindings">
+      <Property name="DefaultDataSourceUpdateMode">OnValidation</Property>
+    </Property>
+    <Event name="Click">btnOK_Click</Event>
+  </Object>
+  <Object type="System.Windows.Forms.Button, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" name="btnHuyBo" children="Controls">
+    <Property name="TabIndex">1</Property>
+    <Property name="Name">btnHuyBo</Property>
+    <Property name="Size">98, 30</Property>
+    <Property name="UseVisualStyleBackColor">True</Property>
+    <Property name="Text">Hủy bỏ</Property>
+    <Property name="Location">402, 262</Property>
+    <Property name="DataBindings">
+      <Property name="DefaultDataSourceUpdateMode">OnValidation</Property>
+    </Property>
+    <Property name="DialogResult">Cancel</Property>
+  </Object>
+  <Object type="System.Windows.Forms.Label, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" name="Label1" children="Controls">
+    <Property name="TabIndex">2</Property>
+    <Property name="BackColor">Transparent</Property>
+    <Property name="AutoSize">True</Property>
+    <Property name="Size">487, 13</Property>
+    <Property name="Text">Chức năng này sẽ đẩy toàn bộ thông tin thẻ chưa đăng ký lên thiết bị cửa từ, máy chấm công vân tay</Property>
+    <Property name="Location">13, 13</Property>
+    <Property name="DataBindings">
+      <Property name="DefaultDataSourceUpdateMode">OnValidation</Property>
+    </Property>
+    <Property name="Name">Label1</Property>
+  </Object>
+  <Object type="System.Windows.Forms.CheckBox, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" name="chkXoaTatGiaoDichVaoRa" children="Controls">
+    <Property name="UseVisualStyleBackColor">False</Property>
+    <Property name="BackColor">Transparent</Property>
+    <Property name="Size">242, 17</Property>
+    <Property name="TabIndex">5</Property>
+    <Property name="Text">Xóa tất cả lịch sử giao dịch vào ra trên thiết bị</Property>
+    <Property name="Location">15, 58</Property>
+    <Property name="DataBindings">
+      <Property name="DefaultDataSourceUpdateMode">OnValidation</Property>
+    </Property>
+    <Property name="Name">chkXoaTatGiaoDichVaoRa</Property>
+    <Property name="AutoSize">True</Property>
+  </Object>
+  <Object type="System.Windows.Forms.CheckBox, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" name="chkCapNhatNhom" children="Controls">
+    <Property name="UseVisualStyleBackColor">False</Property>
+    <Property name="BackColor">Transparent</Property>
+    <Property name="Size">285, 17</Property>
+    <Property name="TabIndex">6</Property>
+    <Property name="Text">Cập nhật phân nhóm (nhóm theo ca tập, nhóm khóa...)</Property>
+    <Property name="Location">15, 81</Property>
+    <Property name="DataBindings">
+      <Property name="DefaultDataSourceUpdateMode">OnValidation</Property>
+    </Property>
+    <Property name="Name">chkCapNhatNhom</Property>
+    <Property name="AutoSize">True</Property>
+    <Event name="CheckedChanged">chkCapNhatNhom_CheckedChanged</Event>
+  </Object>
+  <Object type="System.Windows.Forms.CheckBox, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" name="chkCapNhatThe" children="Controls">
+    <Property name="UseVisualStyleBackColor">False</Property>
+    <Property name="BackColor">Transparent</Property>
+    <Property name="Size">327, 17</Property>
+    <Property name="TabIndex">7</Property>
+    <Property name="Text">Cập nhật thông tin thẻ thành viên (Xóa tất cả các thẻ và tạo lại)</Property>
+    <Property name="Location">15, 35</Property>
+    <Property name="DataBindings">
+      <Property name="DefaultDataSourceUpdateMode">OnValidation</Property>
+    </Property>
+    <Property name="Name">chkCapNhatThe</Property>
+    <Property name="AutoSize">True</Property>
+    <Event name="CheckedChanged">chkCapNhatThe_CheckedChanged</Event>
+  </Object>
+  <Object type="No1Lib.Sys.No1TextBox, No1Lib.Sys, Version=1.0.0.0, Culture=neutral, PublicKeyToken=870be39b125434d2" name="txtNoiDung" children="Controls">
+    <Property name="Multiline">True</Property>
+    <Property name="Size">426, 114</Property>
+    <Property name="ReadOnly">True</Property>
+    <Property name="ScrollBars">Vertical</Property>
+    <Property name="Text">Nhóm 1: Không khóa
+Nhóm 2: Bị khóa
+Nhóm 3: Ca sáng
+Nhóm 4: Ca chiều</Property>
+    <Property name="Name">txtNoiDung</Property>
+    <Property name="Location">74, 142</Property>
+    <Property name="DataBindings">
+      <Property name="DefaultDataSourceUpdateMode">OnValidation</Property>
+    </Property>
+    <Property name="TabIndex">8</Property>
+  </Object>
+  <Object type="System.Windows.Forms.ProgressBar, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" name="progressBar" children="Controls">
+    <Property name="DataBindings">
+      <Property name="DefaultDataSourceUpdateMode">OnValidation</Property>
+    </Property>
+    <Property name="Size">100, 23</Property>
+    <Property name="Visible">False</Property>
+    <Property name="TabIndex">11</Property>
+    <Property name="Location">76, 262</Property>
+    <Property name="Style">Marquee</Property>
+    <Property name="Name">progressBar</Property>
+  </Object>
+  <Object type="System.Windows.Forms.CheckBox, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" name="chkXoaTheQuaHan" children="Controls">
+    <Property name="UseVisualStyleBackColor">False</Property>
+    <Property name="BackColor">Transparent</Property>
+    <Property name="Size">234, 17</Property>
+    <Property name="TabIndex">12</Property>
+    <Property name="Text">Xóa các khách hàng và thẻ trong thùng rác</Property>
+    <Property name="Location">15, 104</Property>
+    <Property name="DataBindings">
+      <Property name="DefaultDataSourceUpdateMode">OnValidation</Property>
+    </Property>
+    <Property name="Name">chkXoaTheQuaHan</Property>
+    <Property name="AutoSize">True</Property>
+  </Object>

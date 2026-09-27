@@ -1,0 +1,28 @@
+# Build results & dependencies
+**/bin/
+**/obj/
+**/node_modules/
+**/dist/
+**/dist-ssr/
+
+# IDE & Editor files
+.vs/
+.vscode/
+.idea/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# Logs
+*.log
+logs/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Temp & scratch files
+scratch/
+.DS_Store
+Thumbs.db

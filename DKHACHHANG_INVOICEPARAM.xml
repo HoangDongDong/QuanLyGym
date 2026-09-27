@@ -1,0 +1,244 @@
+<DocumentElement>
+  <Data>
+    <CHECKED>true</CHECKED>
+    <COLID>a36594f3-43f0-4986-8f35-9b6eefaf21bb</COLID>
+    <TABLEID>5fcc571a-662d-4953-a83f-6004c732f439</TABLEID>
+    <TOTAL />
+    <SORT />
+    <CONDITION />
+    <NOTEMPTY>false</NOTEMPTY>
+    <NOTDUPLICATE>false</NOTDUPLICATE>
+    <FORMULA />
+    <PARAMID />
+    <CAPTION />
+    <KHONGTAOCOT>false</KHONGTAOCOT>
+    <READONLY>false</READONLY>
+    <REPLACE />
+    <ALIAS />
+    <CUSTOMFIELD>False</CUSTOMFIELD>
+    <CUSTOMCOLTYPE />
+    <SELECTORDER />
+  </Data>
+  <Data>
+    <CHECKED>true</CHECKED>
+    <COLID>b2f08a5b-f06f-4b82-91b3-6717150d2106</COLID>
+    <TABLEID>5fcc571a-662d-4953-a83f-6004c732f439</TABLEID>
+    <TOTAL />
+    <SORT />
+    <CONDITION />
+    <NOTEMPTY>false</NOTEMPTY>
+    <NOTDUPLICATE>false</NOTDUPLICATE>
+    <FORMULA />
+    <PARAMID />
+    <CAPTION />
+    <KHONGTAOCOT>false</KHONGTAOCOT>
+    <READONLY>false</READONLY>
+    <REPLACE />
+    <ALIAS />
+    <CUSTOMFIELD>False</CUSTOMFIELD>
+    <CUSTOMCOLTYPE />
+    <SELECTORDER />
+  </Data>
+  <Data>
+    <CHECKED>true</CHECKED>
+    <COLID>ccbc6538-2f9d-4be0-9276-139f19f6f044</COLID>
+    <TABLEID>5fcc571a-662d-4953-a83f-6004c732f439</TABLEID>
+    <TOTAL />
+    <SORT />
+    <CONDITION />
+    <NOTEMPTY>false</NOTEMPTY>
+    <NOTDUPLICATE>false</NOTDUPLICATE>
+    <FORMULA />
+    <PARAMID />
+    <CAPTION />
+    <KHONGTAOCOT>false</KHONGTAOCOT>
+    <READONLY>false</READONLY>
+    <REPLACE />
+    <ALIAS />
+    <CUSTOMFIELD>False</CUSTOMFIELD>
+    <CUSTOMCOLTYPE />
+    <SELECTORDER />
+  </Data>
+  <Data>
+    <CHECKED>true</CHECKED>
+    <COLID>2db4943e-1b4e-41b2-81f1-3510b07b3a18</COLID>
+    <TABLEID>5fcc571a-662d-4953-a83f-6004c732f439</TABLEID>
+    <TOTAL />
+    <SORT />
+    <CONDITION />
+    <NOTEMPTY>false</NOTEMPTY>
+    <NOTDUPLICATE>false</NOTDUPLICATE>
+    <FORMULA />
+    <PARAMID />
+    <CAPTION />
+    <KHONGTAOCOT>false</KHONGTAOCOT>
+    <READONLY>false</READONLY>
+    <REPLACE />
+    <ALIAS />
+    <CUSTOMFIELD>False</CUSTOMFIELD>
+    <CUSTOMCOLTYPE />
+    <SELECTORDER />
+  </Data>
+  <Data>
+    <CHECKED>true</CHECKED>
+    <COLID>7a857a34-acf0-4b9d-94c1-32f7836edbb2</COLID>
+    <TABLEID>5fcc571a-662d-4953-a83f-6004c732f439</TABLEID>
+    <TOTAL />
+    <SORT />
+    <CONDITION />
+    <NOTEMPTY>false</NOTEMPTY>
+    <NOTDUPLICATE>false</NOTDUPLICATE>
+    <FORMULA />
+    <PARAMID />
+    <CAPTION />
+    <KHONGTAOCOT>false</KHONGTAOCOT>
+    <READONLY>false</READONLY>
+    <REPLACE />
+    <ALIAS />
+    <CUSTOMFIELD>False</CUSTOMFIELD>
+    <CUSTOMCOLTYPE />
+    <SELECTORDER />
+  </Data>
+  <Data>
+    <CHECKED>true</CHECKED>
+    <COLID>5ff1a80b-7a78-43ad-aff9-26dc3911e8c9</COLID>
+    <TABLEID>5fcc571a-662d-4953-a83f-6004c732f439</TABLEID>
+    <TOTAL />
+    <SORT />
+    <CONDITION />
+    <NOTEMPTY>false</NOTEMPTY>
+    <NOTDUPLICATE>false</NOTDUPLICATE>
+    <FORMULA />
+    <PARAMID />
+    <CAPTION />
+    <KHONGTAOCOT>false</KHONGTAOCOT>
+    <READONLY>false</READONLY>
+    <REPLACE />
+    <ALIAS />
+    <CUSTOMFIELD>False</CUSTOMFIELD>
+    <CUSTOMCOLTYPE />
+    <SELECTORDER />
+  </Data>
+  <Data>
+    <CHECKED>true</CHECKED>
+    <COLID>7d1c7e9b-3af3-457d-802b-fbf53ae1d402</COLID>
+    <TABLEID>5fcc571a-662d-4953-a83f-6004c732f439</TABLEID>
+    <TOTAL />
+    <SORT />
+    <CONDITION />
+    <NOTEMPTY>false</NOTEMPTY>
+    <NOTDUPLICATE>false</NOTDUPLICATE>
+    <FORMULA />
+    <PARAMID />
+    <CAPTION />
+    <KHONGTAOCOT>false</KHONGTAOCOT>
+    <READONLY>false</READONLY>
+    <REPLACE />
+    <ALIAS />
+    <CUSTOMFIELD>False</CUSTOMFIELD>
+    <CUSTOMCOLTYPE />
+    <SELECTORDER />
+  </Data>
+  <Data>
+    <CHECKED>true</CHECKED>
+    <COLID>aac22276-44e8-4c8e-8833-f954c0481c3b</COLID>
+    <TABLEID>5fcc571a-662d-4953-a83f-6004c732f439</TABLEID>
+    <TOTAL />
+    <SORT />
+    <CONDITION />
+    <NOTEMPTY>false</NOTEMPTY>
+    <NOTDUPLICATE>false</NOTDUPLICATE>
+    <FORMULA />
+    <PARAMID />
+    <CAPTION />
+    <KHONGTAOCOT>false</KHONGTAOCOT>
+    <READONLY>false</READONLY>
+    <REPLACE />
+    <ALIAS />
+    <CUSTOMFIELD>False</CUSTOMFIELD>
+    <CUSTOMCOLTYPE />
+    <SELECTORDER />
+  </Data>
+  <Data>
+    <CHECKED>true</CHECKED>
+    <COLID>07e54af0-5edd-4371-8ab7-ccc488cf01ff</COLID>
+    <TABLEID>5fcc571a-662d-4953-a83f-6004c732f439</TABLEID>
+    <TOTAL />
+    <SORT />
+    <CONDITION />
+    <NOTEMPTY>false</NOTEMPTY>
+    <NOTDUPLICATE>false</NOTDUPLICATE>
+    <FORMULA />
+    <PARAMID />
+    <CAPTION />
+    <KHONGTAOCOT>true</KHONGTAOCOT>
+    <READONLY>false</READONLY>
+    <REPLACE />
+    <ALIAS />
+    <CUSTOMFIELD>False</CUSTOMFIELD>
+    <CUSTOMCOLTYPE />
+    <SELECTORDER />
+  </Data>
+  <Data>
+    <CHECKED>true</CHECKED>
+    <COLID>41f05359-3b46-4a80-844f-ae8d251b91c6</COLID>
+    <TABLEID>9f57b658-500c-428b-bd81-f17d941f0b2a</TABLEID>
+    <TOTAL />
+    <SORT />
+    <CONDITION />
+    <NOTEMPTY>false</NOTEMPTY>
+    <NOTDUPLICATE>false</NOTDUPLICATE>
+    <FORMULA />
+    <PARAMID />
+    <CAPTION />
+    <KHONGTAOCOT>false</KHONGTAOCOT>
+    <READONLY>false</READONLY>
+    <REPLACE />
+    <ALIAS />
+    <CUSTOMFIELD>False</CUSTOMFIELD>
+    <CUSTOMCOLTYPE />
+    <SELECTORDER />
+    <PARENTID>07e54af0-5edd-4371-8ab7-ccc488cf01ff</PARENTID>
+  </Data>
+  <Data>
+    <CHECKED>true</CHECKED>
+    <COLID>d89bbf0a-b870-4698-a457-efdb5a7b1c59</COLID>
+    <TABLEID>5fcc571a-662d-4953-a83f-6004c732f439</TABLEID>
+    <TOTAL />
+    <SORT />
+    <CONDITION />
+    <NOTEMPTY>false</NOTEMPTY>
+    <NOTDUPLICATE>false</NOTDUPLICATE>
+    <FORMULA />
+    <PARAMID />
+    <CAPTION />
+    <KHONGTAOCOT>true</KHONGTAOCOT>
+    <READONLY>false</READONLY>
+    <REPLACE />
+    <ALIAS />
+    <CUSTOMFIELD>False</CUSTOMFIELD>
+    <CUSTOMCOLTYPE />
+    <SELECTORDER />
+  </Data>
+  <Data>
+    <CHECKED>true</CHECKED>
+    <COLID>f9ccddc7-05ad-46f1-adda-da8b6fcd5221</COLID>
+    <TABLEID>2ccf8af0-6c7e-437c-948b-c37e3b230436</TABLEID>
+    <TOTAL />
+    <SORT />
+    <CONDITION />
+    <NOTEMPTY>false</NOTEMPTY>
+    <NOTDUPLICATE>false</NOTDUPLICATE>
+    <FORMULA />
+    <PARAMID />
+    <CAPTION />
+    <KHONGTAOCOT>false</KHONGTAOCOT>
+    <READONLY>false</READONLY>
+    <REPLACE />
+    <ALIAS />
+    <CUSTOMFIELD>False</CUSTOMFIELD>
+    <CUSTOMCOLTYPE />
+    <SELECTORDER />
+    <PARENTID>d89bbf0a-b870-4698-a457-efdb5a7b1c59</PARENTID>
+  </Data>
+</DocumentElement>

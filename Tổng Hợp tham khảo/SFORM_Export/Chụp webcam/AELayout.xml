@@ -1,0 +1,175 @@
+
+  <Object type="No1Lib.Sys.No1Form, No1Lib.Sys, Version=1.0.0.0, Culture=neutral, PublicKeyToken=870be39b125434d2" name="No1Form1" children="Controls">
+    <Reference name="KryptonPanel1" />
+    <Property name="CancelButton">
+      <Reference name="btnCancel" />
+    </Property>
+    <Property name="Name">No1Form1</Property>
+    <Property name="MinimizeBox">False</Property>
+    <Property name="StartPosition">CenterScreen</Property>
+    <Property name="Text">CHỤP ẢNH TỪ CAMERA</Property>
+    <Property name="MaximizeBox">False</Property>
+    <Property name="AcceptButton">
+      <Reference name="bntSave" />
+    </Property>
+    <Property name="ClientSize">541, 381</Property>
+    <Property name="DataBindings">
+      <Property name="DefaultDataSourceUpdateMode">OnValidation</Property>
+    </Property>
+    <Property name="FormBorderStyle">FixedDialog</Property>
+    <Event name="FormClosing">No1Form1_FormClosing</Event>
+  </Object>
+  <Object type="ComponentFactory.Krypton.Toolkit.KryptonPanel, ComponentFactory.Krypton.Toolkit, Version=4.1.6.0, Culture=neutral, PublicKeyToken=5fd520d36328f741" name="KryptonPanel1" children="Controls">
+    <Reference name="btnCancel" />
+    <Reference name="bntVideoSource" />
+    <Reference name="bntVideoFormat" />
+    <Reference name="bntSave" />
+    <Reference name="bntStart" />
+    <Reference name="bntCapture" />
+    <Reference name="bntStop" />
+    <Reference name="bntContinue" />
+    <Reference name="imgCapture" />
+    <Reference name="imgVideo" />
+    <Property name="Dock">Fill</Property>
+    <Property name="Size">541, 381</Property>
+    <Property name="TabIndex">0</Property>
+    <Property name="Location">0, 0</Property>
+    <Property name="DataBindings">
+      <Property name="DefaultDataSourceUpdateMode">OnValidation</Property>
+    </Property>
+    <Property name="Name">KryptonPanel1</Property>
+  </Object>
+  <Object type="System.Windows.Forms.Button, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" name="btnCancel" children="Controls">
+    <Property name="TabIndex">19</Property>
+    <Property name="Name">btnCancel</Property>
+    <Property name="Size">79, 28</Property>
+    <Property name="UseVisualStyleBackColor">True</Property>
+    <Property name="Text">Hủy bỏ</Property>
+    <Property name="Location">449, 341</Property>
+    <Property name="DataBindings">
+      <Property name="DefaultDataSourceUpdateMode">OnValidation</Property>
+    </Property>
+    <Property name="DialogResult">Cancel</Property>
+  </Object>
+  <Object type="System.Windows.Forms.Button, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" name="bntVideoSource" children="Controls">
+    <Property name="TabIndex">18</Property>
+    <Property name="Name">bntVideoSource</Property>
+    <Property name="Size">147, 23</Property>
+    <Property name="UseVisualStyleBackColor">True</Property>
+    <Property name="Text">Nguồn video</Property>
+    <Property name="Location">381, 8</Property>
+    <Property name="DataBindings">
+      <Property name="DefaultDataSourceUpdateMode">OnValidation</Property>
+    </Property>
+    <Event name="Click">bntVideoSource_Click</Event>
+  </Object>
+  <Object type="System.Windows.Forms.Button, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" name="bntVideoFormat" children="Controls">
+    <Property name="TabIndex">17</Property>
+    <Property name="Name">bntVideoFormat</Property>
+    <Property name="Size">147, 23</Property>
+    <Property name="UseVisualStyleBackColor">True</Property>
+    <Property name="Text">Định dạng video</Property>
+    <Property name="Location">228, 8</Property>
+    <Property name="DataBindings">
+      <Property name="DefaultDataSourceUpdateMode">OnValidation</Property>
+    </Property>
+    <Event name="Click">bntVideoFormat_Click</Event>
+  </Object>
+  <Object type="System.Windows.Forms.Button, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" name="bntSave" children="Controls">
+    <Property name="TabIndex">16</Property>
+    <Property name="Name">bntSave</Property>
+    <Property name="Size">79, 28</Property>
+    <Property name="UseVisualStyleBackColor">True</Property>
+    <Property name="Text">Chấp nhận</Property>
+    <Property name="Location">364, 341</Property>
+    <Property name="DataBindings">
+      <Property name="DefaultDataSourceUpdateMode">OnValidation</Property>
+    </Property>
+    <Event name="Click">bntSave_Click</Event>
+  </Object>
+  <Object type="System.Windows.Forms.Button, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" name="bntStart" children="Controls">
+    <Property name="TabIndex">12</Property>
+    <Property name="Name">bntStart</Property>
+    <Property name="Size">78, 28</Property>
+    <Property name="UseVisualStyleBackColor">True</Property>
+    <Property name="TextImageRelation">ImageBeforeText</Property>
+    <Property name="Text">Bắt đầu</Property>
+    <Property name="Image">
+      <Binary>iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAgY0hSTQAAeiYAAICEAAD6AAAAgOgAAHUwAADqYAAAOpgAABdwnLpRPAAAAmJJREFUOE9dk9tOE1EUhnkCHqEvQExEFCsXJoSExAvjnQ9g4pUXBmIkGCEx6IXeeEVijKlpQmIQy6G2sSUClkTUAFpKU+zB0tYKhRKOnU4P0/ld/5aOtDvZmVn/+tY/e6+9p6WlaVx99GH0yrBXv/zQg/pkTL2ZBfBf6h7x99qHvHAGNnFYkNSZwZg68+TqVZZB94ivt+eJH7/3Stg6AdxRHa9/nFhzJlpUOvPkyNPEMqBzSpLhvImxUAHjYQ2uDR2TP3VMRIp4s15QOvPkyFsG3JsjkEROAyY2NCnS4P1Vwm3HCtrvT2E2XcX7OM00vJM8OfKsUyvoGvaUcgUTC5kK3LEivAkdc5kqLg3OYDqYRcfANAJZA75kSYyKiiPPOmXATnP4NnX4ZX5Ml/A5V4P9gRv2Z4t4Pp/ARTH5slPDXLosHOugTsgyMORtXpwXMmUsZitYzUMZ3HCEcP3VGq69DOJcvwtLW4ZaAfkGg6oIS9tVASr4mqti/QDolC3cmspgYHYbF6QX4UPg246hOPKWQdeQp5w+NhE+MLG8W8XqnoGIHBmLni5rOH9vEjFpXHDfxEreUBx51v3bQr9z/MWnJKRWvlxDaL+GqBjcHfuOtj4XUrLlyJGpdObJkWdd/R7Y7NKQ0G4Jf8QzJsVxuXnST/magYR8nYaczJMjL/fAZl2ktpuDd3oe+7EmSbkrkF5CDgNpMUnJZEydeXLkG26iBK0U6Twqy4sf13Ak9tI39WRMnfnT4tZmA8YUOzr7nG/ZIMLsNJ+MqTN/yqn/qeFvPPOr2uS9/RRmASdj6g2DBn8BYRSZEVIn+4MAAAAASUVORK5CYII=</Binary>
+    </Property>
+    <Property name="Location">12, 299</Property>
+    <Property name="DataBindings">
+      <Property name="DefaultDataSourceUpdateMode">OnValidation</Property>
+    </Property>
+    <Event name="Click">bntStart_Click</Event>
+  </Object>
+  <Object type="System.Windows.Forms.Button, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" name="bntCapture" children="Controls">
+    <Property name="TabIndex">15</Property>
+    <Property name="Name">bntCapture</Property>
+    <Property name="Size">85, 28</Property>
+    <Property name="UseVisualStyleBackColor">True</Property>
+    <Property name="TextImageRelation">ImageBeforeText</Property>
+    <Property name="Text">Chụp ảnh</Property>
+    <Property name="Image">
+      <Binary>iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAgY0hSTQAAeiYAAICEAAD6AAAAgOgAAHUwAADqYAAAOpgAABdwnLpRPAAAAAlwSFlzAAALDwAACw8BkvkDpQAAAjFJREFUOE+1k2tP0lEcx7EX0HUBI9t8QFxMrAcO24pIAq1N8AqiUwxJkksMUf4ESgzGHSlnbT2qnFy8ZeXWM99Gj/IlwBvgAft2zpmz/uR60vpvnwfn/M73+7uc8xcI/sPXls2n4gS0sEFyXTnJ13ZW3vNk8yJBS4X1eh21Wo3RaDSYWXeP2kniwrPE50jwHeE7gR1uNpungHwnBtTEyjMgG0dURPH63Dj4uodYPIpgaAlLwUUElv3wB3zw+b3Yqnxk537jSEAXh98+48vhPiNXyKD4uoDKdhnlSgklSrmE1ZcRrETD2Cy9R7m6yaBaZrB3sA27YxbWKQs8XhcKxSzuazUQikUQSyToe6gjLaTh8jhhnhhDOptEfi3DN3gyZ8PwqAnrG6+gIeILly7jqkgM8bV2iCTt0A8YkMmlMGYeQTKdIJWm+Qaz9hlWBXUWEiEV/zg+Jq3soEMqg1QmZ4O0WMfxIsL9aUDFbu8CC9CyaeYqEStUt6Do6oa8S8VKf9CnZUPltbD7qQLawsSkGYW1HHR6HTG4jo4bMihVt7H+5i0GTUZEYxH03lFj/pmDX8HOfgW0BWoQXuHYwAwD/ZDKFSzz4JARqUwC9zR30XlTiafOOdbG6S1Ud7ew4HYyxi2jmLZNIsgtkmHFGTO2Kah7e6DsVLA4PcczoO6JZAyR1RCWuQA8z11wzNsxNGKCadiIR4/7oTfo2H4ozJF3kke++OsauZbX1fra/rb+8M8/809o/60j5mLI+AAAAABJRU5ErkJggg==</Binary>
+    </Property>
+    <Property name="Location">274, 299</Property>
+    <Property name="DataBindings">
+      <Property name="DefaultDataSourceUpdateMode">OnValidation</Property>
+    </Property>
+    <Event name="Click">bntCapture_Click</Event>
+  </Object>
+  <Object type="System.Windows.Forms.Button, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" name="bntStop" children="Controls">
+    <Property name="TabIndex">13</Property>
+    <Property name="Name">bntStop</Property>
+    <Property name="Size">81, 28</Property>
+    <Property name="UseVisualStyleBackColor">True</Property>
+    <Property name="TextImageRelation">ImageBeforeText</Property>
+    <Property name="Text">Dừng</Property>
+    <Property name="Image">
+      <Binary>iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAgY0hSTQAAeiYAAICEAAD6AAAAgOgAAHUwAADqYAAAOpgAABdwnLpRPAAAAfxJREFUOE9tk99LU2EYx/0L/BP2D3QlgqlQIII3QZddh112U+FN0IT8QdG9IGLRzJskkGySU4itCAWlrGDhzONWhssUlw63uenX5/Oe7eRWLzw85/vj+fKe97ynqalhXb7/eqSjf7Zw8V5UtQLDN3ol/aW6BmM97eFZRRKbyuVNOrfA8Oj4alNBQNfgXE/3cExbuyVtm/lVqqCnq/mgwPDo+PATEgSQnDYxuSdNfS1oeq2klymrdb+D4dHx4Q8CeLcnCU+/jqSZb0XdeLyiSwPz/xQ8Oj78zLkddPZHi9n8qRI/ylrIlN3gxPsNPXPluQ6GR8eHnzkXwEmz5tNFvduuOOPYW0+tD+Jqe5hwHQyPjo9VnfMDKkbELXl5R874aMHTlbGPujq+6joYHh0f/rqAshFL2Yo+7/sB4bm0rr/YVK8VHQyPjg9/ENAZjpYyB6dK/pGSh35AXyyrvjc5q33XBxYPHY+ODz9z/hnciTwfjXv6bftK2be+Nfnhv18BHh0ffuZq9yDUbufwZaeorO3tu+VuHUs/7blWYHh0fPjtHoSCi3Th2t2b3UMxfTJx11g3YIedsaKD4dHx4a+7iQaaIUkese2tH5zIXlU5KzoYHr063NwYAIZsbbsdmeKAMHPSdDA8etXn/qe6v/Hcrxqy55aqmQEKDF+3CDgD/giHxCPOIh4AAAAASUVORK5CYII=</Binary>
+    </Property>
+    <Property name="Location">96, 299</Property>
+    <Property name="DataBindings">
+      <Property name="DefaultDataSourceUpdateMode">OnValidation</Property>
+    </Property>
+    <Event name="Click">bntStop_Click</Event>
+  </Object>
+  <Object type="System.Windows.Forms.Button, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" name="bntContinue" children="Controls">
+    <Property name="TabIndex">14</Property>
+    <Property name="Name">bntContinue</Property>
+    <Property name="Size">76, 28</Property>
+    <Property name="UseVisualStyleBackColor">True</Property>
+    <Property name="Text">Tiếp tục</Property>
+    <Property name="Location">183, 299</Property>
+    <Property name="DataBindings">
+      <Property name="DefaultDataSourceUpdateMode">OnValidation</Property>
+    </Property>
+    <Event name="Click">bntContinue_Click</Event>
+  </Object>
+  <Object type="System.Windows.Forms.PictureBox, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" name="imgCapture" children="Controls">
+    <Property name="BackColor">Transparent</Property>
+    <Property name="TabIndex">11</Property>
+    <Property name="Size">256, 256</Property>
+    <Property name="BorderStyle">FixedSingle</Property>
+    <Property name="Location">274, 37</Property>
+    <Property name="TabStop">False</Property>
+    <Property name="Name">imgCapture</Property>
+    <Property name="DataBindings">
+      <Property name="DefaultDataSourceUpdateMode">OnValidation</Property>
+    </Property>
+    <Property name="BackgroundImageLayout">Stretch</Property>
+  </Object>
+  <Object type="System.Windows.Forms.PictureBox, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" name="imgVideo" children="Controls">
+    <Property name="BackColor">Transparent</Property>
+    <Property name="TabIndex">10</Property>
+    <Property name="Size">256, 256</Property>
+    <Property name="BorderStyle">FixedSingle</Property>
+    <Property name="Location">12, 37</Property>
+    <Property name="TabStop">False</Property>
+    <Property name="Name">imgVideo</Property>
+    <Property name="DataBindings">
+      <Property name="DefaultDataSourceUpdateMode">OnValidation</Property>
+    </Property>
+    <Property name="BackgroundImageLayout">Stretch</Property>
+  </Object>

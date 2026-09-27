@@ -1,0 +1,426 @@
+
+  <Object type="No1Lib.Sys.No1UserControl, No1Lib.Sys, Version=1.0.0.0, Culture=neutral, PublicKeyToken=870be39b125434d2" name="No1UserControl1" children="Controls">
+    <Reference name="KryptonSplitContainer1" />
+    <Property name="Size">711, 524</Property>
+    <Property name="DataBindings">
+      <Property name="DefaultDataSourceUpdateMode">OnValidation</Property>
+    </Property>
+    <Property name="Name">No1UserControl1</Property>
+    <Event name="Load">No1UserControl1_Load</Event>
+    <Event name="KeyDownEx">No1UserControl1_KeyDownEx</Event>
+  </Object>
+  <Object type="ComponentFactory.Krypton.Toolkit.KryptonSplitContainer, ComponentFactory.Krypton.Toolkit, Version=4.1.6.0, Culture=neutral, PublicKeyToken=5fd520d36328f741" name="KryptonSplitContainer1" children="Controls">
+    <Property name="Dock">Fill</Property>
+    <Property name="Cursor">Default</Property>
+    <Property name="Size">711, 524</Property>
+    <Property name="DataBindings">
+      <Property name="DefaultDataSourceUpdateMode">OnValidation</Property>
+    </Property>
+    <Property name="Name">KryptonSplitContainer1</Property>
+    <Property name="TabIndex">0</Property>
+    <Property name="Location">0, 0</Property>
+    <Property name="Panel2">
+      <Property name="Controls">
+        <Item type="ComponentFactory.Krypton.Toolkit.KryptonSplitContainer, ComponentFactory.Krypton.Toolkit, Version=4.1.6.0, Culture=neutral, PublicKeyToken=5fd520d36328f741">
+          <Reference name="KryptonSplitContainer2" />
+        </Item>
+      </Property>
+      <Property name="DataBindings">
+        <Property name="DefaultDataSourceUpdateMode">OnValidation</Property>
+      </Property>
+    </Property>
+    <Property name="FixedPanel">Panel1</Property>
+    <Property name="Panel1">
+      <Property name="Controls">
+        <Item type="No1Lib.Sys.No1TreeTable, No1Lib.Sys, Version=1.0.0.0, Culture=neutral, PublicKeyToken=870be39b125434d2">
+          <Reference name="tvNhom" />
+        </Item>
+      </Property>
+      <Property name="DataBindings">
+        <Property name="DefaultDataSourceUpdateMode">OnValidation</Property>
+      </Property>
+    </Property>
+    <Property name="SplitterDistance">222</Property>
+  </Object>
+  <Object type="No1Lib.Sys.No1TreeTable, No1Lib.Sys, Version=1.0.0.0, Culture=neutral, PublicKeyToken=870be39b125434d2" name="tvNhom" children="Controls">
+    <Property name="Table">DNHOMKHACHHANG</Property>
+    <Property name="Size">222, 524</Property>
+    <Property name="Name">tvNhom</Property>
+    <Property name="ReadOnly">False</Property>
+    <Property name="AutoLoad">True</Property>
+    <Property name="TabIndex">0</Property>
+    <Property name="Location">0, 0</Property>
+    <Property name="DataBindings">
+      <Property name="DefaultDataSourceUpdateMode">OnValidation</Property>
+    </Property>
+    <Property name="Dock">Fill</Property>
+    <Event name="OnFocusedNodeChanged">tvNhom_OnFocusedNodeChanged</Event>
+    <Event name="OnCustomNode">tvNhom_OnCustomNode</Event>
+  </Object>
+  <Object type="No1Lib.Sys.GridMapper, No1Lib.Sys, Version=1.0.0.0, Culture=neutral, PublicKeyToken=870be39b125434d2" name="grKhachHang" children="Controls">
+    <Property name="GUID">7188d1e7-5ed7-44ad-8f17-4ec3f786ef79</Property>
+    <Property name="Size">484, 324</Property>
+    <Property name="DataBindings">
+      <Property name="DefaultDataSourceUpdateMode">OnValidation</Property>
+    </Property>
+    <Property name="Name">grKhachHang</Property>
+    <Property name="ReadOnly">True</Property>
+    <Property name="ViewConfig">
+      <Binary>AAEAAAD/////AQAAAAAAAAAPAQAAAPgWAAACPERvY3VtZW50RWxlbWVudD4NCiAgPERhdGE+DQogICAgPENIRUNLRUQ+dHJ1ZTwvQ0hFQ0tFRD4NCiAgICA8Q09MSUQ+MmVkMTcwMTAtNjdlNS00OWE0LWE5M2MtOTk0Y2FhZThlOWU1PC9DT0xJRD4NCiAgICA8VEFCTEVJRD41ZmNjNTcxYS02NjJkLTQ5NTMtYTgzZi02MDA0YzczMmY0Mzk8L1RBQkxFSUQ+DQogICAgPFRPVEFMIC8+DQogICAgPFNPUlQgLz4NCiAgICA8Q09ORElUSU9OIC8+DQogICAgPE5PVEVNUFRZPmZhbHNlPC9OT1RFTVBUWT4NCiAgICA8Tk9URFVQTElDQVRFPmZhbHNlPC9OT1REVVBMSUNBVEU+DQogICAgPEZPUk1VTEEgLz4NCiAgICA8UEFSQU1JRCAvPg0KICAgIDxDQVBUSU9OIC8+DQogICAgPEtIT05HVEFPQ09UPmZhbHNlPC9LSE9OR1RBT0NPVD4NCiAgICA8UkVBRE9OTFk+ZmFsc2U8L1JFQURPTkxZPg0KICAgIDxSRVBMQUNFIC8+DQogICAgPEFMSUFTIC8+DQogICAgPENVU1RPTUZJRUxEPkZhbHNlPC9DVVNUT01GSUVMRD4NCiAgICA8Q1VTVE9NQ09MVFlQRSAvPg0KICAgIDxTRUxFQ1RPUkRFUiAvPg0KICA8L0RhdGE+DQogIDxEYXRhPg0KICAgIDxDSEVDS0VEPnRydWU8L0NIRUNLRUQ+DQogICAgPENPTElEPmEzNjU5NGYzLTQzZjAtNDk4Ni04ZjM1LTliNmVlZmFmMjFiYjwvQ09MSUQ+DQogICAgPFRBQkxFSUQ+NWZjYzU3MWEtNjYyZC00OTUzLWE4M2YtNjAwNGM3MzJmNDM5PC9UQUJMRUlEPg0KICAgIDxUT1RBTCAvPg0KICAgIDxTT1JUPkFTQzwvU09SVD4NCiAgICA8Q09ORElUSU9OIC8+DQogICAgPE5PVEVNUFRZPmZhbHNlPC9OT1RFTVBUWT4NCiAgICA8Tk9URFVQTElDQVRFPmZhbHNlPC9OT1REVVBMSUNBVEU+DQogICAgPEZPUk1VTEEgLz4NCiAgICA8UEFSQU1JRCAvPg0KICAgIDxDQVBUSU9OIC8+DQogICAgPEtIT05HVEFPQ09UPmZhbHNlPC9LSE9OR1RBT0NPVD4NCiAgICA8UkVBRE9OTFk+ZmFsc2U8L1JFQURPTkxZPg0KICAgIDxSRVBMQUNFIC8+DQogICAgPEFMSUFTIC8+DQogICAgPENVU1RPTUZJRUxEPkZhbHNlPC9DVVNUT01GSUVMRD4NCiAgICA8Q1VTVE9NQ09MVFlQRSAvPg0KICAgIDxTRUxFQ1RPUkRFUiAvPg0KICA8L0RhdGE+DQogIDxEYXRhPg0KICAgIDxDSEVDS0VEPnRydWU8L0NIRUNLRUQ+DQogICAgPENPTElEPjI3ZGYwMjAzLTQ3MjYtNDQyZi05Y2NlLWQ5NWNjMTljNzA0NDwvQ09MSUQ+DQogICAgPFRBQkxFSUQ+NWZjYzU3MWEtNjYyZC00OTUzLWE4M2YtNjAwNGM3MzJmNDM5PC9UQUJMRUlEPg0KICAgIDxUT1RBTCAvPg0KICAgIDxTT1JUIC8+DQogICAgPENPTkRJVElPTiAvPg0KICAgIDxOT1RFTVBUWT5mYWxzZTwvTk9URU1QVFk+DQogICAgPE5PVERVUExJQ0FURT5mYWxzZTwvTk9URFVQTElDQVRFPg0KICAgIDxGT1JNVUxBIC8+DQogICAgPFBBUkFNSUQgLz4NCiAgICA8Q0FQVElPTiAvPg0KICAgIDxLSE9OR1RBT0NPVD50cnVlPC9LSE9OR1RBT0NPVD4NCiAgICA8UkVBRE9OTFk+ZmFsc2U8L1JFQURPTkxZPg0KICAgIDxSRVBMQUNFIC8+DQogICAgPEFMSUFTIC8+DQogICAgPENVU1RPTUZJRUxEPkZhbHNlPC9DVVNUT01GSUVMRD4NCiAgICA8Q1VTVE9NQ09MVFlQRSAvPg0KICAgIDxTRUxFQ1RPUkRFUiAvPg0KICA8L0RhdGE+DQogIDxEYXRhPg0KICAgIDxDSEVDS0VEPnRydWU8L0NIRUNLRUQ+DQogICAgPENPTElEPmI5NzA1YjYwLWU2MGQtNDQ3Yi04NjlkLWExMWExYWY1Yjk2NjwvQ09MSUQ+DQogICAgPFRBQkxFSUQ+NThhZWI3MTctMDViNC00NDg1LTgzNDctYmE4MWQ3OTJjZGEwPC9UQUJMRUlEPg0KICAgIDxUT1RBTCAvPg0KICAgIDxTT1JUIC8+DQogICAgPENPTkRJVElPTiAvPg0KICAgIDxOT1RFTVBUWT5mYWxzZTwvTk9URU1QVFk+DQogICAgPE5PVERVUExJQ0FURT5mYWxzZTwvTk9URFVQTElDQVRFPg0KICAgIDxGT1JNVUxBIC8+DQogICAgPFBBUkFNSUQgLz4NCiAgICA8Q0FQVElPTiAvPg0KICAgIDxLSE9OR1RBT0NPVD50cnVlPC9LSE9OR1RBT0NPVD4NCiAgICA8UkVBRE9OTFk+ZmFsc2U8L1JFQURPTkxZPg0KICAgIDxSRVBMQUNFIC8+DQogICAgPEFMSUFTIC8+DQogICAgPENVU1RPTUZJRUxEPkZhbHNlPC9DVVNUT01GSUVMRD4NCiAgICA8Q1VTVE9NQ09MVFlQRSAvPg0KICAgIDxTRUxFQ1RPUkRFUiAvPg0KICAgIDxQQVJFTlRJRD4yN2RmMDIwMy00NzI2LTQ0MmYtOWNjZS1kOTVjYzE5YzcwNDQ8L1BBUkVOVElEPg0KICA8L0RhdGE+DQogIDxEYXRhPg0KICAgIDxDSEVDS0VEPnRydWU8L0NIRUNLRUQ+DQogICAgPENPTElEPmNjYmM2NTM4LTJmOWQtNGJlMC05Mjc2LTEzOWYxOWY2ZjA0NDwvQ09MSUQ+DQogICAgPFRBQkxFSUQ+NWZjYzU3MWEtNjYyZC00OTUzLWE4M2YtNjAwNGM3MzJmNDM5PC9UQUJMRUlEPg0KICAgIDxUT1RBTCAvPg0KICAgIDxTT1JUIC8+DQogICAgPENPTkRJVElPTiAvPg0KICAgIDxOT1RFTVBUWT5mYWxzZTwvTk9URU1QVFk+DQogICAgPE5PVERVUExJQ0FURT5mYWxzZTwvTk9URFVQTElDQVRFPg0KICAgIDxGT1JNVUxBIC8+DQogICAgPFBBUkFNSUQgLz4NCiAgICA8Q0FQVElPTiAvPg0KICAgIDxLSE9OR1RBT0NPVD5mYWxzZTwvS0hPTkdUQU9DT1Q+DQogICAgPFJFQURPTkxZPmZhbHNlPC9SRUFET05MWT4NCiAgICA8UkVQTEFDRSAvPg0KICAgIDxBTElBUyAvPg0KICAgIDxDVVNUT01GSUVMRD5GYWxzZTwvQ1VTVE9NRklFTEQ+DQogICAgPENVU1RPTUNPTFRZUEUgLz4NCiAgICA8U0VMRUNUT1JERVIgLz4NCiAgPC9EYXRhPg0KICA8RGF0YT4NCiAgICA8Q0hFQ0tFRD50cnVlPC9DSEVDS0VEPg0KICAgIDxDT0xJRD4yZGI0OTQzZS0xYjRlLTQxYjItODFmMS0zNTEwYjA3YjNhMTg8L0NPTElEPg0KICAgIDxUQUJMRUlEPjVmY2M1NzFhLTY2MmQtNDk1My1hODNmLTYwMDRjNzMyZjQzOTwvVEFCTEVJRD4NCiAgICA8VE9UQUwgLz4NCiAgICA8U09SVCAvPg0KICAgIDxDT05ESVRJT04gLz4NCiAgICA8Tk9URU1QVFk+ZmFsc2U8L05PVEVNUFRZPg0KICAgIDxOT1REVVBMSUNBVEU+ZmFsc2U8L05PVERVUExJQ0FURT4NCiAgICA8Rk9STVVMQSAvPg0KICAgIDxQQVJBTUlEIC8+DQogICAgPENBUFRJT04gLz4NCiAgICA8S0hPTkdUQU9DT1Q+ZmFsc2U8L0tIT05HVEFPQ09UPg0KICAgIDxSRUFET05MWT5mYWxzZTwvUkVBRE9OTFk+DQogICAgPFJFUExBQ0UgLz4NCiAgICA8QUxJQVMgLz4NCiAgICA8Q1VTVE9NRklFTEQ+RmFsc2U8L0NVU1RPTUZJRUxEPg0KICAgIDxDVVNUT01DT0xUWVBFIC8+DQogICAgPFNFTEVDVE9SREVSIC8+DQogIDwvRGF0YT4NCiAgPERhdGE+DQogICAgPENIRUNLRUQ+dHJ1ZTwvQ0hFQ0tFRD4NCiAgICA8Q09MSUQ+N2E4NTdhMzQtYWNmMC00YjlkLTk0YzEtMzJmNzgzNmVkYmIyPC9DT0xJRD4NCiAgICA8VEFCTEVJRD41ZmNjNTcxYS02NjJkLTQ5NTMtYTgzZi02MDA0YzczMmY0Mzk8L1RBQkxFSUQ+DQogICAgPFRPVEFMIC8+DQogICAgPFNPUlQgLz4NCiAgICA8Q09ORElUSU9OPihES0hBQ0hIQU5HLlNUQVRVUyA9IDMwKTwvQ09ORElUSU9OPg0KICAgIDxOT1RFTVBUWT5mYWxzZTwvTk9URU1QVFk+DQogICAgPE5PVERVUExJQ0FURT5mYWxzZTwvTk9URFVQTElDQVRFPg0KICAgIDxGT1JNVUxBIC8+DQogICAgPFBBUkFNSUQgLz4NCiAgICA8Q0FQVElPTiAvPg0KICAgIDxLSE9OR1RBT0NPVD5mYWxzZTwvS0hPTkdUQU9DT1Q+DQogICAgPFJFQURPTkxZPmZhbHNlPC9SRUFET05MWT4NCiAgICA8UkVQTEFDRSAvPg0KICAgIDxBTElBUyAvPg0KICAgIDxDVVNUT01GSUVMRD5GYWxzZTwvQ1VTVE9NRklFTEQ+DQogICAgPENVU1RPTUNPTFRZUEUgLz4NCiAgICA8U0VMRUNUT1JERVIgLz4NCiAgPC9EYXRhPg0KICA8RGF0YT4NCiAgICA8Q0hFQ0tFRD50cnVlPC9DSEVDS0VEPg0KICAgIDxDT0xJRCAvPg0KICAgIDxUQUJMRUlEIC8+DQogICAgPFRPVEFMIC8+DQogICAgPFNPUlQgLz4NCiAgICA8Q09ORElUSU9OIC8+DQogICAgPE5PVEVNUFRZPmZhbHNlPC9OT1RFTVBUWT4NCiAgICA8Tk9URFVQTElDQVRFPmZhbHNlPC9OT1REVVBMSUNBVEU+DQogICAgPEZPUk1VTEEgLz4NCiAgICA8UEFSQU1JRCAvPg0KICAgIDxDQVBUSU9OPkRvYW5oIHPhu5E8L0NBUFRJT04+DQogICAgPEtIT05HVEFPQ09UPmZhbHNlPC9LSE9OR1RBT0NPVD4NCiAgICA8UkVBRE9OTFk+ZmFsc2U8L1JFQURPTkxZPg0KICAgIDxSRVBMQUNFPihTRUxFQ1QgQ09BTEVTQ0UoU1VNKFRPTkdDT05HKSwgMCkgRlJPTSBURE9OSEFORyBXSEVSRSBEQVRIQU5IVE9BTiA9IDMwIEFORCBMT0FJID0gMCBBTkQgREtIQUNISEFOR0lEPURLSEFDSEhBTkcuSUQpPC9SRVBMQUNFPg0KICAgIDxBTElBUz5ET0FOSFNPPC9BTElBUz4NCiAgICA8Q1VTVE9NRklFTEQ+VHJ1ZTwvQ1VTVE9NRklFTEQ+DQogICAgPENVU1RPTUNPTFRZUEU+SW50ZWdlcjwvQ1VTVE9NQ09MVFlQRT4NCiAgICA8U0VMRUNUT1JERVIgLz4NCiAgPC9EYXRhPg0KICA8RGF0YT4NCiAgICA8Q0hFQ0tFRD50cnVlPC9DSEVDS0VEPg0KICAgIDxDT0xJRCAvPg0KICAgIDxUQUJMRUlEIC8+DQogICAgPFRPVEFMIC8+DQogICAgPFNPUlQgLz4NCiAgICA8Q09ORElUSU9OIC8+DQogICAgPE5PVEVNUFRZPmZhbHNlPC9OT1RFTVBUWT4NCiAgICA8Tk9URFVQTElDQVRFPmZhbHNlPC9OT1REVVBMSUNBVEU+DQogICAgPEZPUk1VTEEgLz4NCiAgICA8UEFSQU1JRCAvPg0KICAgIDxDQVBUSU9OPlPhu5EgaMOzYSDEkcahbjwvQ0FQVElPTj4NCiAgICA8S0hPTkdUQU9DT1Q+ZmFsc2U8L0tIT05HVEFPQ09UPg0KICAgIDxSRUFET05MWT5mYWxzZTwvUkVBRE9OTFk+DQogICAgPFJFUExBQ0U+KFNFTEVDVCBDT1VOVCgqKSBGUk9NIFRET05IQU5HIFdIRVJFIERBVEhBTkhUT0FOID0gMzAgQU5EIExPQUkgPSAwIEFORCBES0hBQ0hIQU5HSUQ9REtIQUNISEFORy5JRCk8L1JFUExBQ0U+DQogICAgPEFMSUFTPlNPRE9OSEFORzwvQUxJQVM+DQogICAgPENVU1RPTUZJRUxEPlRydWU8L0NVU1RPTUZJRUxEPg0KICAgIDxDVVNUT01DT0xUWVBFPkludGVnZXI8L0NVU1RPTUNPTFRZUEU+DQogICAgPFNFTEVDVE9SREVSIC8+DQogIDwvRGF0YT4NCiAgPERhdGE+DQogICAgPENIRUNLRUQ+dHJ1ZTwvQ0hFQ0tFRD4NCiAgICA8Q09MSUQgLz4NCiAgICA8VEFCTEVJRCAvPg0KICAgIDxUT1RBTCAvPg0KICAgIDxTT1JUIC8+DQogICAgPENPTkRJVElPTiAvPg0KICAgIDxOT1RFTVBUWT5mYWxzZTwvTk9URU1QVFk+DQogICAgPE5PVERVUExJQ0FURT5mYWxzZTwvTk9URFVQTElDQVRFPg0KICAgIDxGT1JNVUxBIC8+DQogICAgPFBBUkFNSUQgLz4NCiAgICA8Q0FQVElPTj7EkGnhu4NtIHTDrWNoIGzFqXk8L0NBUFRJT04+DQogICAgPEtIT05HVEFPQ09UPmZhbHNlPC9LSE9OR1RBT0NPVD4NCiAgICA8UkVBRE9OTFk+ZmFsc2U8L1JFQURPTkxZPg0KICAgIDxSRVBMQUNFPkNPQUxFU0NFKERJRU1USUNITFVZQkFOREFVLDApICsgKFNFTEVDVCBDT0FMRVNDRShDQVNFIFdIRU4gQENBQ0hUSU5IID0gMSBUSEVOIFNVTShDT0FMRVNDRShESUVNLCAwKSAtIENPQUxFU0NFKERJRU1HSUFNLCAwKSkgRUxTRSBTVU0oVE9OR0NPTkcpIC8gQ0FTVChARElFTSBBUyBERUNJTUFMKDE4LCAyKSkgRU5ELCAwKSBGUk9NIFRET05IQU5HIFdIRVJFIERBVEhBTkhUT0FOID0gMzAgQU5EIExPQUkgPSAwIEFORCBES0hBQ0hIQU5HSUQ9REtIQUNISEFORy5JRCkgKyAoU0VMRUNUIENPQUxFU0NFKFNVTShESUVNVEFORy1ESUVNR0lBTSksMCkgRlJPTSBUVEFOR0dJQU1ESUVNIFdIRVJFIERLSEFDSEhBTkdJRCA9IERLSEFDSEhBTkcuSUQpPC9SRVBMQUNFPg0KICAgIDxBTElBUz5ESUVNPC9BTElBUz4NCiAgICA8Q1VTVE9NRklFTEQ+VHJ1ZTwvQ1VTVE9NRklFTEQ+DQogICAgPENVU1RPTUNPTFRZUEU+SW50ZWdlcjwvQ1VTVE9NQ09MVFlQRT4NCiAgICA8U0VMRUNUT1JERVIgLz4NCiAgPC9EYXRhPg0KPC9Eb2N1bWVudEVsZW1lbnQ+Cw==</Binary>
+    </Property>
+    <Property name="Location">0, 26</Property>
+    <Property name="Dock">Fill</Property>
+    <Property name="ShowToolbar">False</Property>
+    <Property name="TabIndex">0</Property>
+    <Property name="ShowAddButton">False</Property>
+  </Object>
+  <Object type="ComponentFactory.Krypton.Toolkit.KryptonSplitContainer, ComponentFactory.Krypton.Toolkit, Version=4.1.6.0, Culture=neutral, PublicKeyToken=5fd520d36328f741" name="KryptonSplitContainer2" children="Controls">
+    <Property name="Dock">Fill</Property>
+    <Property name="Cursor">Default</Property>
+    <Property name="Size">484, 524</Property>
+    <Property name="DataBindings">
+      <Property name="DefaultDataSourceUpdateMode">OnValidation</Property>
+    </Property>
+    <Property name="Name">KryptonSplitContainer2</Property>
+    <Property name="TabIndex">1</Property>
+    <Property name="Location">0, 0</Property>
+    <Property name="Panel2">
+      <Property name="Controls">
+        <Item type="ComponentFactory.Krypton.Navigator.KryptonNavigator, ComponentFactory.Krypton.Navigator, Version=4.1.6.0, Culture=neutral, PublicKeyToken=5fd520d36328f741">
+          <Reference name="tabDetail" />
+        </Item>
+      </Property>
+      <Property name="DataBindings">
+        <Property name="DefaultDataSourceUpdateMode">OnValidation</Property>
+      </Property>
+    </Property>
+    <Property name="Orientation">Horizontal</Property>
+    <Property name="Panel1">
+      <Property name="Controls">
+        <Item type="No1Lib.Sys.GridMapper, No1Lib.Sys, Version=1.0.0.0, Culture=neutral, PublicKeyToken=870be39b125434d2">
+          <Reference name="grKhachHang" />
+        </Item>
+        <Item type="ComponentFactory.Krypton.Toolkit.KryptonPanel, ComponentFactory.Krypton.Toolkit, Version=4.1.6.0, Culture=neutral, PublicKeyToken=5fd520d36328f741">
+          <Reference name="KryptonPanel1" />
+        </Item>
+      </Property>
+      <Property name="DataBindings">
+        <Property name="DefaultDataSourceUpdateMode">OnValidation</Property>
+      </Property>
+    </Property>
+    <Property name="SplitterDistance">350</Property>
+  </Object>
+  <Object type="ComponentFactory.Krypton.Navigator.KryptonNavigator, ComponentFactory.Krypton.Navigator, Version=4.1.6.0, Culture=neutral, PublicKeyToken=5fd520d36328f741" name="tabDetail" children="Controls">
+    <Property name="Dock">Fill</Property>
+    <Property name="Size">484, 169</Property>
+    <Property name="Text">KryptonNavigator1</Property>
+    <Property name="Pages">
+      <Item type="ComponentFactory.Krypton.Navigator.KryptonPage, ComponentFactory.Krypton.Navigator, Version=4.1.6.0, Culture=neutral, PublicKeyToken=5fd520d36328f741">
+        <Reference name="pageTangDiem" />
+      </Item>
+      <Item type="ComponentFactory.Krypton.Navigator.KryptonPage, ComponentFactory.Krypton.Navigator, Version=4.1.6.0, Culture=neutral, PublicKeyToken=5fd520d36328f741">
+        <Reference name="pageDiemTheoHoaDon" />
+      </Item>
+    </Property>
+    <Property name="DataBindings">
+      <Property name="DefaultDataSourceUpdateMode">OnValidation</Property>
+    </Property>
+    <Property name="SelectedIndex">0</Property>
+    <Property name="Name">tabDetail</Property>
+    <Property name="TabIndex">0</Property>
+    <Property name="Location">0, 0</Property>
+    <Property name="Enabled">False</Property>
+    <Property name="Button">
+      <Property name="CloseButtonDisplay">Hide</Property>
+      <Property name="ButtonDisplayLogic">None</Property>
+    </Property>
+  </Object>
+  <Object type="ComponentFactory.Krypton.Navigator.KryptonPage, ComponentFactory.Krypton.Navigator, Version=4.1.6.0, Culture=neutral, PublicKeyToken=5fd520d36328f741" name="pageTangDiem" children="Controls">
+    <Reference name="grTangDiem" />
+    <Reference name="ToolStrip1" />
+    <Property name="LastVisibleSet">True</Property>
+    <Property name="MinimumSize">50, 50</Property>
+    <Property name="DataBindings">
+      <Property name="DefaultDataSourceUpdateMode">OnValidation</Property>
+    </Property>
+    <Property name="Name">pageTangDiem</Property>
+    <Property name="AutoHiddenSlideSize">200, 200</Property>
+    <Property name="UniqueName">A740072D823340E5CC98B3EFDE18A59D</Property>
+    <Property name="Text">Tặng điểm - tặng quà</Property>
+    <Property name="Flags">65534</Property>
+    <Property name="ToolTipTitle">Page ToolTip</Property>
+    <Property name="Size">482, 142</Property>
+  </Object>
+  <Object type="ComponentFactory.Krypton.Navigator.KryptonPage, ComponentFactory.Krypton.Navigator, Version=4.1.6.0, Culture=neutral, PublicKeyToken=5fd520d36328f741" name="pageDiemTheoHoaDon" children="Controls">
+    <Reference name="grHoaDon" />
+    <Property name="LastVisibleSet">True</Property>
+    <Property name="MinimumSize">50, 50</Property>
+    <Property name="DataBindings">
+      <Property name="DefaultDataSourceUpdateMode">OnValidation</Property>
+    </Property>
+    <Property name="Name">pageDiemTheoHoaDon</Property>
+    <Property name="AutoHiddenSlideSize">200, 200</Property>
+    <Property name="UniqueName">8F1B10C44F7F4757BAA4B57DBA9D1DE4</Property>
+    <Property name="Text">Điểm theo hóa đơn</Property>
+    <Property name="Flags">65534</Property>
+    <Property name="ToolTipTitle">Page ToolTip</Property>
+    <Property name="Size">482, 142</Property>
+  </Object>
+  <Object type="No1Lib.Sys.No1DataGrid, No1Lib.Sys, Version=1.0.0.0, Culture=neutral, PublicKeyToken=870be39b125434d2" name="grTangDiem" children="Controls">
+    <Property name="RefreshButton" />
+    <Property name="AddButton">
+      <Reference name="tsbThem" />
+    </Property>
+    <Property name="Dock">Fill</Property>
+    <Property name="Size">482, 117</Property>
+    <Property name="AutoLoad">False</Property>
+    <Property name="ShowSetValue">False</Property>
+    <Property name="DeleteButton">
+      <Reference name="tsbXoa" />
+    </Property>
+    <Property name="Location">0, 25</Property>
+    <Property name="AllowAdding">True</Property>
+    <Property name="AllowDeleting">True</Property>
+    <Property name="PrintButton" />
+    <Property name="GUID">8f0024c5-31c1-4de0-a1d1-cd0daf116c9a</Property>
+    <Property name="Name">grTangDiem</Property>
+    <Property name="TabIndex">0</Property>
+    <Property name="Columns">
+      <Item type="No1Lib.Sys.No1GridColumn, No1Lib.Sys, Version=1.0.0.0, Culture=neutral, PublicKeyToken=870be39b125434d2">
+        <ObjectEx>
+          <Property name="DataField">NAME</Property>
+          <Property name="Caption">Số phiếu</Property>
+          <Property name="AllowEmpty">False</Property>
+          <Property name="AllowHidden">False</Property>
+          <Property name="ShowOnQuickAddAsMultiValue">True</Property>
+          <Property name="Value" />
+          <Property name="AllowDuplicate">False</Property>
+        </ObjectEx>
+      </Item>
+      <Item type="No1Lib.Sys.No1GridColumn, No1Lib.Sys, Version=1.0.0.0, Culture=neutral, PublicKeyToken=870be39b125434d2">
+        <ObjectEx>
+          <Property name="DataField">NOTE</Property>
+          <Property name="Caption">Ghi chú</Property>
+          <Property name="Value" />
+        </ObjectEx>
+      </Item>
+      <Item type="No1Lib.Sys.No1GridColumn, No1Lib.Sys, Version=1.0.0.0, Culture=neutral, PublicKeyToken=870be39b125434d2">
+        <ObjectEx>
+          <Property name="ColumnType">DateTime</Property>
+          <Property name="DataField">NGAY</Property>
+          <Property name="Caption">Ngày</Property>
+          <Property name="Value" />
+        </ObjectEx>
+      </Item>
+      <Item type="No1Lib.Sys.No1GridColumn, No1Lib.Sys, Version=1.0.0.0, Culture=neutral, PublicKeyToken=870be39b125434d2">
+        <ObjectEx>
+          <Property name="ColumnType">NumericUpDown</Property>
+          <Property name="DataField">DIEMTANG</Property>
+          <Property name="Caption">Điểm tăng</Property>
+          <Property name="Value" />
+        </ObjectEx>
+      </Item>
+      <Item type="No1Lib.Sys.No1GridColumn, No1Lib.Sys, Version=1.0.0.0, Culture=neutral, PublicKeyToken=870be39b125434d2">
+        <ObjectEx>
+          <Property name="ColumnType">NumericUpDown</Property>
+          <Property name="DataField">DIEMGIAM</Property>
+          <Property name="Caption">Điểm giảm</Property>
+          <Property name="Value" />
+        </ObjectEx>
+      </Item>
+      <Item type="No1Lib.Sys.No1GridColumn, No1Lib.Sys, Version=1.0.0.0, Culture=neutral, PublicKeyToken=870be39b125434d2">
+        <ObjectEx>
+          <Property name="DataField">LYDO</Property>
+          <Property name="Caption">Lý do</Property>
+          <Property name="Value" />
+        </ObjectEx>
+      </Item>
+    </Property>
+    <Property name="sFunctionID">
+    </Property>
+    <Property name="EditButton">
+      <Reference name="tsbSua" />
+    </Property>
+    <Property name="Table">TTANGGIAMDIEM</Property>
+    <Property name="DataBindings">
+      <Property name="DefaultDataSourceUpdateMode">OnValidation</Property>
+    </Property>
+    <Property name="RealDelete">True</Property>
+    <Event name="CustomLoadData">grTangDiem_CustomLoadData</Event>
+    <Event name="AfterCreatedEditForm">grTangDiem_AfterCreatedEditForm</Event>
+  </Object>
+  <Object type="System.Windows.Forms.ToolStrip, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" name="ToolStrip1" children="Controls">
+    <Property name="Text">ToolStrip1</Property>
+    <Property name="Size">482, 25</Property>
+    <Property name="DataBindings">
+      <Property name="DefaultDataSourceUpdateMode">OnValidation</Property>
+    </Property>
+    <Property name="Name">ToolStrip1</Property>
+    <Property name="Items">
+      <Item type="System.Windows.Forms.ToolStripButton, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+        <Reference name="tsbThem" />
+      </Item>
+      <Item type="System.Windows.Forms.ToolStripSeparator, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+        <Reference name="ToolStripSeparator1" />
+      </Item>
+      <Item type="System.Windows.Forms.ToolStripButton, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+        <Reference name="tsbSua" />
+      </Item>
+      <Item type="System.Windows.Forms.ToolStripButton, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+        <Reference name="tsbXoa" />
+      </Item>
+      <Item type="System.Windows.Forms.Design.DesignerToolStripControlHost, System.Design, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+        <ObjectEx>
+          <Property name="CausesValidation">False</Property>
+          <Property name="RightToLeft">No</Property>
+          <Property name="Size">31, 25</Property>
+          <Property name="Text">miniToolStrip</Property>
+          <Property name="Margin">0, 0, 0, 0</Property>
+          <Property name="Name">
+          </Property>
+          <Property name="Visible">False</Property>
+        </ObjectEx>
+      </Item>
+    </Property>
+    <Property name="Location">0, 0</Property>
+    <Property name="TabIndex">1</Property>
+    <Property name="Font">Segoe UI, 9pt</Property>
+  </Object>
+  <Object type="System.Windows.Forms.ToolStripButton, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" name="tsbThem">
+    <Property name="Image">
+      <Binary>iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAFYSURBVDhPtZG7L4NhFMaPSzpI0Y9Wqm1CigjVRNOJusQl4lbqliAiahMTu81i6GIQ32AhdY+FmOseHAmDpDYjf8XjvF9Ck6Ya3+Akv+SX877Pkzd5if5t9h06HTrYQLnp2bNz9HMZcx9LIHHTeYrbefJ9AQrl5gu2NR55m0ckGQWJmy/Y0rjvZRq9z1Mg8ewFuk2nTbmURtfjODruR5HpjFTmZzZsHH6dRTdPQIU6H8aMYPPlAJou+tF2O4zWmyG0XIcRuho0nCSTKlgvZvXU9ruIgQqoYP1pCJUHAQN3vAGuHR88cT+8R0GQZFIFsUKdYlZOx3Pih+vYh0xnpDJZZ83KzvM6lJ3VgsTN/8Kqle2JGpQmqkHi5gtWCrjkqQoae0Hi5gsWLawlvVCQ+F8K8uWSW2gUgtSTs0szuWygXO2IAkKFYMlUmCvLIsEpuH6hXPY2Ie+74AvGtKxvWfujRgAAAABJRU5ErkJggg==</Binary>
+    </Property>
+    <Property name="Size">82, 22</Property>
+    <Property name="Name">tsbThem</Property>
+    <Property name="ImageTransparentColor">Magenta</Property>
+    <Property name="Text">Thêm mới</Property>
+  </Object>
+  <Object type="System.Windows.Forms.ToolStripSeparator, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" name="ToolStripSeparator1">
+    <Property name="Name">ToolStripSeparator1</Property>
+    <Property name="Size">6, 25</Property>
+  </Object>
+  <Object type="System.Windows.Forms.ToolStripButton, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" name="tsbSua">
+    <Property name="Image">
+      <Binary>iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAFWSURBVDhPY2CgJ5jJwMA/m4Hh/EIGhv/LGBjmk2T3zJkz+ScBNd+ss/v/f3fo/5M2ov/XEmsIWPO06eeXdxX9/7/O4//3HKH//1vk/q8DuoSgK2CaDx059r9/0pT/C9M9//8sFv1/z5X1/xqgi/AaMDONgX96gdL5vv7u/7v27vt/7MSp/8VlFf+7g63/LwdqXgUME5wGgDWnMpw/ONPk/6GlQf9LSwv+z5g1539zW8d/H9/A8y4uocRpvrTW7f+BaQb/F1Rp/I+JCiNP87p6yf+98Sz/k9yFSLcZpjnbjeF8mguRfoY5m2jNoJCckcwQv65Z6/+tPclgP5OkGWTApASG82fWpf5/eWXy/yPz3MB+JuhsWBwaGhrKJ/iogjUfXZX6f2KeCvGaQYZEBnv2p6Wl/Y9wV/1f5M1wPs+VIR5vgKGnnmA/l/+5uRn/27t6CKdtNM0AE4HaRdDCVfMAAAAASUVORK5CYII=</Binary>
+    </Property>
+    <Property name="Size">46, 22</Property>
+    <Property name="Enabled">False</Property>
+    <Property name="Name">tsbSua</Property>
+    <Property name="ImageTransparentColor">Magenta</Property>
+    <Property name="Text">Sửa</Property>
+  </Object>
+  <Object type="System.Windows.Forms.ToolStripButton, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" name="tsbXoa">
+    <Property name="Image">
+      <Binary>iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAHJSURBVDhPzZJBSFNxHMe/PmVvbPh0tteaS/Km6MHmGHidl0YEnsKbgYlRopdm3hZIRU4ZiJoHNZuamgc3aaSI7dKpGJTTOrVDjBGUdKmL5vb8/mHCG86xow8+/P8/ft/v9//+v/eAC/O8AbwrQFywCkwUerFloJk6P4msAb15mgUaj30+7XdfX/aj250WtV6wCIysGAyfl4D3r4GbGlCWF/CKiXM0CfOv7m4t1dFxFFbVbzOAa1VR5mONjcmXQHQWuHbu2F5QPAUEuMY/eTx/vni9mc2GhtR2S0tqEtggV0qa+RiDggyJOp1/3zY1HU0bjfslGYXoKaCSyFJt7c+o3X4YlOXEnNX6IyBJiZJC/MB4SFXTsbq6TECW91nfJeuTJtN3ru+KhviAe1MUxm02LaQo6SFg8NTAzfjz8vKv1DwrGPKA0x3gvXdV9f8Hs/kf99H7gEUv7geGyRbxnAnpAcbmTaZ0sqZGeyRJezS7Cp3Ev+cJGXkMVOT17/D0hMWSDRsMB9yPFrsr+w9vAK16zdXrQFcnQ24DOzagnc16cplUkUpSTVTicABtzcAtfYDCwkrsOYRRGMzESOTcKmqhFbO5VPSLlNo8AdBBfwgV8rY0AAAAAElFTkSuQmCC</Binary>
+    </Property>
+    <Property name="Size">47, 22</Property>
+    <Property name="Enabled">False</Property>
+    <Property name="Name">tsbXoa</Property>
+    <Property name="ImageTransparentColor">Magenta</Property>
+    <Property name="Text">Xóa</Property>
+  </Object>
+  <Object type="No1Lib.Sys.No1DataGrid, No1Lib.Sys, Version=1.0.0.0, Culture=neutral, PublicKeyToken=870be39b125434d2" name="grHoaDon" children="Controls">
+    <Property name="RefreshButton" />
+    <Property name="AddButton" />
+    <Property name="Dock">Fill</Property>
+    <Property name="ReadOnly">True</Property>
+    <Property name="Size">482, 142</Property>
+    <Property name="AutoLoad">False</Property>
+    <Property name="DeleteButton" />
+    <Property name="Location">0, 0</Property>
+    <Property name="AllowAdding">True</Property>
+    <Property name="AllowDeleting">True</Property>
+    <Property name="PrintButton" />
+    <Property name="GUID">a6836c07-edc1-467f-a60d-6ca09bbe8aae</Property>
+    <Property name="Name">grHoaDon</Property>
+    <Property name="TabIndex">0</Property>
+    <Property name="Columns">
+      <Item type="No1Lib.Sys.No1GridColumn, No1Lib.Sys, Version=1.0.0.0, Culture=neutral, PublicKeyToken=870be39b125434d2">
+        <ObjectEx>
+          <Property name="ColumnType">NumericUpDown</Property>
+          <Property name="DataField">DIEM</Property>
+          <Property name="Caption">Điểm</Property>
+          <Property name="Value" />
+        </ObjectEx>
+      </Item>
+      <Item type="No1Lib.Sys.No1GridColumn, No1Lib.Sys, Version=1.0.0.0, Culture=neutral, PublicKeyToken=870be39b125434d2">
+        <ObjectEx>
+          <Property name="DataField">NAME</Property>
+          <Property name="Caption">Số phiếu</Property>
+          <Property name="AllowEmpty">False</Property>
+          <Property name="AllowHidden">False</Property>
+          <Property name="ShowOnQuickAddAsMultiValue">True</Property>
+          <Property name="Value" />
+          <Property name="AllowDuplicate">False</Property>
+        </ObjectEx>
+      </Item>
+      <Item type="No1Lib.Sys.No1GridColumn, No1Lib.Sys, Version=1.0.0.0, Culture=neutral, PublicKeyToken=870be39b125434d2">
+        <ObjectEx>
+          <Property name="ColumnType">DateTime</Property>
+          <Property name="DataField">NGAY</Property>
+          <Property name="Caption">Ngày</Property>
+          <Property name="Value" />
+        </ObjectEx>
+      </Item>
+      <Item type="No1Lib.Sys.No1GridColumn, No1Lib.Sys, Version=1.0.0.0, Culture=neutral, PublicKeyToken=870be39b125434d2">
+        <ObjectEx>
+          <Property name="ColumnType">NumericUpDown</Property>
+          <Property name="DataField">TONGCONG</Property>
+          <Property name="Caption">Tổng cộng</Property>
+          <Property name="Value" />
+        </ObjectEx>
+      </Item>
+      <Item type="No1Lib.Sys.No1GridColumn, No1Lib.Sys, Version=1.0.0.0, Culture=neutral, PublicKeyToken=870be39b125434d2">
+        <ObjectEx>
+          <Property name="ColumnType">NumericUpDown</Property>
+          <Property name="DataField">DIEMGIAM</Property>
+          <Property name="Caption">Điểm sử dụng</Property>
+          <Property name="Value" />
+        </ObjectEx>
+      </Item>
+    </Property>
+    <Property name="sFunctionID">
+    </Property>
+    <Property name="EditButton" />
+    <Property name="Table">TDONHANG</Property>
+    <Property name="DataBindings">
+      <Property name="DefaultDataSourceUpdateMode">OnValidation</Property>
+    </Property>
+    <Event name="CustomLoadData">grHoaDon_CustomLoadData</Event>
+  </Object>
+  <Object type="ComponentFactory.Krypton.Toolkit.KryptonPanel, ComponentFactory.Krypton.Toolkit, Version=4.1.6.0, Culture=neutral, PublicKeyToken=5fd520d36328f741" name="KryptonPanel1" children="Controls">
+    <Reference name="Label1" />
+    <Reference name="txtTim" />
+    <Property name="Dock">Top</Property>
+    <Property name="Size">484, 26</Property>
+    <Property name="TabIndex">1</Property>
+    <Property name="Location">0, 0</Property>
+    <Property name="DataBindings">
+      <Property name="DefaultDataSourceUpdateMode">OnValidation</Property>
+    </Property>
+    <Property name="Name">KryptonPanel1</Property>
+  </Object>
+  <Object type="No1Lib.Sys.No1TextBox, No1Lib.Sys, Version=1.0.0.0, Culture=neutral, PublicKeyToken=870be39b125434d2" name="txtTim" children="Controls">
+    <Property name="Size">100, 20</Property>
+    <Property name="Name">txtTim</Property>
+    <Property name="Location">58, 3</Property>
+    <Property name="DataBindings">
+      <Property name="DefaultDataSourceUpdateMode">OnValidation</Property>
+    </Property>
+    <Property name="TabIndex">0</Property>
+  </Object>
+  <Object type="System.Windows.Forms.Label, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" name="Label1" children="Controls">
+    <Property name="TabIndex">1</Property>
+    <Property name="BackColor">Transparent</Property>
+    <Property name="AutoSize">True</Property>
+    <Property name="Size">49, 13</Property>
+    <Property name="Text">Lọc (F3):</Property>
+    <Property name="Location">3, 6</Property>
+    <Property name="DataBindings">
+      <Property name="DefaultDataSourceUpdateMode">OnValidation</Property>
+    </Property>
+    <Property name="Name">Label1</Property>
+  </Object>
+  <Object type="System.Windows.Forms.Timer, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" name="Timer1">
+    <Event name="Tick">Timer1_Tick</Event>
+  </Object>

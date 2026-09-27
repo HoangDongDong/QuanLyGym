@@ -1,0 +1,125 @@
+
+  <Object type="No1Lib.Sys.No1Form, No1Lib.Sys, Version=1.0.0.0, Culture=neutral, PublicKeyToken=870be39b125434d2" name="form" children="Controls">
+    <Reference name="KryptonPanel1" />
+    <Property name="CancelButton">
+      <Reference name="btnHuyBo" />
+    </Property>
+    <Property name="Name">form</Property>
+    <Property name="MinimizeBox">False</Property>
+    <Property name="StartPosition">CenterScreen</Property>
+    <Property name="Text">Chọn loại giá bán</Property>
+    <Property name="MaximizeBox">False</Property>
+    <Property name="ClientSize">324, 261</Property>
+    <Property name="DataBindings">
+      <Property name="DefaultDataSourceUpdateMode">OnValidation</Property>
+    </Property>
+    <Property name="FormBorderStyle">FixedDialog</Property>
+    <Event name="Load">form_Load</Event>
+    <Event name="OnAutoTest">form_OnAutoTest</Event>
+  </Object>
+  <Object type="ComponentFactory.Krypton.Toolkit.KryptonPanel, ComponentFactory.Krypton.Toolkit, Version=4.1.6.0, Culture=neutral, PublicKeyToken=5fd520d36328f741" name="KryptonPanel1" children="Controls">
+    <Reference name="chkApDungTatCa" />
+    <Reference name="btnHuyBo" />
+    <Reference name="label1" />
+    <Reference name="btnDonGia4" />
+    <Reference name="btnDonGia3" />
+    <Reference name="btnDonGia2" />
+    <Reference name="btnDonGia" />
+    <Property name="Dock">Fill</Property>
+    <Property name="Size">324, 261</Property>
+    <Property name="TabIndex">0</Property>
+    <Property name="Location">0, 0</Property>
+    <Property name="DataBindings">
+      <Property name="DefaultDataSourceUpdateMode">OnValidation</Property>
+    </Property>
+    <Property name="Name">KryptonPanel1</Property>
+  </Object>
+  <Object type="System.Windows.Forms.Button, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" name="btnHuyBo" children="Controls">
+    <Property name="TabIndex">11</Property>
+    <Property name="Name">btnHuyBo</Property>
+    <Property name="Size">300, 32</Property>
+    <Property name="UseVisualStyleBackColor">True</Property>
+    <Property name="Text">Hủy bỏ</Property>
+    <Property name="Location">12, 164</Property>
+    <Property name="DataBindings">
+      <Property name="DefaultDataSourceUpdateMode">OnValidation</Property>
+    </Property>
+    <Property name="DialogResult">Cancel</Property>
+  </Object>
+  <Object type="System.Windows.Forms.Label, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" name="label1" children="Controls">
+    <Property name="TabIndex">10</Property>
+    <Property name="BackColor">Transparent</Property>
+    <Property name="Size">300, 30</Property>
+    <Property name="Text">(Để kích hoạt các giá 2, 3, 4 bạn vào menu 'Quản trị | Cấu hình toàn hệ thống', tab 'Giá mặt hàng'</Property>
+    <Property name="Font">Microsoft Sans Serif, 8.25pt, style=Italic</Property>
+    <Property name="Location">12, 223</Property>
+    <Property name="DataBindings">
+      <Property name="DefaultDataSourceUpdateMode">OnValidation</Property>
+    </Property>
+    <Property name="Name">label1</Property>
+  </Object>
+  <Object type="System.Windows.Forms.Button, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" name="btnDonGia4" children="Controls">
+    <Property name="TabIndex">9</Property>
+    <Property name="Tag">3</Property>
+    <Property name="Name">btnDonGia4</Property>
+    <Property name="Size">300, 32</Property>
+    <Property name="UseVisualStyleBackColor">True</Property>
+    <Property name="Text">Giá bán 4</Property>
+    <Property name="Location">12, 126</Property>
+    <Property name="DataBindings">
+      <Property name="DefaultDataSourceUpdateMode">OnValidation</Property>
+    </Property>
+    <Event name="Click">btnDonGia_Click</Event>
+  </Object>
+  <Object type="System.Windows.Forms.Button, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" name="btnDonGia3" children="Controls">
+    <Property name="TabIndex">8</Property>
+    <Property name="Tag">2</Property>
+    <Property name="Name">btnDonGia3</Property>
+    <Property name="Size">300, 32</Property>
+    <Property name="UseVisualStyleBackColor">True</Property>
+    <Property name="Text">Giá bán 3</Property>
+    <Property name="Location">12, 88</Property>
+    <Property name="DataBindings">
+      <Property name="DefaultDataSourceUpdateMode">OnValidation</Property>
+    </Property>
+    <Event name="Click">btnDonGia_Click</Event>
+  </Object>
+  <Object type="System.Windows.Forms.Button, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" name="btnDonGia2" children="Controls">
+    <Property name="TabIndex">7</Property>
+    <Property name="Tag">1</Property>
+    <Property name="Name">btnDonGia2</Property>
+    <Property name="Size">300, 32</Property>
+    <Property name="UseVisualStyleBackColor">True</Property>
+    <Property name="Text">Giá bán 2</Property>
+    <Property name="Location">12, 50</Property>
+    <Property name="DataBindings">
+      <Property name="DefaultDataSourceUpdateMode">OnValidation</Property>
+    </Property>
+    <Event name="Click">btnDonGia_Click</Event>
+  </Object>
+  <Object type="System.Windows.Forms.Button, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" name="btnDonGia" children="Controls">
+    <Property name="TabIndex">6</Property>
+    <Property name="Tag">0</Property>
+    <Property name="Name">btnDonGia</Property>
+    <Property name="Size">300, 32</Property>
+    <Property name="UseVisualStyleBackColor">True</Property>
+    <Property name="Text">Giá bán</Property>
+    <Property name="Location">12, 12</Property>
+    <Property name="DataBindings">
+      <Property name="DefaultDataSourceUpdateMode">OnValidation</Property>
+    </Property>
+    <Event name="Click">btnDonGia_Click</Event>
+  </Object>
+  <Object type="System.Windows.Forms.CheckBox, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" name="chkApDungTatCa" children="Controls">
+    <Property name="UseVisualStyleBackColor">False</Property>
+    <Property name="BackColor">Transparent</Property>
+    <Property name="Size">213, 17</Property>
+    <Property name="TabIndex">12</Property>
+    <Property name="Text">Áp dụng cho tất cả mặt hàng trong đơn</Property>
+    <Property name="Location">13, 203</Property>
+    <Property name="DataBindings">
+      <Property name="DefaultDataSourceUpdateMode">OnValidation</Property>
+    </Property>
+    <Property name="Name">chkApDungTatCa</Property>
+    <Property name="AutoSize">True</Property>
+  </Object>

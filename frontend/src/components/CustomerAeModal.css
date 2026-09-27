@@ -1,0 +1,497 @@
+/* ==========================================================================
+   CUSTOMER AE MODAL - REAL GYM LAYOUT FROM D:\QuanLyPhongGym\backend\Data\DATA.fdb
+   ========================================================================== */
+
+.gym-ae-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.68);
+  backdrop-filter: blur(3px);
+  z-index: 10000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: custFadeIn 0.15s ease-out;
+}
+
+.gym-ae-window {
+  width: 760px;
+  max-width: 96vw;
+  background: #d8e4f8;
+  border: 1px solid #6b93b8;
+  box-shadow: 0 14px 40px rgba(0, 0, 0, 0.45);
+  border-radius: 4px;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+  font-size: 12px;
+  color: #0f172a;
+  animation: custPopIn 0.15s ease-out;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Title bar WinForms DevExpress */
+.gym-ae-titlebar {
+  height: 30px;
+  background: #ffffff;
+  border-bottom: 1px solid #c8d8e8;
+  padding: 0 8px 0 10px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 12px;
+  font-weight: 600;
+  color: #1e293b;
+}
+
+.gym-ae-title {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  letter-spacing: 0.3px;
+}
+
+.gym-ae-win-btn {
+  background: transparent;
+  border: none;
+  font-size: 13px;
+  color: #64748b;
+  cursor: pointer;
+  padding: 2px 6px;
+  border-radius: 2px;
+}
+.gym-ae-win-btn:hover {
+  background: #dc2626;
+  color: #ffffff;
+}
+
+/* Header bar WinForms No1Lib */
+.gym-ae-header-bar {
+  height: 48px;
+  background: linear-gradient(180deg, #f8fafd 0%, #e8f0fa 100%);
+  border-bottom: 1px solid #b8cde4;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 14px;
+}
+
+.gym-ae-header-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.gym-ae-header-icon {
+  font-size: 26px;
+  line-height: 1;
+}
+
+.gym-ae-header-text {
+  font-size: 15px;
+  font-weight: 700;
+  color: #1e293b;
+}
+
+.gym-ae-header-shortcuts {
+  font-size: 11.5px;
+  color: #334155;
+  font-weight: 500;
+}
+
+/* Toolbar Ribbon WinForms */
+.gym-ae-toolbar {
+  height: 32px;
+  background: linear-gradient(180deg, #e4edf8 0%, #d4e3f5 100%);
+  border-bottom: 1px solid #abc1dc;
+  display: flex;
+  align-items: center;
+  padding: 0 6px;
+  gap: 4px;
+}
+
+.gym-tb-btn {
+  height: 24px;
+  padding: 0 8px;
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: 3px;
+  font-size: 11.5px;
+  color: #1e293b;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  white-space: nowrap;
+}
+.gym-tb-btn:hover:not(.disabled) {
+  background: #ffffff;
+  border-color: #9bb5cc;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.06);
+}
+.gym-tb-btn.disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+
+/* KryptonNavigator Tabs */
+.gym-ae-tabs {
+  display: flex;
+  background: #cee0f2;
+  padding: 4px 8px 0 8px;
+  border-bottom: 1px solid #9bb5cc;
+  gap: 2px;
+}
+
+.gym-ae-tab {
+  padding: 6px 14px;
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  background: #dceaf7;
+  border: 1px solid #b2c9df;
+  border-bottom: none;
+  border-radius: 3px 3px 0 0;
+  color: #334155;
+  transition: all 0.15s;
+}
+.gym-ae-tab:hover {
+  background: #eaf3fb;
+}
+.gym-ae-tab.active {
+  background: #ffffff;
+  color: #0284c7;
+  font-weight: 600;
+  border-color: #9bb5cc;
+  border-bottom: 1px solid #ffffff;
+  margin-bottom: -1px;
+}
+
+/* Form body */
+.gym-ae-form {
+  padding: 10px 12px 12px 12px;
+  background: #d8e4f8;
+  display: flex;
+  flex-direction: column;
+}
+
+.gym-ae-tab-content {
+  background: #ffffff;
+  border: 1px solid #9bb5cc;
+  padding: 12px 14px;
+  border-radius: 2px;
+  min-height: 380px;
+}
+
+/* Tab 1: Split Left (Fields) / Right (Avatar) */
+.gym-main-split {
+  display: flex;
+  gap: 16px;
+}
+
+.gym-main-fields {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.gym-main-avatar-col {
+  width: 210px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.gym-avatar-header {
+  width: 100%;
+}
+
+.gym-avatar-row-wrapper {
+  display: flex;
+  gap: 6px;
+  align-items: flex-start;
+  width: 100%;
+}
+
+.gym-avatar-box {
+  width: 165px;
+  height: 190px;
+  border: 1px solid #94a3b8;
+  background: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  border-radius: 2px;
+}
+
+.gym-avatar-img, .gym-avatar-video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.gym-avatar-placeholder {
+  width: 100%;
+  height: 100%;
+  background: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.gym-avatar-side-icons {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.gym-avatar-icon-btn {
+  width: 24px;
+  height: 24px;
+  background: #ffffff;
+  border: 1px solid #cbd5e1;
+  border-radius: 3px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 11px;
+  color: #475569;
+}
+.gym-avatar-icon-btn:hover {
+  background: #e2e8f0;
+  border-color: #94a3b8;
+}
+.gym-avatar-icon-btn.delete {
+  color: #dc2626;
+}
+
+.gym-avatar-actions {
+  width: 100%;
+  margin-top: 10px;
+}
+
+.gym-webcam-btn {
+  width: 165px;
+  height: 26px;
+  background: #ffffff;
+  border: 1px solid #abadb3;
+  border-radius: 3px;
+  font-size: 11.5px;
+  font-weight: 500;
+  color: #1e293b;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+.gym-webcam-btn:hover {
+  background: #e8f2fe;
+  border-color: #0078d7;
+}
+.gym-webcam-btn.capture {
+  background: #16a34a;
+  color: #ffffff;
+  border-color: #15803d;
+}
+
+/* Rows & Inputs */
+.gym-ae-row {
+  display: flex;
+  align-items: center;
+  min-height: 23px;
+}
+
+.gym-ae-row.split-row {
+  gap: 0;
+}
+
+.gym-ae-label {
+  width: 125px;
+  font-size: 12px;
+  color: #1e293b;
+  white-space: nowrap;
+  flex-shrink: 0;
+  padding-right: 6px;
+}
+.gym-ae-label.req {
+  font-weight: 600;
+}
+.gym-ae-label.bold {
+  font-weight: 700;
+  color: #0f172a;
+}
+
+.gym-ae-input {
+  flex: 1;
+  height: 23px;
+  border: 1px solid #abadb3;
+  padding: 0 6px;
+  font-size: 12px;
+  color: #0f172a;
+  background: #ffffff;
+  outline: none;
+  border-radius: 2px;
+}
+.gym-ae-input:focus {
+  border-color: #0078d7;
+  box-shadow: 0 0 0 1px #0078d7;
+}
+
+.gym-ae-input.highlight-yellow {
+  background: #ffffcc !important;
+}
+
+.gym-ae-select {
+  flex: 1;
+  height: 24px;
+  border: 1px solid #abadb3;
+  padding: 0 4px;
+  font-size: 12px;
+  color: #0f172a;
+  background: #ffffff;
+  outline: none;
+  cursor: pointer;
+  border-radius: 2px;
+}
+.gym-ae-select:focus {
+  border-color: #0078d7;
+  box-shadow: 0 0 0 1px #0078d7;
+}
+
+/* Tab 2: Thông tin hiện tại */
+.gym-tab-hientai {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.gym-hientai-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px 16px;
+}
+
+.gym-hientai-actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 6px;
+}
+
+.gym-btn-dev {
+  height: 28px;
+  padding: 0 12px;
+  background: #ffffff;
+  border: 1px solid #8e9ca8;
+  border-radius: 3px;
+  font-size: 11px;
+  font-weight: 600;
+  cursor: pointer;
+}
+.gym-btn-dev:hover {
+  background: #e8f2fe;
+  border-color: #0078d7;
+}
+.gym-btn-dev.danger {
+  color: #dc2626;
+  border-color: #f87171;
+}
+.gym-btn-dev.success {
+  color: #16a34a;
+  border-color: #86efac;
+}
+
+.gym-hientai-machine-box {
+  border: 1px solid #cbd5e1;
+  background: #f8fafc;
+  padding: 8px;
+  border-radius: 3px;
+  margin-top: 4px;
+}
+
+.gym-machine-title {
+  font-size: 11px;
+  font-weight: 700;
+  color: #475569;
+  margin-bottom: 6px;
+}
+
+.gym-machine-table, .gym-subtab-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 12px;
+  background: #ffffff;
+}
+
+.gym-machine-table th, .gym-subtab-table th {
+  background: #eceff4;
+  border: 1px solid #cbd5e1;
+  padding: 5px 8px;
+  font-weight: 600;
+  text-align: left;
+}
+
+.gym-machine-table td, .gym-subtab-table td {
+  border: 1px solid #e2e8f0;
+  padding: 5px 8px;
+}
+
+/* Footer buttons WinForms */
+.gym-ae-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 10px;
+}
+
+.gym-ae-footer-left, .gym-ae-footer-right {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.gym-win-btn {
+  height: 25px;
+  padding: 0 12px;
+  background: #ffffff;
+  border: 1px solid #abadb3;
+  font-size: 12px;
+  font-weight: 500;
+  color: #0f172a;
+  cursor: pointer;
+  border-radius: 3px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  white-space: nowrap;
+}
+.gym-win-btn:hover:not(:disabled) {
+  background: #e8f2fe;
+  border-color: #0078d7;
+}
+.gym-win-btn.primary {
+  border-color: #0078d7;
+  font-weight: 600;
+}
+.gym-win-btn.exit {
+  border: 1.5px solid #0078d7;
+  min-width: 65px;
+}
+.gym-win-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+@keyframes custFadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes custPopIn {
+  from { opacity: 0; transform: scale(0.97); }
+  to { opacity: 1; transform: scale(1); }
+}

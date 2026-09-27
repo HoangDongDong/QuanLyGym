@@ -1,0 +1,3038 @@
+/* ===================================================================
+   CUSTOMER MANAGEMENT (DANH MỤC KHÁCH HÀNG) - DEVEXPRESS WINFORMS THEME
+   Replicates exact desktop UI with split tree, master grid & bottom detail tabs
+   =================================================================== */
+
+.cust-mgmt-container {
+  display: flex;
+  flex-direction: column;
+  height: calc(100vh - 48px);
+  width: 100%;
+  background: #dfe7f0;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-size: 12px;
+  color: #1e293b;
+  overflow: hidden;
+  user-select: none;
+}
+
+/* 1. TOP TABS (DOCUMENT MANAGER TABS) */
+.cust-doc-tabs {
+  display: flex;
+  align-items: flex-end;
+  background: #c5d5e8;
+  padding: 4px 6px 0 6px;
+  border-bottom: 2px solid #2d6ca2;
+  gap: 2px;
+  height: 32px;
+  flex-shrink: 0;
+}
+
+.cust-doc-tab {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 14px;
+  background: #dbe5f1;
+  color: #1e395b;
+  border: 1px solid #9fb9d6;
+  border-bottom: none;
+  border-radius: 3px 3px 0 0;
+  cursor: pointer;
+  font-size: 11.5px;
+  font-weight: 600;
+  height: 27px;
+  transition: all 0.15s ease;
+}
+
+.cust-doc-tab:hover {
+  background: #edf3fa;
+}
+
+.cust-doc-tab.active {
+  background: #fff8e1; /* Golden accent matching desktop screenshot */
+  color: #0c2543;
+  border-color: #2d6ca2;
+  border-top: 2px solid #ff9800;
+  border-bottom: 1px solid #fff8e1;
+  height: 28px;
+  font-weight: 700;
+}
+
+.cust-tab-close {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 14px;
+  height: 14px;
+  border-radius: 2px;
+  font-size: 11px;
+  color: #64748b;
+  margin-left: 4px;
+  cursor: pointer;
+}
+
+.cust-tab-close:hover {
+  background: #ef4444;
+  color: #fff;
+}
+
+/* 2. MAIN SPLIT WORKSPACE */
+.cust-split-body {
+  display: flex;
+  flex: 1;
+  overflow: hidden;
+  position: relative;
+}
+
+/* LEFT PANE: TRẠNG THÁI TREE */
+.cust-left-pane {
+  width: 210px;
+  min-width: 170px;
+  background: #f7fafc;
+  border-right: 1px solid #b6c7db;
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
+}
+
+.cust-pane-header {
+  height: 27px;
+  background: linear-gradient(180deg, #e7eff8 0%, #cfdeee 100%);
+  border-bottom: 1px solid #b6c7db;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 8px;
+  font-weight: 700;
+  color: #1e395b;
+  font-size: 12px;
+}
+
+.cust-pane-tabs {
+  display: flex;
+  background: #c5d5e8;
+  border-bottom: 1px solid #b6c7db;
+  height: 26px;
+  padding: 0 4px;
+  gap: 2px;
+}
+
+.cust-pane-tab {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 0 8px;
+  font-size: 11px;
+  font-weight: 600;
+  color: #27456b;
+  cursor: pointer;
+  border: 1px solid transparent;
+  border-bottom: none;
+  border-radius: 3px 3px 0 0;
+  transition: all 0.15s ease;
+  height: 25px;
+  margin-top: 1px;
+}
+
+.cust-pane-tab:hover {
+  background: #edf3fa;
+}
+
+.cust-pane-tab.active {
+  background: #f7fafc;
+  color: #0c2543;
+  font-weight: 700;
+  border-color: #b6c7db;
+  border-top: 2px solid #0284c7;
+  border-bottom: 1px solid #f7fafc;
+}
+
+.cust-pane-header .header-tools {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: #557295;
+  cursor: pointer;
+}
+
+.cust-pane-header .header-tools:hover {
+  color: #0284c7;
+}
+
+.cust-tree-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  padding: 3px 6px;
+  background: #edf3fa;
+  border-bottom: 1px solid #d4e0ee;
+}
+
+.cust-tree-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+  background: #ffffff;
+  border: 1px solid #c2d2e4;
+  border-radius: 2px;
+  cursor: pointer;
+  color: #334155;
+  font-size: 11px;
+  transition: all 0.15s ease;
+}
+
+.cust-tree-btn:hover {
+  background: #e2effd;
+  border-color: #72a3dc;
+  color: #0284c7;
+}
+
+.cust-tree-search {
+  flex: 1;
+  height: 22px;
+  border: 1px solid #c2d2e4;
+  border-radius: 2px;
+  padding: 0 6px;
+  font-size: 11.5px;
+  outline: none;
+  background: #fff;
+}
+
+.cust-tree-search:focus {
+  border-color: #0284c7;
+}
+
+.cust-tree-list {
+  flex: 1;
+  overflow-y: auto;
+  padding: 4px 0;
+  background: #ffffff;
+}
+
+.cust-tree-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 5px 10px 5px 8px;
+  cursor: pointer;
+  font-size: 11.5px;
+  color: #1e293b;
+  border-left: 3px solid transparent;
+  transition: background 0.12s;
+}
+
+.cust-tree-item:hover {
+  background: #eef5fc;
+}
+
+.cust-tree-item.active {
+  background: #d7e8f9;
+  color: #034f84;
+  font-weight: 700;
+  border-left-color: #0284c7;
+}
+
+.cust-tree-label {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.cust-tree-count {
+  font-size: 10px;
+  padding: 1px 5px;
+  border-radius: 8px;
+  background: #e2e8f0;
+  color: #475569;
+  font-weight: 600;
+}
+
+.cust-tree-item.active .cust-tree-count {
+  background: #0284c7;
+  color: #fff;
+}
+
+/* RIGHT PANE: MAIN WORKSPACE (GRID + BOTTOM TABS) */
+.cust-right-pane {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  background: #ffffff;
+}
+
+/* TOP TOOLBAR OF KHÁCH HÀNG */
+.cust-main-header {
+  height: 27px;
+  background: linear-gradient(180deg, #e7eff8 0%, #cfdeee 100%);
+  border-bottom: 1px solid #b6c7db;
+  display: flex;
+  align-items: center;
+  padding: 0 10px;
+  font-weight: 700;
+  color: #1e395b;
+  font-size: 12px;
+}
+
+.cust-ribbon-bar {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 4px;
+  padding: 4px 8px;
+  background: #f1f6fb;
+  border-bottom: 1px solid #cbd5e1;
+}
+
+.cust-ribbon-filter {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin-right: 6px;
+}
+
+.cust-ribbon-filter span {
+  font-weight: 600;
+  color: #334155;
+  font-size: 11.5px;
+}
+
+.cust-ribbon-filter input {
+  height: 24px;
+  width: 140px;
+  border: 1px solid #b6c7db;
+  border-radius: 2px;
+  padding: 0 6px;
+  font-size: 11.5px;
+  outline: none;
+}
+
+.cust-ribbon-filter input:focus {
+  border-color: #0284c7;
+  background: #fff;
+}
+
+.cust-ribbon-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  height: 24px;
+  padding: 0 8px;
+  background: linear-gradient(180deg, #ffffff 0%, #eef4fb 100%);
+  border: 1px solid #b6c7db;
+  border-radius: 2px;
+  font-size: 11.5px;
+  font-weight: 500;
+  color: #1e293b;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.15s ease;
+}
+
+.cust-ribbon-btn:hover:not(:disabled) {
+  background: linear-gradient(180deg, #e3f0fd 0%, #cce3f9 100%);
+  border-color: #72a3dc;
+  color: #034f84;
+}
+
+.cust-ribbon-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.cust-ribbon-btn.primary {
+  color: #166534;
+  font-weight: 600;
+}
+
+.cust-ribbon-btn.danger {
+  color: #b91c1c;
+}
+
+.cust-ribbon-sep {
+  width: 1px;
+  height: 18px;
+  background: #cbd5e1;
+  margin: 0 3px;
+}
+
+/* MASTER DATA GRID */
+.cust-grid-wrapper {
+  flex: 1;
+  overflow: auto;
+  position: relative;
+  border-bottom: 1px solid #b6c7db;
+}
+
+.cust-grid-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  font-size: 11.5px;
+  table-layout: auto;
+}
+
+.cust-grid-table thead th {
+  position: sticky;
+  top: 0;
+  z-index: 5;
+  background: linear-gradient(180deg, #f5f8fb 0%, #e1ebf5 100%);
+  border-bottom: 1px solid #adc1d6;
+  border-right: 1px solid #c8d7e6;
+  color: #1e395b;
+  font-weight: 600;
+  padding: 5px 8px;
+  text-align: left;
+  white-space: nowrap;
+}
+
+.cust-grid-table tbody tr {
+  cursor: pointer;
+  height: 24px;
+}
+
+.cust-grid-table tbody tr:nth-child(even) {
+  background: #fbfcfe;
+}
+
+.cust-grid-table tbody tr:nth-child(odd) {
+  background: #ffffff;
+}
+
+.cust-grid-table tbody tr:hover {
+  background: #eef6ff !important;
+}
+
+.cust-grid-table tbody tr.selected {
+  background: #3399ff !important;
+  color: #ffffff !important;
+}
+
+.cust-grid-table tbody tr.selected td {
+  color: #ffffff !important;
+  background-color: #3399ff !important;
+  border-color: #2b88e6;
+}
+
+.cust-grid-table tbody td {
+  padding: 3px 8px;
+  border-bottom: 1px solid #e2e8f0;
+  border-right: 1px solid #edf2f7;
+  white-space: nowrap;
+  color: #1e293b;
+}
+
+.cust-grid-indicator {
+  width: 30px;
+  text-align: center;
+  background: #eef4fa !important;
+  color: #475569;
+  font-weight: 600;
+  border-right: 1px solid #adc1d6 !important;
+}
+
+.cust-grid-table tbody tr.selected .cust-grid-indicator {
+  background: #257ad6 !important;
+  color: #fff !important;
+}
+
+/* MÃ THẺ BADGE */
+.cust-cardcode-tag {
+  display: inline-block;
+  padding: 1px 6px;
+  background: #8b3a1a;
+  color: #ffffff;
+  font-weight: 700;
+  border-radius: 2px;
+  font-size: 11px;
+}
+
+.cust-grid-table tbody tr.selected .cust-cardcode-tag {
+  background: #ffffff;
+  color: #8b3a1a;
+}
+
+/* TRẠNG THÁI BADGE IN GRID */
+.cust-status-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 11.5px;
+}
+
+.cust-status-badge.active-use {
+  color: #15803d;
+  font-weight: 600;
+}
+
+.cust-grid-table tbody tr.selected .cust-status-badge.active-use {
+  color: #a7f3d0;
+}
+
+.cust-status-badge.inactive {
+  color: #dc2626;
+}
+
+.cust-grid-table tbody tr.selected .cust-status-badge.inactive {
+  color: #fecaca;
+}
+
+/* 3. BOTTOM DETAIL PANEL ("PHÂN TÍCH KĨ PHẦN ĐÁY") */
+.cust-bottom-pane {
+  height: 200px;
+  min-height: 160px;
+  max-height: 380px;
+  background: #f7fafc;
+  display: flex;
+  flex-direction: column;
+  border-top: 2px solid #3b82f6;
+  position: relative;
+  flex-shrink: 0;
+}
+
+.cust-bottom-tabs-header {
+  display: flex;
+  align-items: center;
+  background: #e6eef6;
+  border-bottom: 1px solid #b6c7db;
+  overflow-x: auto;
+  scrollbar-width: none;
+  flex-shrink: 0;
+}
+
+.cust-bottom-tabs-header::-webkit-scrollbar {
+  display: none;
+}
+
+.cust-bottom-tab {
+  padding: 5px 12px;
+  font-size: 11px;
+  font-weight: 600;
+  color: #334155;
+  background: #dbe7f3;
+  border-right: 1px solid #c2d2e4;
+  border-top: 2px solid transparent;
+  cursor: pointer;
+  white-space: nowrap;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  transition: all 0.15s ease;
+}
+
+.cust-bottom-tab:hover {
+  background: #edf3fa;
+  color: #0284c7;
+}
+
+.cust-bottom-tab.active {
+  background: #ffffff;
+  color: #0c2543;
+  font-weight: 700;
+  border-top: 2px solid #0284c7;
+  border-bottom: 1px solid #ffffff;
+}
+
+.cust-tab-nav-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 26px;
+  background: #d4e0ee;
+  border: none;
+  border-left: 1px solid #b6c7db;
+  cursor: pointer;
+  color: #334155;
+  font-size: 10px;
+  flex-shrink: 0;
+}
+
+.cust-tab-nav-btn:hover {
+  background: #0284c7;
+  color: #ffffff;
+}
+
+.cust-bottom-tab-body {
+  flex: 1;
+  overflow: auto;
+  background: #ffffff;
+  padding: 8px 12px;
+}
+
+/* TAB "THÔNG TIN" AUDIT CONTENT */
+.cust-audit-content {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  font-size: 11.5px;
+}
+
+.cust-audit-row {
+  display: flex;
+  align-items: center;
+  gap: 40px;
+  color: #1e293b;
+}
+
+.cust-audit-field {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.cust-audit-label {
+  font-weight: 600;
+  color: #475569;
+}
+
+.cust-audit-val {
+  color: #0f172a;
+}
+
+.cust-detail-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 8px;
+  margin-top: 4px;
+}
+
+.cust-detail-card {
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 3px;
+  padding: 6px 10px;
+}
+
+.cust-detail-card .card-lbl {
+  font-size: 10px;
+  color: #64748b;
+  text-transform: uppercase;
+  font-weight: 600;
+}
+
+.cust-detail-card .card-val {
+  font-size: 12px;
+  font-weight: 600;
+  color: #1e3a8a;
+  margin-top: 2px;
+}
+
+/* SUB TAB SUBGRID TABLE (MATCHING DEVEXPRESS DESKTOP APP) */
+.cust-sub-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  font-size: 11px;
+  background: #ffffff;
+}
+
+.cust-sub-table thead tr {
+  height: 23px;
+}
+
+.cust-sub-table th {
+  background: linear-gradient(180deg, #fbfcfe 0%, #e9edf4 100%);
+  border-right: 1px solid #c2cde0;
+  border-bottom: 1px solid #b8c4d8;
+  border-top: none;
+  border-left: none;
+  padding: 3px 6px;
+  text-align: left;
+  font-weight: 600;
+  color: #1e293b;
+  white-space: nowrap;
+}
+
+.cust-sub-table th:first-child {
+  border-left: 1px solid #c2cde0;
+  width: 28px;
+  background: #f1f4f9;
+}
+
+.cust-sub-table td {
+  border-right: 1px solid #e2e8f0;
+  border-bottom: 1px solid #e2e8f0;
+  padding: 3px 6px;
+  white-space: nowrap;
+  color: #1e293b;
+  height: 22px;
+}
+
+.cust-sub-table td:first-child {
+  border-left: 1px solid #e2e8f0;
+  background: #f8fafc;
+}
+
+.cust-sub-table tr:hover td {
+  background-color: #f1f5f9;
+}
+
+/* 4. MODAL FORM: THÊM / CHỈNH SỬA KHÁCH HÀNG (DevExpress WinForms Dialog) */
+.cust-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.45);
+  backdrop-filter: blur(2px);
+  z-index: 10000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  animation: custFadeIn 0.18s ease-out;
+}
+
+.cust-modal-box {
+  width: 760px;
+  max-width: 95vw;
+  max-height: 92vh;
+  background: #ffffff;
+  border: 1px solid #3b82f6;
+  border-radius: 4px;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.35);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  animation: custPopIn 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.cust-modal-header {
+  height: 32px;
+  background: linear-gradient(180deg, #3a82ee 0%, #1d4ed8 100%);
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 12px;
+  font-weight: 700;
+  font-size: 12.5px;
+}
+
+.cust-modal-close-btn {
+  background: transparent;
+  border: none;
+  color: #ffffff;
+  font-size: 14px;
+  cursor: pointer;
+  padding: 2px 6px;
+  border-radius: 2px;
+}
+
+.cust-modal-close-btn:hover {
+  background: rgba(239, 68, 68, 0.9);
+}
+
+.cust-modal-tabs {
+  display: flex;
+  background: #edf3fa;
+  border-bottom: 1px solid #cbd5e1;
+  padding: 4px 8px 0 8px;
+  gap: 2px;
+}
+
+.cust-modal-tab-btn {
+  padding: 5px 14px;
+  font-size: 11.5px;
+  font-weight: 600;
+  color: #334155;
+  background: #dbe7f3;
+  border: 1px solid #cbd5e1;
+  border-bottom: none;
+  border-radius: 3px 3px 0 0;
+  cursor: pointer;
+}
+
+.cust-modal-tab-btn.active {
+  background: #ffffff;
+  color: #0284c7;
+  font-weight: 700;
+  border-top: 2px solid #0284c7;
+}
+
+.cust-modal-body {
+  flex: 1;
+  overflow-y: auto;
+  padding: 16px 20px;
+  background: #ffffff;
+}
+
+.cust-form-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px 18px;
+}
+
+.cust-form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.cust-form-group.full-width {
+  grid-column: 1 / -1;
+}
+
+.cust-form-label {
+  font-size: 11.5px;
+  font-weight: 600;
+  color: #334155;
+}
+
+.cust-form-label.required::after {
+  content: ' *';
+  color: #ef4444;
+}
+
+.cust-form-input,
+.cust-form-select,
+.cust-form-textarea {
+  height: 26px;
+  border: 1px solid #cbd5e1;
+  border-radius: 2px;
+  padding: 0 8px;
+  font-size: 12px;
+  color: #0f172a;
+  outline: none;
+  background: #ffffff;
+  transition: border-color 0.15s ease;
+}
+
+.cust-form-textarea {
+  height: 52px;
+  padding: 6px 8px;
+  resize: vertical;
+}
+
+.cust-form-input:focus,
+.cust-form-select:focus,
+.cust-form-textarea:focus {
+  border-color: #0284c7;
+  box-shadow: 0 0 0 1px rgba(2, 132, 199, 0.2);
+}
+
+.cust-modal-footer {
+  height: 44px;
+  background: #f1f5f9;
+  border-top: 1px solid #e2e8f0;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 8px;
+  padding: 0 16px;
+}
+
+.cust-btn {
+  height: 27px;
+  padding: 0 14px;
+  border-radius: 2px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  transition: all 0.15s ease;
+}
+
+.cust-btn-cancel {
+  background: #ffffff;
+  border: 1px solid #cbd5e1;
+  color: #475569;
+}
+
+.cust-btn-cancel:hover {
+  background: #f8fafc;
+  color: #0f172a;
+}
+
+.cust-btn-save {
+  background: linear-gradient(180deg, #3b82f6 0%, #1d4ed8 100%);
+  border: 1px solid #1e40af;
+  color: #ffffff;
+}
+
+.cust-btn-save:hover {
+  background: linear-gradient(180deg, #2563eb 0%, #1e40af 100%);
+}
+
+/* 5. BOTTOM STATUS BAR */
+.cust-statusbar {
+  height: 24px;
+  background: linear-gradient(180deg, #e4ecf5 0%, #cfdde9 100%);
+  border-top: 1px solid #b6c7db;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 10px;
+  font-size: 11px;
+  color: #334155;
+  flex-shrink: 0;
+}
+
+.cust-statusbar-left {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.cust-statusbar-right {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+@keyframes custFadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes custPopIn {
+  from { opacity: 0; transform: scale(0.96); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+
+/* ==========================================================================
+   FASTREPORT .NET & ADVANCED MODAL STYLES (IN, EXCEL, THIẾT BỊ, VÂN TAY)
+   ========================================================================== */
+
+.fr-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.72);
+  backdrop-filter: blur(4px);
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: custFadeIn 0.2s ease-out;
+}
+
+/* --- 1. POPUP CHỌN MẪU IN FASTREPORT --- */
+.fr-template-dialog {
+  background: #ffffff;
+  border-radius: 8px;
+  width: 620px;
+  max-width: 95vw;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.25);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  border: 1px solid #cbd5e1;
+  animation: custPopIn 0.2s ease-out;
+}
+
+.fr-dialog-header {
+  height: 48px;
+  background: #f8fafc;
+  border-bottom: 1px solid #e2e8f0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 16px;
+}
+
+.fr-dialog-title {
+  font-weight: 700;
+  font-size: 15px;
+  color: #1e293b;
+  display: flex;
+  align-items: center;
+}
+
+.fr-close-btn, .fr-win-close-btn {
+  background: transparent;
+  border: none;
+  font-size: 16px;
+  color: #64748b;
+  cursor: pointer;
+  padding: 6px 10px;
+  border-radius: 4px;
+  transition: all 0.15s;
+}
+.fr-close-btn:hover, .fr-win-close-btn:hover {
+  background: #fee2e2;
+  color: #dc2626;
+}
+
+.fr-dialog-body {
+  padding: 18px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  max-height: 80vh;
+  overflow-y: auto;
+}
+
+.fr-dialog-desc {
+  margin: 0;
+  font-size: 13px;
+  color: #475569;
+}
+
+.fr-template-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.fr-template-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 12px 14px;
+  border: 1.5px solid #e2e8f0;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.15s;
+  background: #ffffff;
+}
+.fr-template-item:hover {
+  border-color: #93c5fd;
+  background: #f8fafc;
+}
+.fr-template-item.active {
+  border-color: #2563eb;
+  background: #eff6ff;
+  box-shadow: 0 0 0 1px #2563eb;
+}
+
+.fr-template-radio {
+  margin-top: 3px;
+}
+.fr-template-radio input {
+  cursor: pointer;
+}
+
+.fr-template-icon {
+  font-size: 22px;
+  color: #2563eb;
+  margin-top: 2px;
+}
+
+.fr-template-info {
+  flex: 1;
+}
+
+.fr-template-name {
+  font-weight: 600;
+  font-size: 13.5px;
+  color: #0f172a;
+}
+
+.fr-template-sub {
+  font-size: 12px;
+  color: #64748b;
+  margin-top: 2px;
+  line-height: 1.4;
+}
+
+.fr-template-tags {
+  display: flex;
+  gap: 6px;
+  margin-top: 6px;
+}
+
+.fr-badge {
+  font-size: 10.5px;
+  font-weight: 600;
+  padding: 2px 6px;
+  border-radius: 4px;
+  background: #e2e8f0;
+  color: #475569;
+}
+
+.fr-scope-section {
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 6px;
+  padding: 12px 14px;
+}
+
+.fr-scope-title {
+  display: block;
+  font-weight: 600;
+  font-size: 12.5px;
+  color: #334155;
+  margin-bottom: 8px;
+}
+
+.fr-scope-options {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.fr-radio-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12.5px;
+  color: #334155;
+  cursor: pointer;
+}
+.fr-radio-label.disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.fr-dialog-footer {
+  height: 52px;
+  background: #f8fafc;
+  border-top: 1px solid #e2e8f0;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 10px;
+  padding: 0 16px;
+}
+
+.fr-btn {
+  height: 34px;
+  padding: 0 16px;
+  font-size: 12.5px;
+  font-weight: 600;
+  border: 1px solid #cbd5e1;
+  background: #ffffff;
+  color: #334155;
+  border-radius: 4px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  transition: all 0.15s;
+}
+.fr-btn:hover {
+  background: #f1f5f9;
+  border-color: #94a3b8;
+}
+.fr-btn.primary {
+  background: #2563eb;
+  color: #ffffff;
+  border-color: #1d4ed8;
+}
+.fr-btn.primary:hover {
+  background: #1d4ed8;
+}
+.fr-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* --- 2. TRÌNH XEM BÁO CÁO FASTREPORT VIEWER --- */
+.fr-viewer-window {
+  width: 96vw;
+  height: 95vh;
+  background: #ffffff;
+  border-radius: 6px;
+  box-shadow: 0 25px 50px rgba(0, 0, 0, 0.35);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  border: 1px solid #475569;
+}
+
+.fr-window-titlebar {
+  height: 38px;
+  background: #1e293b;
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 12px;
+  user-select: none;
+  border-bottom: 1px solid #334155;
+}
+
+.fr-titlebar-left {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.fr-app-badge {
+  background: #2563eb;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 2px 7px;
+  border-radius: 3px;
+  letter-spacing: 0.5px;
+}
+
+.fr-report-filename {
+  font-size: 12.5px;
+  font-weight: 500;
+  color: #cbd5e1;
+}
+
+.fr-titlebar-right {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.fr-back-btn {
+  background: #334155;
+  border: 1px solid #475569;
+  color: #f1f5f9;
+  font-size: 11.5px;
+  font-weight: 500;
+  padding: 4px 10px;
+  border-radius: 3px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  transition: all 0.15s;
+}
+.fr-back-btn:hover {
+  background: #475569;
+}
+
+/* FASTREPORT RIBBON TOOLBAR */
+.fr-toolbar {
+  height: 44px;
+  background: #f1f5f9;
+  border-bottom: 1px solid #cbd5e1;
+  display: flex;
+  align-items: center;
+  padding: 0 10px;
+  gap: 6px;
+  user-select: none;
+}
+
+.fr-tool-group {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.fr-tool-sep {
+  width: 1px;
+  height: 24px;
+  background: #cbd5e1;
+  margin: 0 4px;
+}
+
+.fr-tool-btn {
+  height: 30px;
+  padding: 0 10px;
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: 3px;
+  font-size: 12px;
+  font-weight: 500;
+  color: #334155;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.fr-tool-btn:hover {
+  background: #e2e8f0;
+  border-color: #cbd5e1;
+}
+.fr-tool-btn.primary-tool {
+  background: #2563eb;
+  color: #ffffff;
+  border-color: #1d4ed8;
+  font-weight: 600;
+}
+.fr-tool-btn.primary-tool:hover {
+  background: #1d4ed8;
+}
+.fr-tool-btn.icon-only {
+  width: 28px;
+  padding: 0;
+  justify-content: center;
+}
+.fr-tool-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.fr-page-indicator {
+  font-size: 12px;
+  font-weight: 600;
+  color: #475569;
+  padding: 0 6px;
+}
+
+.fr-zoom-select {
+  height: 28px;
+  border: 1px solid #cbd5e1;
+  border-radius: 3px;
+  padding: 0 6px;
+  font-size: 12px;
+  background: #ffffff;
+  color: #334155;
+  cursor: pointer;
+}
+
+/* FASTREPORT CANVAS & PAPER SHEET */
+.fr-canvas-container {
+  flex: 1;
+  background: #525659;
+  overflow: auto;
+  padding: 24px 16px;
+  display: flex;
+  justify-content: center;
+}
+
+.fr-paper-sheet {
+  background: #ffffff;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.45);
+  box-sizing: border-box;
+  color: #000000;
+  font-family: "Times New Roman", Times, serif;
+  transition: transform 0.15s ease-out;
+}
+
+.fr-paper-sheet.portrait {
+  width: 210mm;
+  min-height: 297mm;
+  padding: 20mm 15mm;
+}
+
+.fr-paper-sheet.landscape {
+  width: 297mm;
+  min-height: 210mm;
+  padding: 15mm 15mm;
+}
+
+.fr-sheet-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  border-bottom: 2px solid #000000;
+  padding-bottom: 10px;
+  margin-bottom: 14px;
+}
+
+.fr-company-name {
+  font-size: 15px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.fr-company-sub {
+  font-size: 12px;
+  margin-top: 2px;
+}
+
+.fr-meta-box {
+  font-size: 11.5px;
+  text-align: right;
+  line-height: 1.5;
+  font-style: italic;
+}
+
+.fr-sheet-title-section {
+  text-align: center;
+  margin-bottom: 16px;
+}
+
+.fr-sheet-main-title {
+  font-size: 20px;
+  font-weight: 700;
+  text-transform: uppercase;
+  margin: 0;
+  letter-spacing: 0.5px;
+}
+
+.fr-sheet-sub-title {
+  font-size: 12px;
+  font-style: italic;
+  margin-top: 4px;
+}
+
+/* FASTREPORT DATA TABLE */
+.fr-data-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 11.5px;
+  margin-bottom: 20px;
+}
+
+.fr-data-table th, .fr-data-table td {
+  border: 1px solid #000000;
+  padding: 4px 6px;
+  line-height: 1.3;
+}
+
+.fr-data-table th {
+  background: #f1f5f9;
+  font-weight: 700;
+  text-align: left;
+}
+
+.fr-data-table tbody tr:nth-child(even) {
+  background: #fbfcfd;
+}
+
+.fr-total-row td {
+  background: #f8fafc;
+  font-weight: 700;
+}
+
+/* MẪU 3 PROFILE LAYOUT */
+.fr-member-profile-layout {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.fr-profile-top {
+  display: flex;
+  gap: 20px;
+}
+
+.fr-profile-avatar {
+  width: 120px;
+  text-align: center;
+}
+
+.fr-profile-avatar img {
+  width: 110px;
+  height: 140px;
+  object-fit: cover;
+  border: 1px solid #000000;
+}
+
+.fr-avatar-placeholder {
+  width: 110px;
+  height: 140px;
+  border: 1px dashed #64748b;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 36px;
+  color: #94a3b8;
+  background: #f8fafc;
+}
+
+.fr-profile-mathe {
+  margin-top: 6px;
+  font-weight: 700;
+  font-size: 12px;
+}
+
+.fr-profile-details {
+  flex: 1;
+}
+
+.fr-profile-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 12.5px;
+}
+
+.fr-profile-table td {
+  padding: 6px 8px;
+  border-bottom: 1px dotted #cbd5e1;
+}
+
+.fr-label-col {
+  width: 110px;
+  font-weight: 700;
+}
+
+.fr-val-col.highlight {
+  font-size: 14px;
+  font-weight: 700;
+  color: #1e3a8a;
+}
+
+.fr-profile-rules {
+  background: #f8fafc;
+  border: 1px solid #cbd5e1;
+  padding: 10px 14px;
+  border-radius: 4px;
+}
+
+.fr-rules-title {
+  font-size: 12px;
+  font-weight: 700;
+  margin-bottom: 6px;
+}
+
+.fr-rules-list {
+  margin: 0;
+  padding-left: 20px;
+  font-size: 11px;
+  line-height: 1.5;
+}
+
+/* SIGNATURES */
+.fr-sheet-signatures {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 24px;
+  page-break-inside: avoid;
+}
+
+.fr-sig-col {
+  width: 30%;
+  text-align: center;
+  font-size: 12px;
+}
+
+.fr-sig-title {
+  font-weight: 700;
+}
+
+.fr-sig-sub {
+  font-style: italic;
+  font-size: 11px;
+}
+
+.fr-sig-space {
+  height: 60px;
+}
+
+.fr-sig-name {
+  font-weight: 700;
+}
+
+.fr-sig-date {
+  font-style: italic;
+  font-size: 11.5px;
+  margin-bottom: 4px;
+}
+
+/* --- 3. EXCEL IMPORT & DEVICE MODAL STYLES --- */
+.cust-import-modal, .cust-fp-modal {
+  background: #ffffff;
+  border-radius: 8px;
+  width: 780px;
+  max-width: 95vw;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.25);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  border: 1px solid #cbd5e1;
+  animation: custPopIn 0.2s ease-out;
+}
+
+.cust-fp-modal {
+  width: 580px;
+}
+
+.cust-import-header {
+  height: 48px;
+  background: #f8fafc;
+  border-bottom: 1px solid #e2e8f0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 16px;
+}
+
+.cust-import-title {
+  font-weight: 700;
+  font-size: 14.5px;
+  color: #0f172a;
+  display: flex;
+  align-items: center;
+}
+
+.cust-import-body {
+  padding: 16px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  max-height: 75vh;
+  overflow-y: auto;
+}
+
+.cust-import-actions-bar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.cust-file-name {
+  font-size: 12.5px;
+  color: #0f172a;
+}
+
+.cust-dropzone {
+  border: 2px dashed #cbd5e1;
+  border-radius: 8px;
+  padding: 36px 20px;
+  text-align: center;
+  cursor: pointer;
+  background: #f8fafc;
+  transition: all 0.2s;
+}
+.cust-dropzone:hover, .cust-dropzone.drag-over {
+  border-color: #2563eb;
+  background: #eff6ff;
+}
+
+.cust-drop-icon {
+  font-size: 42px;
+  color: #3b82f6;
+  margin-bottom: 10px;
+}
+
+.cust-drop-text {
+  font-size: 14px;
+  font-weight: 600;
+  color: #1e293b;
+}
+
+.cust-drop-sub {
+  font-size: 12px;
+  color: #64748b;
+  margin-top: 4px;
+}
+
+.cust-preview-section {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.cust-preview-stats {
+  display: flex;
+  gap: 16px;
+  font-size: 12.5px;
+  font-weight: 500;
+}
+
+.cust-preview-table-box {
+  max-height: 320px;
+  overflow: auto;
+  border: 1px solid #e2e8f0;
+  border-radius: 4px;
+}
+
+.cust-badge.valid {
+  background: #dcfce7;
+  color: #15803d;
+  font-weight: 600;
+  padding: 2px 6px;
+  border-radius: 3px;
+  font-size: 11px;
+}
+
+.cust-badge.invalid {
+  background: #fee2e2;
+  color: #b91c1c;
+  font-weight: 600;
+  padding: 2px 6px;
+  border-radius: 3px;
+  font-size: 11px;
+}
+
+/* DEVICE SYNC STYLES */
+.cust-device-selector-row {
+  display: flex;
+  gap: 12px;
+  align-items: flex-end;
+}
+
+.cust-empty-device-state {
+  text-align: center;
+  padding: 36px 20px;
+  border: 1px dashed #cbd5e1;
+  border-radius: 6px;
+  background: #f8fafc;
+}
+
+.cust-device-big-icon {
+  font-size: 44px;
+  color: #0284c7;
+  margin-bottom: 10px;
+}
+
+.cust-device-state-title {
+  font-size: 15px;
+  font-weight: 700;
+  color: #0f172a;
+}
+
+.cust-device-state-sub {
+  font-size: 12.5px;
+  color: #64748b;
+  margin-top: 6px;
+  max-width: 480px;
+  margin-left: auto;
+  margin-right: auto;
+  line-height: 1.4;
+}
+
+/* FINGERPRINT ENROLL STYLES */
+.cust-fp-customer-card {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 14px;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 6px;
+}
+
+.cust-fp-cust-name {
+  font-size: 15px;
+  font-weight: 700;
+  color: #0f172a;
+}
+
+.cust-fp-cust-meta {
+  font-size: 12px;
+  color: #64748b;
+  margin-top: 2px;
+}
+
+.cust-fp-controls {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.cust-fp-scanner-area {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+}
+
+.cust-fp-scanner-box {
+  width: 110px;
+  height: 130px;
+  border-radius: 8px;
+  background: #ffffff;
+  border: 2px solid #cbd5e1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+.cust-fp-giant-icon {
+  font-size: 64px;
+  color: #94a3b8;
+  transition: all 0.3s;
+}
+
+.cust-fp-scanner-box.scanning {
+  border-color: #0284c7;
+}
+.cust-fp-scanner-box.scanning .cust-fp-giant-icon {
+  color: #0284c7;
+}
+
+.cust-fp-scanner-box.success {
+  border-color: #16a34a;
+  background: #f0fdf4;
+}
+.cust-fp-scanner-box.success .cust-fp-giant-icon {
+  color: #16a34a;
+}
+
+.cust-fp-laser-line {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: #0284c7;
+  box-shadow: 0 0 10px #38bdf8;
+  animation: laserScan 1.2s infinite alternate ease-in-out;
+}
+
+@keyframes laserScan {
+  from { top: 5%; }
+  to { top: 90%; }
+}
+
+.cust-fp-steps-indicator {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 18px;
+}
+
+.cust-fp-step-dot {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11.5px;
+  font-weight: 600;
+  color: #94a3b8;
+}
+.cust-fp-step-dot.active {
+  color: #0284c7;
+}
+
+.cust-fp-step-dot .dot-num {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  border: 1px solid currentColor;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+}
+
+.cust-fp-step-dot.active .dot-num {
+  background: #0284c7;
+  color: #ffffff;
+  border-color: #0284c7;
+}
+
+.cust-fp-step-line {
+  width: 30px;
+  height: 1px;
+  background: #cbd5e1;
+}
+
+.cust-fp-instructions {
+  margin-top: 14px;
+  font-size: 12.5px;
+  color: #334155;
+  text-align: center;
+  font-weight: 500;
+}
+
+.cust-fp-template-display {
+  margin-top: 10px;
+  font-size: 11.5px;
+  background: #ffffff;
+  border: 1px solid #cbd5e1;
+  padding: 4px 10px;
+  border-radius: 4px;
+}
+
+/* ==========================================================================
+   PRINT CSS (CHỈ IN TỜ GIẤY BÁO CÁO FASTREPORT KHI NHẤN NÚT IN)
+   ========================================================================== */
+@media print {
+  body * {
+    visibility: hidden;
+  }
+  #fastreport-printable-area, #fastreport-printable-area * {
+    visibility: visible;
+  }
+  #fastreport-printable-area {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    box-shadow: none !important;
+    transform: none !important;
+  }
+}
+
+
+/* ==========================================================================
+   FORM IN LƯỚI & FASTREPORT BÁM SÁT 100% GIAO DIỆN WINFORMS TÂN AN PHÁT
+   ========================================================================== */
+
+/* Hộp thoại In lưới */
+.in-luoi-dialog {
+  background: #f0f0f0;
+  border: 1px solid #707070;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+  width: 530px;
+  max-width: 95vw;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+  font-size: 12px;
+  color: #000000;
+  display: flex;
+  flex-direction: column;
+  animation: custPopIn 0.15s ease-out;
+}
+
+.in-luoi-titlebar {
+  background: #ffffff;
+  padding: 6px 10px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid #d0d0d0;
+}
+
+.in-luoi-title {
+  font-weight: 600;
+  font-size: 12.5px;
+  color: #1e293b;
+}
+
+.in-luoi-close-btn {
+  background: transparent;
+  border: none;
+  font-size: 14px;
+  cursor: pointer;
+  color: #475569;
+  padding: 2px 6px;
+}
+.in-luoi-close-btn:hover {
+  background: #dc2626;
+  color: #ffffff;
+}
+
+.in-luoi-tabs {
+  background: #e8e8e8;
+  padding: 4px 8px 0;
+  border-bottom: 1px solid #c0c0c0;
+  display: flex;
+}
+
+.in-luoi-tab.active {
+  background: #f0f0f0;
+  border: 1px solid #c0c0c0;
+  border-bottom: 1px solid #f0f0f0;
+  margin-bottom: -1px;
+  padding: 6px 14px;
+  font-weight: 600;
+  font-size: 12px;
+  color: #0f172a;
+}
+
+.in-luoi-body {
+  padding: 12px 14px;
+}
+
+.in-luoi-fieldset {
+  border: 1px solid #b8b8b8;
+  padding: 12px 14px;
+  margin: 0;
+  background: #ffffff;
+}
+
+.in-luoi-fieldset legend {
+  font-weight: 600;
+  padding: 0 4px;
+  font-size: 12px;
+  color: #1e293b;
+}
+
+.in-luoi-row {
+  display: flex;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.in-luoi-row.align-top {
+  align-items: flex-start;
+}
+
+.in-luoi-label {
+  width: 90px;
+  flex-shrink: 0;
+  font-size: 12px;
+}
+
+.in-luoi-input {
+  flex: 1;
+  height: 24px;
+  border: 1px solid #abadb3;
+  padding: 0 6px;
+  font-size: 12px;
+  outline: none;
+}
+.in-luoi-input:focus {
+  border-color: #2563eb;
+}
+
+.in-luoi-mauin-box {
+  flex: 1;
+  border: 1px solid #abadb3;
+  background: #ffffff;
+  padding: 4px;
+  height: 90px;
+  overflow-y: auto;
+}
+
+.in-luoi-mauin-item {
+  padding: 4px 6px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+}
+.in-luoi-mauin-item:hover {
+  background: #e5f1fb;
+}
+.in-luoi-mauin-item.selected {
+  background: #cce8ff;
+  border: 1px solid #99d1ff;
+  font-weight: 500;
+}
+
+.in-luoi-columns-box {
+  flex: 1;
+  border: 1px solid #abadb3;
+  background: #ffffff;
+  padding: 6px;
+  height: 140px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.in-luoi-checkbox-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+  font-size: 12px;
+}
+
+.in-luoi-footer {
+  padding: 8px 14px;
+  background: #f0f0f0;
+  border-top: 1px solid #d0d0d0;
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
+.in-luoi-btn {
+  min-width: 75px;
+  height: 25px;
+  padding: 0 12px;
+  font-size: 12px;
+  border: 1px solid #707070;
+  background: #e1e1e1;
+  cursor: pointer;
+}
+.in-luoi-btn:hover {
+  background: #e5f1fb;
+  border-color: #0078d7;
+}
+.in-luoi-btn.primary {
+  border: 1.5px solid #0078d7;
+  background: #e1e1e1;
+  font-weight: 600;
+}
+
+/* --- FASTREPORT "IN DANH SÁCH" WINDOW --- */
+.fr-window-titlebar-classic {
+  height: 32px;
+  background: #ffffff;
+  border-bottom: 1px solid #c0c0c0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 10px;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.fr-toolbar-classic {
+  height: 38px;
+  background: #eaf1fb;
+  border-bottom: 1px solid #c4d5ea;
+  display: flex;
+  align-items: center;
+  padding: 0 6px;
+  gap: 3px;
+  font-size: 11.5px;
+}
+
+.fr-tb-item {
+  height: 28px;
+  padding: 0 6px;
+  border: 1px solid transparent;
+  background: transparent;
+  border-radius: 2px;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  cursor: pointer;
+  font-size: 11.5px;
+  color: #1e293b;
+}
+.fr-tb-item:hover {
+  background: #d6e5fa;
+  border-color: #92b8ea;
+}
+.fr-tb-item.icon-btn {
+  width: 26px;
+  padding: 0;
+  justify-content: center;
+}
+.fr-tb-item:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+
+.fr-tb-sep {
+  width: 1px;
+  height: 20px;
+  background: #bad0ec;
+  margin: 0 3px;
+}
+
+.fr-tb-page {
+  font-weight: 500;
+  font-size: 11.5px;
+  padding: 0 4px;
+}
+
+.fr-canvas-classic {
+  flex: 1;
+  background: #7393b3;
+  overflow: auto;
+  padding: 24px 16px;
+  display: flex;
+  justify-content: center;
+}
+
+.fr-sheet-classic {
+  background: #ffffff;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.35);
+  box-sizing: border-box;
+  font-family: Arial, "Helvetica Neue", Helvetica, sans-serif;
+  color: #000000;
+}
+
+.fr-sheet-classic.landscape {
+  width: 297mm;
+  min-height: 210mm;
+  padding: 15mm 15mm;
+}
+
+.fr-sheet-classic.portrait {
+  width: 210mm;
+  min-height: 297mm;
+  padding: 18mm 15mm;
+}
+
+.fr-company-header-classic {
+  text-align: center;
+  margin-bottom: 12px;
+}
+
+.fr-company-name-classic {
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+}
+
+.fr-company-meta-classic {
+  font-size: 11.5px;
+  margin-top: 2px;
+}
+
+.fr-orange-line {
+  height: 2.5px;
+  background: #ea580c;
+  margin-bottom: 14px;
+  width: 100%;
+}
+
+.fr-report-title-right {
+  text-align: right;
+  font-size: 17px;
+  font-weight: 700;
+  margin-bottom: 10px;
+  color: #000000;
+  padding-right: 4px;
+}
+
+.fr-table-classic {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 11px;
+  margin-bottom: 24px;
+}
+
+.fr-table-classic th, .fr-table-classic td {
+  border: 1px solid #000000;
+  padding: 4px 6px;
+  line-height: 1.3;
+}
+
+.fr-table-classic th {
+  background: #ffffff;
+  font-weight: 700;
+  text-align: center;
+}
+
+.fr-signatures-classic {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 20px;
+  padding: 0 30px;
+}
+
+.fr-sig-box-left, .fr-sig-box-right {
+  text-align: center;
+  min-width: 150px;
+}
+
+.fr-sig-title-classic {
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.fr-sig-hint-classic {
+  font-size: 11px;
+  font-style: italic;
+  margin-top: 2px;
+}
+
+
+/* ==========================================================================
+   FORM "THÊM NHANH" (KHỚP 100% ẢNH DESKTOP WINFORMS TÂN AN PHÁT)
+   ========================================================================== */
+
+.them-nhanh-window {
+  background: #d8e4f8;
+  border: 1px solid #707070;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4);
+  width: 96vw;
+  max-width: 1200px;
+  height: 90vh;
+  display: flex;
+  flex-direction: column;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+  font-size: 12px;
+  color: #000000;
+  animation: custPopIn 0.15s ease-out;
+}
+
+.them-nhanh-titlebar {
+  height: 32px;
+  background: #ffffff;
+  border-bottom: 1px solid #c0c0c0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 10px;
+  font-weight: 600;
+  font-size: 12.5px;
+}
+
+.them-nhanh-win-btn {
+  background: transparent;
+  border: none;
+  font-size: 14px;
+  color: #475569;
+  cursor: pointer;
+  padding: 2px 6px;
+}
+.them-nhanh-win-btn:hover {
+  background: #dc2626;
+  color: #ffffff;
+}
+
+.them-nhanh-sub-header {
+  height: 34px;
+  padding: 0 14px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 500;
+  font-size: 12px;
+  color: #1e293b;
+  border-bottom: 1px solid #c8d8f0;
+}
+.them-nhanh-sub-header .star-icon {
+  font-size: 16px;
+}
+
+.them-nhanh-main-split {
+  flex: 1;
+  display: flex;
+  overflow: hidden;
+  padding: 6px 10px;
+  gap: 12px;
+}
+
+/* CỘT TRÁI (LƯỚI) */
+.them-nhanh-left-pane {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.them-nhanh-toolbar {
+  height: 34px;
+  background: #eaf1fb;
+  border: 1px solid #abadb3;
+  border-bottom: none;
+  display: flex;
+  align-items: center;
+  padding: 0 8px;
+  gap: 8px;
+}
+
+.tn-tb-label {
+  font-size: 12px;
+}
+
+.tn-tb-num-input {
+  width: 45px;
+  height: 22px;
+  border: 1px solid #abadb3;
+  text-align: center;
+  font-size: 12px;
+}
+
+.tn-tb-btn {
+  height: 24px;
+  padding: 0 8px;
+  font-size: 11.5px;
+  border: 1px solid #abadb3;
+  background: #ffffff;
+  display: inline-flex;
+  align-items: center;
+  cursor: pointer;
+}
+.tn-tb-btn:hover {
+  background: #e5f1fb;
+  border-color: #0078d7;
+}
+
+.them-nhanh-grid-box {
+  flex: 1;
+  background: #ffffff;
+  border: 1px solid #abadb3;
+  overflow: auto;
+}
+
+.them-nhanh-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 12px;
+}
+
+.them-nhanh-table th {
+  background: #f0f0f0;
+  border: 1px solid #d0d0d0;
+  padding: 4px 6px;
+  font-weight: 500;
+  text-align: left;
+  position: sticky;
+  top: 0;
+  z-index: 2;
+}
+
+.them-nhanh-table td {
+  border: 1px solid #e0e0e0;
+  padding: 2px;
+}
+
+.them-nhanh-table tr.row-selected {
+  background: #e5f1fb;
+}
+
+.row-selector {
+  background: #f8fafc;
+  color: #64748b;
+  font-size: 10px;
+  width: 25px;
+  user-select: none;
+}
+
+.tn-cell-input {
+  width: 100%;
+  height: 24px;
+  border: none;
+  outline: none;
+  background: transparent;
+  font-size: 12px;
+  padding: 0 4px;
+  box-sizing: border-box;
+}
+.tn-cell-input:focus {
+  background: #ffffff;
+  box-shadow: inset 0 0 0 1px #2563eb;
+}
+.tn-cell-input.req-cell {
+  background: #fefce8;
+}
+
+.them-nhanh-bottom-left {
+  padding-top: 6px;
+}
+
+.tn-btn-sub {
+  height: 26px;
+  padding: 0 12px;
+  font-size: 12px;
+  border: 1px solid #abadb3;
+  background: #ffffff;
+  cursor: pointer;
+}
+.tn-btn-sub:hover {
+  background: #fee2e2;
+  border-color: #dc2626;
+  color: #dc2626;
+}
+
+/* CỘT PHẢI (CÁC THUỘC TÍNH CHUNG) */
+.them-nhanh-right-pane {
+  width: 320px;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.tn-common-title {
+  color: #dc2626;
+  font-weight: 700;
+  font-size: 13px;
+  margin-bottom: 6px;
+  padding-left: 4px;
+}
+
+.tn-common-fields-list {
+  flex: 1;
+  overflow-y: auto;
+  padding-right: 6px;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.tn-prop-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+}
+
+.tn-prop-row input[type="checkbox"] {
+  cursor: pointer;
+}
+
+.tn-prop-label {
+  width: 110px;
+  flex-shrink: 0;
+  font-size: 11.5px;
+}
+
+.tn-prop-input, .tn-prop-select {
+  flex: 1;
+  height: 22px;
+  border: 1px solid #abadb3;
+  padding: 0 4px;
+  font-size: 11.5px;
+  outline: none;
+  background: #ffffff;
+}
+.tn-prop-input:disabled, .tn-prop-select:disabled {
+  background: #f1f5f9;
+  color: #94a3b8;
+}
+.tn-prop-input.highlight-yellow {
+  background: #ffffcc;
+}
+
+/* FOOTER NÚT BẤM */
+.them-nhanh-footer {
+  height: 42px;
+  padding: 0 16px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 10px;
+  border-top: 1px solid #c8d8f0;
+}
+
+.tn-btn-primary {
+  min-width: 80px;
+  height: 26px;
+  padding: 0 14px;
+  border: 1px solid #0078d7;
+  background: #e1e1e1;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+}
+.tn-btn-primary:hover {
+  background: #e5f1fb;
+}
+
+.tn-btn-cancel {
+  min-width: 80px;
+  height: 26px;
+  padding: 0 14px;
+  border: 1px solid #abadb3;
+  background: #e1e1e1;
+  font-size: 12px;
+  cursor: pointer;
+}
+.tn-btn-cancel:hover {
+  background: #f1f5f9;
+}
+
+
+/* ==========================================================================
+   SUB-MODALS: "CHỌN FILE EXCEL HOẶC XUẤT FILE MẪU" & "THÊM TỪ EXCEL" (GHÉP CỘT)
+   ========================================================================== */
+
+.sub-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.4);
+  z-index: 10005;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: custFadeIn 0.15s ease-out;
+}
+
+/* 1. DIALOG "CHỌN FILE EXCEL HOẶC XUẤT FILE MẪU" */
+.choice-dialog-window {
+  width: 500px;
+  max-width: 95vw;
+  background: #d8e4f8;
+  border: 1px solid #707070;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+  font-size: 12px;
+  color: #000000;
+  animation: custPopIn 0.15s ease-out;
+}
+
+.choice-dialog-titlebar {
+  height: 30px;
+  background: #ffffff;
+  border-bottom: 1px solid #c0c0c0;
+  padding: 0 10px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-weight: 600;
+  font-size: 12px;
+}
+
+.choice-dialog-close {
+  background: transparent;
+  border: none;
+  font-size: 13px;
+  cursor: pointer;
+  color: #475569;
+}
+.choice-dialog-close:hover {
+  background: #dc2626;
+  color: #ffffff;
+}
+
+.choice-dialog-body {
+  padding: 16px 20px;
+}
+
+.choice-section-hint {
+  font-size: 12px;
+  color: #1e293b;
+  margin-bottom: 8px;
+}
+
+.choice-action-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.choice-action-btn {
+  width: 100%;
+  height: 30px;
+  background: #ffffff;
+  border: 1px solid #abadb3;
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.15s;
+}
+.choice-action-btn:hover {
+  background: #e5f1fb;
+  border-color: #0078d7;
+}
+
+.choice-footer-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+.choice-btn-primary {
+  width: 100%;
+  height: 30px;
+  background: #ffffff;
+  border: 1.5px solid #0078d7;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.choice-btn-primary:hover {
+  background: #e5f1fb;
+}
+
+.choice-btn-cancel {
+  width: 100%;
+  height: 28px;
+  background: #ffffff;
+  border: 1px solid #abadb3;
+  font-size: 12px;
+  cursor: pointer;
+}
+.choice-btn-cancel:hover {
+  background: #f1f5f9;
+}
+
+/* 2. DIALOG "THÊM TỪ EXCEL" (BẢNG GHÉP CỘT) */
+.mapping-dialog-window {
+  width: 540px;
+  max-width: 95vw;
+  background: #d8e4f8;
+  border: 1px solid #707070;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+  font-size: 12px;
+  color: #000000;
+  animation: custPopIn 0.15s ease-out;
+}
+
+.mapping-dialog-titlebar {
+  height: 30px;
+  background: #ffffff;
+  border-bottom: 1px solid #c0c0c0;
+  padding: 0 10px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-weight: 600;
+  font-size: 12px;
+}
+
+.mapping-dialog-close {
+  background: transparent;
+  border: none;
+  font-size: 13px;
+  cursor: pointer;
+  color: #475569;
+}
+.mapping-dialog-close:hover {
+  background: #dc2626;
+  color: #ffffff;
+}
+
+.mapping-dialog-body {
+  padding: 12px 14px;
+}
+
+.mapping-guide {
+  font-size: 11.5px;
+  color: #1e293b;
+  margin-bottom: 10px;
+  line-height: 1.4;
+}
+.mapping-guide p {
+  margin: 2px 0;
+}
+
+.mapping-table-container {
+  height: 320px;
+  background: #ffffff;
+  border: 1px solid #abadb3;
+  overflow-y: auto;
+}
+
+.mapping-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 12px;
+}
+
+.mapping-table th {
+  background: #f0f0f0;
+  border: 1px solid #d0d0d0;
+  padding: 5px 8px;
+  font-weight: 600;
+  text-align: left;
+  position: sticky;
+  top: 0;
+  z-index: 2;
+}
+
+.mapping-table td {
+  border: 1px solid #e0e0e0;
+  padding: 2px 4px;
+}
+
+.mapping-excel-cell {
+  background: #fbfcfd;
+  font-weight: 500;
+  padding-left: 8px !important;
+}
+
+.mapping-select {
+  width: 100%;
+  height: 24px;
+  border: 1px solid transparent;
+  background: transparent;
+  font-size: 12px;
+  outline: none;
+  cursor: pointer;
+}
+.mapping-select:focus {
+  border-color: #0078d7;
+  background: #ffffff;
+}
+
+.mapping-dialog-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 12px;
+}
+
+.mapping-btn-auto {
+  height: 26px;
+  padding: 0 14px;
+  background: #ffffff;
+  border: 1px solid #abadb3;
+  font-size: 12px;
+  cursor: pointer;
+}
+.mapping-btn-auto:hover {
+  background: #e5f1fb;
+  border-color: #0078d7;
+}
+
+.mapping-btn-right-group {
+  display: flex;
+  gap: 8px;
+}
+
+.mapping-btn-accept {
+  min-width: 75px;
+  height: 26px;
+  padding: 0 14px;
+  background: #ffffff;
+  border: 1.5px solid #0078d7;
+  font-weight: 600;
+  font-size: 12px;
+  cursor: pointer;
+}
+.mapping-btn-accept:hover {
+  background: #e5f1fb;
+}
+
+.mapping-btn-cancel {
+  min-width: 70px;
+  height: 26px;
+  padding: 0 12px;
+  background: #ffffff;
+  border: 1px solid #abadb3;
+  font-size: 12px;
+  cursor: pointer;
+}
+.mapping-btn-cancel:hover {
+  background: #f1f5f9;
+}
+
+/* WINFORMS AERO STYLE REFINEMENTS FOR EXCEL SUB-MODALS */
+.choice-dialog-window, .mapping-dialog-window {
+  background: #cfe2f7 !important;
+  border: 1px solid #6b93b8 !important;
+  border-radius: 4px !important;
+  box-shadow: 0 12px 36px rgba(0, 0, 0, 0.45) !important;
+}
+
+.choice-dialog-titlebar, .mapping-dialog-titlebar {
+  background: #ffffff !important;
+  border-bottom: 1px solid #c8d8e8 !important;
+  height: 32px !important;
+  padding: 0 10px 0 12px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  font-size: 12.5px !important;
+  font-weight: 600 !important;
+  color: #1e293b !important;
+}
+
+.choice-dialog-body {
+  padding: 18px 24px !important;
+}
+
+.choice-section-hint {
+  font-size: 12px !important;
+  color: #1e293b !important;
+  margin-bottom: 10px !important;
+}
+
+.choice-action-btn, .choice-btn-primary, .choice-btn-cancel {
+  width: 100% !important;
+  height: 28px !important;
+  background: #ffffff !important;
+  border: 1px solid #8e9ca8 !important;
+  border-radius: 3px !important;
+  font-size: 12px !important;
+  color: #0f172a !important;
+  cursor: pointer !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.05) !important;
+  transition: all 0.15s !important;
+}
+
+.choice-action-btn:hover, .choice-btn-primary:hover, .choice-btn-cancel:hover {
+  background: #e8f2fe !important;
+  border-color: #0078d7 !important;
+}
+
+.choice-footer-buttons {
+  margin-top: 10px !important;
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 8px !important;
+}
+
+.mapping-table-container {
+  height: 330px !important;
+  background: #ffffff !important;
+  border: 1px solid #8e9ca8 !important;
+  overflow-y: scroll !important;
+}
+
+.mapping-table {
+  width: 100% !important;
+  border-collapse: collapse !important;
+  font-size: 12px !important;
+}
+
+.mapping-table th {
+  background: #eceff4 !important;
+  border: 1px solid #d5dbe4 !important;
+  padding: 5px 8px !important;
+  font-weight: 600 !important;
+  font-size: 12px !important;
+  color: #1e293b !important;
+  text-align: left !important;
+  position: sticky !important;
+  top: 0 !important;
+  z-index: 2 !important;
+}
+
+.mapping-table td {
+  border: 1px solid #e2e8f0 !important;
+  padding: 0 !important;
+  height: 24px !important;
+}
+
+.mapping-excel-cell {
+  padding-left: 8px !important;
+  color: #0f172a !important;
+  cursor: pointer !important;
+  font-size: 12px !important;
+}
+
+.mapping-row-selected .mapping-excel-cell {
+  background: #0078d7 !important;
+  color: #ffffff !important;
+  font-weight: 500 !important;
+}
+
+.mapping-select {
+  width: 100% !important;
+  height: 100% !important;
+  border: none !important;
+  background: transparent !important;
+  font-size: 12px !important;
+  color: #0f172a !important;
+  padding: 0 4px !important;
+  cursor: pointer !important;
+  outline: none !important;
+}
+
+.mapping-select:focus {
+  background: #ffffff !important;
+  outline: 1px solid #0078d7 !important;
+}
+
+.mapping-btn-auto, .mapping-btn-accept, .mapping-btn-cancel {
+  height: 26px !important;
+  background: #ffffff !important;
+  border: 1px solid #8e9ca8 !important;
+  border-radius: 3px !important;
+  font-size: 12px !important;
+  cursor: pointer !important;
+  transition: all 0.15s !important;
+}
+
+.mapping-btn-auto:hover, .mapping-btn-accept:hover, .mapping-btn-cancel:hover {
+  background: #e8f2fe !important;
+  border-color: #0078d7 !important;
+}
+
+.mapping-btn-auto {
+  padding: 0 16px !important;
+}
+
+.mapping-btn-accept {
+  min-width: 80px !important;
+  padding: 0 16px !important;
+  border-color: #0078d7 !important;
+  font-weight: 600 !important;
+}
+
+.mapping-btn-cancel {
+  min-width: 75px !important;
+  padding: 0 14px !important;
+}
+
+
+/* ==========================================================================
+   WINFORMS RIGHT-CLICK CONTEXT MENU (CONTEXTMENUSTRIP)
+   ========================================================================== */
+
+.wf-context-menu {
+  position: fixed;
+  background: #f2f2f2;
+  border: 1px solid #8e9ca8;
+  box-shadow: 3px 4px 10px rgba(0, 0, 0, 0.35);
+  z-index: 99999;
+  width: 215px;
+  padding: 3px 2px;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+  font-size: 12px;
+  color: #0f172a;
+  border-radius: 2px;
+  animation: custFadeIn 0.1s ease-out;
+}
+
+.wf-menu-item {
+  display: flex;
+  align-items: center;
+  height: 23px;
+  padding: 0 10px 0 6px;
+  cursor: pointer;
+  position: relative;
+  user-select: none;
+  border-radius: 2px;
+}
+
+.wf-menu-item:hover {
+  background: #bde0fe;
+  outline: 1px solid #7da2ce;
+}
+
+.wf-menu-icon {
+  width: 20px;
+  height: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+  margin-right: 6px;
+  flex-shrink: 0;
+}
+
+.wf-menu-text {
+  flex: 1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-size: 12px;
+  color: #1e293b;
+}
+
+.wf-submenu-arrow {
+  font-size: 9px;
+  color: #475569;
+  margin-left: 6px;
+}
+
+.wf-submenu {
+  position: absolute;
+  left: 98%;
+  top: -2px;
+  background: #f2f2f2;
+  border: 1px solid #8e9ca8;
+  box-shadow: 3px 4px 10px rgba(0, 0, 0, 0.35);
+  width: 155px;
+  padding: 3px 2px;
+  z-index: 100000;
+  border-radius: 2px;
+  animation: custFadeIn 0.1s ease-out;
+}
+
+.wf-menu-separator {
+  height: 1px;
+  background: #d4d8de;
+  margin: 3px 4px 3px 26px;
+}
+
+/* FOCUSED CELL HIGHLIGHT (MATCHING USER SCREENSHOT: BROWN/AMBER HIGHLIGHT) */
+.cust-cell-focused {
+  background-color: #b4652c !important;
+  color: #ffffff !important;
+  outline: 1px solid #7c3b12 !important;
+  font-weight: 600 !important;
+}
+.cust-cell-focused span, .cust-cell-focused * {
+  color: #ffffff !important;
+}
+
+
+/* WINFORMS TREEVIEW ACTIVE SELECTION STYLE (MATCHING USER SCREENSHOT) */
+.cust-tree-item.active {
+  background: #005a9e !important;
+  color: #ffffff !important;
+  font-weight: 600 !important;
+  outline: 1px dotted #cce4f7 !important;
+  border-left-color: #003a66 !important;
+}
+
+.cust-tree-item.active .cust-tree-label span {
+  color: #ffffff !important;
+}
+
+.cust-tree-item.active .cust-tree-count {
+  background: #ffffff !important;
+  color: #005a9e !important;
+  font-weight: 700 !important;
+}
+
+
+/* WINFORMS CLASSIC OFFICE GOLD HOVER (MATCHING 100% USER SCREENSHOTS) */
+.wf-menu-item:hover {
+  background: linear-gradient(to bottom, #fff8db, #ffe88c) !important;
+  outline: 1px solid #d4a520 !important;
+  color: #000000 !important;
+}
+
+.wf-menu-item:hover .wf-menu-text {
+  color: #000000 !important;
+  font-weight: 500 !important;
+}
+
+.wf-menu-item:hover .wf-submenu-arrow {
+  color: #000000 !important;
+}

@@ -1,0 +1,293 @@
+
+  <Object type="No1Lib.Sys.No1Form, No1Lib.Sys, Version=1.0.0.0, Culture=neutral, PublicKeyToken=870be39b125434d2" name="form" children="Controls">
+    <Reference name="KryptonPanel1" />
+    <Property name="Name">form</Property>
+    <Property name="MinimizeBox">False</Property>
+    <Property name="StartPosition">CenterScreen</Property>
+    <Property name="Text">DANH MỤC BILL HỦY</Property>
+    <Property name="MaximizeBox">False</Property>
+    <Property name="ClientSize">818, 462</Property>
+    <Property name="DataBindings">
+      <Property name="DefaultDataSourceUpdateMode">OnValidation</Property>
+    </Property>
+    <Property name="FormBorderStyle">FixedDialog</Property>
+    <Event name="Load">form_Load</Event>
+  </Object>
+  <Object type="ComponentFactory.Krypton.Toolkit.KryptonPanel, ComponentFactory.Krypton.Toolkit, Version=4.1.6.0, Culture=neutral, PublicKeyToken=5fd520d36328f741" name="KryptonPanel1" children="Controls">
+    <Reference name="KryptonSplitContainer1" />
+    <Property name="Dock">Fill</Property>
+    <Property name="Size">818, 462</Property>
+    <Property name="TabIndex">0</Property>
+    <Property name="Location">0, 0</Property>
+    <Property name="DataBindings">
+      <Property name="DefaultDataSourceUpdateMode">OnValidation</Property>
+    </Property>
+    <Property name="Name">KryptonPanel1</Property>
+  </Object>
+  <Object type="ComponentFactory.Krypton.Toolkit.KryptonSplitContainer, ComponentFactory.Krypton.Toolkit, Version=4.1.6.0, Culture=neutral, PublicKeyToken=5fd520d36328f741" name="KryptonSplitContainer1" children="Controls">
+    <Property name="Dock">Fill</Property>
+    <Property name="Cursor">Default</Property>
+    <Property name="Size">818, 462</Property>
+    <Property name="DataBindings">
+      <Property name="DefaultDataSourceUpdateMode">OnValidation</Property>
+    </Property>
+    <Property name="Name">KryptonSplitContainer1</Property>
+    <Property name="TabIndex">0</Property>
+    <Property name="Location">0, 0</Property>
+    <Property name="Panel2">
+      <Property name="Controls">
+        <Item type="No1Lib.Sys.GridMapper, No1Lib.Sys, Version=1.0.0.0, Culture=neutral, PublicKeyToken=870be39b125434d2">
+          <Reference name="grDetail" />
+        </Item>
+      </Property>
+      <Property name="DataBindings">
+        <Property name="DefaultDataSourceUpdateMode">OnValidation</Property>
+      </Property>
+    </Property>
+    <Property name="Orientation">Horizontal</Property>
+    <Property name="Panel1">
+      <Property name="Controls">
+        <Item type="No1Lib.Sys.No1DataGrid, No1Lib.Sys, Version=1.0.0.0, Culture=neutral, PublicKeyToken=870be39b125434d2">
+          <Reference name="grMain" />
+        </Item>
+        <Item type="ComponentFactory.Krypton.Toolkit.KryptonPanel, ComponentFactory.Krypton.Toolkit, Version=4.1.6.0, Culture=neutral, PublicKeyToken=5fd520d36328f741">
+          <Reference name="KryptonPanel2" />
+        </Item>
+      </Property>
+      <Property name="DataBindings">
+        <Property name="DefaultDataSourceUpdateMode">OnValidation</Property>
+      </Property>
+    </Property>
+    <Property name="SplitterDistance">238</Property>
+  </Object>
+  <Object type="No1Lib.Sys.GridMapper, No1Lib.Sys, Version=1.0.0.0, Culture=neutral, PublicKeyToken=870be39b125434d2" name="grDetail" children="Controls">
+    <Property name="GUID">bb78e739-cabc-48b7-8470-60f4fc18af55</Property>
+    <Property name="Size">818, 219</Property>
+    <Property name="DataBindings">
+      <Property name="DefaultDataSourceUpdateMode">OnValidation</Property>
+    </Property>
+    <Property name="Name">grDetail</Property>
+    <Property name="ViewConfig">
+      <Binary>AAEAAAD/////AQAAAAAAAAAPAQAAAHoMAAACPERvY3VtZW50RWxlbWVudD4NCiAgPERhdGE+DQogICAgPENIRUNLRUQ+dHJ1ZTwvQ0hFQ0tFRD4NCiAgICA8Q09MSUQ+ZmUzZmY4ZjEtMTQ3OS00YTM0LWIzZGMtYjI5ZTU0Y2JkZjllPC9DT0xJRD4NCiAgICA8VEFCTEVJRD45ZGZhYmYzOC0yMDJlLTQzNWQtYTg3YS0zM2U1NTFmZDJlNGQ8L1RBQkxFSUQ+DQogICAgPFRPVEFMIC8+DQogICAgPFNPUlQgLz4NCiAgICA8Q09ORElUSU9OIC8+DQogICAgPEZPUk1VTEEgLz4NCiAgICA8UEFSQU1JRCAvPg0KICAgIDxDQVBUSU9OIC8+DQogICAgPEtIT05HVEFPQ09UPmZhbHNlPC9LSE9OR1RBT0NPVD4NCiAgICA8UkVBRE9OTFk+ZmFsc2U8L1JFQURPTkxZPg0KICAgIDxSRVBMQUNFIC8+DQogICAgPEFMSUFTIC8+DQogICAgPENVU1RPTUZJRUxEPkZhbHNlPC9DVVNUT01GSUVMRD4NCiAgICA8Q1VTVE9NQ09MVFlQRSAvPg0KICAgIDxTRUxFQ1RPUkRFUiAvPg0KICA8L0RhdGE+DQogIDxEYXRhPg0KICAgIDxDSEVDS0VEPnRydWU8L0NIRUNLRUQ+DQogICAgPENPTElEPjdiYWIxMTYwLTM2YzAtNDIxOS05ZTBhLTU5ODRhYTg2YTk5ZDwvQ09MSUQ+DQogICAgPFRBQkxFSUQ+OWRmYWJmMzgtMjAyZS00MzVkLWE4N2EtMzNlNTUxZmQyZTRkPC9UQUJMRUlEPg0KICAgIDxUT1RBTCAvPg0KICAgIDxTT1JUIC8+DQogICAgPENPTkRJVElPTiAvPg0KICAgIDxGT1JNVUxBIC8+DQogICAgPFBBUkFNSUQgLz4NCiAgICA8Q0FQVElPTiAvPg0KICAgIDxLSE9OR1RBT0NPVD5mYWxzZTwvS0hPTkdUQU9DT1Q+DQogICAgPFJFQURPTkxZPmZhbHNlPC9SRUFET05MWT4NCiAgICA8UkVQTEFDRSAvPg0KICAgIDxBTElBUyAvPg0KICAgIDxDVVNUT01GSUVMRD5GYWxzZTwvQ1VTVE9NRklFTEQ+DQogICAgPENVU1RPTUNPTFRZUEUgLz4NCiAgICA8U0VMRUNUT1JERVIgLz4NCiAgPC9EYXRhPg0KICA8RGF0YT4NCiAgICA8Q0hFQ0tFRD50cnVlPC9DSEVDS0VEPg0KICAgIDxDT0xJRD45ZDg3NjQwMC1mNWYxLTRlM2UtOTU2NC03YzA0MTBkN2Q3NDU8L0NPTElEPg0KICAgIDxUQUJMRUlEPjlkZmFiZjM4LTIwMmUtNDM1ZC1hODdhLTMzZTU1MWZkMmU0ZDwvVEFCTEVJRD4NCiAgICA8VE9UQUwgLz4NCiAgICA8U09SVCAvPg0KICAgIDxDT05ESVRJT04gLz4NCiAgICA8Rk9STVVMQSAvPg0KICAgIDxQQVJBTUlEIC8+DQogICAgPENBUFRJT04gLz4NCiAgICA8S0hPTkdUQU9DT1Q+ZmFsc2U8L0tIT05HVEFPQ09UPg0KICAgIDxSRUFET05MWT5mYWxzZTwvUkVBRE9OTFk+DQogICAgPFJFUExBQ0UgLz4NCiAgICA8QUxJQVMgLz4NCiAgICA8Q1VTVE9NRklFTEQ+RmFsc2U8L0NVU1RPTUZJRUxEPg0KICAgIDxDVVNUT01DT0xUWVBFIC8+DQogICAgPFNFTEVDVE9SREVSIC8+DQogIDwvRGF0YT4NCiAgPERhdGE+DQogICAgPENIRUNLRUQ+dHJ1ZTwvQ0hFQ0tFRD4NCiAgICA8Q09MSUQ+YTUzNTUzMTAtYTA5My00Mjk1LWIxOTItMDM1YjdiOTFhNjlmPC9DT0xJRD4NCiAgICA8VEFCTEVJRD45ZGZhYmYzOC0yMDJlLTQzNWQtYTg3YS0zM2U1NTFmZDJlNGQ8L1RBQkxFSUQ+DQogICAgPFRPVEFMIC8+DQogICAgPFNPUlQgLz4NCiAgICA8Q09ORElUSU9OIC8+DQogICAgPEZPUk1VTEEgLz4NCiAgICA8UEFSQU1JRCAvPg0KICAgIDxDQVBUSU9OIC8+DQogICAgPEtIT05HVEFPQ09UPmZhbHNlPC9LSE9OR1RBT0NPVD4NCiAgICA8UkVBRE9OTFk+ZmFsc2U8L1JFQURPTkxZPg0KICAgIDxSRVBMQUNFIC8+DQogICAgPEFMSUFTIC8+DQogICAgPENVU1RPTUZJRUxEPkZhbHNlPC9DVVNUT01GSUVMRD4NCiAgICA8Q1VTVE9NQ09MVFlQRSAvPg0KICAgIDxTRUxFQ1RPUkRFUiAvPg0KICA8L0RhdGE+DQogIDxEYXRhPg0KICAgIDxDSEVDS0VEPnRydWU8L0NIRUNLRUQ+DQogICAgPENPTElEPjI0M2ZjYWFhLTA1YjQtNDc0NS1hMDE1LTU3OWI4ZTlhYzExZjwvQ09MSUQ+DQogICAgPFRBQkxFSUQ+OWRmYWJmMzgtMjAyZS00MzVkLWE4N2EtMzNlNTUxZmQyZTRkPC9UQUJMRUlEPg0KICAgIDxUT1RBTCAvPg0KICAgIDxTT1JUIC8+DQogICAgPENPTkRJVElPTiAvPg0KICAgIDxGT1JNVUxBIC8+DQogICAgPFBBUkFNSUQgLz4NCiAgICA8Q0FQVElPTiAvPg0KICAgIDxLSE9OR1RBT0NPVD5mYWxzZTwvS0hPTkdUQU9DT1Q+DQogICAgPFJFQURPTkxZPmZhbHNlPC9SRUFET05MWT4NCiAgICA8UkVQTEFDRSAvPg0KICAgIDxBTElBUyAvPg0KICAgIDxDVVNUT01GSUVMRD5GYWxzZTwvQ1VTVE9NRklFTEQ+DQogICAgPENVU1RPTUNPTFRZUEUgLz4NCiAgICA8U0VMRUNUT1JERVIgLz4NCiAgPC9EYXRhPg0KICA8RGF0YT4NCiAgICA8Q0hFQ0tFRD50cnVlPC9DSEVDS0VEPg0KICAgIDxDT0xJRD40ZDcxMjE1Yy00OTgwLTQyYmItOTkwZC02M2E2OWExNjRhNTA8L0NPTElEPg0KICAgIDxUQUJMRUlEPjlkZmFiZjM4LTIwMmUtNDM1ZC1hODdhLTMzZTU1MWZkMmU0ZDwvVEFCTEVJRD4NCiAgICA8VE9UQUwgLz4NCiAgICA8U09SVCAvPg0KICAgIDxDT05ESVRJT04gLz4NCiAgICA8Rk9STVVMQSAvPg0KICAgIDxQQVJBTUlEIC8+DQogICAgPENBUFRJT04gLz4NCiAgICA8S0hPTkdUQU9DT1Q+ZmFsc2U8L0tIT05HVEFPQ09UPg0KICAgIDxSRUFET05MWT5mYWxzZTwvUkVBRE9OTFk+DQogICAgPFJFUExBQ0UgLz4NCiAgICA8QUxJQVMgLz4NCiAgICA8Q1VTVE9NRklFTEQ+RmFsc2U8L0NVU1RPTUZJRUxEPg0KICAgIDxDVVNUT01DT0xUWVBFIC8+DQogICAgPFNFTEVDVE9SREVSIC8+DQogIDwvRGF0YT4NCiAgPERhdGE+DQogICAgPENIRUNLRUQ+dHJ1ZTwvQ0hFQ0tFRD4NCiAgICA8Q09MSUQ+NWQ2ZTg4MDItYmI1NS00ODZmLTlhZmItMmY0ZjliNDM5Mjc2PC9DT0xJRD4NCiAgICA8VEFCTEVJRD45ZGZhYmYzOC0yMDJlLTQzNWQtYTg3YS0zM2U1NTFmZDJlNGQ8L1RBQkxFSUQ+DQogICAgPFRPVEFMIC8+DQogICAgPFNPUlQgLz4NCiAgICA8Q09ORElUSU9OIC8+DQogICAgPEZPUk1VTEEgLz4NCiAgICA8UEFSQU1JRCAvPg0KICAgIDxDQVBUSU9OIC8+DQogICAgPEtIT05HVEFPQ09UPmZhbHNlPC9LSE9OR1RBT0NPVD4NCiAgICA8UkVBRE9OTFk+ZmFsc2U8L1JFQURPTkxZPg0KICAgIDxSRVBMQUNFIC8+DQogICAgPEFMSUFTIC8+DQogICAgPENVU1RPTUZJRUxEPkZhbHNlPC9DVVNUT01GSUVMRD4NCiAgICA8Q1VTVE9NQ09MVFlQRSAvPg0KICAgIDxTRUxFQ1RPUkRFUiAvPg0KICA8L0RhdGE+DQo8L0RvY3VtZW50RWxlbWVudD4L</Binary>
+    </Property>
+    <Property name="ReadOnly">True</Property>
+    <Property name="Location">0, 0</Property>
+    <Property name="Dock">Fill</Property>
+    <Property name="ShowToolbar">False</Property>
+    <Property name="TabIndex">0</Property>
+    <Property name="ShowAddButton">False</Property>
+    <Event name="CustomLoadData">grDetail_CustomLoadData</Event>
+  </Object>
+  <Object type="ComponentFactory.Krypton.Toolkit.KryptonPanel, ComponentFactory.Krypton.Toolkit, Version=4.1.6.0, Culture=neutral, PublicKeyToken=5fd520d36328f741" name="KryptonPanel2" children="Controls">
+    <Reference name="FilterDateRange1" />
+    <Property name="Dock">Top</Property>
+    <Property name="Size">818, 29</Property>
+    <Property name="TabIndex">0</Property>
+    <Property name="Location">0, 0</Property>
+    <Property name="DataBindings">
+      <Property name="DefaultDataSourceUpdateMode">OnValidation</Property>
+    </Property>
+    <Property name="Name">KryptonPanel2</Property>
+  </Object>
+  <Object type="No1Lib.Sys.No1DataGrid, No1Lib.Sys, Version=1.0.0.0, Culture=neutral, PublicKeyToken=870be39b125434d2" name="grMain" children="Controls">
+    <Property name="RefreshButton" />
+    <Property name="AddButton" />
+    <Property name="Dock">Fill</Property>
+    <Property name="ReadOnly">True</Property>
+    <Property name="Size">818, 209</Property>
+    <Property name="DeleteButton" />
+    <Property name="Location">0, 29</Property>
+    <Property name="AllowAdding">True</Property>
+    <Property name="AllowDeleting">True</Property>
+    <Property name="EditButton" />
+    <Property name="PrintButton" />
+    <Property name="GUID">19ba3aa7-c9e7-45fa-ba04-2e6392a7a523</Property>
+    <Property name="Name">grMain</Property>
+    <Property name="TabIndex">1</Property>
+    <Property name="Columns">
+      <Item type="No1Lib.Sys.No1GridColumn, No1Lib.Sys, Version=1.0.0.0, Culture=neutral, PublicKeyToken=870be39b125434d2">
+        <ObjectEx>
+          <Property name="DataField">NAME</Property>
+          <Property name="Caption">Số phiếu</Property>
+          <Property name="AllowEmpty">False</Property>
+          <Property name="AllowHidden">False</Property>
+          <Property name="ShowOnQuickAddAsMultiValue">True</Property>
+          <Property name="Value" />
+          <Property name="AllowDuplicate">False</Property>
+        </ObjectEx>
+      </Item>
+      <Item type="No1Lib.Sys.No1GridColumn, No1Lib.Sys, Version=1.0.0.0, Culture=neutral, PublicKeyToken=870be39b125434d2">
+        <ObjectEx>
+          <Property name="DataField">NOTE</Property>
+          <Property name="Caption">Ghi chú</Property>
+          <Property name="Value" />
+        </ObjectEx>
+      </Item>
+      <Item type="No1Lib.Sys.No1GridColumn, No1Lib.Sys, Version=1.0.0.0, Culture=neutral, PublicKeyToken=870be39b125434d2">
+        <ObjectEx>
+          <Property name="ColumnType">DateTime</Property>
+          <Property name="DataField">NGAY</Property>
+          <Property name="Caption">Ngày</Property>
+          <Property name="Value" />
+        </ObjectEx>
+      </Item>
+      <Item type="No1Lib.Sys.No1GridColumn, No1Lib.Sys, Version=1.0.0.0, Culture=neutral, PublicKeyToken=870be39b125434d2">
+        <ObjectEx>
+          <Property name="DataField">KHACHHANG</Property>
+          <Property name="Caption">Khách hàng</Property>
+          <Property name="Value" />
+        </ObjectEx>
+      </Item>
+      <Item type="No1Lib.Sys.No1GridColumn, No1Lib.Sys, Version=1.0.0.0, Culture=neutral, PublicKeyToken=870be39b125434d2">
+        <ObjectEx>
+          <Property name="DataField">NHANVEN</Property>
+          <Property name="Caption">Nhân viên</Property>
+          <Property name="Value" />
+        </ObjectEx>
+      </Item>
+      <Item type="No1Lib.Sys.No1GridColumn, No1Lib.Sys, Version=1.0.0.0, Culture=neutral, PublicKeyToken=870be39b125434d2">
+        <ObjectEx>
+          <Property name="DataField">THUNGAN</Property>
+          <Property name="Caption">Thu ngân hủy</Property>
+          <Property name="Value" />
+        </ObjectEx>
+      </Item>
+      <Item type="No1Lib.Sys.No1GridColumn, No1Lib.Sys, Version=1.0.0.0, Culture=neutral, PublicKeyToken=870be39b125434d2">
+        <ObjectEx>
+          <Property name="ColumnType">DateTime</Property>
+          <Property name="DataField">GIOHUY</Property>
+          <Property name="Caption">Giờ hủy</Property>
+          <Property name="Value" />
+        </ObjectEx>
+      </Item>
+      <Item type="No1Lib.Sys.No1GridColumn, No1Lib.Sys, Version=1.0.0.0, Culture=neutral, PublicKeyToken=870be39b125434d2">
+        <ObjectEx>
+          <Property name="ColumnType">DateTime</Property>
+          <Property name="DataField">NGAYHUY</Property>
+          <Property name="Caption">Ngày hủy</Property>
+          <Property name="Value" />
+        </ObjectEx>
+      </Item>
+      <Item type="No1Lib.Sys.No1GridColumn, No1Lib.Sys, Version=1.0.0.0, Culture=neutral, PublicKeyToken=870be39b125434d2">
+        <ObjectEx>
+          <Property name="ColumnType">NumericUpDown</Property>
+          <Property name="DataField">DOITRA</Property>
+          <Property name="Caption">Đổi trả</Property>
+          <Property name="Value" />
+        </ObjectEx>
+      </Item>
+      <Item type="No1Lib.Sys.No1GridColumn, No1Lib.Sys, Version=1.0.0.0, Culture=neutral, PublicKeyToken=870be39b125434d2">
+        <ObjectEx>
+          <Property name="ColumnType">CheckBox</Property>
+          <Property name="DataField">DATHANHTOAN</Property>
+          <Property name="Caption">Đã thanh toán</Property>
+          <Property name="Value" />
+        </ObjectEx>
+      </Item>
+      <Item type="No1Lib.Sys.No1GridColumn, No1Lib.Sys, Version=1.0.0.0, Culture=neutral, PublicKeyToken=870be39b125434d2">
+        <ObjectEx>
+          <Property name="ColumnType">DateTime</Property>
+          <Property name="DataField">GIOTHANHTOAN</Property>
+          <Property name="Caption">Giờ thanh toán</Property>
+          <Property name="Value" />
+        </ObjectEx>
+      </Item>
+      <Item type="No1Lib.Sys.No1GridColumn, No1Lib.Sys, Version=1.0.0.0, Culture=neutral, PublicKeyToken=870be39b125434d2">
+        <ObjectEx>
+          <Property name="ColumnType">NumericUpDown</Property>
+          <Property name="DataField">TRALAI</Property>
+          <Property name="Caption">Trả lại</Property>
+          <Property name="Value" />
+        </ObjectEx>
+      </Item>
+      <Item type="No1Lib.Sys.No1GridColumn, No1Lib.Sys, Version=1.0.0.0, Culture=neutral, PublicKeyToken=870be39b125434d2">
+        <ObjectEx>
+          <Property name="ColumnType">NumericUpDown</Property>
+          <Property name="DataField">TIENHANG</Property>
+          <Property name="Caption">Tiền hàng</Property>
+          <Property name="Value" />
+        </ObjectEx>
+      </Item>
+      <Item type="No1Lib.Sys.No1GridColumn, No1Lib.Sys, Version=1.0.0.0, Culture=neutral, PublicKeyToken=870be39b125434d2">
+        <ObjectEx>
+          <Property name="ColumnType">NumericUpDown</Property>
+          <Property name="DataField">TILETHUE</Property>
+          <Property name="Caption">Tỉ lệ thuế</Property>
+          <Property name="Value" />
+        </ObjectEx>
+      </Item>
+      <Item type="No1Lib.Sys.No1GridColumn, No1Lib.Sys, Version=1.0.0.0, Culture=neutral, PublicKeyToken=870be39b125434d2">
+        <ObjectEx>
+          <Property name="ColumnType">NumericUpDown</Property>
+          <Property name="DataField">TIENTHUE</Property>
+          <Property name="Caption">Tiền thuế</Property>
+          <Property name="Value" />
+        </ObjectEx>
+      </Item>
+      <Item type="No1Lib.Sys.No1GridColumn, No1Lib.Sys, Version=1.0.0.0, Culture=neutral, PublicKeyToken=870be39b125434d2">
+        <ObjectEx>
+          <Property name="ColumnType">NumericUpDown</Property>
+          <Property name="DataField">TILEGIAMGIA</Property>
+          <Property name="Caption">Tỉ lệ giảm giá (%)</Property>
+          <Property name="Value" />
+        </ObjectEx>
+      </Item>
+      <Item type="No1Lib.Sys.No1GridColumn, No1Lib.Sys, Version=1.0.0.0, Culture=neutral, PublicKeyToken=870be39b125434d2">
+        <ObjectEx>
+          <Property name="ColumnType">NumericUpDown</Property>
+          <Property name="DataField">TIENGIAMGIA</Property>
+          <Property name="Caption">Tiền giảm giá</Property>
+          <Property name="Value" />
+        </ObjectEx>
+      </Item>
+      <Item type="No1Lib.Sys.No1GridColumn, No1Lib.Sys, Version=1.0.0.0, Culture=neutral, PublicKeyToken=870be39b125434d2">
+        <ObjectEx>
+          <Property name="ColumnType">NumericUpDown</Property>
+          <Property name="DataField">PHIVANCHUYEN</Property>
+          <Property name="Caption">Phí vận chuyển</Property>
+          <Property name="Value" />
+        </ObjectEx>
+      </Item>
+      <Item type="No1Lib.Sys.No1GridColumn, No1Lib.Sys, Version=1.0.0.0, Culture=neutral, PublicKeyToken=870be39b125434d2">
+        <ObjectEx>
+          <Property name="DataField">THANHTOANBOI</Property>
+          <Property name="Caption">Thanh toán bởi</Property>
+          <Property name="Value" />
+        </ObjectEx>
+      </Item>
+    </Property>
+    <Property name="sFunctionID">
+    </Property>
+    <Property name="Table">TDONHANGHUY</Property>
+    <Property name="DataBindings">
+      <Property name="DefaultDataSourceUpdateMode">OnValidation</Property>
+    </Property>
+    <Event name="OnFocusedRowChanged">grMain_OnFocusedRowChanged</Event>
+  </Object>
+  <Object type="No1Lib.Sys.FilterDateRange, No1Lib.Sys, Version=1.0.0.0, Culture=neutral, PublicKeyToken=870be39b125434d2" name="FilterDateRange1" children="Controls">
+    <Property name="EditValue" />
+    <Property name="Size">271, 24</Property>
+    <Property name="Name">FilterDateRange1</Property>
+    <Property name="BackColor">Transparent</Property>
+    <Property name="Location">5, 3</Property>
+    <Property name="DataBindings">
+      <Property name="DefaultDataSourceUpdateMode">OnValidation</Property>
+    </Property>
+    <Property name="TabIndex">0</Property>
+    <Property name="LockEvent">False</Property>
+  </Object>
+  <Object type="No1Lib.Sys.FilterManager, No1Lib.Sys, Version=1.0.0.0, Culture=neutral, PublicKeyToken=870be39b125434d2" name="FilterManager1">
+    <Property name="Maps">
+      <Item type="No1Lib.Sys.FilterMap, No1Lib.Sys, Version=1.0.0.0, Culture=neutral, PublicKeyToken=870be39b125434d2">
+        <ObjectEx>
+          <Property name="Control">
+            <Reference name="FilterDateRange1" />
+          </Property>
+          <Property name="Field">NGAYHUY</Property>
+        </ObjectEx>
+      </Item>
+    </Property>
+    <Property name="DataGrid">
+      <Reference name="grMain" />
+    </Property>
+  </Object>

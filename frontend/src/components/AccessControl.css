@@ -1,0 +1,1475 @@
+/* ==========================================================================
+   GIAO DIỆN KIỂM SOÁT RA VÀO (ACCESS CONTROL) - TÂN AN PHÁT GYM
+   Thiết kế chuẩn xác theo bản vẽ mockup với phong cách hiện đại, thanh lịch
+   ========================================================================== */
+
+.tap-access-control-container {
+  display: flex;
+  gap: 16px;
+  width: 100%;
+  box-sizing: border-box;
+  font-family: inherit;
+  color: #1e293b;
+  align-items: stretch;
+}
+
+/* Base Card Style */
+.tap-card {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.03);
+  box-sizing: border-box;
+}
+
+/* ==========================================================================
+   CỘT TRÁI (LEFT COLUMN - 63%)
+   ========================================================================== */
+.tap-ac-left-col {
+  flex: 1 1 63%;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  min-width: 0;
+}
+
+/* --- CARD 1: ĐẦU ĐỌC THẺ & MÃ VẠCH RFID --- */
+.tap-rfid-card {
+  padding: 12px 16px 10px;
+}
+
+.tap-rfid-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.tap-rfid-signal-icon {
+  color: #0284c7;
+  font-size: 14px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.tap-rfid-title {
+  font-size: 13.5px;
+  font-weight: 800;
+  color: #0f172a;
+  letter-spacing: 0.3px;
+  text-transform: uppercase;
+}
+
+.tap-rfid-input-row {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.tap-rfid-input-wrapper {
+  flex: 1;
+  position: relative;
+  display: flex;
+  align-items: center;
+  border: 1.5px solid #38bdf8;
+  border-radius: 6px;
+  background: #ffffff;
+  transition: all 0.2s ease;
+  box-shadow: 0 1px 2px rgba(56, 189, 248, 0.08);
+}
+
+.tap-rfid-input-wrapper:focus-within {
+  border-color: #0284c7;
+  box-shadow: 0 0 0 3px rgba(2, 132, 199, 0.15);
+}
+
+.tap-input-icon {
+  position: absolute;
+  left: 12px;
+  color: #0284c7;
+  font-size: 14px;
+  pointer-events: none;
+}
+
+.tap-rfid-input {
+  width: 100%;
+  height: 38px;
+  padding: 0 12px 0 36px;
+  border: none;
+  outline: none;
+  font-size: 13px;
+  color: #0f172a;
+  background: transparent;
+  font-weight: 500;
+}
+
+.tap-rfid-input::placeholder {
+  color: #94a3b8;
+  font-style: italic;
+  font-weight: 400;
+}
+
+.tap-rfid-submit-btn {
+  height: 38px;
+  padding: 0 18px;
+  background: #0284c7;
+  border: none;
+  border-radius: 6px;
+  color: #ffffff;
+  font-size: 12.5px;
+  font-weight: 700;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  white-space: nowrap;
+  letter-spacing: 0.3px;
+  transition: all 0.15s ease;
+  box-shadow: 0 2px 4px rgba(2, 132, 199, 0.25);
+}
+
+.tap-rfid-submit-btn:hover {
+  background: #0369a1;
+  box-shadow: 0 4px 8px rgba(2, 132, 199, 0.35);
+  transform: translateY(-1px);
+}
+
+.tap-rfid-submit-btn:active {
+  transform: translateY(0);
+}
+
+.tap-rfid-hint {
+  margin-top: 6px;
+  font-size: 11.5px;
+  color: #64748b;
+  font-family: monospace, sans-serif;
+}
+
+.tap-shortcut-badge {
+  background: #f1f5f9;
+  border: 1px solid #cbd5e1;
+  border-radius: 4px;
+  padding: 1px 5px;
+  font-size: 11px;
+  color: #334155;
+  font-family: inherit;
+}
+
+/* --- CARD 2: TRẠNG THÁI CỔNG TURNSTILE --- */
+.tap-turnstile-card {
+  padding: 10px 16px;
+  background: #edf3f8;
+  border: 1px solid #d9e3ec;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  transition: all 0.3s ease;
+}
+
+.tap-turnstile-card.tap-gate-unlocked {
+  background: #f0fdf4;
+  border-color: #86efac;
+}
+
+.tap-turnstile-card.tap-gate-blocked {
+  background: #fef2f2;
+  border-color: #fca5a5;
+}
+
+.tap-turnstile-left {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  flex: 1;
+}
+
+.tap-turnstile-icon-box {
+  width: 44px;
+  height: 44px;
+  background: #dbe6f0;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 19px;
+  color: #334155;
+  flex-shrink: 0;
+  transition: all 0.3s ease;
+}
+
+.tap-gate-unlocked .tap-turnstile-icon-box {
+  background: #bbf7d0;
+  color: #15803d;
+}
+
+.tap-gate-blocked .tap-turnstile-icon-box {
+  background: #fecaca;
+  color: #b91c1c;
+}
+
+.tap-turnstile-text {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.tap-turnstile-sub {
+  font-size: 10.5px;
+  font-weight: 700;
+  color: #64748b;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+}
+
+.tap-turnstile-main-status {
+  font-size: 15px;
+  font-weight: 800;
+  color: #0f172a;
+  letter-spacing: -0.2px;
+}
+
+.tap-status-unlocked-text {
+  color: #15803d;
+}
+
+.tap-status-blocked-text {
+  color: #b91c1c;
+}
+
+.tap-turnstile-desc {
+  font-size: 11.5px;
+  color: #64748b;
+  line-height: 1.35;
+}
+
+.tap-turnstile-right {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 5px;
+  flex-shrink: 0;
+}
+
+.tap-signal-label {
+  font-size: 10.5px;
+  font-weight: 700;
+  color: #64748b;
+  letter-spacing: 0.3px;
+  text-transform: uppercase;
+}
+
+.tap-signal-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 14px;
+  border-radius: 20px;
+  font-size: 11.5px;
+  font-weight: 700;
+  letter-spacing: 0.3px;
+  white-space: nowrap;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+}
+
+.tap-signal-ready {
+  background: #fffbeb;
+  border: 1px solid #fde047;
+  color: #854d0e;
+}
+
+.tap-signal-open {
+  background: #dcfce7;
+  border: 1px solid #86efac;
+  color: #166534;
+  animation: tap-pulse-border 1.5s infinite;
+}
+
+.tap-signal-warning {
+  background: #fef3c7;
+  border: 1px solid #fcd34d;
+  color: #b45309;
+}
+
+.tap-signal-blocked {
+  background: #fee2e2;
+  border: 1px solid #fca5a5;
+  color: #991b1b;
+}
+
+.tap-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.tap-dot-yellow {
+  background: #eab308;
+}
+
+.tap-dot-green {
+  background: #22c55e;
+  box-shadow: 0 0 6px #22c55e;
+}
+
+.tap-dot-red {
+  background: #ef4444;
+}
+
+@keyframes tap-pulse-border {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.4); }
+  50% { box-shadow: 0 0 0 5px rgba(34, 197, 94, 0); }
+}
+
+/* --- CARD 3: HỒ SƠ HỘI VIÊN XÁC THỰC (NỘI DUNG CHÍNH) --- */
+.tap-member-profile-card {
+  padding: 14px 20px 12px;
+}
+
+.tap-profile-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid #f1f5f9;
+}
+
+.tap-profile-header-left {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.tap-profile-icon {
+  color: #0284c7;
+  font-size: 18px;
+}
+
+.tap-profile-title {
+  font-size: 15px;
+  font-weight: 800;
+  color: #0f172a;
+  letter-spacing: 0.3px;
+  text-transform: uppercase;
+}
+
+.tap-member-status-pill {
+  font-size: 12px;
+  font-weight: 700;
+  padding: 4px 12px;
+  border-radius: 6px;
+  letter-spacing: 0.3px;
+  text-transform: uppercase;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+}
+
+.tap-status-idle {
+  background: #f8fafc;
+  border: 1px solid #cbd5e1;
+  color: #64748b;
+}
+
+.tap-status-valid {
+  background: #dcfce7;
+  border: 1px solid #86efac;
+  color: #166534;
+}
+
+.tap-status-warning {
+  background: #fef3c7;
+  border: 1px solid #fcd34d;
+  color: #b45309;
+}
+
+.tap-status-expired {
+  background: #fee2e2;
+  border: 1px solid #fca5a5;
+  color: #991b1b;
+}
+
+.tap-profile-body-row {
+  display: flex;
+  gap: 18px;
+}
+
+.tap-profile-fields-col {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.tap-field-row {
+  display: flex;
+  gap: 16px;
+}
+
+.tap-field-two-col {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  width: 100%;
+}
+
+.tap-field-item {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.tap-field-item label {
+  font-size: 11.5px;
+  font-weight: 700;
+  color: #64748b;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+}
+
+.tap-field-value {
+  font-size: 15px;
+  font-weight: 600;
+  color: #1e293b;
+  min-height: 22px;
+  line-height: 1.35;
+}
+
+.tap-field-code {
+  color: #0284c7;
+  font-family: 'JetBrains Mono', 'Consolas', 'Segoe UI Mono', monospace;
+  font-weight: 800;
+  font-size: 18px;
+  letter-spacing: 0.4px;
+}
+
+.tap-name-highlight {
+  font-size: 22px;
+  font-weight: 800;
+  color: #0f172a;
+  letter-spacing: -0.2px;
+  line-height: 1.25;
+}
+
+.tap-placeholder-name {
+  color: #94a3b8;
+  font-style: italic;
+  font-weight: 500;
+  font-size: 15px;
+}
+
+.tap-address-truncate {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 280px;
+  font-size: 14.5px;
+}
+
+.tap-package-highlight {
+  color: #0284c7;
+  font-weight: 700;
+  font-size: 16px;
+}
+
+.tap-expiry-highlight {
+  color: #0f172a;
+  font-weight: 700;
+  font-size: 16px;
+}
+
+.tap-shift-value {
+  color: #059669;
+  font-weight: 700;
+  font-size: 15px;
+}
+
+.tap-profile-alert-banner {
+  margin-top: 4px;
+  background: #f0f9ff;
+  border: 1px solid #bae6fd;
+  border-radius: 6px;
+  padding: 8px 14px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: #0369a1;
+  font-size: 12px;
+  line-height: 1.4;
+}
+
+.tap-alert-icon {
+  font-size: 15px;
+  color: #0284c7;
+  flex-shrink: 0;
+}
+
+/* Hộp Camera AI bên phải */
+.tap-profile-camera-col {
+  width: 215px;
+  flex-shrink: 0;
+  display: flex;
+}
+
+.tap-camera-dashed-box {
+  width: 100%;
+  border: 1.5px dashed #93c5fd;
+  border-radius: 8px;
+  background: #fbfcfe;
+  padding: 14px 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  box-sizing: border-box;
+}
+
+.tap-camera-placeholder-icon {
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  background: #e2e8f0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+  color: #64748b;
+  margin-bottom: 8px;
+}
+
+.tap-camera-member-photo {
+  width: 76px;
+  height: 76px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2.5px solid #0284c7;
+  margin-bottom: 8px;
+  box-shadow: 0 2px 6px rgba(2, 132, 199, 0.2);
+}
+
+.tap-camera-title {
+  font-size: 12px;
+  font-weight: 800;
+  color: #1e293b;
+  margin-bottom: 3px;
+}
+
+.tap-camera-desc {
+  font-size: 10.5px;
+  color: #94a3b8;
+  line-height: 1.35;
+  margin-bottom: 10px;
+  padding: 0 4px;
+}
+
+.tap-camera-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  background: #e2e8f0;
+  color: #475569;
+  font-size: 10px;
+  font-weight: 700;
+  padding: 3px 10px;
+  border-radius: 12px;
+}
+
+.tap-cam-pill-matched {
+  background: #dcfce7;
+  color: #166534;
+}
+
+.tap-cam-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: currentColor;
+}
+
+/* --- CARD 4: 4 CHỈ SỐ THỐNG KÊ (BOTTOM METRICS) --- */
+.tap-bottom-metrics-row {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+}
+
+.tap-metric-card {
+  border-radius: 8px;
+  padding: 8px 12px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  gap: 2px;
+  transition: all 0.2s ease;
+}
+
+.tap-metric-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+}
+
+.tap-metric-title {
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.4px;
+  text-transform: uppercase;
+}
+
+.tap-metric-value {
+  font-size: 18px;
+  font-weight: 800;
+  letter-spacing: 0.5px;
+}
+
+.tap-metric-text-small {
+  font-size: 12.5px !important;
+  font-weight: 700;
+}
+
+.tap-metric-sub {
+  font-size: 10px;
+}
+
+/* Màu thẻ 1: Xanh lá (Số ngày còn) */
+.tap-metric-green {
+  background: #ecfdf5;
+  border: 1px solid #a7f3d0;
+}
+.tap-metric-green .tap-metric-title {
+  color: #059669;
+}
+.tap-metric-green .tap-metric-value {
+  color: #047857;
+}
+.tap-metric-green .tap-metric-sub {
+  color: #10b981;
+}
+
+/* Màu thẻ 2: Xanh dương (Số lần đã đến) */
+.tap-metric-blue {
+  background: #eff6ff;
+  border: 1px solid #bfdbfe;
+}
+.tap-metric-blue .tap-metric-title {
+  color: #2563eb;
+}
+.tap-metric-blue .tap-metric-value {
+  color: #1d4ed8;
+}
+.tap-metric-blue .tap-metric-sub {
+  color: #3b82f6;
+}
+
+/* Màu thẻ 3: Tím (Số lần còn) */
+.tap-metric-purple {
+  background: #faf5ff;
+  border: 1px solid #e9d5ff;
+}
+.tap-metric-purple .tap-metric-title {
+  color: #9333ea;
+}
+.tap-metric-purple .tap-metric-value {
+  color: #7e22ce;
+}
+.tap-metric-purple .tap-metric-sub {
+  color: #a855f7;
+}
+
+/* Màu thẻ 4: Vàng/Cam (Tập hôm nay) */
+.tap-metric-yellow {
+  background: #fffbeb;
+  border: 1px solid #fde68a;
+}
+.tap-metric-yellow .tap-metric-title {
+  color: #d97706;
+}
+.tap-metric-yellow .tap-metric-value {
+  color: #b45309;
+}
+.tap-metric-yellow .tap-metric-sub {
+  color: #f59e0b;
+}
+
+/* ==========================================================================
+   CỘT PHẢI (RIGHT COLUMN - 37%)
+   ========================================================================== */
+.tap-ac-right-col {
+  flex: 1 1 37%;
+  display: flex;
+  min-width: 320px;
+}
+
+.tap-right-panel-card {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  padding: 14px 16px;
+  overflow: hidden;
+}
+
+/* Tabs trên cùng */
+.tap-right-tabs-row {
+  display: flex;
+  gap: 8px;
+  border-bottom: 1px solid #e2e8f0;
+  padding-bottom: 10px;
+  margin-bottom: 12px;
+}
+
+.tap-tab-item {
+  background: transparent;
+  border: 1px solid transparent;
+  padding: 7px 12px;
+  border-radius: 6px;
+  font-size: 12.5px;
+  font-weight: 600;
+  color: #64748b;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  transition: all 0.15s ease;
+}
+
+.tap-tab-item:hover {
+  background: #f8fafc;
+  color: #1e293b;
+}
+
+.tap-tab-item.tap-tab-active {
+  background: #ffffff;
+  border: 1px solid #cbd5e1;
+  color: #0284c7;
+  font-weight: 700;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+}
+
+/* Bộ lọc tìm kiếm & nút Refresh */
+.tap-filter-search-row {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.tap-search-box {
+  flex: 1;
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.tap-search-icon {
+  position: absolute;
+  left: 10px;
+  color: #94a3b8;
+  font-size: 13px;
+  pointer-events: none;
+}
+
+.tap-search-input {
+  width: 100%;
+  height: 36px;
+  padding: 0 30px 0 32px;
+  border: 1px solid #e2e8f0;
+  border-radius: 6px;
+  font-size: 12.5px;
+  color: #1e293b;
+  background: #ffffff;
+  outline: none;
+  transition: all 0.2s ease;
+}
+
+.tap-search-input:focus {
+  border-color: #0284c7;
+  box-shadow: 0 0 0 2px rgba(2, 132, 199, 0.12);
+}
+
+.tap-search-clear {
+  position: absolute;
+  right: 8px;
+  background: none;
+  border: none;
+  color: #94a3b8;
+  cursor: pointer;
+  font-size: 12px;
+  padding: 4px;
+}
+
+.tap-search-clear:hover {
+  color: #475569;
+}
+
+.tap-refresh-btn {
+  width: 36px;
+  height: 36px;
+  border: 1px solid #e2e8f0;
+  border-radius: 6px;
+  background: #ffffff;
+  color: #475569;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+  transition: all 0.2s ease;
+}
+
+.tap-refresh-btn:hover {
+  background: #f1f5f9;
+  color: #0284c7;
+  border-color: #cbd5e1;
+}
+
+.tap-refresh-btn.tap-refreshing i {
+  animation: tap-spin 0.6s linear infinite;
+}
+
+@keyframes tap-spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+/* Bảng lịch sử quét thẻ */
+.tap-history-table-wrapper {
+  flex: 1;
+  overflow-y: auto;
+  max-height: calc(100vh - 280px);
+  min-height: 380px;
+}
+
+.tap-history-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 12px;
+}
+
+.tap-history-table thead th {
+  text-align: left;
+  padding: 8px 6px;
+  font-size: 10.5px;
+  font-weight: 700;
+  color: #64748b;
+  letter-spacing: 0.3px;
+  text-transform: uppercase;
+  border-bottom: 1.5px solid #e2e8f0;
+  background: #ffffff;
+  position: sticky;
+  top: 0;
+  z-index: 1;
+}
+
+.tap-col-time {
+  width: 68px;
+  white-space: nowrap;
+}
+
+.tap-col-name {
+  padding-left: 6px;
+}
+
+.tap-col-code {
+  width: 80px;
+  text-align: center;
+}
+
+.tap-col-status {
+  width: 76px;
+  text-align: right;
+  padding-right: 4px;
+}
+
+.tap-history-row {
+  border-bottom: 1px solid #f1f5f9;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.tap-history-row:hover {
+  background: #f8fafc;
+}
+
+.tap-history-row.tap-row-selected {
+  background: #f0f9ff;
+  border-color: #bae6fd;
+}
+
+.tap-history-row td {
+  padding: 10px 6px;
+  vertical-align: middle;
+}
+
+.tap-time-text {
+  color: #0284c7;
+  font-family: monospace;
+  font-weight: 700;
+  font-size: 11.5px;
+}
+
+.tap-customer-name {
+  font-weight: 700;
+  color: #0f172a;
+  font-size: 12.5px;
+}
+
+.tap-customer-package {
+  font-size: 11px;
+  color: #64748b;
+  margin-top: 2px;
+}
+
+.tap-code-badge {
+  font-family: monospace;
+  font-size: 11.5px;
+  font-weight: 600;
+  color: #334155;
+  background: #f1f5f9;
+  padding: 2px 6px;
+  border-radius: 4px;
+}
+
+.tap-badge-pill {
+  display: inline-block;
+  padding: 3px 8px;
+  border-radius: 12px;
+  font-size: 10.5px;
+  font-weight: 700;
+  text-align: center;
+  white-space: nowrap;
+}
+
+.tap-pill-green {
+  background: #ecfdf5;
+  border: 1px solid #a7f3d0;
+  color: #15803d;
+}
+
+.tap-pill-yellow {
+  background: #fffbeb;
+  border: 1px solid #fde68a;
+  color: #b45309;
+}
+
+.tap-pill-red {
+  background: #fee2e2;
+  border: 1px solid #fca5a5;
+  color: #b91c1c;
+}
+
+.tap-empty-history {
+  text-align: center;
+  padding: 30px 10px;
+  color: #94a3b8;
+}
+
+.tap-empty-history i {
+  font-size: 24px;
+  margin-bottom: 6px;
+  display: block;
+}
+
+/* Tab 2: Thiết bị phần cứng thực tế */
+.tap-hardware-tab-pane {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.tap-hardware-header-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 12px;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 6px;
+  gap: 10px;
+}
+
+.tap-hardware-title-meta strong {
+  display: block;
+  font-size: 12.5px;
+  color: #0f172a;
+}
+
+.tap-hardware-title-meta p {
+  margin: 2px 0 0;
+  font-size: 11px;
+  color: #64748b;
+}
+
+.tap-btn-add-device {
+  background: #0284c7;
+  color: #ffffff;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 5px;
+  font-size: 11.5px;
+  font-weight: 700;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  white-space: nowrap;
+  transition: all 0.15s ease;
+}
+
+.tap-btn-add-device:hover {
+  background: #0369a1;
+}
+
+/* Empty State khi chưa có thiết bị nào */
+.tap-empty-hardware-box {
+  background: #ffffff;
+  border: 1.5px dashed #cbd5e1;
+  border-radius: 8px;
+  padding: 32px 18px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.tap-empty-hw-icon {
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  background: #f1f5f9;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 22px;
+  color: #64748b;
+  margin-bottom: 4px;
+}
+
+.tap-empty-hw-title {
+  font-size: 13.5px;
+  font-weight: 800;
+  color: #1e293b;
+}
+
+.tap-empty-hw-desc {
+  font-size: 11.5px;
+  color: #64748b;
+  line-height: 1.45;
+  max-width: 320px;
+  margin-bottom: 8px;
+}
+
+.tap-btn-empty-add-hw {
+  background: #0284c7;
+  color: #ffffff;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  box-shadow: 0 2px 4px rgba(2, 132, 199, 0.2);
+  transition: all 0.15s ease;
+}
+
+.tap-btn-empty-add-hw:hover {
+  background: #0369a1;
+  transform: translateY(-1px);
+}
+
+/* Danh sách thiết bị thật */
+.tap-devices-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  max-height: 380px;
+  overflow-y: auto;
+}
+
+.tap-device-card {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 12px;
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 6px;
+  transition: all 0.15s ease;
+}
+
+.tap-device-card:hover {
+  border-color: #cbd5e1;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.04);
+}
+
+.tap-device-icon {
+  width: 38px;
+  height: 38px;
+  border-radius: 6px;
+  background: #f0f9ff;
+  border: 1px solid #bae6fd;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #0284c7;
+  font-size: 16px;
+  flex-shrink: 0;
+}
+
+.tap-device-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.tap-device-name {
+  font-size: 12.5px;
+  font-weight: 700;
+  color: #0f172a;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.tap-device-meta {
+  font-size: 11px;
+  color: #64748b;
+  font-family: monospace;
+  margin-top: 1px;
+}
+
+.tap-device-note {
+  font-size: 10.5px;
+  color: #94a3b8;
+  font-style: italic;
+  margin-top: 1px;
+}
+
+.tap-device-state-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 10.5px;
+  color: #166534;
+  font-weight: 600;
+  margin-top: 3px;
+}
+
+.tap-device-action-group {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  flex-shrink: 0;
+}
+
+.tap-btn-ping {
+  background: #f1f5f9;
+  color: #334155;
+  border: 1px solid #cbd5e1;
+  padding: 5px 8px;
+  border-radius: 4px;
+  font-size: 10.5px;
+  font-weight: 700;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  transition: all 0.15s ease;
+}
+
+.tap-btn-ping:hover {
+  background: #e2e8f0;
+  color: #0284c7;
+}
+
+.tap-btn-del-device {
+  background: #fff1f2;
+  color: #e11d48;
+  border: 1px solid #fecdd3;
+  width: 28px;
+  height: 28px;
+  border-radius: 4px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+  transition: all 0.15s ease;
+}
+
+.tap-btn-del-device:hover {
+  background: #ffe4e6;
+  color: #be123c;
+}
+
+.tap-btn-open-door {
+  background: #0284c7;
+  color: #ffffff;
+  border: none;
+  padding: 5px 10px;
+  border-radius: 4px;
+  font-size: 11px;
+  font-weight: 700;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  transition: all 0.15s ease;
+}
+
+.tap-btn-open-door:hover {
+  background: #0369a1;
+}
+
+.tap-hardware-footer-actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+.tap-btn-hw-primary {
+  flex: 1;
+  background: #0284c7;
+  color: #ffffff;
+  border: none;
+  padding: 8px;
+  border-radius: 6px;
+  font-size: 11.5px;
+  font-weight: 700;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+
+.tap-btn-hw-secondary {
+  flex: 1;
+  background: #f1f5f9;
+  color: #334155;
+  border: 1px solid #cbd5e1;
+  padding: 8px;
+  border-radius: 6px;
+  font-size: 11.5px;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+
+.tap-btn-hw-secondary:hover {
+  background: #e2e8f0;
+}
+
+/* Modal thêm thiết bị */
+.tap-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.6);
+  backdrop-filter: blur(3px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  padding: 16px;
+}
+
+.tap-modal-card {
+  width: 100%;
+  max-width: 480px;
+  background: #ffffff;
+  border-radius: 10px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+  overflow: hidden;
+  animation: tap-modal-pop 0.2s ease-out;
+}
+
+@keyframes tap-modal-pop {
+  from { opacity: 0; transform: scale(0.95); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+.tap-modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 18px;
+  background: #0f172a;
+  color: #ffffff;
+}
+
+.tap-modal-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13.5px;
+  font-weight: 800;
+  letter-spacing: 0.3px;
+}
+
+.tap-modal-close {
+  background: transparent;
+  border: none;
+  color: #94a3b8;
+  font-size: 16px;
+  cursor: pointer;
+  padding: 4px;
+}
+
+.tap-modal-close:hover {
+  color: #ffffff;
+}
+
+.tap-modal-body {
+  padding: 18px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.tap-form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.tap-form-group label {
+  font-size: 11px;
+  font-weight: 700;
+  color: #475569;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+}
+
+.tap-form-group input,
+.tap-form-group select {
+  height: 38px;
+  border: 1px solid #cbd5e1;
+  border-radius: 6px;
+  padding: 0 12px;
+  font-size: 13px;
+  color: #0f172a;
+  outline: none;
+  background: #ffffff;
+  transition: all 0.15s ease;
+}
+
+.tap-form-group input:focus,
+.tap-form-group select:focus {
+  border-color: #0284c7;
+  box-shadow: 0 0 0 2px rgba(2, 132, 199, 0.15);
+}
+
+.tap-form-row-two {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.tap-modal-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 10px;
+  padding-top: 12px;
+  border-top: 1px solid #f1f5f9;
+}
+
+.tap-btn-cancel {
+  background: #f1f5f9;
+  color: #475569;
+  border: 1px solid #cbd5e1;
+  padding: 8px 16px;
+  border-radius: 6px;
+  font-size: 12.5px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.tap-btn-cancel:hover {
+  background: #e2e8f0;
+}
+
+.tap-btn-save {
+  background: #0284c7;
+  color: #ffffff;
+  border: none;
+  padding: 8px 18px;
+  border-radius: 6px;
+  font-size: 12.5px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.tap-btn-save:hover {
+  background: #0369a1;
+}
+
+.tap-btn-save:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* ==========================================================================
+   RESPONSIVE CHO MÀN HÌNH NHỎ & MOBILE
+   ========================================================================== */
+@media (max-width: 1024px) {
+  .tap-access-control-container {
+    flex-direction: column;
+  }
+
+  .tap-ac-left-col,
+  .tap-ac-right-col {
+    width: 100%;
+    flex: auto;
+  }
+
+  .tap-profile-body-row {
+    flex-direction: column;
+  }
+
+  .tap-profile-camera-col {
+    width: 100%;
+  }
+
+  .tap-bottom-metrics-row {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 640px) {
+  .tap-rfid-input-row {
+    flex-direction: column;
+  }
+
+  .tap-rfid-submit-btn {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .tap-turnstile-card {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .tap-turnstile-right {
+    align-items: flex-start;
+    width: 100%;
+  }
+
+  .tap-field-two-col {
+    grid-template-columns: 1fr;
+  }
+
+  .tap-bottom-metrics-row {
+    grid-template-columns: 1fr;
+  }
+}

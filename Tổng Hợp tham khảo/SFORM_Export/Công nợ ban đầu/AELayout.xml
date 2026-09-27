@@ -1,0 +1,297 @@
+
+  <Object type="No1Lib.Sys.No1Form, No1Lib.Sys, Version=1.0.0.0, Culture=neutral, PublicKeyToken=870be39b125434d2" name="form" children="Controls">
+    <Reference name="KryptonPanel1" />
+    <Property name="Name">form</Property>
+    <Property name="StartPosition">CenterScreen</Property>
+    <Property name="Text">CÔNG NỢ BAN ĐẦU</Property>
+    <Property name="ClientSize">734, 495</Property>
+    <Property name="DataBindings">
+      <Property name="DefaultDataSourceUpdateMode">OnValidation</Property>
+    </Property>
+    <Event name="Load">form_Load</Event>
+    <Event name="OnInit">form_OnInit</Event>
+  </Object>
+  <Object type="ComponentFactory.Krypton.Toolkit.KryptonPanel, ComponentFactory.Krypton.Toolkit, Version=4.1.6.0, Culture=neutral, PublicKeyToken=5fd520d36328f741" name="KryptonPanel1" children="Controls">
+    <Reference name="grMain" />
+    <Reference name="KryptonPanel3" />
+    <Reference name="toolStrip1" />
+    <Reference name="KryptonPanel2" />
+    <Reference name="panel1" />
+    <Property name="Dock">Fill</Property>
+    <Property name="Size">734, 495</Property>
+    <Property name="TabIndex">0</Property>
+    <Property name="Location">0, 0</Property>
+    <Property name="DataBindings">
+      <Property name="DefaultDataSourceUpdateMode">OnValidation</Property>
+    </Property>
+    <Property name="Name">KryptonPanel1</Property>
+  </Object>
+  <Object type="System.Windows.Forms.ToolStripTextBox, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" name="txtLoc">
+    <Property name="Name">txtLoc</Property>
+    <Property name="Size">100, 25</Property>
+    <Event name="TextChanged">txtLoc_TextChanged</Event>
+  </Object>
+  <Object type="No1Lib.Sys.MiscDataGridView, No1Lib.Sys, Version=1.0.0.0, Culture=neutral, PublicKeyToken=870be39b125434d2" name="grMain" children="Controls">
+    <Property name="BorderStyle">Fixed3D</Property>
+    <Property name="AllowUserToAddRows">False</Property>
+    <Property name="Columns">
+      <Item type="System.Windows.Forms.DataGridViewTextBoxColumn, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+        <Reference name="colMaKhach" />
+      </Item>
+      <Item type="System.Windows.Forms.DataGridViewTextBoxColumn, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+        <Reference name="colTenKhach" />
+      </Item>
+      <Item type="System.Windows.Forms.DataGridViewTextBoxColumn, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+        <Reference name="colDiaChi" />
+      </Item>
+      <Item type="System.Windows.Forms.DataGridViewTextBoxColumn, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+        <Reference name="colDienThoai" />
+      </Item>
+      <Item type="No1Lib.Sys.NumericDataGridViewColumn, No1Lib.Sys, Version=1.0.0.0, Culture=neutral, PublicKeyToken=870be39b125434d2">
+        <Reference name="colDonGia" />
+      </Item>
+    </Property>
+    <Property name="AutoSizeColumnsMode">Fill</Property>
+    <Property name="Name">grMain</Property>
+    <Property name="AllowUserToOrderColumns">True</Property>
+    <Property name="Size">734, 364</Property>
+    <Property name="SelectionMode">FullRowSelect</Property>
+    <Property name="BackgroundColor">White</Property>
+    <Property name="DataBindings">
+      <Property name="DefaultDataSourceUpdateMode">OnValidation</Property>
+    </Property>
+    <Property name="GUID">190bbb2a-9d20-40c1-93f7-35a33785d6c1</Property>
+    <Property name="Dock">Fill</Property>
+    <Property name="Location">0, 95</Property>
+    <Property name="DeleteButton" />
+    <Property name="AllowUserToResizeRows">False</Property>
+    <Property name="TabIndex">16</Property>
+    <Property name="AllowUserToDeleteRows">False</Property>
+    <Property name="EditButton" />
+    <Property name="RowHeadersWidthSizeMode">DisableResizing</Property>
+    <Property name="ColumnHeadersHeightSizeMode">AutoSize</Property>
+    <Property name="SearchTextBox" />
+  </Object>
+  <Object type="System.Windows.Forms.DataGridViewTextBoxColumn, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" name="colMaKhach">
+    <Property name="DataPropertyName">CODE</Property>
+    <Property name="HeaderText">Mã khách</Property>
+    <Property name="Name">colMaKhach</Property>
+    <Property name="ReadOnly">True</Property>
+  </Object>
+  <Object type="System.Windows.Forms.DataGridViewTextBoxColumn, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" name="colTenKhach">
+    <Property name="DataPropertyName">NAME</Property>
+    <Property name="HeaderText">Tên khách</Property>
+    <Property name="Name">colTenKhach</Property>
+    <Property name="FillWeight">200</Property>
+    <Property name="ReadOnly">True</Property>
+  </Object>
+  <Object type="System.Windows.Forms.DataGridViewTextBoxColumn, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" name="colDiaChi">
+    <Property name="DataPropertyName">DIACHI</Property>
+    <Property name="HeaderText">Địa chỉ</Property>
+    <Property name="Name">colDiaChi</Property>
+    <Property name="FillWeight">200</Property>
+    <Property name="ReadOnly">True</Property>
+  </Object>
+  <Object type="System.Windows.Forms.DataGridViewTextBoxColumn, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" name="colDienThoai">
+    <Property name="DataPropertyName">DIENTHOAI</Property>
+    <Property name="HeaderText">Điện thoại</Property>
+    <Property name="Name">colDienThoai</Property>
+    <Property name="ReadOnly">True</Property>
+  </Object>
+  <Object type="No1Lib.Sys.NumericDataGridViewColumn, No1Lib.Sys, Version=1.0.0.0, Culture=neutral, PublicKeyToken=870be39b125434d2" name="colDonGia">
+    <Property name="DataPropertyName">SOTIEN</Property>
+    <Property name="DefaultCellStyle">
+      <InstanceDescriptor member="AAEAAAD/////AQAAAAAAAAAEAQAAAC9TeXN0ZW0uUmVmbGVjdGlvbi5NZW1iZXJJbmZvU2VyaWFsaXphdGlvbkhvbGRlcgYAAAAETmFtZQxBc3NlbWJseU5hbWUJQ2xhc3NOYW1lCVNpZ25hdHVyZQpNZW1iZXJUeXBlEEdlbmVyaWNBcmd1bWVudHMBAQEBAAMIDVN5c3RlbS5UeXBlW10GAgAAAAUuY3RvcgYDAAAAV1N5c3RlbS5XaW5kb3dzLkZvcm1zLCBWZXJzaW9uPTIuMC4wLjAsIEN1bHR1cmU9bmV1dHJhbCwgUHVibGljS2V5VG9rZW49Yjc3YTVjNTYxOTM0ZTA4OQYEAAAAKlN5c3RlbS5XaW5kb3dzLkZvcm1zLkRhdGFHcmlkVmlld0NlbGxTdHlsZQYFAAAADFZvaWQgLmN0b3IoKQEAAAAKCw==">
+        <Property name="Alignment">MiddleRight</Property>
+        <Property name="Format">N2</Property>
+      </InstanceDescriptor>
+    </Property>
+    <Property name="DecimalLength">2</Property>
+    <Property name="HeaderText">Số tiền</Property>
+    <Property name="Name">colDonGia</Property>
+    <Property name="AllowNegative">False</Property>
+  </Object>
+  <Object type="System.Windows.Forms.ToolStripLabel, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" name="toolStripLabel1">
+    <Property name="Size">49, 22</Property>
+    <Property name="Text">Lọc (F3)</Property>
+    <Property name="Name">toolStripLabel1</Property>
+  </Object>
+  <Object type="System.Windows.Forms.ToolStripSeparator, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" name="toolStripSeparator1">
+    <Property name="Name">toolStripSeparator1</Property>
+    <Property name="Size">6, 25</Property>
+  </Object>
+  <Object type="System.Windows.Forms.ToolStrip, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" name="toolStrip1" children="Controls">
+    <Property name="Text">toolStrip1</Property>
+    <Property name="Size">734, 25</Property>
+    <Property name="DataBindings">
+      <Property name="DefaultDataSourceUpdateMode">OnValidation</Property>
+    </Property>
+    <Property name="Name">toolStrip1</Property>
+    <Property name="Items">
+      <Item type="System.Windows.Forms.ToolStripLabel, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+        <Reference name="toolStripLabel1" />
+      </Item>
+      <Item type="System.Windows.Forms.ToolStripTextBox, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+        <Reference name="txtLoc" />
+      </Item>
+      <Item type="System.Windows.Forms.ToolStripSeparator, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+        <Reference name="toolStripSeparator1" />
+      </Item>
+      <Item type="System.Windows.Forms.ToolStripButton, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+        <Reference name="tsbImport" />
+      </Item>
+      <Item type="System.Windows.Forms.ToolStripButton, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+        <Reference name="tsbFileMau" />
+      </Item>
+      <Item type="System.Windows.Forms.Design.DesignerToolStripControlHost, System.Design, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+        <ObjectEx>
+          <Property name="CausesValidation">False</Property>
+          <Property name="RightToLeft">No</Property>
+          <Property name="Size">31, 25</Property>
+          <Property name="Text">miniToolStrip</Property>
+          <Property name="Margin">0, 0, 0, 0</Property>
+          <Property name="Name">
+          </Property>
+          <Property name="Visible">False</Property>
+        </ObjectEx>
+      </Item>
+    </Property>
+    <Property name="Location">0, 70</Property>
+    <Property name="TabIndex">17</Property>
+    <Property name="Font">Segoe UI, 9pt</Property>
+  </Object>
+  <Object type="System.Windows.Forms.ToolStripButton, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" name="tsbImport">
+    <Property name="Image">
+      <Binary>iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAHBSURBVDhPldM7S8NQGAbg82scHFwCUmurKFSNFxKlalWsSL1RUYpCi9pgLFUhCEa0HQpWiggOOoiTo/+kS+93nBzKa75Tk0HFauAlkO89T5ITwtjnkUql4kbQJnGz/+2cTCbRbDZ/DXWM/IwkEgm+OJ/PI5fL8WSzWWQyGR6alUolUM/IdyQWi/FSoVDgyFeIZgQRQl0jLWTzaQx/CQHpdNpCdF2HkThbfxDR7qDOT/ujaRqY784FRT/BwvEyBsIDljUanYAt1AspOA7qfH01AqPRKNjidWvR1csFJs6G4Ny1Q9xzoTsooE+18xl1isUiD0EUAhRFAZu5dFh3jb2eY+lkHv0bDowpQ/z6O95AHdo8igkREAqFwGTNZgHiqQjlOYI5fQkO1YnV2zVE7lVQp1KpoFwuWxABgUAATFQFDvTvOSGEBdgPexB+PMBich7CVmtGnWq1yhETIsDv94MNBruwsrsGeV+CqLkwogxjWnVj5yaAySMJs8oUqFOr1ThiQgT4fD4wx3Znu68I6tTrdY6YEAFerxfMtt6Bv6TRaHDEhAjweDywfiq3282fpN0PZc6pS2ssQJKkuCzL+E9ozQecpccwnU8LVQAAAABJRU5ErkJggg==</Binary>
+    </Property>
+    <Property name="Size">106, 22</Property>
+    <Property name="Name">tsbImport</Property>
+    <Property name="ImageTransparentColor">Magenta</Property>
+    <Property name="Text">Import từ excel</Property>
+    <Event name="Click">tsbImport_Click</Event>
+  </Object>
+  <Object type="System.Windows.Forms.ToolStripButton, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" name="tsbFileMau">
+    <Property name="Image">
+      <Binary>iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAIcSURBVDhPlZHfS1NhHMbPbfkHGF3lZXrRjaSj6IdGEDboogUS3ixYtVjEYrQ21mpYdlV6lRdREUF6t9vWmg1pzemaGyNRYbjS4RQm07Pfc0/vc2ov2pU78HDe8/I8n/O871dR/j3XXC69we02tSJmmnnlqtN5Ey0+zEjAFYfjVkMALswB/bMNnJ+p41y4hjOhCk5NF6ELquiZ2sbJQB7d/i3Qy4wEXLbZzPVGQwM8z0EDDG/U4FmvwL32F+BYycOe2tIA9DIjAZes1juV3V3Z4MYPFcPxDXhi63DPrcEV+Q1nOA3H9xXYv6VALzMScNFisZTqddngaWITVfHdVDCRkGt/NAp6mZGAfrP5rlqr4eWXCD74/HgX+Ynw4iJCCwuYTiYRXV7G1Pw8ArEYCKCXGQk4azLdy1cqeOv1arN48ymAdDaLgtij2KC5JoBeZpTOgYHrnXr9Q+rVxASoVRFkdW8wiK/xuNZgdmlpX4NcuYzTRqNVOdbX9+j/8XNEZVGRUsWf8qWS1oBvig02xbtnaOi+0q7TGdt7ez3UyPg4qHQmg1K1ikmfT/srG8yI+9h7B9liEd2DgzZ5BycMhgeZQgGPx8bQEDN+9v4jkqkUcmKPYoPmmg3oZUYCjuv1jlVVheX1JOwvRjH6ObRvCgTsbUAvMxIgjvIkK877a2fnQKKXGQk41NFxu62ra6QVMSMBYnFY6IjQ0QOK3rY/QYV7YsxgIUQAAAAASUVORK5CYII=</Binary>
+    </Property>
+    <Property name="Size">106, 22</Property>
+    <Property name="Name">tsbFileMau</Property>
+    <Property name="ImageTransparentColor">Magenta</Property>
+    <Property name="Text">Export file mẫu</Property>
+    <Event name="Click">tsbFileMau_Click</Event>
+  </Object>
+  <Object type="No1Lib.Sys.No1DatePicker, No1Lib.Sys, Version=1.0.0.0, Culture=neutral, PublicKeyToken=870be39b125434d2" name="dtNgay" children="Controls">
+    <Property name="DateTime">
+    </Property>
+    <Property name="EditValue" />
+    <Property name="Size">91, 20</Property>
+    <Property name="Name">dtNgay</Property>
+    <Property name="Location">118, 6</Property>
+    <Property name="DataBindings">
+      <Property name="DefaultDataSourceUpdateMode">OnValidation</Property>
+    </Property>
+    <Property name="TabIndex">1</Property>
+    <Event name="OnEditValueChanged">dtNgay_OnEditValueChanged</Event>
+  </Object>
+  <Object type="ComponentFactory.Krypton.Toolkit.KryptonPanel, ComponentFactory.Krypton.Toolkit, Version=4.1.6.0, Culture=neutral, PublicKeyToken=5fd520d36328f741" name="KryptonPanel2" children="Controls">
+    <Reference name="dtNgay" />
+    <Reference name="label2" />
+    <Property name="Dock">Top</Property>
+    <Property name="Size">734, 31</Property>
+    <Property name="TabIndex">15</Property>
+    <Property name="Location">0, 39</Property>
+    <Property name="DataBindings">
+      <Property name="DefaultDataSourceUpdateMode">OnValidation</Property>
+    </Property>
+    <Property name="Name">KryptonPanel2</Property>
+  </Object>
+  <Object type="System.Windows.Forms.Label, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" name="label2" children="Controls">
+    <Property name="TabIndex">0</Property>
+    <Property name="BackColor">Transparent</Property>
+    <Property name="AutoSize">True</Property>
+    <Property name="Size">101, 13</Property>
+    <Property name="Text">Ngày chốt công nợ:</Property>
+    <Property name="Location">11, 9</Property>
+    <Property name="DataBindings">
+      <Property name="DefaultDataSourceUpdateMode">OnValidation</Property>
+    </Property>
+    <Property name="Name">label2</Property>
+  </Object>
+  <Object type="System.Windows.Forms.PictureBox, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" name="pictureBox1" children="Controls">
+    <Property name="TabIndex">3</Property>
+    <Property name="SizeMode">AutoSize</Property>
+    <Property name="Size">32, 32</Property>
+    <Property name="Image">
+      <Binary>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</Binary>
+    </Property>
+    <Property name="Location">4, 3</Property>
+    <Property name="TabStop">False</Property>
+    <Property name="Name">pictureBox1</Property>
+    <Property name="DataBindings">
+      <Property name="DefaultDataSourceUpdateMode">OnValidation</Property>
+    </Property>
+  </Object>
+  <Object type="System.Windows.Forms.Panel, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" name="panel1" children="Controls">
+    <Reference name="pictureBox1" />
+    <Reference name="label1" />
+    <Property name="Dock">Top</Property>
+    <Property name="Size">734, 39</Property>
+    <Property name="BackColor">White</Property>
+    <Property name="TabIndex">14</Property>
+    <Property name="Location">0, 0</Property>
+    <Property name="DataBindings">
+      <Property name="DefaultDataSourceUpdateMode">OnValidation</Property>
+    </Property>
+    <Property name="Name">panel1</Property>
+  </Object>
+  <Object type="System.Windows.Forms.Label, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" name="label1" children="Controls">
+    <Property name="TabIndex">1</Property>
+    <Property name="AutoSize">True</Property>
+    <Property name="Size">344, 13</Property>
+    <Property name="Text">Cập nhật thông tin công nợ ban đầu khi sử dụng phần mềm</Property>
+    <Property name="Font">Microsoft Sans Serif, 8.25pt, style=Bold</Property>
+    <Property name="Location">42, 12</Property>
+    <Property name="DataBindings">
+      <Property name="DefaultDataSourceUpdateMode">OnValidation</Property>
+    </Property>
+    <Property name="Name">label1</Property>
+  </Object>
+  <Object type="System.Windows.Forms.Button, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" name="btnOK" children="Controls">
+    <Property name="TabIndex">3</Property>
+    <Property name="Anchor">Bottom, Right</Property>
+    <Property name="Name">btnOK</Property>
+    <Property name="Size">75, 30</Property>
+    <Property name="UseVisualStyleBackColor">True</Property>
+    <Property name="Text">Ghi dữ liệu</Property>
+    <Property name="Location">575, 3</Property>
+    <Property name="DataBindings">
+      <Property name="DefaultDataSourceUpdateMode">OnValidation</Property>
+    </Property>
+    <Property name="DialogResult">OK</Property>
+    <Event name="Click">btnOK_Click</Event>
+  </Object>
+  <Object type="System.Windows.Forms.Button, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" name="btnCancel" children="Controls">
+    <Property name="TabIndex">4</Property>
+    <Property name="Anchor">Bottom, Right</Property>
+    <Property name="Name">btnCancel</Property>
+    <Property name="Size">75, 30</Property>
+    <Property name="UseVisualStyleBackColor">True</Property>
+    <Property name="Text">Thoát</Property>
+    <Property name="Location">656, 3</Property>
+    <Property name="DataBindings">
+      <Property name="DefaultDataSourceUpdateMode">OnValidation</Property>
+    </Property>
+    <Property name="DialogResult">Cancel</Property>
+  </Object>
+  <Object type="ComponentFactory.Krypton.Toolkit.KryptonPanel, ComponentFactory.Krypton.Toolkit, Version=4.1.6.0, Culture=neutral, PublicKeyToken=5fd520d36328f741" name="KryptonPanel3" children="Controls">
+    <Reference name="btnCancel" />
+    <Reference name="btnOK" />
+    <Property name="Dock">Bottom</Property>
+    <Property name="Size">734, 36</Property>
+    <Property name="TabIndex">18</Property>
+    <Property name="Location">0, 459</Property>
+    <Property name="DataBindings">
+      <Property name="DefaultDataSourceUpdateMode">OnValidation</Property>
+    </Property>
+    <Property name="Name">KryptonPanel3</Property>
+  </Object>
