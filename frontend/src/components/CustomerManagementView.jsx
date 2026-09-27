@@ -166,7 +166,7 @@ export default function CustomerManagementView({ onSwitchToAccessControl, showNo
   // 1. Khung Vàng (Cây bên trái - cust-left-pane)
   const [treePaneWidth, setTreePaneWidth] = useState(() => {
     const saved = localStorage.getItem('cust_tree_pane_width');
-    return saved ? Math.max(130, Math.min(500, parseInt(saved, 10))) : 220;
+    return saved ? Math.max(130, Math.min(500, parseInt(saved, 10))) : 200;
   });
   const [isDraggingTreeSplitter, setIsDraggingTreeSplitter] = useState(false);
 
@@ -246,15 +246,11 @@ export default function CustomerManagementView({ onSwitchToAccessControl, showNo
     });
   };
 
-  // 3. Tỷ lệ phóng to giao diện máy tính (Chuẩn 100% | To rõ 110% | Rất to 120%)
+  // 3. Tỷ lệ giao diện máy tính (Nhỏ gọn chuẩn WinForms 100%)
   const [uiScale, setUiScale] = useState(() => {
-    return localStorage.getItem('cust_ui_scale') || '100';
+    try { localStorage.removeItem('cust_ui_scale'); } catch (e) {}
+    return '100';
   });
-
-  const handleSetUiScale = (scale) => {
-    setUiScale(scale);
-    localStorage.setItem('cust_ui_scale', scale);
-  };
 
 
   // Tải danh sách khách hàng & số lượng cây trạng thái / nhóm
@@ -1643,34 +1639,6 @@ export default function CustomerManagementView({ onSwitchToAccessControl, showNo
                   <span>Cấu hình</span>
                 </button>
               )}
-
-              {/* BỘ NÚT CHUYỂN ĐỔI CỠ GIAO DIỆN MÁY TÍNH TO RÕ RÀNG */}
-              <div className="cust-scale-group" title="Tùy chỉnh cỡ giao diện to nhỏ cho máy tính">
-                <span className="cust-scale-label">
-                  <i className="fa-solid fa-display"></i> Cỡ giao diện:
-                </span>
-                <button
-                  className={`cust-scale-btn ${uiScale === '100' ? 'active' : ''}`}
-                  onClick={() => handleSetUiScale('100')}
-                  title="Cỡ chuẩn (100%)"
-                >
-                  Chuẩn
-                </button>
-                <button
-                  className={`cust-scale-btn ${uiScale === '110' ? 'active' : ''}`}
-                  onClick={() => handleSetUiScale('110')}
-                  title="To rõ nét cho màn hình vi tính (110%)"
-                >
-                  To rõ (110%)
-                </button>
-                <button
-                  className={`cust-scale-btn ${uiScale === '120' ? 'active' : ''}`}
-                  onClick={() => handleSetUiScale('120')}
-                  title="Rất to dễ nhìn & dễ bấm (120%)"
-                >
-                  Cực to (120%)
-                </button>
-              </div>
             </div>
           </div>
 
