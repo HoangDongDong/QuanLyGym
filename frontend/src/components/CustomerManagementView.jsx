@@ -887,7 +887,7 @@ export default function CustomerManagementView({ onSwitchToAccessControl, showNo
     baoLuuThe: ['Số tiền', 'Ghi chú', 'Số phiếu', 'Ngày', 'Khách hàng', 'Loại thẻ', 'Từ ngày', 'Đến ngày', 'Số ngày bảo lưu', 'Đến ngày thực'],
     doiLoaiThe: ['Số tiền chênh lệch', 'Ghi chú', 'Số phiếu', 'Ngày', 'Khách hàng', 'Loại thẻ cũ', 'Loại thẻ mới'],
     tangGiamDiem: ['Số phiếu', 'Ngày', 'Khách hàng', 'Điểm tăng', 'Điểm giảm', 'Lý do', 'Ghi chú'],
-    theTrang: ['Ngày', 'Khách hàng', 'Chiều cao (cm)', 'Cân nặng (kg)', 'BMI', 'Vòng ngực', 'Vòng bụng', 'Vòng mông', 'Ghi chú'],
+    theTrang: ['Khách hàng', 'Chiều cao', 'Cân nặng', 'Vòng ngực', 'Vòng bụng', 'Vòng mông', 'BMI', 'Ngày', 'Ghi chú'],
     phieuThu: ['Số phiếu', 'Ngày', 'Số tiền thu', 'Khách hàng / Đối tượng', 'Lý do thu chi', 'Diễn giải', 'Chứng từ gốc', 'Nhân viên', 'Ghi chú'],
     phieuChi: ['Số phiếu', 'Ngày', 'Số tiền chi', 'Đối tượng nhận', 'Lý do thu chi', 'Diễn giải', 'Chứng từ gốc', 'Nhân viên', 'Ghi chú'],
     thuCongNo: ['Ghi chú', 'Số phiếu', 'Ngày', 'Tên đối tượng', 'Địa chỉ', 'Nhân viên', 'Khách hàng', 'Loại đối tượng', 'Lý do thu chi', 'Diễn giải', 'Chứng từ gốc', 'Số tiền thu', 'Số tiền chi', 'Nhà cung cấp', 'Chuyển khoản', 'Đặt cọc'],
@@ -2492,14 +2492,14 @@ export default function CustomerManagementView({ onSwitchToAccessControl, showNo
                       <thead>
                         <tr>
                           <th style={{ width: 30, textAlign: 'center' }}></th>
-                          <th style={{ width: 90 }}>Ngày</th>
                           <th style={{ width: 140 }}>Khách hàng</th>
-                          <th style={{ width: 100, textAlign: 'right' }}>Chiều cao (cm)</th>
-                          <th style={{ width: 100, textAlign: 'right' }}>Cân nặng (kg)</th>
-                          <th style={{ width: 85, textAlign: 'right' }}>BMI</th>
-                          <th style={{ width: 95, textAlign: 'right' }}>Vòng ngực</th>
-                          <th style={{ width: 95, textAlign: 'right' }}>Vòng bụng</th>
-                          <th style={{ width: 95, textAlign: 'right' }}>Vòng mông</th>
+                          <th style={{ width: 90, textAlign: 'right' }}>Chiều cao</th>
+                          <th style={{ width: 90, textAlign: 'right' }}>Cân nặng</th>
+                          <th style={{ width: 90, textAlign: 'right' }}>Vòng ngực</th>
+                          <th style={{ width: 90, textAlign: 'right' }}>Vòng bụng</th>
+                          <th style={{ width: 90, textAlign: 'right' }}>Vòng mông</th>
+                          <th style={{ width: 75, textAlign: 'right' }}>BMI</th>
+                          <th style={{ width: 90 }}>Ngày</th>
                           <th style={{ width: 150 }}>Ghi chú</th>
                         </tr>
                       </thead>
@@ -2507,14 +2507,14 @@ export default function CustomerManagementView({ onSwitchToAccessControl, showNo
                         {subtabsData?.theTrang?.map((t, idx) => (
                           <tr key={t.id || idx}>
                             <td style={{ textAlign: 'center', color: '#64748b' }}>{idx + 1}</td>
-                            <td>{t.ngay}</td>
-                            <td>{t.khachHang}</td>
+                            <td>{t.khachHang || selectedCustomer?.tenKhachHang}</td>
                             <td style={{ textAlign: 'right' }}>{t.chieuCao}</td>
                             <td style={{ textAlign: 'right' }}>{t.canNang}</td>
-                            <td style={{ textAlign: 'right', fontWeight: 600, color: t.bmi >= 25 ? '#ea580c' : '#16a34a' }}>{t.bmi}</td>
                             <td style={{ textAlign: 'right' }}>{t.vongNguc}</td>
                             <td style={{ textAlign: 'right' }}>{t.vongBung}</td>
                             <td style={{ textAlign: 'right' }}>{t.vongMong}</td>
+                            <td style={{ textAlign: 'right', fontWeight: 600, color: t.bmi >= 25 ? '#ea580c' : '#16a34a' }}>{t.bmi}</td>
+                            <td>{t.ngay}</td>
                             <td>{t.note}</td>
                           </tr>
                         ))}
@@ -3375,145 +3375,226 @@ export default function CustomerManagementView({ onSwitchToAccessControl, showNo
           style={{ top: subtabContextMenu.y, left: subtabContextMenu.x, width: 185 }}
           onClick={(e) => e.stopPropagation()}
         >
-          {/* 1. + Thêm [Tên tab] (e.g. Thêm Đặt hàng, Thêm Báo giá, etc.) */}
-          <div
-            className="wf-menu-item"
-            onClick={handleOpenAddSubtab}
-          >
-            <span className="wf-menu-icon" style={{ color: '#16a34a', fontWeight: 'bold', fontSize: 13 }}>✚</span>
-            <span className="wf-menu-text" style={{ fontWeight: 600 }}>
-              Thêm {subtabContextMenu.tabLabel}
-            </span>
-          </div>
-
-          {/* 2. Thêm nhanh (excel) */}
-          <div
-            className="wf-menu-item"
-            onClick={() => { closeSubtabContextMenu(); setShowExcelImport(true); }}
-          >
-            <span className="wf-menu-icon"></span>
-            <span className="wf-menu-text">Thêm nhanh (excel)</span>
-          </div>
-
-          {/* 3. Cập nhật nhanh (excel) */}
-          <div
-            className="wf-menu-item"
-            onClick={() => { closeSubtabContextMenu(); setShowExcelImport(true); }}
-          >
-            <span className="wf-menu-icon"></span>
-            <span className="wf-menu-text">Cập nhật nhanh (excel)</span>
-          </div>
-
-          {/* 4. ✏️ Chỉnh sửa */}
-          <div
-            className="wf-menu-item"
-            onClick={handleOpenEditSubtab}
-          >
-            <span className="wf-menu-icon" style={{ color: '#d97706' }}>✏️</span>
-            <span className="wf-menu-text">Chỉnh sửa</span>
-          </div>
-
-          <div className="wf-menu-separator"></div>
-
-          {/* 5. Sắp xếp theo ► */}
-          <div
-            className="wf-menu-item has-submenu"
-            onMouseEnter={() => setShowSubtabSubSapXep(true)}
-            onMouseLeave={() => setShowSubtabSubSapXep(false)}
-          >
-            <span className="wf-menu-icon"></span>
-            <span className="wf-menu-text">Sắp xếp theo</span>
-            <span className="wf-submenu-arrow">▶</span>
-
-            {showSubtabSubSapXep && (
-              <div className="wf-submenu" style={{ width: 155 }}>
-                <div className="wf-menu-item" onClick={() => handleSubtabSort('asc')}>
-                  <span className="wf-menu-icon" style={{ fontSize: 10 }}>▲</span>
-                  <span className="wf-menu-text">Sắp xếp tăng dần</span>
-                </div>
-                <div className="wf-menu-item" onClick={() => handleSubtabSort('desc')}>
-                  <span className="wf-menu-icon" style={{ fontSize: 10 }}>▼</span>
-                  <span className="wf-menu-text">Sắp xếp giảm dần</span>
-                </div>
+          {subtabContextMenu.tabId === 'theTrang' ? (
+            /* CONTEXT MENU RIÊNG CHO TAB THỂ TRẠNG (KHỚP 100% ẢNH THỰC TẾ) */
+            <>
+              {/* 1. 📑 Sao chép */}
+              <div
+                className="wf-menu-item"
+                onClick={handleSubtabCopyRow}
+              >
+                <span className="wf-menu-icon" style={{ color: '#0284c7', fontSize: 13 }}>📑</span>
+                <span className="wf-menu-text">Sao chép</span>
               </div>
-            )}
-          </div>
 
-          {/* 6. 🔄 Refresh */}
-          <div
-            className="wf-menu-item"
-            onClick={handleSubtabRefresh}
-          >
-            <span className="wf-menu-icon" style={{ color: '#16a34a' }}>🔄</span>
-            <span className="wf-menu-text">Refresh</span>
-          </div>
+              {/* 2. Cột hiển thị */}
+              <div
+                className="wf-menu-item"
+                onClick={() => { closeSubtabContextMenu(); setShowSubtabColChooser(true); }}
+              >
+                <span className="wf-menu-icon"></span>
+                <span className="wf-menu-text">Cột hiển thị</span>
+              </div>
 
-          {/* 7. In danh sách */}
-          <div
-            className="wf-menu-item"
-            onClick={handleSubtabPrint}
-          >
-            <span className="wf-menu-icon"></span>
-            <span className="wf-menu-text">In danh sách</span>
-          </div>
+              <div className="wf-menu-separator"></div>
 
-          <div className="wf-menu-separator"></div>
+              {/* 3. 🔄 Refresh */}
+              <div
+                className="wf-menu-item"
+                onClick={handleSubtabRefresh}
+              >
+                <span className="wf-menu-icon" style={{ color: '#16a34a', fontSize: 13 }}>🔄</span>
+                <span className="wf-menu-text">Refresh</span>
+              </div>
 
-          {/* 8. 📄 Sao chép ô */}
-          <div
-            className="wf-menu-item"
-            onClick={handleSubtabCopyCell}
-          >
-            <span className="wf-menu-icon" style={{ color: '#0284c7' }}>📄</span>
-            <span className="wf-menu-text">Sao chép ô</span>
-          </div>
+              {/* 4. 🔭 Tìm kiếm... */}
+              <div
+                className="wf-menu-item"
+                onClick={() => {
+                  closeSubtabContextMenu();
+                  const term = prompt('Tìm kiếm trong danh sách Thể trạng:');
+                  if (term && term.trim()) {
+                    showNotification && showNotification(`Đang lọc thể trạng: "${term.trim()}"`);
+                  }
+                }}
+              >
+                <span className="wf-menu-icon" style={{ color: '#2563eb', fontSize: 13 }}>🔭</span>
+                <span className="wf-menu-text">Tìm kiếm...</span>
+              </div>
 
-          {/* 9. 📑 Sao chép vùng chọn */}
-          <div
-            className="wf-menu-item"
-            onClick={handleSubtabCopyRow}
-          >
-            <span className="wf-menu-icon" style={{ color: '#0284c7' }}>📑</span>
-            <span className="wf-menu-text">Sao chép vùng chọn</span>
-          </div>
+              {/* 5. In danh sách */}
+              <div
+                className="wf-menu-item"
+                onClick={handleSubtabPrint}
+              >
+                <span className="wf-menu-icon"></span>
+                <span className="wf-menu-text">In danh sách</span>
+              </div>
 
-          {/* 10. ❌ Xóa */}
-          <div
-            className="wf-menu-item"
-            onClick={handleSubtabDelete}
-          >
-            <span className="wf-menu-icon" style={{ color: '#dc2626' }}>❌</span>
-            <span className="wf-menu-text">Xóa</span>
-          </div>
+              <div className="wf-menu-separator" style={{ borderTopStyle: 'dashed' }}></div>
 
-          <div className="wf-menu-separator"></div>
+              {/* 6. Tự động dãn cột */}
+              <div
+                className="wf-menu-item"
+                onClick={() => { closeSubtabContextMenu(); showNotification && showNotification('Đã tự động dãn cột theo nội dung'); }}
+              >
+                <span className="wf-menu-icon"></span>
+                <span className="wf-menu-text">Tự động dãn cột</span>
+              </div>
 
-          {/* 11. Tự động dãn cột */}
-          <div
-            className="wf-menu-item"
-            onClick={() => { closeSubtabContextMenu(); showNotification && showNotification('Đã tự động dãn cột theo nội dung'); }}
-          >
-            <span className="wf-menu-icon"></span>
-            <span className="wf-menu-text">Tự động dãn cột</span>
-          </div>
+              {/* 7. Thuộc tính */}
+              <div
+                className="wf-menu-item"
+                onClick={() => { closeSubtabContextMenu(); setShowSubtabPropsDialog(true); }}
+              >
+                <span className="wf-menu-icon"></span>
+                <span className="wf-menu-text">Thuộc tính</span>
+              </div>
+            </>
+          ) : (
+            /* CONTEXT MENU CHUẨN CHO CÁC PHÂN HỆ/TAB KHÁC */
+            <>
+              {/* 1. + Thêm [Tên tab] (e.g. Thêm Đặt hàng, Thêm Báo giá, etc.) */}
+              <div
+                className="wf-menu-item"
+                onClick={handleOpenAddSubtab}
+              >
+                <span className="wf-menu-icon" style={{ color: '#16a34a', fontWeight: 'bold', fontSize: 13 }}>✚</span>
+                <span className="wf-menu-text" style={{ fontWeight: 600 }}>
+                  Thêm {subtabContextMenu.tabLabel}
+                </span>
+              </div>
 
-          {/* 12. Cột hiển thị */}
-          <div
-            className="wf-menu-item"
-            onClick={() => { closeSubtabContextMenu(); setShowSubtabColChooser(true); }}
-          >
-            <span className="wf-menu-icon"></span>
-            <span className="wf-menu-text">Cột hiển thị</span>
-          </div>
+              {/* 2. Thêm nhanh (excel) */}
+              <div
+                className="wf-menu-item"
+                onClick={() => { closeSubtabContextMenu(); setShowExcelImport(true); }}
+              >
+                <span className="wf-menu-icon"></span>
+                <span className="wf-menu-text">Thêm nhanh (excel)</span>
+              </div>
 
-          {/* 13. Thuộc tính */}
-          <div
-            className="wf-menu-item"
-            onClick={() => { closeSubtabContextMenu(); setShowSubtabPropsDialog(true); }}
-          >
-            <span className="wf-menu-icon"></span>
-            <span className="wf-menu-text">Thuộc tính</span>
-          </div>
+              {/* 3. Cập nhật nhanh (excel) */}
+              <div
+                className="wf-menu-item"
+                onClick={() => { closeSubtabContextMenu(); setShowExcelImport(true); }}
+              >
+                <span className="wf-menu-icon"></span>
+                <span className="wf-menu-text">Cập nhật nhanh (excel)</span>
+              </div>
+
+              {/* 4. ✏️ Chỉnh sửa */}
+              <div
+                className="wf-menu-item"
+                onClick={handleOpenEditSubtab}
+              >
+                <span className="wf-menu-icon" style={{ color: '#d97706' }}>✏️</span>
+                <span className="wf-menu-text">Chỉnh sửa</span>
+              </div>
+
+              <div className="wf-menu-separator"></div>
+
+              {/* 5. Sắp xếp theo ► */}
+              <div
+                className="wf-menu-item has-submenu"
+                onMouseEnter={() => setShowSubtabSubSapXep(true)}
+                onMouseLeave={() => setShowSubtabSubSapXep(false)}
+              >
+                <span className="wf-menu-icon"></span>
+                <span className="wf-menu-text">Sắp xếp theo</span>
+                <span className="wf-submenu-arrow">▶</span>
+
+                {showSubtabSubSapXep && (
+                  <div className="wf-submenu" style={{ width: 155 }}>
+                    <div className="wf-menu-item" onClick={() => handleSubtabSort('asc')}>
+                      <span className="wf-menu-icon" style={{ fontSize: 10 }}>▲</span>
+                      <span className="wf-menu-text">Sắp xếp tăng dần</span>
+                    </div>
+                    <div className="wf-menu-item" onClick={() => handleSubtabSort('desc')}>
+                      <span className="wf-menu-icon" style={{ fontSize: 10 }}>▼</span>
+                      <span className="wf-menu-text">Sắp xếp giảm dần</span>
+                    </div>
+                  </div>
+                )}
+              </div>
+
+              {/* 6. 🔄 Refresh */}
+              <div
+                className="wf-menu-item"
+                onClick={handleSubtabRefresh}
+              >
+                <span className="wf-menu-icon" style={{ color: '#16a34a' }}>🔄</span>
+                <span className="wf-menu-text">Refresh</span>
+              </div>
+
+              {/* 7. In danh sách */}
+              <div
+                className="wf-menu-item"
+                onClick={handleSubtabPrint}
+              >
+                <span className="wf-menu-icon"></span>
+                <span className="wf-menu-text">In danh sách</span>
+              </div>
+
+              <div className="wf-menu-separator"></div>
+
+              {/* 8. 📄 Sao chép ô */}
+              <div
+                className="wf-menu-item"
+                onClick={handleSubtabCopyCell}
+              >
+                <span className="wf-menu-icon" style={{ color: '#0284c7' }}>📄</span>
+                <span className="wf-menu-text">Sao chép ô</span>
+              </div>
+
+              {/* 9. 📑 Sao chép vùng chọn */}
+              <div
+                className="wf-menu-item"
+                onClick={handleSubtabCopyRow}
+              >
+                <span className="wf-menu-icon" style={{ color: '#0284c7' }}>📑</span>
+                <span className="wf-menu-text">Sao chép vùng chọn</span>
+              </div>
+
+              {/* 10. ❌ Xóa */}
+              <div
+                className="wf-menu-item"
+                onClick={handleSubtabDelete}
+              >
+                <span className="wf-menu-icon" style={{ color: '#dc2626' }}>❌</span>
+                <span className="wf-menu-text">Xóa</span>
+              </div>
+
+              <div className="wf-menu-separator"></div>
+
+              {/* 11. Tự động dãn cột */}
+              <div
+                className="wf-menu-item"
+                onClick={() => { closeSubtabContextMenu(); showNotification && showNotification('Đã tự động dãn cột theo nội dung'); }}
+              >
+                <span className="wf-menu-icon"></span>
+                <span className="wf-menu-text">Tự động dãn cột</span>
+              </div>
+
+              {/* 12. Cột hiển thị */}
+              <div
+                className="wf-menu-item"
+                onClick={() => { closeSubtabContextMenu(); setShowSubtabColChooser(true); }}
+              >
+                <span className="wf-menu-icon"></span>
+                <span className="wf-menu-text">Cột hiển thị</span>
+              </div>
+
+              {/* 13. Thuộc tính */}
+              <div
+                className="wf-menu-item"
+                onClick={() => { closeSubtabContextMenu(); setShowSubtabPropsDialog(true); }}
+              >
+                <span className="wf-menu-icon"></span>
+                <span className="wf-menu-text">Thuộc tính</span>
+              </div>
+            </>
+          )}
         </div>
       )}
 
