@@ -4,9 +4,10 @@ import { khachHangService } from '../services/khachHangService';
 export default function SubtabAeModal({
   show,
   mode = 'create',
-  tabId = 'datHang',
-  tabLabel = 'Đặt hàng',
+  tabId = 'giaHanThe',
+  tabLabel = 'Gia hạn thẻ',
   customer = null,
+  customers = [],
   initialData = null,
   metadata = {},
   onSave,
@@ -15,7 +16,7 @@ export default function SubtabAeModal({
   const [formData, setFormData] = useState({});
   const [saving, setSaving] = useState(false);
 
-  // Helper tính ngày cộng thêm
+  // Helper date add
   const addDays = (dateStr, days) => {
     if (!dateStr) return '';
     try {
@@ -38,37 +39,54 @@ export default function SubtabAeModal({
     }
   };
 
+  // Convert date format helper (YYYY-MM-DD <-> DD/MM/YYYY)
+  const toDisplayDate = (isoStr) => {
+    if (!isoStr) return '';
+    if (isoStr.includes('/')) return isoStr;
+    const parts = isoStr.split('-');
+    if (parts.length === 3) return `${parts[2]}/${parts[1]}/${parts[0]}`;
+    return isoStr;
+  };
+
+  const toIsoDate = (displayStr) => {
+    if (!displayStr) return '';
+    if (displayStr.includes('-')) return displayStr;
+    const parts = displayStr.split('/');
+    if (parts.length === 3) return `${parts[2]}-${parts[1]}-${parts[0]}`;
+    return displayStr;
+  };
+
   // Khởi tạo dữ liệu form tương ứng với từng loại subtab
   useEffect(() => {
     if (!show) return;
 
-    const todayStr = new Date().toISOString().split('T')[0];
+    const todayIso = new Date().toISOString().split('T')[0];
     const nowTimeStr = new Date().toTimeString().slice(0, 5); // HH:mm
 
     if (mode === 'edit' && initialData) {
       setFormData({
         ...initialData,
-        ngay: initialData.ngay ? (initialData.ngay.includes('/') ? initialData.ngay.split('/').reverse().join('-') : initialData.ngay) : todayStr,
-        tuNgay: initialData.tuNgay ? (initialData.tuNgay.includes('/') ? initialData.tuNgay.split('/').reverse().join('-') : initialData.tuNgay) : todayStr,
-        denNgay: initialData.denNgay ? (initialData.denNgay.includes('/') ? initialData.denNgay.split('/').reverse().join('-') : initialData.denNgay) : todayStr
+        ngay: initialData.ngay ? toIsoDate(initialData.ngay) : todayIso,
+        tuNgay: initialData.tuNgay ? toIsoDate(initialData.tuNgay) : todayIso,
+        denNgay: initialData.denNgay ? toIsoDate(initialData.denNgay) : todayIso
       });
     } else {
-      // Dữ liệu tạo mới cơ bản
+      const activeCust = customer || (customers && customers[0]) || null;
       const baseData = {
         soPhiu: '',
-        ngay: todayStr,
-        khachHangId: customer?.id || '',
-        maKhach: customer?.maThe || '',
-        tenKhach: customer?.tenKhachHang || '',
-        dienThoai: customer?.dienThoai || '',
-        diaChi: customer?.diaChi || '',
-        email: customer?.email || '',
+        ngay: todayIso,
+        khachHangId: activeCust?.id || '',
+        maKhach: activeCust?.maThe || '',
+        tenKhach: activeCust?.tenKhachHang || '',
+        dienThoai: activeCust?.dienThoai || '',
+        diaChi: activeCust?.diaChi || '',
+        email: activeCust?.email || '',
         note: '',
-        nhanVienId: customer?.nhanVienId || '',
-        nhanVien: customer?.nhanVien || 'Administrator'
+        nhanVienId: activeCust?.nhanVienId || '',
+        nhanVien: activeCust?.nhanVien || 'Administrator'
       };
 
-      // Tự động lấy số phiếu chuẩn theo cấu hình hệ thống (NOTEMPLATE)
+      // Tự động sinh số phiếu chuẩn theo cấu hình hệ thống (NOTEMPLATE)
       khachHangService.generateSlipNumber(tabId).then(res => {
         if (res && res.success && res.soPhiu) {
           setFormData(prev => ({ ...prev, soPhiu: res.soPhiu }));
@@ -77,43 +95,21 @@ export default function SubtabAeModal({
         console.error('Lỗi lấy số phiếu tự động:', err);
       });
 
-      // 1. TAB: ĐƠN HÀNG (SFORM_Export/Đơn hàng)
-      if (tabId === 'donHang') {
-        setFormData({
-          ...baseData,
-          gioThanhToan: nowTimeStr,
-          dkhoXuatId: metadata.khoHang?.[0]?.id || '',
-          dnhanVienXuatId: metadata.nhanVien?.[0]?.id || '',
-          userThanhToan: 'Administrator',
-          tienHang: 0,
-          tiLeGiamGia: 0,
-          tienGiamGia: 0,
-          tiLeThue: 0,
-          tienThue: 0,
-          phiVanChuyen: 0,
-          tongCong: 0,
-          thanhToan: 0,
-          conLai: 0,
-          giaoHang: '',
-          doiTra: 0,
-          dienGiai: ''
-        });
-      }
-      // 2. TAB: GIA HẠN THẺ (SFORM_Export/Gia hạn thẻ)
-      else if (tabId === 'giaHanThe') {
-        const defaultLt = metadata.loaiThe?.find(l => l.id === customer?.dloaiTheId) || metadata.loaiThe?.[0];
+      // 1. TAB: GIA HẠN THẺ (SFORM_Export/Gia hạn thẻ)
+      if (tabId === 'giaHanThe') {
+        const defaultLt = metadata.loaiThe?.find(l => l.id === activeCust?.dloaiTheId) || metadata.loaiThe?.[0];
         const soThang = defaultLt?.soThang || 1;
         const soNgay = defaultLt?.soNgay || (soThang * 30);
-        const giaBan = defaultLt?.giaBan || 500000;
-        const denNgayCalc = addDays(todayStr, soNgay);
+        const giaBan = defaultLt?.giaBan || 0;
+        const denNgayCalc = addDays(todayIso, soNgay);
 
         setFormData({
           ...baseData,
           dloaiTheId: defaultLt?.id || '',
           loaiThe: defaultLt?.name || '',
-          dcatapId: customer?.dcatapId || (metadata.caTap?.[0]?.id || ''),
-          soLan: defaultLt?.soLan || 30,
-          tuNgay: todayStr,
+          dcatapId: activeCust?.dcatapId || (metadata.caTap?.[0]?.id || ''),
+          soLan: defaultLt?.soLan || 0,
+          tuNgay: todayIso,
           soThang: soThang,
           soNgay: soNgay,
           ngayTangThem: 0,
@@ -122,113 +118,132 @@ export default function SubtabAeModal({
           soTien: giaBan,
           tiLeGiamGia: 0,
           tienGiamGia: 0,
+          datTruoc: 0,
           tongCong: giaBan,
           thanhToan: giaBan,
           khuyenMai: '',
           chuaKichHoat: false
         });
       }
-      // 3. TAB: BẢO LƯU THẺ (SFORM_Export/Bảo lưu thẻ)
+      // 2. TAB: BẢO LƯU THẺ (SFORM_Export/Bảo lưu thẻ)
       else if (tabId === 'baoLuuThe') {
         const soNgay = 30;
-        const denNgayCalc = addDays(todayStr, soNgay);
+        const denNgayCalc = addDays(todayIso, soNgay);
         setFormData({
           ...baseData,
-          dloaiTheId: customer?.dloaiTheId || '',
-          loaiThe: customer?.loaiThe || '',
-          tuNgayRef: customer?.tuNgay || todayStr,
-          denNgayRef: customer?.denNgay || todayStr,
-          tuNgay: todayStr,
+          dloaiTheId: activeCust?.dloaiTheId || '',
+          loaiThe: activeCust?.loaiThe || '',
+          soPhieuRef: activeCust?.maThe || 'HD0001',
+          ngayRef: activeCust?.tuNgay ? toIsoDate(activeCust.tuNgay) : todayIso,
+          tuNgayRef: activeCust?.tuNgay ? toIsoDate(activeCust.tuNgay) : todayIso,
+          denNgayRef: activeCust?.denNgay ? toIsoDate(activeCust.denNgay) : todayIso,
+          dcatapId: activeCust?.dcatapId || '',
+          tuNgay: todayIso,
           soNgay: soNgay,
           denNgay: denNgayCalc,
-          soTien: 0,
           note: 'Bảo lưu theo yêu cầu của hội viên'
         });
       }
-      // 4. TAB: PHIẾU THU (SFORM_Export/Phiếu thu)
+      // 3. TAB: PHIẾU THU (SFORM_Export/Phiếu thu)
       else if (tabId === 'phieuThu') {
         setFormData({
           ...baseData,
-          dcuaHangId: metadata.cuaHang?.[0]?.id || '',
-          loaiDoiTuong: 2, // 2: Khách hàng (SFORM WinForms chuẩn)
-          tenDoiTuong: customer?.tenKhachHang || '',
-          diaChi: customer?.diaChi || '',
-          dnhanVienId: customer?.nhanVienId || (metadata.nhanVien?.[0]?.id || ''),
+          loaiDoiTuong: 2, // 2: Khách hàng
+          tenDoiTuong: activeCust?.tenKhachHang || '',
+          diaChi: activeCust?.diaChi || '',
           dlyDoThuChiId: metadata.lyDoThuChi?.find(l => l.laThu)?.id || '',
-          dienGiai: 'Thu tiền hội viên',
+          dienGiai: 'Thu tiền dịch vụ',
           chungTuGoc: '',
-          thu: 200000,
+          dnhanVienId: activeCust?.nhanVienId || (metadata.nhanVien?.[0]?.id || ''),
+          dkhachHangId: activeCust?.id || '',
+          dnhaCungCapId: '',
+          thu: 0,
           chuyenKhoan: false,
+          taiKhoanNganHangId: '',
+          dcuaHangId: metadata.cuaHang?.[0]?.id || '',
           khongThayDoiCongNo: false
         });
       }
-      // 5. TAB: PHIẾU CHI (SFORM_Export/Phiếu chi)
+      // 4. TAB: PHIẾU CHI (SFORM_Export/Phiếu chi)
       else if (tabId === 'phieuChi') {
         setFormData({
           ...baseData,
-          dcuaHangId: metadata.cuaHang?.[0]?.id || '',
-          loaiDoiTuong: 2, // 2: Khách hàng
-          tenDoiTuong: customer?.tenKhachHang || '',
-          diaChi: customer?.diaChi || '',
-          dnhanVienId: customer?.nhanVienId || (metadata.nhanVien?.[0]?.id || ''),
+          loaiDoiTuong: 2,
+          tenDoiTuong: activeCust?.tenKhachHang || '',
+          diaChi: activeCust?.diaChi || '',
           dlyDoThuChiId: metadata.lyDoThuChi?.find(l => l.laChi)?.id || '',
           dienGiai: 'Chi tiền hội viên / dịch vụ',
           chungTuGoc: '',
-          chi: 100000,
+          dnhanVienId: activeCust?.nhanVienId || (metadata.nhanVien?.[0]?.id || ''),
+          dkhachHangId: activeCust?.id || '',
+          dnhaCungCapId: '',
+          chi: 0,
           chuyenKhoan: false,
+          taiKhoanNganHangId: '',
+          dcuaHangId: metadata.cuaHang?.[0]?.id || '',
           khongThayDoiCongNo: false
         });
       }
-      // 6. TAB: ĐẶT CỌC (SFORM_Export/Đặt cọc)
+      // 5. TAB: ĐẶT CỌC (SFORM_Export/Đặt cọc)
       else if (tabId === 'datCoc') {
         const defaultLt = metadata.loaiThe?.[0];
         const giaTriGoi = defaultLt?.giaBan || 1000000;
         setFormData({
           ...baseData,
-          tenDoiTuong: customer?.tenKhachHang || '',
-          dienThoai: customer?.dienThoai || '',
-          diaChi: customer?.diaChi || '',
+          tenDoiTuong: activeCust?.tenKhachHang || '',
+          diaChi: activeCust?.diaChi || '',
+          dienThoai: activeCust?.dienThoai || '',
+          dlyDoThuChiId: metadata.lyDoThuChi?.find(l => l.name?.toLowerCase().includes('cọc') || l.name?.toLowerCase().includes('đặt'))?.id || '',
           dloaiTheId: defaultLt?.id || '',
           giaTriGoi: giaTriGoi,
           giamGia: 0,
           tienGiam: 0,
           tongCong: giaTriGoi,
-          thu: 500000, // Tiền cọc trước
-          conLai: giaTriGoi - 500000,
-          dlyDoThuChiId: metadata.lyDoThuChi?.find(l => l.name?.toLowerCase().includes('cọc') || l.name?.toLowerCase().includes('đặt'))?.id || '',
-          chuyenKhoan: false
+          thu: 500000,
+          tongDat: 500000,
+          chuyenKhoan: false,
+          taiKhoanNganHangId: ''
         });
       }
-      // 7. TAB: PHIẾU THU CÔNG NỢ (SFORM_Export/Phiếu thu công nợ)
+      // 6. TAB: PHIẾU THU CÔNG NỢ (SFORM_Export/Phiếu thu công nợ)
       else if (tabId === 'thuCongNo') {
         setFormData({
           ...baseData,
-          tenDoiTuong: customer?.tenKhachHang || '',
-          diaChi: customer?.diaChi || '',
-          dnhanVienId: customer?.nhanVienId || (metadata.nhanVien?.[0]?.id || ''),
+          dnhanVienId: activeCust?.nhanVienId || (metadata.nhanVien?.[0]?.id || ''),
+          dienGiai: 'Thu công nợ khách hàng',
           dlyDoThuChiId: metadata.lyDoThuChi?.find(l => l.name?.toLowerCase().includes('nợ'))?.id || '',
-          dienGiai: 'Thu công nợ hội viên',
           chungTuGoc: '',
-          thu: 500000,
+          thu: 0,
           chuyenKhoan: false
         });
       }
-      // CÁC TAB KHÁC: ĐẶT HÀNG, BÁO GIÁ, ĐỔI LOẠI THẺ, TĂNG GIẢM ĐIỂM
-      else if (tabId === 'datHang' || tabId === 'baoGia') {
+      // 7. TAB: ĐƠN HÀNG (SFORM_Export/Đơn hàng)
+      else if (tabId === 'donHang') {
         setFormData({
           ...baseData,
+          gioThanhToan: nowTimeStr,
+          dkhoXuatId: metadata.khoHang?.[0]?.id || '',
+          dnhanVienXuatId: metadata.nhanVien?.[0]?.id || '',
+          userThanhToanId: 'Administrator',
+          giaoHang: '',
+          dienGiai: '',
           tienHang: 0,
+          phiVanChuyen: 0,
           tiLeGiamGia: 0,
           tienGiamGia: 0,
           tiLeThue: 0,
           tienThue: 0,
-          phiVanChuyen: 0,
-          tongCong: 0
+          doiTra: 0,
+          tongCong: 0,
+          thanhToan: 0,
+          conLai: 0
         });
-      } else if (tabId === 'doiLoaiThe') {
+      }
+      // CÁC TAB KHÁC: ĐỔI LOẠI THẺ, TĂNG GIẢM ĐIỂM
+      else if (tabId === 'doiLoaiThe') {
         setFormData({
           ...baseData,
-          loaiTheCu: customer?.loaiThe || '',
+          loaiTheCu: activeCust?.loaiThe || '',
           dloaiTheIdMoi: metadata.loaiThe?.[0]?.id || '',
           soTien: 0
         });
@@ -243,38 +258,62 @@ export default function SubtabAeModal({
         setFormData(baseData);
       }
     }
-  }, [show, mode, tabId, customer, initialData, metadata]);
+  }, [show, mode, tabId, customer, initialData, metadata, customers]);
 
   if (!show) return null;
 
+  // Lấy thông tin khách khi chọn combobox khách hàng
+  const handleSelectCustomer = (custId) => {
+    const cust = customers.find(c => c.id === custId) || customer;
+    if (!cust) return;
+
+    setFormData(prev => {
+      const updated = {
+        ...prev,
+        khachHangId: cust.id,
+        maKhach: cust.maThe || '',
+        tenKhach: cust.tenKhachHang || cust.name || '',
+        tenDoiTuong: cust.tenKhachHang || cust.name || '',
+        diaChi: cust.diaChi || '',
+        dienThoai: cust.dienThoai || '',
+        dloaiTheId: cust.dloaiTheId || prev.dloaiTheId,
+        dcatapId: cust.dcatapId || prev.dcatapId
+      };
+
+      if (tabId === 'giaHanThe') {
+        const lt = metadata.loaiThe?.find(l => l.id === (cust.dloaiTheId || prev.dloaiTheId));
+        if (lt) {
+          updated.soThang = lt.soThang || 1;
+          updated.soNgay = lt.soNgay || (lt.soThang * 30 || 30);
+          updated.soLan = lt.soLan || 0;
+          updated.soTien = lt.giaBan || 0;
+          updated.tongCong = lt.giaBan || 0;
+          updated.thanhToan = lt.giaBan || 0;
+          updated.denNgay = addDays(updated.tuNgay || prev.tuNgay, updated.soNgay);
+        }
+      }
+      return updated;
+    });
+  };
+
+  // Cập nhật giá trị và tự động tính toán nghiệp vụ
   const handleChange = (field, value) => {
     setFormData(prev => {
       const updated = { ...prev, [field]: value };
 
-      // Tự động tính toán theo nghiệp vụ từng form
-      // A. Đơn hàng: Tính tổng cộng & còn lại
-      if (tabId === 'donHang') {
-        const th = field === 'tienHang' ? Number(value) || 0 : Number(prev.tienHang) || 0;
-        const tg = field === 'tienGiamGia' ? Number(value) || 0 : Number(prev.tienGiamGia) || 0;
-        const tt = field === 'tienThue' ? Number(value) || 0 : Number(prev.tienThue) || 0;
-        const pvc = field === 'phiVanChuyen' ? Number(value) || 0 : Number(prev.phiVanChuyen) || 0;
-        const tong = th - tg + tt + pvc;
-        const ttPay = field === 'thanhToan' ? Number(value) || 0 : Number(prev.thanhToan) || 0;
-        updated.tongCong = tong;
-        updated.conLai = tong - ttPay;
-      }
-
-      // B. Gia hạn thẻ: Đổi loại thẻ -> Cập nhật số tiền, số ngày, hạn đến ngày
+      // 1. Gia hạn thẻ
       if (tabId === 'giaHanThe') {
         if (field === 'dloaiTheId') {
           const lt = metadata.loaiThe?.find(l => l.id === value);
           if (lt) {
             updated.soTien = lt.giaBan || 0;
-            updated.tongCong = lt.giaBan || 0;
-            updated.thanhToan = lt.giaBan || 0;
             updated.soThang = lt.soThang || 1;
             updated.soNgay = lt.soNgay || (lt.soThang * 30 || 30);
             updated.soLan = lt.soLan || 0;
+            const tg = Math.round((lt.giaBan || 0) * (Number(prev.tiLeGiamGia) || 0) / 100);
+            updated.tienGiamGia = tg;
+            updated.tongCong = (lt.giaBan || 0) - tg;
+            updated.thanhToan = (lt.giaBan || 0) - tg;
             updated.denNgay = addDays(updated.tuNgay || prev.tuNgay, updated.soNgay + (Number(prev.ngayTangThem) || 0));
           }
         } else if (field === 'tuNgay' || field === 'soNgay' || field === 'ngayTangThem') {
@@ -289,12 +328,16 @@ export default function SubtabAeModal({
           updated.tienGiamGia = tg;
           updated.tongCong = st - tg;
           updated.thanhToan = st - tg;
-        } else if (field === 'thanhToan') {
-          // Keep user payment
+        } else if (field === 'tienGiamGia') {
+          const st = Number(prev.soTien) || 0;
+          const tg = Number(value) || 0;
+          updated.tongCong = st - tg;
+          updated.thanhToan = st - tg;
+          updated.tiLeGiamGia = st > 0 ? Math.round((tg / st) * 100) : 0;
         }
       }
 
-      // C. Bảo lưu thẻ: Thay đổi số ngày -> Cập nhật hạn bảo lưu đến ngày
+      // 2. Bảo lưu thẻ
       if (tabId === 'baoLuuThe') {
         if (field === 'tuNgay' || field === 'soNgay') {
           const tn = field === 'tuNgay' ? value : prev.tuNgay;
@@ -303,7 +346,7 @@ export default function SubtabAeModal({
         }
       }
 
-      // D. Đặt cọc: Đổi gói tập hoặc giảm giá -> Cập nhật tổng cộng & còn lại
+      // 3. Đặt cọc
       if (tabId === 'datCoc') {
         if (field === 'dloaiTheId') {
           const lt = metadata.loaiThe?.find(l => l.id === value);
@@ -313,18 +356,29 @@ export default function SubtabAeModal({
             const tg = Math.round(lt.giaBan * gg / 100);
             updated.tienGiam = tg;
             updated.tongCong = lt.giaBan - tg;
-            updated.conLai = (lt.giaBan - tg) - (Number(prev.thu) || 0);
           }
-        } else if (field === 'giamGia' || field === 'giaTriGoi' || field === 'thu') {
+        } else if (field === 'giamGia' || field === 'giaTriGoi') {
           const gtg = field === 'giaTriGoi' ? Number(value) || 0 : Number(prev.giaTriGoi) || 0;
           const gg = field === 'giamGia' ? Number(value) || 0 : Number(prev.giamGia) || 0;
           const tg = Math.round(gtg * gg / 100);
-          const tc = gtg - tg;
-          const thu = field === 'thu' ? Number(value) || 0 : Number(prev.thu) || 0;
           updated.tienGiam = tg;
-          updated.tongCong = tc;
-          updated.conLai = tc - thu;
+          updated.tongCong = gtg - tg;
+        } else if (field === 'thu') {
+          updated.tongDat = Number(value) || 0;
         }
+      }
+
+      // 4. Đơn hàng
+      if (tabId === 'donHang') {
+        const th = field === 'tienHang' ? Number(value) || 0 : Number(prev.tienHang) || 0;
+        const tg = field === 'tienGiamGia' ? Number(value) || 0 : Number(prev.tienGiamGia) || 0;
+        const tt = field === 'tienThue' ? Number(value) || 0 : Number(prev.tienThue) || 0;
+        const pvc = field === 'phiVanChuyen' ? Number(value) || 0 : Number(prev.phiVanChuyen) || 0;
+        const dt = field === 'doiTra' ? Number(value) || 0 : Number(prev.doiTra) || 0;
+        const tong = th - tg + tt + pvc - dt;
+        const ttPay = field === 'thanhToan' ? Number(value) || 0 : Number(prev.thanhToan) || 0;
+        updated.tongCong = tong;
+        updated.conLai = tong - ttPay;
       }
 
       return updated;
@@ -332,7 +386,7 @@ export default function SubtabAeModal({
   };
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
+    if (e && e.preventDefault) e.preventDefault();
     if (!formData.soPhiu || !formData.soPhiu.trim()) {
       alert('Vui lòng nhập Số phiếu!');
       return;
@@ -350,1231 +404,1432 @@ export default function SubtabAeModal({
     }
   };
 
+  // Xác định tiêu đề chuẩn theo screenshot WinForms
+  const formTitles = {
+    giaHanThe: 'GIA HẠN THẺ',
+    baoLuuThe: 'BẢO LƯU THẺ',
+    phieuThu: 'PHIẾU THU',
+    phieuChi: 'PHIẾU CHI',
+    datCoc: 'ĐẶT CỌC',
+    thuCongNo: 'PHIẾU THU CÔNG NỢ',
+    donHang: 'ĐƠN HÀNG',
+    doiLoaiThe: 'ĐỔI LOẠI THẺ',
+    tangGiamDiem: 'TĂNG GIẢM ĐIỂM'
+  };
+
+  const bannerTitle = formTitles[tabId] || tabLabel.toUpperCase();
+  const windowTitle = `${bannerTitle} - ${mode === 'create' ? 'THÊM MỚI' : 'CHỈNH SỬA'}`;
+
+  // Kích thước canvas chuẩn từ AELayout.xml
+  const formDimensions = {
+    giaHanThe: { width: 564, height: 433 },
+    baoLuuThe: { width: 541, height: 432 },
+    phieuThu: { width: 527, height: 382 },
+    phieuChi: { width: 527, height: 382 },
+    datCoc: { width: 514, height: 330 },
+    thuCongNo: { width: 590, height: 454 },
+    donHang: { width: 660, height: 510 },
+    doiLoaiThe: { width: 520, height: 350 },
+    tangGiamDiem: { width: 520, height: 350 }
+  };
+
+  const dim = formDimensions[tabId] || { width: 564, height: 433 };
+
+  // Common inline style definitions matching exact WinForms DevExpress / Krypton
+  const lblStyle = {
+    position: 'absolute',
+    fontFamily: "Tahoma, 'Segoe UI', Arial, sans-serif",
+    fontSize: '11px',
+    color: '#000000',
+    lineHeight: '22px',
+    userSelect: 'none',
+    whiteSpace: 'nowrap'
+  };
+
+  const inputStyle = (extra = {}) => ({
+    position: 'absolute',
+    height: '21px',
+    boxSizing: 'border-box',
+    border: '1px solid #7192b8',
+    borderRadius: '1px',
+    padding: '1px 5px',
+    fontFamily: "Tahoma, 'Segoe UI', Arial, sans-serif",
+    fontSize: '11px',
+    color: '#000000',
+    background: '#ffffff',
+    outline: 'none',
+    ...extra
+  });
+
+  const yellowInputStyle = (extra = {}) => inputStyle({
+    background: '#ffffd5', // Pale yellow for mandatory / key inputs
+    ...extra
+  });
+
   return (
-    <div className="choice-dialog-backdrop" onClick={onClose} style={{ zIndex: 1050 }}>
+    <div
+      className="choice-dialog-backdrop"
+      onClick={onClose}
+      style={{
+        position: 'fixed',
+        top: 0,
+        left: 0,
+        right: 0,
+        bottom: 0,
+        background: 'rgba(0, 0, 0, 0.45)',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        zIndex: 1050
+      }}
+    >
       <div
-        className="choice-dialog-window"
+        className="winforms-window"
         onClick={(e) => e.stopPropagation()}
-        style={{ width: tabId === 'donHang' || tabId === 'giaHanThe' ? 720 : 640, maxWidth: '96vw', borderRadius: 4 }}
+        style={{
+          width: dim.width + 2,
+          maxWidth: '98vw',
+          background: '#cbdbe8',
+          border: '1px solid #5a82a6',
+          boxShadow: '0 8px 30px rgba(0, 0, 0, 0.5)',
+          borderRadius: '4px 4px 0 0',
+          overflow: 'hidden',
+          display: 'flex',
+          flexDirection: 'column'
+        }}
       >
-        {/* TITLEBAR */}
+        {/* ========================================================================= */}
+        {/* 1. WINDOW TITLE BAR (WINFORMS AERO / CLASSIC)                             */}
+        {/* ========================================================================= */}
         <div
-          className="choice-dialog-titlebar"
           style={{
-            background: 'linear-gradient(180deg, #1e3a8a 0%, #1e40af 100%)',
-            color: '#ffffff',
+            height: 28,
+            background: 'linear-gradient(180deg, #eef5fc 0%, #bdd3e8 100%)',
+            borderBottom: '1px solid #8caec7',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'space-between',
-            padding: '7px 12px',
-            fontSize: 13,
-            fontWeight: 600
+            padding: '0 4px 0 8px',
+            userSelect: 'none'
           }}
         >
-          <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-            <span>{mode === 'create' ? '✚' : '✏️'}</span>
-            <span>{mode === 'create' ? `Thêm mới ${tabLabel}` : `Chỉnh sửa ${tabLabel}`}</span>
-            {customer && <span style={{ opacity: 0.9, fontWeight: 400 }}>- [{customer.tenKhachHang}]</span>}
+          <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+            {/* Small WinForms icon */}
+            <div
+              style={{
+                width: 16,
+                height: 14,
+                background: 'linear-gradient(180deg, #38bdf8 0%, #0284c7 100%)',
+                border: '1px solid #0369a1',
+                borderRadius: 2,
+                boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.6)'
+              }}
+            />
+            <span style={{ fontSize: 11.5, fontWeight: 700, color: '#0f2942', letterSpacing: '0.2px' }}>
+              {windowTitle}
+            </span>
           </div>
-          <button
-            className="choice-dialog-close"
-            onClick={onClose}
+
+          <div style={{ display: 'flex', alignItems: 'center' }}>
+            <button
+              onClick={onClose}
+              style={{
+                width: 28,
+                height: 20,
+                background: 'transparent',
+                border: 'none',
+                color: '#334155',
+                fontSize: 12,
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                cursor: 'pointer',
+                borderRadius: 2
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.background = '#e81123';
+                e.currentTarget.style.color = '#ffffff';
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.background = 'transparent';
+                e.currentTarget.style.color = '#334155';
+              }}
+            >
+              ✕
+            </button>
+          </div>
+        </div>
+
+        {/* ========================================================================= */}
+        {/* 2. FORM BANNER (HEADER STRIP VỚI ICON & TIÊU ĐỀ IN ĐẬM)                  */}
+        {/* ========================================================================= */}
+        <div
+          style={{
+            height: 44,
+            background: 'linear-gradient(180deg, #ffffff 0%, #e2edf7 100%)',
+            borderBottom: '1px solid #b5ccdf',
+            display: 'flex',
+            alignItems: 'center',
+            padding: '0 12px',
+            gap: 12
+          }}
+        >
+          {/* Cyan/Blue Card Graphic Badge */}
+          <div
             style={{
-              background: 'transparent',
-              border: 'none',
+              width: 32,
+              height: 24,
+              background: 'linear-gradient(135deg, #38bdf8 0%, #0ea5e9 100%)',
+              borderRadius: 3,
+              border: '1px solid #0284c7',
+              boxShadow: '0 1px 3px rgba(0,0,0,0.15)',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
               color: '#ffffff',
               fontSize: 14,
-              cursor: 'pointer',
-              padding: '0 4px',
-              lineHeight: 1
+              fontWeight: 700
             }}
           >
-            ✕
+            💳
+          </div>
+          <span style={{ fontSize: 14, fontWeight: 700, color: '#1e293b', fontFamily: "Tahoma, 'Segoe UI', sans-serif" }}>
+            {bannerTitle}
+          </span>
+        </div>
+
+        {/* ========================================================================= */}
+        {/* 3. TOOLSTRIP (CÁC NÚT THAO TÁC NHANH: PHÍM TẮT, TRƯỚC, SAU, TẠO MỚI)     */}
+        {/* ========================================================================= */}
+        <div
+          style={{
+            height: 25,
+            background: 'linear-gradient(180deg, #f2f7fc 0%, #d8e5f2 100%)',
+            borderBottom: '1px solid #aec4d9',
+            display: 'flex',
+            alignItems: 'center',
+            padding: '0 6px',
+            gap: 4,
+            fontSize: 11,
+            color: '#1e293b'
+          }}
+        >
+          <button type="button" className="wf-tool-btn" style={{ background: 'transparent', border: '1px solid transparent', padding: '1px 5px', fontSize: 11, cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 3 }}>
+            <span>⌨️</span> Phím tắt ▾
+          </button>
+          <div style={{ width: 1, height: 14, background: '#c1d4e6', margin: '0 2px' }} />
+          <button type="button" className="wf-tool-btn" style={{ background: 'transparent', border: '1px solid transparent', padding: '1px 5px', fontSize: 11, cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 3, opacity: 0.6 }}>
+            <span>⬅</span> Trước (F10)
+          </button>
+          <button type="button" className="wf-tool-btn" style={{ background: 'transparent', border: '1px solid transparent', padding: '1px 5px', fontSize: 11, cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 3, opacity: 0.6 }}>
+            <span>➡</span> Sau (F11)
+          </button>
+          <div style={{ width: 1, height: 14, background: '#c1d4e6', margin: '0 2px' }} />
+          <button type="button" className="wf-tool-btn" style={{ background: 'transparent', border: '1px solid transparent', padding: '1px 5px', fontSize: 11, cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 3 }}>
+            <span>📄</span> Tạo mới
+          </button>
+          <button type="button" className="wf-tool-btn" style={{ background: 'transparent', border: '1px solid transparent', padding: '1px 5px', fontSize: 11, cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 3, opacity: 0.6 }}>
+            <span>📑</span> Sao chép
           </button>
         </div>
 
-        {/* DIALOG BODY */}
-        <form onSubmit={handleSubmit}>
-          <div style={{ padding: '16px 20px', maxHeight: '78vh', overflowY: 'auto', background: '#f8fafc' }}>
-            
-            {/* THÔNG TIN CHUNG: SỐ PHIẾU & NGÀY (CÓ Ở TẤT CẢ CÁC FORM) */}
-            <div style={{ display: 'grid', gridTemplateColumns: '1.2fr 1fr', gap: '10px 14px', marginBottom: 14 }}>
-              <div>
-                <label style={{ display: 'block', marginBottom: 3, fontWeight: 600, color: '#1e3a8a', fontSize: 12 }}>
-                  Số phiếu <span style={{ color: '#dc2626' }}>*</span>
-                </label>
+        {/* ========================================================================= */}
+        {/* 4. FORM CANVAS: EXACT LOCATIONS & SIZES FROM AELAYOUT.XML                 */}
+        {/* ========================================================================= */}
+        <div
+          style={{
+            position: 'relative',
+            width: dim.width,
+            height: dim.height,
+            background: '#cbdbe8',
+            overflow: 'hidden'
+          }}
+        >
+          {/* ----------------------------------------------------------------------- */}
+          {/* FORM 1: GIA HẠN THẺ (Khớp 100% hình ảnh thực tế của người dùng)         */}
+          {/* ----------------------------------------------------------------------- */}
+          {tabId === 'giaHanThe' && (
+            <>
+              {/* Ngày & Số phiếu */}
+              <div style={{ ...lblStyle, left: 10, top: 11, width: 41 }}>Ngày</div>
+              <input
+                type="date"
+                required
+                style={yellowInputStyle({ left: 118, top: 9, width: 128 })}
+                value={formData.ngay || ''}
+                onChange={(e) => handleChange('ngay', e.target.value)}
+              />
+              <div style={{ ...lblStyle, left: 327, top: 13, width: 61 }}>Số phiếu</div>
+              <input
+                type="text"
+                required
+                style={inputStyle({ left: 413, top: 10, width: 140, fontWeight: 700, background: '#f0fbfb', color: '#1e3a8a' })}
+                value={formData.soPhiu || ''}
+                onChange={(e) => handleChange('soPhiu', e.target.value)}
+              />
+
+              {/* Khách hàng (Dropdown) */}
+              <div style={{ ...lblStyle, left: 10, top: 39, width: 78 }}>Khách hàng</div>
+              <select
+                style={yellowInputStyle({ left: 118, top: 37, width: 435, height: 23, fontWeight: 600 })}
+                value={formData.khachHangId || ''}
+                onChange={(e) => handleSelectCustomer(e.target.value)}
+              >
+                <option value="">-- Chọn khách hàng --</option>
+                {customers && customers.length > 0 ? (
+                  customers.map(c => (
+                    <option key={c.id} value={c.id}>
+                      {c.maThe ? `[${c.maThe}] ` : ''}{c.tenKhachHang || c.name} - {c.dienThoai || ''}
+                    </option>
+                  ))
+                ) : (
+                  customer && <option value={customer.id}>[{customer.maThe}] {customer.tenKhachHang}</option>
+                )}
+              </select>
+
+              {/* Tên khách */}
+              <div style={{ ...lblStyle, left: 10, top: 68, width: 71 }}>Tên khách</div>
+              <input
+                type="text"
+                readOnly
+                style={inputStyle({ left: 118, top: 66, width: 435, background: '#f8fafc' })}
+                value={formData.tenKhach || ''}
+              />
+
+              {/* Địa chỉ */}
+              <div style={{ ...lblStyle, left: 10, top: 96, width: 48 }}>Địa chỉ</div>
+              <input
+                type="text"
+                style={inputStyle({ left: 118, top: 94, width: 435 })}
+                value={formData.diaChi || ''}
+                onChange={(e) => handleChange('diaChi', e.target.value)}
+              />
+
+              {/* Điện thoại */}
+              <div style={{ ...lblStyle, left: 10, top: 124, width: 67 }}>Điện thoại</div>
+              <input
+                type="text"
+                style={inputStyle({ left: 118, top: 122, width: 435 })}
+                value={formData.dienThoai || ''}
+                onChange={(e) => handleChange('dienThoai', e.target.value)}
+              />
+
+              {/* Mã thẻ */}
+              <div style={{ ...lblStyle, left: 10, top: 152, width: 48 }}>Mã thẻ</div>
+              <input
+                type="text"
+                style={inputStyle({ left: 118, top: 150, width: 435 })}
+                value={formData.maKhach || ''}
+                onChange={(e) => handleChange('maKhach', e.target.value)}
+              />
+
+              {/* Loại thẻ */}
+              <div style={{ ...lblStyle, left: 10, top: 180, width: 55 }}>Loại thẻ</div>
+              <select
+                style={yellowInputStyle({ left: 118, top: 178, width: 435, height: 23, fontWeight: 600 })}
+                value={formData.dloaiTheId || ''}
+                onChange={(e) => handleChange('dloaiTheId', e.target.value)}
+              >
+                <option value="">-- Chọn loại thẻ / Gói tập --</option>
+                {metadata.loaiThe?.map(lt => (
+                  <option key={lt.id} value={lt.id}>
+                    {lt.name} ({lt.giaBan?.toLocaleString()} đ - {lt.soThang || 1} tháng)
+                  </option>
+                ))}
+              </select>
+
+              {/* Từ ngày, Đến ngày, Số lần tập */}
+              <div style={{ ...lblStyle, left: 10, top: 209, width: 57 }}>Từ ngày</div>
+              <input
+                type="date"
+                required
+                style={yellowInputStyle({ left: 118, top: 207, width: 101 })}
+                value={formData.tuNgay || ''}
+                onChange={(e) => handleChange('tuNgay', e.target.value)}
+              />
+              <div style={{ ...lblStyle, left: 225, top: 209, width: 65 }}>Đến ngày</div>
+              <input
+                type="date"
+                required
+                style={yellowInputStyle({ left: 295, top: 207, width: 103, fontWeight: 700 })}
+                value={formData.denNgay || ''}
+                onChange={(e) => handleChange('denNgay', e.target.value)}
+              />
+              <div style={{ ...lblStyle, left: 403, top: 209, width: 68 }}>Số lần tập</div>
+              <input
+                type="number"
+                min="0"
+                style={inputStyle({ left: 477, top: 207, width: 76, textAlign: 'right' })}
+                value={formData.soLan ?? 0}
+                onChange={(e) => handleChange('soLan', parseInt(e.target.value) || 0)}
+              />
+
+              {/* Ngày tặng thêm, Lần tặng thêm */}
+              <div style={{ ...lblStyle, left: 10, top: 237, width: 102 }}>Ngày tặng thêm</div>
+              <input
+                type="number"
+                min="0"
+                style={inputStyle({ left: 118, top: 235, width: 101, textAlign: 'right' })}
+                value={formData.ngayTangThem ?? 0}
+                onChange={(e) => handleChange('ngayTangThem', parseInt(e.target.value) || 0)}
+              />
+              <div style={{ ...lblStyle, left: 225, top: 237, width: 91 }}>Lần tặng thêm</div>
+              <input
+                type="number"
+                min="0"
+                style={inputStyle({ left: 337, top: 235, width: 55, textAlign: 'right' })}
+                value={formData.lanTangThem ?? 0}
+                onChange={(e) => handleChange('lanTangThem', parseInt(e.target.value) || 0)}
+              />
+
+              {/* Ca tập */}
+              <div style={{ ...lblStyle, left: 10, top: 265, width: 47 }}>Ca tập</div>
+              <select
+                style={inputStyle({ left: 118, top: 263, width: 435, height: 23 })}
+                value={formData.dcatapId || ''}
+                onChange={(e) => handleChange('dcatapId', e.target.value)}
+              >
+                <option value="">-- Cả ngày (Mặc định) --</option>
+                {metadata.caTap?.map(ct => (
+                  <option key={ct.id} value={ct.id}>{ct.name}</option>
+                ))}
+              </select>
+
+              {/* Số tiền & Checkbox Kích hoạt sau */}
+              <div style={{ ...lblStyle, left: 10, top: 292, width: 49 }}>Số tiền</div>
+              <input
+                type="number"
+                min="0"
+                style={inputStyle({ left: 118, top: 291, width: 128, textAlign: 'right', fontWeight: 600 })}
+                value={formData.soTien ?? 0}
+                onChange={(e) => handleChange('soTien', parseFloat(e.target.value) || 0)}
+              />
+              <label style={{ position: 'absolute', left: 425, top: 292, display: 'flex', alignItems: 'center', gap: 6, fontSize: 11, cursor: 'pointer', userSelect: 'none' }}>
                 <input
-                  type="text"
-                  required
-                  className="tn-input"
-                  style={{ width: '100%', height: 28, fontSize: 13, fontWeight: 700, color: '#1d4ed8', fontFamily: 'Consolas, monospace' }}
-                  value={formData.soPhiu || ''}
-                  onChange={(e) => handleChange('soPhiu', e.target.value)}
-                  placeholder="VD: BG26/00001"
+                  type="checkbox"
+                  checked={!!formData.chuaKichHoat}
+                  onChange={(e) => handleChange('chuaKichHoat', e.target.checked)}
                 />
-              </div>
-              <div>
-                <label style={{ display: 'block', marginBottom: 3, fontWeight: 600, color: '#334155', fontSize: 12 }}>
-                  Ngày <span style={{ color: '#dc2626' }}>*</span>
-                </label>
-                <input
-                  type="date"
-                  required
-                  className="tn-input"
-                  style={{ width: '100%', height: 28, fontSize: 12 }}
-                  value={formData.ngay || ''}
-                  onChange={(e) => handleChange('ngay', e.target.value)}
-                />
-              </div>
-            </div>
-
-            {/* ========================================================================= */}
-            {/* 1. FORM: PHIẾU THU (KHỚP CHUẨN SFORM_Export/Phiếu thu)                    */}
-            {/* ========================================================================= */}
-            {tabId === 'phieuThu' && (
-              <div style={{ display: 'flex', flexDirection: 'column', gap: 10, fontSize: 12 }}>
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px 14px' }}>
-                  <div>
-                    <label style={{ display: 'block', marginBottom: 3, fontWeight: 600, color: '#334155' }}>Loại đối tượng</label>
-                    <select
-                      className="tn-input"
-                      style={{ width: '100%', height: 28 }}
-                      value={formData.loaiDoiTuong ?? 2}
-                      onChange={(e) => handleChange('loaiDoiTuong', Number(e.target.value))}
-                    >
-                      <option value={2}>Khách hàng</option>
-                      <option value={1}>Nhân viên</option>
-                      <option value={3}>Nhà cung cấp</option>
-                      <option value={0}>Đối tượng ngoài / Khác</option>
-                    </select>
-                  </div>
-                  <div>
-                    <label style={{ display: 'block', marginBottom: 3, fontWeight: 600, color: '#334155' }}>Cửa hàng</label>
-                    <select
-                      className="tn-input"
-                      style={{ width: '100%', height: 28 }}
-                      value={formData.dcuaHangId || ''}
-                      onChange={(e) => handleChange('dcuaHangId', e.target.value)}
-                    >
-                      {metadata.cuaHang?.map(c => <option key={c.id} value={c.id}>{c.name}</option>) || <option value="">Cửa hàng chính</option>}
-                    </select>
-                  </div>
-                </div>
-
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px 14px' }}>
-                  <div>
-                    <label style={{ display: 'block', marginBottom: 3, fontWeight: 600, color: '#334155' }}>Tên đối tượng / Khách</label>
-                    <input
-                      type="text"
-                      className="tn-input"
-                      style={{ width: '100%', height: 28 }}
-                      value={formData.tenDoiTuong || ''}
-                      onChange={(e) => handleChange('tenDoiTuong', e.target.value)}
-                    />
-                  </div>
-                  <div>
-                    <label style={{ display: 'block', marginBottom: 3, fontWeight: 600, color: '#334155' }}>Địa chỉ</label>
-                    <input
-                      type="text"
-                      className="tn-input"
-                      style={{ width: '100%', height: 28 }}
-                      value={formData.diaChi || ''}
-                      onChange={(e) => handleChange('diaChi', e.target.value)}
-                    />
-                  </div>
-                </div>
-
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px 14px' }}>
-                  <div>
-                    <label style={{ display: 'block', marginBottom: 3, fontWeight: 600, color: '#334155' }}>Phân loại (Lý do thu)</label>
-                    <select
-                      className="tn-input"
-                      style={{ width: '100%', height: 28 }}
-                      value={formData.dlyDoThuChiId || ''}
-                      onChange={(e) => handleChange('dlyDoThuChiId', e.target.value)}
-                    >
-                      <option value="">-- Chọn lý do thu --</option>
-                      {metadata.lyDoThuChi?.filter(l => l.laThu).map(l => (
-                        <option key={l.id} value={l.id}>{l.name}</option>
-                      ))}
-                    </select>
-                  </div>
-                  <div>
-                    <label style={{ display: 'block', marginBottom: 3, fontWeight: 600, color: '#334155' }}>Nhân viên thu</label>
-                    <select
-                      className="tn-input"
-                      style={{ width: '100%', height: 28 }}
-                      value={formData.dnhanVienId || ''}
-                      onChange={(e) => handleChange('dnhanVienId', e.target.value)}
-                    >
-                      <option value="">-- Chọn nhân viên --</option>
-                      {metadata.nhanVien?.map(nv => (
-                        <option key={nv.id} value={nv.id}>{nv.name}</option>
-                      ))}
-                    </select>
-                  </div>
-                </div>
-
-                <div>
-                  <label style={{ display: 'block', marginBottom: 3, fontWeight: 600, color: '#334155' }}>Lý do thu / Diễn giải</label>
-                  <input
-                    type="text"
-                    className="tn-input"
-                    style={{ width: '100%', height: 28 }}
-                    value={formData.dienGiai || ''}
-                    onChange={(e) => handleChange('dienGiai', e.target.value)}
-                  />
-                </div>
-
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px 14px' }}>
-                  <div>
-                    <label style={{ display: 'block', marginBottom: 3, fontWeight: 600, color: '#16a34a', fontSize: 13 }}>
-                      Số tiền thu (VND) <span style={{ color: '#dc2626' }}>*</span>
-                    </label>
-                    <input
-                      type="number"
-                      required
-                      min="0"
-                      className="tn-input"
-                      style={{ width: '100%', height: 32, fontSize: 15, fontWeight: 700, color: '#16a34a' }}
-                      value={formData.thu ?? 0}
-                      onChange={(e) => handleChange('thu', parseFloat(e.target.value) || 0)}
-                    />
-                  </div>
-                  <div>
-                    <label style={{ display: 'block', marginBottom: 3, fontWeight: 600, color: '#334155' }}>Chứng từ gốc</label>
-                    <input
-                      type="text"
-                      className="tn-input"
-                      style={{ width: '100%', height: 28 }}
-                      value={formData.chungTuGoc || ''}
-                      onChange={(e) => handleChange('chungTuGoc', e.target.value)}
-                    />
-                  </div>
-                </div>
-
-                <div style={{ display: 'flex', gap: 24, marginTop: 4 }}>
-                  <label style={{ display: 'flex', alignItems: 'center', gap: 6, cursor: 'pointer' }}>
-                    <input
-                      type="checkbox"
-                      checked={!!formData.chuyenKhoan}
-                      onChange={(e) => handleChange('chuyenKhoan', e.target.checked)}
-                    />
-                    <span>Chuyển vào tài khoản</span>
-                  </label>
-                  <label style={{ display: 'flex', alignItems: 'center', gap: 6, cursor: 'pointer' }}>
-                    <input
-                      type="checkbox"
-                      checked={!!formData.khongThayDoiCongNo}
-                      onChange={(e) => handleChange('khongThayDoiCongNo', e.target.checked)}
-                    />
-                    <span>Không thay đổi công nợ</span>
-                  </label>
-                </div>
-              </div>
-            )}
-
-            {/* ========================================================================= */}
-            {/* 2. FORM: PHIẾU CHI (KHỚP CHUẨN SFORM_Export/Phiếu chi)                    */}
-            {/* ========================================================================= */}
-            {tabId === 'phieuChi' && (
-              <div style={{ display: 'flex', flexDirection: 'column', gap: 10, fontSize: 12 }}>
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px 14px' }}>
-                  <div>
-                    <label style={{ display: 'block', marginBottom: 3, fontWeight: 600, color: '#334155' }}>Loại đối tượng</label>
-                    <select
-                      className="tn-input"
-                      style={{ width: '100%', height: 28 }}
-                      value={formData.loaiDoiTuong ?? 2}
-                      onChange={(e) => handleChange('loaiDoiTuong', Number(e.target.value))}
-                    >
-                      <option value={2}>Khách hàng</option>
-                      <option value={1}>Nhân viên</option>
-                      <option value={3}>Nhà cung cấp</option>
-                      <option value={0}>Đối tượng ngoài / Khác</option>
-                    </select>
-                  </div>
-                  <div>
-                    <label style={{ display: 'block', marginBottom: 3, fontWeight: 600, color: '#334155' }}>Cửa hàng</label>
-                    <select
-                      className="tn-input"
-                      style={{ width: '100%', height: 28 }}
-                      value={formData.dcuaHangId || ''}
-                      onChange={(e) => handleChange('dcuaHangId', e.target.value)}
-                    >
-                      {metadata.cuaHang?.map(c => <option key={c.id} value={c.id}>{c.name}</option>) || <option value="">Cửa hàng chính</option>}
-                    </select>
-                  </div>
-                </div>
-
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px 14px' }}>
-                  <div>
-                    <label style={{ display: 'block', marginBottom: 3, fontWeight: 600, color: '#334155' }}>Tên đối tượng nhận</label>
-                    <input
-                      type="text"
-                      className="tn-input"
-                      style={{ width: '100%', height: 28 }}
-                      value={formData.tenDoiTuong || ''}
-                      onChange={(e) => handleChange('tenDoiTuong', e.target.value)}
-                    />
-                  </div>
-                  <div>
-                    <label style={{ display: 'block', marginBottom: 3, fontWeight: 600, color: '#334155' }}>Địa chỉ</label>
-                    <input
-                      type="text"
-                      className="tn-input"
-                      style={{ width: '100%', height: 28 }}
-                      value={formData.diaChi || ''}
-                      onChange={(e) => handleChange('diaChi', e.target.value)}
-                    />
-                  </div>
-                </div>
-
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px 14px' }}>
-                  <div>
-                    <label style={{ display: 'block', marginBottom: 3, fontWeight: 600, color: '#334155' }}>Phân loại (Lý do chi)</label>
-                    <select
-                      className="tn-input"
-                      style={{ width: '100%', height: 28 }}
-                      value={formData.dlyDoThuChiId || ''}
-                      onChange={(e) => handleChange('dlyDoThuChiId', e.target.value)}
-                    >
-                      <option value="">-- Chọn lý do chi --</option>
-                      {metadata.lyDoThuChi?.filter(l => l.laChi).map(l => (
-                        <option key={l.id} value={l.id}>{l.name}</option>
-                      ))}
-                    </select>
-                  </div>
-                  <div>
-                    <label style={{ display: 'block', marginBottom: 3, fontWeight: 600, color: '#334155' }}>Nhân viên chi</label>
-                    <select
-                      className="tn-input"
-                      style={{ width: '100%', height: 28 }}
-                      value={formData.dnhanVienId || ''}
-                      onChange={(e) => handleChange('dnhanVienId', e.target.value)}
-                    >
-                      <option value="">-- Chọn nhân viên --</option>
-                      {metadata.nhanVien?.map(nv => (
-                        <option key={nv.id} value={nv.id}>{nv.name}</option>
-                      ))}
-                    </select>
-                  </div>
-                </div>
-
-                <div>
-                  <label style={{ display: 'block', marginBottom: 3, fontWeight: 600, color: '#334155' }}>Lý do chi / Diễn giải</label>
-                  <input
-                    type="text"
-                    className="tn-input"
-                    style={{ width: '100%', height: 28 }}
-                    value={formData.dienGiai || ''}
-                    onChange={(e) => handleChange('dienGiai', e.target.value)}
-                  />
-                </div>
-
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px 14px' }}>
-                  <div>
-                    <label style={{ display: 'block', marginBottom: 3, fontWeight: 600, color: '#dc2626', fontSize: 13 }}>
-                      Số tiền chi (VND) <span style={{ color: '#dc2626' }}>*</span>
-                    </label>
-                    <input
-                      type="number"
-                      required
-                      min="0"
-                      className="tn-input"
-                      style={{ width: '100%', height: 32, fontSize: 15, fontWeight: 700, color: '#dc2626' }}
-                      value={formData.chi ?? 0}
-                      onChange={(e) => handleChange('chi', parseFloat(e.target.value) || 0)}
-                    />
-                  </div>
-                  <div>
-                    <label style={{ display: 'block', marginBottom: 3, fontWeight: 600, color: '#334155' }}>Chứng từ gốc</label>
-                    <input
-                      type="text"
-                      className="tn-input"
-                      style={{ width: '100%', height: 28 }}
-                      value={formData.chungTuGoc || ''}
-                      onChange={(e) => handleChange('chungTuGoc', e.target.value)}
-                    />
-                  </div>
-                </div>
-
-                <div style={{ display: 'flex', gap: 24, marginTop: 4 }}>
-                  <label style={{ display: 'flex', alignItems: 'center', gap: 6, cursor: 'pointer' }}>
-                    <input
-                      type="checkbox"
-                      checked={!!formData.chuyenKhoan}
-                      onChange={(e) => handleChange('chuyenKhoan', e.target.checked)}
-                    />
-                    <span>Chuyển từ tài khoản</span>
-                  </label>
-                  <label style={{ display: 'flex', alignItems: 'center', gap: 6, cursor: 'pointer' }}>
-                    <input
-                      type="checkbox"
-                      checked={!!formData.khongThayDoiCongNo}
-                      onChange={(e) => handleChange('khongThayDoiCongNo', e.target.checked)}
-                    />
-                    <span>Không thay đổi công nợ</span>
-                  </label>
-                </div>
-              </div>
-            )}
-
-            {/* ========================================================================= */}
-            {/* 3. FORM: ĐẶT CỌC (KHỚP CHUẨN SFORM_Export/Đặt cọc)                        */}
-            {/* ========================================================================= */}
-            {tabId === 'datCoc' && (
-              <div style={{ display: 'flex', flexDirection: 'column', gap: 10, fontSize: 12 }}>
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px 14px' }}>
-                  <div>
-                    <label style={{ display: 'block', marginBottom: 3, fontWeight: 600, color: '#334155' }}>Khách hàng</label>
-                    <input
-                      type="text"
-                      className="tn-input"
-                      style={{ width: '100%', height: 28, fontWeight: 600 }}
-                      value={formData.tenDoiTuong || ''}
-                      onChange={(e) => handleChange('tenDoiTuong', e.target.value)}
-                    />
-                  </div>
-                  <div>
-                    <label style={{ display: 'block', marginBottom: 3, fontWeight: 600, color: '#334155' }}>
-                      Điện thoại <span style={{ color: '#dc2626' }}>*</span>
-                    </label>
-                    <input
-                      type="text"
-                      required
-                      className="tn-input"
-                      style={{ width: '100%', height: 28 }}
-                      value={formData.dienThoai || ''}
-                      onChange={(e) => handleChange('dienThoai', e.target.value)}
-                    />
-                  </div>
-                </div>
-
-                <div>
-                  <label style={{ display: 'block', marginBottom: 3, fontWeight: 600, color: '#334155' }}>Địa chỉ</label>
-                  <input
-                    type="text"
-                    className="tn-input"
-                    style={{ width: '100%', height: 28 }}
-                    value={formData.diaChi || ''}
-                    onChange={(e) => handleChange('diaChi', e.target.value)}
-                  />
-                </div>
-
-                <div>
-                  <label style={{ display: 'block', marginBottom: 3, fontWeight: 600, color: '#1e40af' }}>
-                    Loại thẻ đặt cọc <span style={{ color: '#dc2626' }}>*</span>
-                  </label>
-                  <select
-                    required
-                    className="tn-input"
-                    style={{ width: '100%', height: 28, fontWeight: 600 }}
-                    value={formData.dloaiTheId || ''}
-                    onChange={(e) => handleChange('dloaiTheId', e.target.value)}
-                  >
-                    <option value="">-- Chọn loại thẻ đặt cọc --</option>
-                    {metadata.loaiThe?.map(lt => (
-                      <option key={lt.id} value={lt.id}>{lt.name} ({lt.giaBan?.toLocaleString()} đ)</option>
-                    ))}
-                  </select>
-                </div>
-
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '10px 14px' }}>
-                  <div>
-                    <label style={{ display: 'block', marginBottom: 3, fontWeight: 500 }}>Giá trị gói (đ)</label>
-                    <input
-                      type="number"
-                      min="0"
-                      className="tn-input"
-                      style={{ width: '100%', height: 28 }}
-                      value={formData.giaTriGoi ?? 0}
-                      onChange={(e) => handleChange('giaTriGoi', parseFloat(e.target.value) || 0)}
-                    />
-                  </div>
-                  <div>
-                    <label style={{ display: 'block', marginBottom: 3, fontWeight: 500 }}>Giảm giá (%)</label>
-                    <input
-                      type="number"
-                      min="0"
-                      max="100"
-                      className="tn-input"
-                      style={{ width: '100%', height: 28 }}
-                      value={formData.giamGia ?? 0}
-                      onChange={(e) => handleChange('giamGia', parseFloat(e.target.value) || 0)}
-                    />
-                  </div>
-                  <div>
-                    <label style={{ display: 'block', marginBottom: 3, fontWeight: 600, color: '#1e3a8a' }}>Tổng cộng (đ)</label>
-                    <input
-                      type="text"
-                      readOnly
-                      className="tn-input"
-                      style={{ width: '100%', height: 28, background: '#f1f5f9', fontWeight: 700 }}
-                      value={(formData.tongCong ?? 0).toLocaleString()}
-                    />
-                  </div>
-                </div>
-
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px 14px' }}>
-                  <div>
-                    <label style={{ display: 'block', marginBottom: 3, fontWeight: 700, color: '#16a34a', fontSize: 13 }}>
-                      Số tiền đặt trước (Thu cọc) <span style={{ color: '#dc2626' }}>*</span>
-                    </label>
-                    <input
-                      type="number"
-                      required
-                      min="0"
-                      className="tn-input"
-                      style={{ width: '100%', height: 32, fontSize: 15, fontWeight: 700, color: '#16a34a' }}
-                      value={formData.thu ?? 0}
-                      onChange={(e) => handleChange('thu', parseFloat(e.target.value) || 0)}
-                    />
-                  </div>
-                  <div>
-                    <label style={{ display: 'block', marginBottom: 3, fontWeight: 600, color: '#b45309' }}>Còn lại cần thanh toán</label>
-                    <input
-                      type="text"
-                      readOnly
-                      className="tn-input"
-                      style={{ width: '100%', height: 32, fontSize: 14, fontWeight: 700, background: '#fffbeb', color: '#b45309' }}
-                      value={(formData.conLai ?? 0).toLocaleString() + ' đ'}
-                    />
-                  </div>
-                </div>
-
-                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginTop: 4 }}>
-                  <label style={{ display: 'flex', alignItems: 'center', gap: 6, cursor: 'pointer' }}>
-                    <input
-                      type="checkbox"
-                      checked={!!formData.chuyenKhoan}
-                      onChange={(e) => handleChange('chuyenKhoan', e.target.checked)}
-                    />
-                    <span>Chuyển khoản</span>
-                  </label>
-                </div>
-              </div>
-            )}
-
-            {/* ========================================================================= */}
-            {/* 4. FORM: PHIẾU THU CÔNG NỢ (KHỚP CHUẨN SFORM_Export/Phiếu thu công nợ)    */}
-            {/* ========================================================================= */}
-            {tabId === 'thuCongNo' && (
-              <div style={{ display: 'flex', flexDirection: 'column', gap: 10, fontSize: 12 }}>
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px 14px' }}>
-                  <div>
-                    <label style={{ display: 'block', marginBottom: 3, fontWeight: 600, color: '#334155' }}>Khách hàng / Đối tượng nợ</label>
-                    <input
-                      type="text"
-                      className="tn-input"
-                      style={{ width: '100%', height: 28, fontWeight: 600 }}
-                      value={formData.tenDoiTuong || ''}
-                      onChange={(e) => handleChange('tenDoiTuong', e.target.value)}
-                    />
-                  </div>
-                  <div>
-                    <label style={{ display: 'block', marginBottom: 3, fontWeight: 600, color: '#334155' }}>Địa chỉ</label>
-                    <input
-                      type="text"
-                      className="tn-input"
-                      style={{ width: '100%', height: 28 }}
-                      value={formData.diaChi || ''}
-                      onChange={(e) => handleChange('diaChi', e.target.value)}
-                    />
-                  </div>
-                </div>
-
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px 14px' }}>
-                  <div>
-                    <label style={{ display: 'block', marginBottom: 3, fontWeight: 600, color: '#334155' }}>Lý do thu chi</label>
-                    <select
-                      className="tn-input"
-                      style={{ width: '100%', height: 28 }}
-                      value={formData.dlyDoThuChiId || ''}
-                      onChange={(e) => handleChange('dlyDoThuChiId', e.target.value)}
-                    >
-                      <option value="">-- Thu công nợ --</option>
-                      {metadata.lyDoThuChi?.map(l => (
-                        <option key={l.id} value={l.id}>{l.name}</option>
-                      ))}
-                    </select>
-                  </div>
-                  <div>
-                    <label style={{ display: 'block', marginBottom: 3, fontWeight: 600, color: '#334155' }}>Nhân viên thu</label>
-                    <select
-                      className="tn-input"
-                      style={{ width: '100%', height: 28 }}
-                      value={formData.dnhanVienId || ''}
-                      onChange={(e) => handleChange('dnhanVienId', e.target.value)}
-                    >
-                      <option value="">-- Chọn nhân viên --</option>
-                      {metadata.nhanVien?.map(nv => (
-                        <option key={nv.id} value={nv.id}>{nv.name}</option>
-                      ))}
-                    </select>
-                  </div>
-                </div>
-
-                <div>
-                  <label style={{ display: 'block', marginBottom: 3, fontWeight: 600, color: '#334155' }}>Diễn giải</label>
-                  <input
-                    type="text"
-                    className="tn-input"
-                    style={{ width: '100%', height: 28 }}
-                    value={formData.dienGiai || ''}
-                    onChange={(e) => handleChange('dienGiai', e.target.value)}
-                  />
-                </div>
-
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px 14px' }}>
-                  <div>
-                    <label style={{ display: 'block', marginBottom: 3, fontWeight: 700, color: '#16a34a', fontSize: 13 }}>
-                      Số tiền thu công nợ <span style={{ color: '#dc2626' }}>*</span>
-                    </label>
-                    <input
-                      type="number"
-                      required
-                      min="0"
-                      className="tn-input"
-                      style={{ width: '100%', height: 32, fontSize: 15, fontWeight: 700, color: '#16a34a' }}
-                      value={formData.thu ?? 0}
-                      onChange={(e) => handleChange('thu', parseFloat(e.target.value) || 0)}
-                    />
-                  </div>
-                  <div>
-                    <label style={{ display: 'block', marginBottom: 3, fontWeight: 600, color: '#334155' }}>Chứng từ gốc</label>
-                    <input
-                      type="text"
-                      className="tn-input"
-                      style={{ width: '100%', height: 28 }}
-                      value={formData.chungTuGoc || ''}
-                      onChange={(e) => handleChange('chungTuGoc', e.target.value)}
-                    />
-                  </div>
-                </div>
-
-                <div style={{ marginTop: 4 }}>
-                  <label style={{ display: 'flex', alignItems: 'center', gap: 6, cursor: 'pointer' }}>
-                    <input
-                      type="checkbox"
-                      checked={!!formData.chuyenKhoan}
-                      onChange={(e) => handleChange('chuyenKhoan', e.target.checked)}
-                    />
-                    <span>Chuyển khoản</span>
-                  </label>
-                </div>
-              </div>
-            )}
-
-            {/* ========================================================================= */}
-            {/* 5. FORM: ĐƠN HÀNG (KHỚP CHUẨN SFORM_Export/Đơn hàng)                      */}
-            {/* ========================================================================= */}
-            {tabId === 'donHang' && (
-              <div style={{ display: 'flex', flexDirection: 'column', gap: 10, fontSize: 12 }}>
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '10px 14px' }}>
-                  <div>
-                    <label style={{ display: 'block', marginBottom: 3, fontWeight: 600, color: '#334155' }}>Giờ thanh toán</label>
-                    <input
-                      type="time"
-                      className="tn-input"
-                      style={{ width: '100%', height: 28 }}
-                      value={formData.gioThanhToan || ''}
-                      onChange={(e) => handleChange('gioThanhToan', e.target.value)}
-                    />
-                  </div>
-                  <div>
-                    <label style={{ display: 'block', marginBottom: 3, fontWeight: 600, color: '#334155' }}>Kho xuất</label>
-                    <select
-                      className="tn-input"
-                      style={{ width: '100%', height: 28 }}
-                      value={formData.dkhoXuatId || ''}
-                      onChange={(e) => handleChange('dkhoXuatId', e.target.value)}
-                    >
-                      {metadata.khoHang?.map(k => <option key={k.id} value={k.id}>{k.name}</option>) || <option value="">Kho chính</option>}
-                    </select>
-                  </div>
-                  <div>
-                    <label style={{ display: 'block', marginBottom: 3, fontWeight: 600, color: '#334155' }}>Nhân viên xuất</label>
-                    <select
-                      className="tn-input"
-                      style={{ width: '100%', height: 28 }}
-                      value={formData.dnhanVienXuatId || ''}
-                      onChange={(e) => handleChange('dnhanVienXuatId', e.target.value)}
-                    >
-                      <option value="">-- Chọn nhân viên --</option>
-                      {metadata.nhanVien?.map(nv => <option key={nv.id} value={nv.id}>{nv.name}</option>)}
-                    </select>
-                  </div>
-                </div>
-
-                <div style={{ display: 'grid', gridTemplateColumns: '1.2fr 1fr 1fr', gap: '10px 14px' }}>
-                  <div>
-                    <label style={{ display: 'block', marginBottom: 3, fontWeight: 500 }}>Tiền hàng (đ)</label>
-                    <input
-                      type="number"
-                      min="0"
-                      className="tn-input"
-                      style={{ width: '100%', height: 28 }}
-                      value={formData.tienHang ?? 0}
-                      onChange={(e) => handleChange('tienHang', parseFloat(e.target.value) || 0)}
-                    />
-                  </div>
-                  <div>
-                    <label style={{ display: 'block', marginBottom: 3, fontWeight: 500 }}>Tỉ lệ giảm (%)</label>
-                    <input
-                      type="number"
-                      min="0"
-                      max="100"
-                      className="tn-input"
-                      style={{ width: '100%', height: 28 }}
-                      value={formData.tiLeGiamGia ?? 0}
-                      onChange={(e) => handleChange('tiLeGiamGia', parseFloat(e.target.value) || 0)}
-                    />
-                  </div>
-                  <div>
-                    <label style={{ display: 'block', marginBottom: 3, fontWeight: 500 }}>Tiền giảm giá</label>
-                    <input
-                      type="number"
-                      min="0"
-                      className="tn-input"
-                      style={{ width: '100%', height: 28 }}
-                      value={formData.tienGiamGia ?? 0}
-                      onChange={(e) => handleChange('tienGiamGia', parseFloat(e.target.value) || 0)}
-                    />
-                  </div>
-                </div>
-
-                <div style={{ display: 'grid', gridTemplateColumns: '1.2fr 1fr 1fr', gap: '10px 14px' }}>
-                  <div>
-                    <label style={{ display: 'block', marginBottom: 3, fontWeight: 500 }}>Phí vận chuyển</label>
-                    <input
-                      type="number"
-                      min="0"
-                      className="tn-input"
-                      style={{ width: '100%', height: 28 }}
-                      value={formData.phiVanChuyen ?? 0}
-                      onChange={(e) => handleChange('phiVanChuyen', parseFloat(e.target.value) || 0)}
-                    />
-                  </div>
-                  <div>
-                    <label style={{ display: 'block', marginBottom: 3, fontWeight: 700, color: '#1e3a8a' }}>Tổng cộng (đ)</label>
-                    <input
-                      type="text"
-                      readOnly
-                      className="tn-input"
-                      style={{ width: '100%', height: 28, background: '#f1f5f9', fontWeight: 700, color: '#1e3a8a' }}
-                      value={(formData.tongCong ?? 0).toLocaleString()}
-                    />
-                  </div>
-                  <div>
-                    <label style={{ display: 'block', marginBottom: 3, fontWeight: 700, color: '#16a34a' }}>Thanh toán (đ)</label>
-                    <input
-                      type="number"
-                      min="0"
-                      className="tn-input"
-                      style={{ width: '100%', height: 28, fontWeight: 700, color: '#16a34a' }}
-                      value={formData.thanhToan ?? 0}
-                      onChange={(e) => handleChange('thanhToan', parseFloat(e.target.value) || 0)}
-                    />
-                  </div>
-                </div>
-
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px 14px' }}>
-                  <div>
-                    <label style={{ display: 'block', marginBottom: 3, fontWeight: 500 }}>Giao hàng</label>
-                    <input
-                      type="text"
-                      className="tn-input"
-                      style={{ width: '100%', height: 28 }}
-                      value={formData.giaoHang || ''}
-                      onChange={(e) => handleChange('giaoHang', e.target.value)}
-                    />
-                  </div>
-                  <div>
-                    <label style={{ display: 'block', marginBottom: 3, fontWeight: 500 }}>Diễn giải</label>
-                    <input
-                      type="text"
-                      className="tn-input"
-                      style={{ width: '100%', height: 28 }}
-                      value={formData.dienGiai || ''}
-                      onChange={(e) => handleChange('dienGiai', e.target.value)}
-                    />
-                  </div>
-                </div>
-              </div>
-            )}
-
-            {/* ========================================================================= */}
-            {/* 6. FORM: GIA HẠN THẺ (KHỚP CHUẨN SFORM_Export/Gia hạn thẻ)                */}
-            {/* ========================================================================= */}
-            {tabId === 'giaHanThe' && (
-              <div style={{ display: 'flex', flexDirection: 'column', gap: 10, fontSize: 12 }}>
-                {/* GROUPBOX THÔNG TIN KHÁCH HÀNG */}
-                <div style={{ background: '#f1f5f9', border: '1px solid #cbd5e1', borderRadius: 4, padding: '8px 12px', display: 'grid', gridTemplateColumns: '1fr 1.5fr 1fr 1fr', gap: 8 }}>
-                  <div><span style={{ color: '#64748b' }}>Mã thẻ:</span> <strong>{customer?.maThe || '---'}</strong></div>
-                  <div><span style={{ color: '#64748b' }}>Tên khách:</span> <strong style={{ color: '#1d4ed8' }}>{customer?.tenKhachHang || '---'}</strong></div>
-                  <div><span style={{ color: '#64748b' }}>Điện thoại:</span> {customer?.dienThoai || '---'}</div>
-                  <div><span style={{ color: '#64748b' }}>Ca tập:</span> {customer?.caTap || '---'}</div>
-                </div>
-
-                <div style={{ display: 'grid', gridTemplateColumns: '1.4fr 1fr 1fr', gap: '10px 14px' }}>
-                  <div>
-                    <label style={{ display: 'block', marginBottom: 3, fontWeight: 700, color: '#1e3a8a' }}>
-                      Loại thẻ / Gói tập <span style={{ color: '#dc2626' }}>*</span>
-                    </label>
-                    <select
-                      required
-                      className="tn-input"
-                      style={{ width: '100%', height: 28, fontWeight: 600 }}
-                      value={formData.dloaiTheId || ''}
-                      onChange={(e) => handleChange('dloaiTheId', e.target.value)}
-                    >
-                      <option value="">-- Chọn loại thẻ --</option>
-                      {metadata.loaiThe?.map(lt => (
-                        <option key={lt.id} value={lt.id}>{lt.name} ({lt.giaBan?.toLocaleString()} đ)</option>
-                      ))}
-                    </select>
-                  </div>
-                  <div>
-                    <label style={{ display: 'block', marginBottom: 3, fontWeight: 600, color: '#334155' }}>Ca tập</label>
-                    <select
-                      className="tn-input"
-                      style={{ width: '100%', height: 28 }}
-                      value={formData.dcatapId || ''}
-                      onChange={(e) => handleChange('dcatapId', e.target.value)}
-                    >
-                      <option value="">-- Chọn ca tập --</option>
-                      {metadata.caTap?.map(ct => <option key={ct.id} value={ct.id}>{ct.name}</option>)}
-                    </select>
-                  </div>
-                  <div>
-                    <label style={{ display: 'block', marginBottom: 3, fontWeight: 600, color: '#334155' }}>Số lần tập</label>
-                    <input
-                      type="number"
-                      min="0"
-                      className="tn-input"
-                      style={{ width: '100%', height: 28 }}
-                      value={formData.soLan ?? 30}
-                      onChange={(e) => handleChange('soLan', parseInt(e.target.value) || 0)}
-                    />
-                  </div>
-                </div>
-
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr 0.8fr 0.8fr 1fr', gap: '10px 14px' }}>
-                  <div>
-                    <label style={{ display: 'block', marginBottom: 3, fontWeight: 600, color: '#334155' }}>
-                      Từ ngày <span style={{ color: '#dc2626' }}>*</span>
-                    </label>
-                    <input
-                      type="date"
-                      required
-                      className="tn-input"
-                      style={{ width: '100%', height: 28 }}
-                      value={formData.tuNgay || ''}
-                      onChange={(e) => handleChange('tuNgay', e.target.value)}
-                    />
-                  </div>
-                  <div>
-                    <label style={{ display: 'block', marginBottom: 3, fontWeight: 500 }}>Số tháng</label>
-                    <input
-                      type="number"
-                      min="0"
-                      className="tn-input"
-                      style={{ width: '100%', height: 28 }}
-                      value={formData.soThang ?? 1}
-                      onChange={(e) => handleChange('soThang', parseInt(e.target.value) || 0)}
-                    />
-                  </div>
-                  <div>
-                    <label style={{ display: 'block', marginBottom: 3, fontWeight: 500 }}>Số ngày</label>
-                    <input
-                      type="number"
-                      min="0"
-                      className="tn-input"
-                      style={{ width: '100%', height: 28 }}
-                      value={formData.soNgay ?? 30}
-                      onChange={(e) => handleChange('soNgay', parseInt(e.target.value) || 0)}
-                    />
-                  </div>
-                  <div>
-                    <label style={{ display: 'block', marginBottom: 3, fontWeight: 600, color: '#1e3a8a' }}>
-                      Đến ngày <span style={{ color: '#dc2626' }}>*</span>
-                    </label>
-                    <input
-                      type="date"
-                      required
-                      className="tn-input"
-                      style={{ width: '100%', height: 28, fontWeight: 700, color: '#1e3a8a' }}
-                      value={formData.denNgay || ''}
-                      onChange={(e) => handleChange('denNgay', e.target.value)}
-                    />
-                  </div>
-                </div>
-
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '10px 14px' }}>
-                  <div>
-                    <label style={{ display: 'block', marginBottom: 3, fontWeight: 500 }}>Ngày tặng thêm</label>
-                    <input
-                      type="number"
-                      min="0"
-                      className="tn-input"
-                      style={{ width: '100%', height: 28 }}
-                      value={formData.ngayTangThem ?? 0}
-                      onChange={(e) => handleChange('ngayTangThem', parseInt(e.target.value) || 0)}
-                    />
-                  </div>
-                  <div>
-                    <label style={{ display: 'block', marginBottom: 3, fontWeight: 500 }}>Lần tặng thêm</label>
-                    <input
-                      type="number"
-                      min="0"
-                      className="tn-input"
-                      style={{ width: '100%', height: 28 }}
-                      value={formData.lanTangThem ?? 0}
-                      onChange={(e) => handleChange('lanTangThem', parseInt(e.target.value) || 0)}
-                    />
-                  </div>
-                  <div>
-                    <label style={{ display: 'block', marginBottom: 3, fontWeight: 500 }}>Khuyến mãi</label>
-                    <input
-                      type="text"
-                      className="tn-input"
-                      style={{ width: '100%', height: 28 }}
-                      value={formData.khuyenMai || ''}
-                      onChange={(e) => handleChange('khuyenMai', e.target.value)}
-                    />
-                  </div>
-                </div>
-
-                <div style={{ display: 'grid', gridTemplateColumns: '1.2fr 1fr 1.2fr 1.2fr', gap: '10px 14px' }}>
-                  <div>
-                    <label style={{ display: 'block', marginBottom: 3, fontWeight: 500 }}>Giá gói (đ)</label>
-                    <input
-                      type="number"
-                      min="0"
-                      className="tn-input"
-                      style={{ width: '100%', height: 28 }}
-                      value={formData.soTien ?? 0}
-                      onChange={(e) => handleChange('soTien', parseFloat(e.target.value) || 0)}
-                    />
-                  </div>
-                  <div>
-                    <label style={{ display: 'block', marginBottom: 3, fontWeight: 500 }}>Giảm (%)</label>
-                    <input
-                      type="number"
-                      min="0"
-                      max="100"
-                      className="tn-input"
-                      style={{ width: '100%', height: 28 }}
-                      value={formData.tiLeGiamGia ?? 0}
-                      onChange={(e) => handleChange('tiLeGiamGia', parseFloat(e.target.value) || 0)}
-                    />
-                  </div>
-                  <div>
-                    <label style={{ display: 'block', marginBottom: 3, fontWeight: 700, color: '#1e3a8a' }}>Tổng cộng (đ)</label>
-                    <input
-                      type="text"
-                      readOnly
-                      className="tn-input"
-                      style={{ width: '100%', height: 28, background: '#f1f5f9', fontWeight: 700, color: '#1e3a8a' }}
-                      value={(formData.tongCong ?? 0).toLocaleString()}
-                    />
-                  </div>
-                  <div>
-                    <label style={{ display: 'block', marginBottom: 3, fontWeight: 700, color: '#16a34a' }}>Thanh toán (đ)</label>
-                    <input
-                      type="number"
-                      min="0"
-                      className="tn-input"
-                      style={{ width: '100%', height: 28, fontWeight: 700, color: '#16a34a' }}
-                      value={formData.thanhToan ?? 0}
-                      onChange={(e) => handleChange('thanhToan', parseFloat(e.target.value) || 0)}
-                    />
-                  </div>
-                </div>
-
-                <div style={{ marginTop: 4 }}>
-                  <label style={{ display: 'flex', alignItems: 'center', gap: 6, cursor: 'pointer' }}>
-                    <input
-                      type="checkbox"
-                      checked={!!formData.chuaKichHoat}
-                      onChange={(e) => handleChange('chuaKichHoat', e.target.checked)}
-                    />
-                    <span>Kích hoạt sau (Chưa tính ngày tập cho đến khi khách quẹt thẻ lần đầu)</span>
-                  </label>
-                </div>
-              </div>
-            )}
-
-            {/* ========================================================================= */}
-            {/* 7. FORM: BẢO LƯU THẺ (KHỚP CHUẨN SFORM_Export/Bảo lưu thẻ)                */}
-            {/* ========================================================================= */}
-            {tabId === 'baoLuuThe' && (
-              <div style={{ display: 'flex', flexDirection: 'column', gap: 12, fontSize: 12 }}>
-                {/* KHUNG THÔNG TIN THẺ CẦN BẢO LƯU (REF) */}
-                <div style={{ background: '#f1f5f9', border: '1px solid #cbd5e1', borderRadius: 4, padding: '10px 14px' }}>
-                  <div style={{ fontWeight: 700, color: '#1e3a8a', marginBottom: 8 }}>
-                    Thông tin thẻ đang sử dụng (Thẻ bảo lưu)
-                  </div>
-                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 10 }}>
-                    <div><span style={{ color: '#64748b' }}>Hội viên:</span> <strong>{customer?.tenKhachHang || '---'}</strong></div>
-                    <div><span style={{ color: '#64748b' }}>Mã thẻ:</span> <strong>{customer?.maThe || '---'}</strong></div>
-                    <div><span style={{ color: '#64748b' }}>Gói thẻ:</span> <strong style={{ color: '#16a34a' }}>{customer?.loaiThe || '---'}</strong></div>
-                    <div><span style={{ color: '#64748b' }}>Từ ngày:</span> {customer?.tuNgay || '---'}</div>
-                    <div><span style={{ color: '#64748b' }}>Hạn đến ngày:</span> <strong style={{ color: '#dc2626' }}>{customer?.denNgay || '---'}</strong></div>
-                    <div><span style={{ color: '#64748b' }}>Số buổi còn:</span> <strong>{customer?.conLai ?? '---'}</strong></div>
-                  </div>
-                </div>
-
-                {/* KHUNG THÔNG TIN BẢO LƯU */}
-                <div style={{ background: '#ffffff', border: '1px solid #93c5fd', borderRadius: 4, padding: '12px 14px' }}>
-                  <div style={{ fontWeight: 700, color: '#0369a1', marginBottom: 10 }}>
-                    Thông tin thiết lập bảo lưu
-                  </div>
-                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 0.8fr 1fr', gap: '10px 14px' }}>
-                    <div>
-                      <label style={{ display: 'block', marginBottom: 3, fontWeight: 600, color: '#334155' }}>
-                        Bảo lưu từ ngày <span style={{ color: '#dc2626' }}>*</span>
-                      </label>
-                      <input
-                        type="date"
-                        required
-                        className="tn-input"
-                        style={{ width: '100%', height: 28 }}
-                        value={formData.tuNgay || ''}
-                        onChange={(e) => handleChange('tuNgay', e.target.value)}
-                      />
-                    </div>
-                    <div>
-                      <label style={{ display: 'block', marginBottom: 3, fontWeight: 600, color: '#334155' }}>
-                        Số ngày <span style={{ color: '#dc2626' }}>*</span>
-                      </label>
-                      <input
-                        type="number"
-                        required
-                        min="1"
-                        max="365"
-                        className="tn-input"
-                        style={{ width: '100%', height: 28, fontWeight: 700 }}
-                        value={formData.soNgay ?? 30}
-                        onChange={(e) => handleChange('soNgay', parseInt(e.target.value) || 0)}
-                      />
-                    </div>
-                    <div>
-                      <label style={{ display: 'block', marginBottom: 3, fontWeight: 600, color: '#1e3a8a' }}>
-                        Bảo lưu đến ngày <span style={{ color: '#dc2626' }}>*</span>
-                      </label>
-                      <input
-                        type="date"
-                        required
-                        className="tn-input"
-                        style={{ width: '100%', height: 28, fontWeight: 700, color: '#1e3a8a' }}
-                        value={formData.denNgay || ''}
-                        onChange={(e) => handleChange('denNgay', e.target.value)}
-                      />
-                    </div>
-                  </div>
-
-                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px 14px', marginTop: 10 }}>
-                    <div>
-                      <label style={{ display: 'block', marginBottom: 3, fontWeight: 500 }}>Phí bảo lưu (nếu có)</label>
-                      <input
-                        type="number"
-                        min="0"
-                        className="tn-input"
-                        style={{ width: '100%', height: 28 }}
-                        value={formData.soTien ?? 0}
-                        onChange={(e) => handleChange('soTien', parseFloat(e.target.value) || 0)}
-                      />
-                    </div>
-                    <div style={{ display: 'flex', alignItems: 'center', paddingTop: 18, color: '#0369a1', fontSize: 12 }}>
-                      ℹ️ Sau thời gian bảo lưu, hạn thẻ của hội viên sẽ được tự động gia hạn thêm {formData.soNgay || 30} ngày.
-                    </div>
-                  </div>
-                </div>
-              </div>
-            )}
-
-            {/* ========================================================================= */}
-            {/* CÁC TAB KHÁC (BÁO GIÁ, ĐẶT HÀNG, ĐỔI LOẠI THẺ, TĂNG GIẢM ĐIỂM)           */}
-            {/* ========================================================================= */}
-            {(tabId === 'datHang' || tabId === 'baoGia') && (
-              <div style={{ display: 'flex', flexDirection: 'column', gap: 10, fontSize: 12 }}>
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '10px 14px' }}>
-                  <div>
-                    <label style={{ display: 'block', marginBottom: 3, fontWeight: 500 }}>Tiền hàng</label>
-                    <input
-                      type="number"
-                      min="0"
-                      className="tn-input"
-                      style={{ width: '100%', height: 28 }}
-                      value={formData.tienHang ?? 0}
-                      onChange={(e) => handleChange('tienHang', parseFloat(e.target.value) || 0)}
-                    />
-                  </div>
-                  <div>
-                    <label style={{ display: 'block', marginBottom: 3, fontWeight: 500 }}>Tiền giảm giá</label>
-                    <input
-                      type="number"
-                      min="0"
-                      className="tn-input"
-                      style={{ width: '100%', height: 28 }}
-                      value={formData.tienGiamGia ?? 0}
-                      onChange={(e) => handleChange('tienGiamGia', parseFloat(e.target.value) || 0)}
-                    />
-                  </div>
-                  <div>
-                    <label style={{ display: 'block', marginBottom: 3, fontWeight: 600, color: '#1e3a8a' }}>Tổng cộng</label>
-                    <input
-                      type="number"
-                      min="0"
-                      className="tn-input"
-                      style={{ width: '100%', height: 28, fontWeight: 700 }}
-                      value={formData.tongCong ?? 0}
-                      onChange={(e) => handleChange('tongCong', parseFloat(e.target.value) || 0)}
-                    />
-                  </div>
-                </div>
-              </div>
-            )}
-
-            {tabId === 'doiLoaiThe' && (
-              <div style={{ display: 'flex', flexDirection: 'column', gap: 10, fontSize: 12 }}>
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px 14px' }}>
-                  <div>
-                    <label style={{ display: 'block', marginBottom: 3, fontWeight: 500 }}>Loại thẻ cũ</label>
-                    <input
-                      type="text"
-                      readOnly
-                      className="tn-input"
-                      style={{ width: '100%', height: 28, background: '#f1f5f9' }}
-                      value={customer?.loaiThe || '---'}
-                    />
-                  </div>
-                  <div>
-                    <label style={{ display: 'block', marginBottom: 3, fontWeight: 600, color: '#1e3a8a' }}>
-                      Loại thẻ mới <span style={{ color: '#dc2626' }}>*</span>
-                    </label>
-                    <select
-                      required
-                      className="tn-input"
-                      style={{ width: '100%', height: 28 }}
-                      value={formData.dloaiTheIdMoi || ''}
-                      onChange={(e) => handleChange('dloaiTheIdMoi', e.target.value)}
-                    >
-                      <option value="">-- Chọn loại thẻ mới --</option>
-                      {metadata.loaiThe?.map(lt => <option key={lt.id} value={lt.id}>{lt.name}</option>)}
-                    </select>
-                  </div>
-                </div>
-                <div>
-                  <label style={{ display: 'block', marginBottom: 3, fontWeight: 500 }}>Số tiền chênh lệch / Phí đổi thẻ</label>
-                  <input
-                    type="number"
-                    min="0"
-                    className="tn-input"
-                    style={{ width: '100%', height: 28 }}
-                    value={formData.soTien ?? 0}
-                    onChange={(e) => handleChange('soTien', parseFloat(e.target.value) || 0)}
-                  />
-                </div>
-              </div>
-            )}
-
-            {tabId === 'tangGiamDiem' && (
-              <div style={{ display: 'flex', flexDirection: 'column', gap: 10, fontSize: 12 }}>
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px 14px' }}>
-                  <div>
-                    <label style={{ display: 'block', marginBottom: 3, fontWeight: 600, color: '#16a34a' }}>Điểm tăng (+)</label>
-                    <input
-                      type="number"
-                      min="0"
-                      className="tn-input"
-                      style={{ width: '100%', height: 28 }}
-                      value={formData.diemTang ?? 0}
-                      onChange={(e) => handleChange('diemTang', parseInt(e.target.value) || 0)}
-                    />
-                  </div>
-                  <div>
-                    <label style={{ display: 'block', marginBottom: 3, fontWeight: 600, color: '#dc2626' }}>Điểm giảm (-)</label>
-                    <input
-                      type="number"
-                      min="0"
-                      className="tn-input"
-                      style={{ width: '100%', height: 28 }}
-                      value={formData.diemGiam ?? 0}
-                      onChange={(e) => handleChange('diemGiam', parseInt(e.target.value) || 0)}
-                    />
-                  </div>
-                </div>
-              </div>
-            )}
-
-            {/* Ô GHI CHÚ CHUNG */}
-            <div style={{ marginTop: 12 }}>
-              <label style={{ display: 'block', marginBottom: 3, fontWeight: 600, color: '#334155', fontSize: 12 }}>
-                Ghi chú
+                <span>Kích hoạt sau</span>
               </label>
-              <textarea
-                className="tn-input"
-                style={{ width: '100%', height: 50, padding: '4px 8px', fontSize: 12, resize: 'vertical' }}
+
+              {/* Giảm giá (%) & Đặt trước */}
+              <div style={{ ...lblStyle, left: 10, top: 320, width: 62 }}>Giảm giá</div>
+              <input
+                type="number"
+                min="0"
+                style={inputStyle({ left: 118, top: 318, width: 34, textAlign: 'right' })}
+                value={formData.tiLeGiamGia ?? 0}
+                onChange={(e) => handleChange('tiLeGiamGia', parseFloat(e.target.value) || 0)}
+              />
+              <div style={{ ...lblStyle, left: 158, top: 320, width: 20 }}>%</div>
+              <input
+                type="number"
+                min="0"
+                style={inputStyle({ left: 184, top: 318, width: 62, textAlign: 'right' })}
+                value={formData.tienGiamGia ?? 0}
+                onChange={(e) => handleChange('tienGiamGia', parseFloat(e.target.value) || 0)}
+              />
+              <div style={{ ...lblStyle, left: 317, top: 320, width: 60 }}>Đặt trước</div>
+              <input
+                type="number"
+                min="0"
+                style={inputStyle({ left: 425, top: 317, width: 128, textAlign: 'right' })}
+                value={formData.datTruoc ?? 0}
+                onChange={(e) => handleChange('datTruoc', parseFloat(e.target.value) || 0)}
+              />
+
+              {/* Tổng cộng & Thanh toán */}
+              <div style={{ ...lblStyle, left: 10, top: 346, width: 73 }}>Tổng cộng</div>
+              <input
+                type="number"
+                readOnly
+                style={yellowInputStyle({ left: 118, top: 344, width: 128, textAlign: 'right', fontWeight: 700 })}
+                value={formData.tongCong ?? 0}
+              />
+              <div style={{ ...lblStyle, left: 317, top: 346, width: 75 }}>Thanh toán</div>
+              <input
+                type="number"
+                min="0"
+                style={inputStyle({ left: 425, top: 344, width: 128, textAlign: 'right', fontWeight: 600 })}
+                value={formData.thanhToan ?? 0}
+                onChange={(e) => handleChange('thanhToan', parseFloat(e.target.value) || 0)}
+              />
+
+              {/* Khuyến mãi */}
+              <div style={{ ...lblStyle, left: 10, top: 374, width: 77 }}>Khuyến mãi</div>
+              <input
+                type="text"
+                style={inputStyle({ left: 118, top: 372, width: 435 })}
+                value={formData.khuyenMai || ''}
+                onChange={(e) => handleChange('khuyenMai', e.target.value)}
+              />
+
+              {/* Ghi chú */}
+              <div style={{ ...lblStyle, left: 10, top: 402, width: 52 }}>Ghi chú</div>
+              <input
+                type="text"
+                style={inputStyle({ left: 118, top: 400, width: 435 })}
                 value={formData.note || ''}
                 onChange={(e) => handleChange('note', e.target.value)}
-                placeholder="Nhập ghi chú thêm cho chứng từ..."
               />
-            </div>
-          </div>
+            </>
+          )}
 
-          {/* FOOTER ACTIONS */}
-          <div
-            className="choice-dialog-footer"
-            style={{
-              display: 'flex',
-              justifyContent: 'flex-end',
-              gap: 8,
-              padding: '10px 18px',
-              background: '#f1f5f9',
-              borderTop: '1px solid #e2e8f0'
-            }}
-          >
+          {/* ----------------------------------------------------------------------- */}
+          {/* FORM 2: BẢO LƯU THẺ (Khớp AELayout.xml Bảo lưu thẻ 541x432)             */}
+          {/* ----------------------------------------------------------------------- */}
+          {tabId === 'baoLuuThe' && (
+            <>
+              {/* Ngày & Số phiếu */}
+              <div style={{ ...lblStyle, left: 10, top: 13, width: 41 }}>Ngày</div>
+              <input
+                type="date"
+                required
+                style={yellowInputStyle({ left: 125, top: 11, width: 95 })}
+                value={formData.ngay || ''}
+                onChange={(e) => handleChange('ngay', e.target.value)}
+              />
+              <div style={{ ...lblStyle, left: 320, top: 13, width: 61 }}>Số phiếu</div>
+              <input
+                type="text"
+                required
+                style={inputStyle({ left: 410, top: 11, width: 123, fontWeight: 700, background: '#f0fbfb', color: '#1e3a8a' })}
+                value={formData.soPhiu || ''}
+                onChange={(e) => handleChange('soPhiu', e.target.value)}
+              />
+
+              {/* Khách hàng */}
+              <div style={{ ...lblStyle, left: 10, top: 41, width: 78 }}>Khách hàng</div>
+              <select
+                style={yellowInputStyle({ left: 125, top: 39, width: 408, height: 21, fontWeight: 600 })}
+                value={formData.khachHangId || ''}
+                onChange={(e) => handleSelectCustomer(e.target.value)}
+              >
+                <option value="">-- Chọn khách hàng --</option>
+                {customers?.map(c => (
+                  <option key={c.id} value={c.id}>[{c.maThe}] {c.tenKhachHang || c.name}</option>
+                )) || <option value={customer?.id}>[{customer?.maThe}] {customer?.tenKhachHang}</option>}
+              </select>
+
+              {/* Groupbox: Thông tin bảo lưu (Panel1) */}
+              <div style={{ ...lblStyle, left: 10, top: 70, width: 110, fontWeight: 600 }}>Thông tin bảo lưu</div>
+              <div
+                style={{
+                  position: 'absolute',
+                  left: 125,
+                  top: 66,
+                  width: 408,
+                  height: 169,
+                  border: '1px solid #7192b8',
+                  background: '#d8e5f2',
+                  padding: 8
+                }}
+              >
+                {/* Ngày gốc */}
+                <div style={{ position: 'absolute', left: 14, top: 8, fontSize: 11 }}>Ngày</div>
+                <input type="date" readOnly style={inputStyle({ left: 72, top: 5, width: 95, background: '#f1f5f9' })} value={formData.ngayRef || formData.ngay || ''} />
+
+                {/* Số phiếu gốc */}
+                <div style={{ position: 'absolute', left: 14, top: 34, fontSize: 11 }}>Số phiếu</div>
+                <input type="text" readOnly style={inputStyle({ left: 72, top: 31, width: 320, background: '#f1f5f9' })} value={formData.soPhieuRef || ''} />
+
+                {/* Loại thẻ gốc */}
+                <div style={{ position: 'absolute', left: 14, top: 61, fontSize: 11 }}>Loại thẻ</div>
+                <input type="text" readOnly style={inputStyle({ left: 72, top: 58, width: 320, background: '#f1f5f9' })} value={formData.loaiThe || customer?.loaiThe || ''} />
+
+                {/* Từ ngày gốc */}
+                <div style={{ position: 'absolute', left: 14, top: 88, fontSize: 11 }}>Từ ngày</div>
+                <input type="date" readOnly style={inputStyle({ left: 72, top: 85, width: 95, background: '#f1f5f9' })} value={formData.tuNgayRef || ''} />
+
+                {/* Đến ngày gốc */}
+                <div style={{ position: 'absolute', left: 14, top: 115, fontSize: 11 }}>Đến ngày</div>
+                <input type="date" readOnly style={inputStyle({ left: 72, top: 112, width: 95, background: '#f1f5f9' })} value={formData.denNgayRef || ''} />
+
+                {/* Ca tập gốc */}
+                <div style={{ position: 'absolute', left: 14, top: 142, fontSize: 11 }}>Ca tập</div>
+                <input type="text" readOnly style={inputStyle({ left: 72, top: 139, width: 320, background: '#f1f5f9' })} value={customer?.caTap || 'Cả ngày'} />
+              </div>
+
+              {/* Bảo lưu từ ngày & Đến ngày */}
+              <div style={{ ...lblStyle, left: 11, top: 243, width: 99 }}>Bảo lưu từ ngày</div>
+              <input
+                type="date"
+                required
+                style={yellowInputStyle({ left: 125, top: 241, width: 95 })}
+                value={formData.tuNgay || ''}
+                onChange={(e) => handleChange('tuNgay', e.target.value)}
+              />
+              <div style={{ ...lblStyle, left: 320, top: 246, width: 112 }}>Bảo lưu đến ngày</div>
+              <input
+                type="date"
+                required
+                style={yellowInputStyle({ left: 438, top: 243, width: 95, fontWeight: 700 })}
+                value={formData.denNgay || ''}
+                onChange={(e) => handleChange('denNgay', e.target.value)}
+              />
+
+              {/* Số ngày */}
+              <div style={{ ...lblStyle, left: 11, top: 273, width: 58 }}>Số ngày</div>
+              <input
+                type="number"
+                min="1"
+                style={inputStyle({ left: 125, top: 271, width: 95, textAlign: 'right', fontWeight: 600 })}
+                value={formData.soNgay ?? 30}
+                onChange={(e) => handleChange('soNgay', parseInt(e.target.value) || 0)}
+              />
+
+              {/* Ghi chú */}
+              <div style={{ ...lblStyle, left: 11, top: 302, width: 52 }}>Ghi chú</div>
+              <textarea
+                style={{
+                  ...inputStyle({ left: 125, top: 299, width: 408, height: '115px' }),
+                  padding: 4,
+                  resize: 'none'
+                }}
+                value={formData.note || ''}
+                onChange={(e) => handleChange('note', e.target.value)}
+              />
+            </>
+          )}
+
+          {/* ----------------------------------------------------------------------- */}
+          {/* FORM 3 & 4: PHIẾU THU & PHIẾU CHI (Khớp 100% AELayout.xml 527x379)      */}
+          {/* ----------------------------------------------------------------------- */}
+          {(tabId === 'phieuThu' || tabId === 'phieuChi') && (
+            <>
+              {/* Ngày & Số phiếu */}
+              <div style={{ ...lblStyle, left: 10, top: 13, width: 32 }}>Ngày</div>
+              <input
+                type="date"
+                required
+                style={yellowInputStyle({ left: 90, top: 10, width: 95 })}
+                value={formData.ngay || ''}
+                onChange={(e) => handleChange('ngay', e.target.value)}
+              />
+              <div style={{ ...lblStyle, left: 191, top: 13, width: 49 }}>Số phiếu</div>
+              <input
+                type="text"
+                required
+                style={inputStyle({ left: 261, top: 10, width: 134, fontWeight: 700, background: '#f0fbfb', color: '#1e3a8a' })}
+                value={formData.soPhiu || ''}
+                onChange={(e) => handleChange('soPhiu', e.target.value)}
+              />
+
+              {/* Phân loại (Lý do thu / chi) */}
+              <div style={{ ...lblStyle, left: 10, top: 40, width: 51 }}>Phân loại</div>
+              <select
+                style={inputStyle({ left: 90, top: 37, width: 305, height: 21 })}
+                value={formData.dlyDoThuChiId || ''}
+                onChange={(e) => handleChange('dlyDoThuChiId', e.target.value)}
+              >
+                <option value="">-- Chọn phân loại --</option>
+                {metadata.lyDoThuChi?.filter(l => tabId === 'phieuThu' ? l.laThu : l.laChi).map(l => (
+                  <option key={l.id} value={l.id}>{l.name}</option>
+                ))}
+              </select>
+
+              {/* Lý do thu / chi (Diễn giải) */}
+              <div style={{ ...lblStyle, left: 10, top: 67, width: 51 }}>{tabId === 'phieuThu' ? 'Lý do thu' : 'Lý do chi'}</div>
+              <input
+                type="text"
+                style={inputStyle({ left: 90, top: 64, width: 305 })}
+                value={formData.dienGiai || ''}
+                onChange={(e) => handleChange('dienGiai', e.target.value)}
+              />
+
+              {/* Chứng từ gốc & Loại đối tượng */}
+              <div style={{ ...lblStyle, left: 10, top: 94, width: 71 }}>Chứng từ gốc</div>
+              <input
+                type="text"
+                style={inputStyle({ left: 90, top: 91, width: 305 })}
+                value={formData.chungTuGoc || ''}
+                onChange={(e) => handleChange('chungTuGoc', e.target.value)}
+              />
+              <div style={{ ...lblStyle, left: 401, top: 98, width: 75 }}>Loại đối tượng</div>
+              <select
+                style={inputStyle({ left: 401, top: 117, width: 117, height: 21 })}
+                value={formData.loaiDoiTuong ?? 2}
+                onChange={(e) => handleChange('loaiDoiTuong', Number(e.target.value))}
+              >
+                <option value={2}>Khách hàng</option>
+                <option value={1}>Nhân viên</option>
+                <option value={3}>Nhà cung cấp</option>
+                <option value={0}>Đối tượng khác</option>
+              </select>
+
+              {/* Tên đối tượng */}
+              <div style={{ ...lblStyle, left: 10, top: 120, width: 74 }}>Tên đối tượng</div>
+              <input
+                type="text"
+                style={inputStyle({ left: 90, top: 117, width: 305 })}
+                value={formData.tenDoiTuong || ''}
+                onChange={(e) => handleChange('tenDoiTuong', e.target.value)}
+              />
+
+              {/* Địa chỉ */}
+              <div style={{ ...lblStyle, left: 10, top: 147, width: 40 }}>Địa chỉ</div>
+              <input
+                type="text"
+                style={inputStyle({ left: 90, top: 144, width: 305 })}
+                value={formData.diaChi || ''}
+                onChange={(e) => handleChange('diaChi', e.target.value)}
+              />
+
+              {/* Nhân viên */}
+              <div style={{ ...lblStyle, left: 10, top: 174, width: 56 }}>Nhân viên</div>
+              <select
+                style={inputStyle({ left: 91, top: 170, width: 305, height: 21 })}
+                value={formData.dnhanVienId || ''}
+                onChange={(e) => handleChange('dnhanVienId', e.target.value)}
+              >
+                <option value="">-- Chọn nhân viên --</option>
+                {metadata.nhanVien?.map(nv => (
+                  <option key={nv.id} value={nv.id}>{nv.name}</option>
+                ))}
+              </select>
+
+              {/* Khách hàng */}
+              <div style={{ ...lblStyle, left: 10, top: 201, width: 65 }}>Khách hàng</div>
+              <select
+                style={inputStyle({ left: 90, top: 197, width: 305, height: 21 })}
+                value={formData.khachHangId || ''}
+                onChange={(e) => handleSelectCustomer(e.target.value)}
+              >
+                <option value="">-- Chọn khách hàng --</option>
+                {customers?.map(c => (
+                  <option key={c.id} value={c.id}>[{c.maThe}] {c.tenKhachHang || c.name}</option>
+                ))}
+              </select>
+
+              {/* Nhà cung cấp */}
+              <div style={{ ...lblStyle, left: 11, top: 226, width: 75 }}>Nhà cung cấp</div>
+              <select
+                style={inputStyle({ left: 90, top: 224, width: 306, height: 21 })}
+                value={formData.dnhaCungCapId || ''}
+                onChange={(e) => handleChange('dnhaCungCapId', e.target.value)}
+              >
+                <option value="">-- Chọn nhà cung cấp --</option>
+              </select>
+
+              {/* Số tiền thu/chi */}
+              <div style={{ ...lblStyle, left: 12, top: 252, width: 43, fontWeight: 700 }}>Số tiền:</div>
+              <input
+                type="number"
+                min="0"
+                required
+                style={yellowInputStyle({ left: 91, top: 250, width: 94, textAlign: 'right', fontWeight: 700, color: tabId === 'phieuThu' ? '#16a34a' : '#dc2626' })}
+                value={tabId === 'phieuThu' ? (formData.thu ?? 0) : (formData.chi ?? 0)}
+                onChange={(e) => handleChange(tabId === 'phieuThu' ? 'thu' : 'chi', parseFloat(e.target.value) || 0)}
+              />
+
+              {/* Chuyển khoản */}
+              <label style={{ position: 'absolute', left: 92, top: 276, display: 'flex', alignItems: 'center', gap: 6, fontSize: 11, cursor: 'pointer' }}>
+                <input
+                  type="checkbox"
+                  checked={!!formData.chuyenKhoan}
+                  onChange={(e) => handleChange('chuyenKhoan', e.target.checked)}
+                />
+                <span>{tabId === 'phieuThu' ? 'Chuyển vào tài khoản' : 'Chuyển từ tài khoản'}</span>
+              </label>
+
+              {/* Cửa hàng */}
+              <div style={{ ...lblStyle, left: 12, top: 302, width: 53 }}>Cửa hàng</div>
+              <select
+                style={inputStyle({ left: 92, top: 299, width: 304, height: 21 })}
+                value={formData.dcuaHangId || ''}
+                onChange={(e) => handleChange('dcuaHangId', e.target.value)}
+              >
+                {metadata.cuaHang?.map(c => <option key={c.id} value={c.id}>{c.name}</option>) || <option value="">Cửa hàng chính</option>}
+              </select>
+
+              {/* Không thay đổi công nợ */}
+              <label style={{ position: 'absolute', left: 91, top: 326, display: 'flex', alignItems: 'center', gap: 6, fontSize: 11, cursor: 'pointer' }}>
+                <input
+                  type="checkbox"
+                  checked={!!formData.khongThayDoiCongNo}
+                  onChange={(e) => handleChange('khongThayDoiCongNo', e.target.checked)}
+                />
+                <span>Không thay đổi công nợ</span>
+              </label>
+
+              {/* Ghi chú */}
+              <div style={{ ...lblStyle, left: 11, top: 351, width: 44 }}>Ghi chú</div>
+              <input
+                type="text"
+                style={inputStyle({ left: 91, top: 348, width: 305 })}
+                value={formData.note || ''}
+                onChange={(e) => handleChange('note', e.target.value)}
+              />
+            </>
+          )}
+
+          {/* ----------------------------------------------------------------------- */}
+          {/* FORM 5: ĐẶT CỌC (Khớp AELayout.xml Đặt cọc 514x327)                     */}
+          {/* ----------------------------------------------------------------------- */}
+          {tabId === 'datCoc' && (
+            <>
+              {/* Ngày & Số phiếu */}
+              <div style={{ ...lblStyle, left: 10, top: 13, width: 41 }}>Ngày</div>
+              <input
+                type="date"
+                required
+                style={yellowInputStyle({ left: 120, top: 11, width: 95 })}
+                value={formData.ngay || ''}
+                onChange={(e) => handleChange('ngay', e.target.value)}
+              />
+              <div style={{ ...lblStyle, left: 288, top: 14, width: 61 }}>Số phiếu</div>
+              <input
+                type="text"
+                required
+                style={inputStyle({ left: 355, top: 11, width: 150, fontWeight: 700, background: '#f0fbfb', color: '#1e3a8a' })}
+                value={formData.soPhiu || ''}
+                onChange={(e) => handleChange('soPhiu', e.target.value)}
+              />
+
+              {/* Khách hàng & Button Chọn */}
+              <div style={{ ...lblStyle, left: 10, top: 41, width: 78 }}>Khách hàng</div>
+              <input
+                type="text"
+                style={inputStyle({ left: 120, top: 39, width: 326 })}
+                value={formData.tenDoiTuong || ''}
+                onChange={(e) => handleChange('tenDoiTuong', e.target.value)}
+              />
+              <button
+                type="button"
+                style={{
+                  ...inputStyle({ left: 452, top: 39, width: 53, height: 23, textAlign: 'center' }),
+                  background: 'linear-gradient(180deg, #fff 0%, #e2ecf5 100%)',
+                  cursor: 'pointer'
+                }}
+                onClick={() => {
+                  const cust = customers?.[0];
+                  if (cust) handleSelectCustomer(cust.id);
+                }}
+              >
+                Chọn
+              </button>
+
+              {/* Địa chỉ & Button Xóa */}
+              <div style={{ ...lblStyle, left: 10, top: 69, width: 48 }}>Địa chỉ</div>
+              <input
+                type="text"
+                style={inputStyle({ left: 120, top: 67, width: 326 })}
+                value={formData.diaChi || ''}
+                onChange={(e) => handleChange('diaChi', e.target.value)}
+              />
+              <button
+                type="button"
+                style={{
+                  ...inputStyle({ left: 452, top: 67, width: 53, height: 23, textAlign: 'center' }),
+                  background: 'linear-gradient(180deg, #fff 0%, #e2ecf5 100%)',
+                  cursor: 'pointer'
+                }}
+                onClick={() => handleChange('diaChi', '')}
+              >
+                Xóa
+              </button>
+
+              {/* Điện thoại */}
+              <div style={{ ...lblStyle, left: 10, top: 98, width: 67 }}>Điện thoại</div>
+              <input
+                type="text"
+                style={inputStyle({ left: 120, top: 95, width: 326 })}
+                value={formData.dienThoai || ''}
+                onChange={(e) => handleChange('dienThoai', e.target.value)}
+              />
+
+              {/* Lý do thu chi */}
+              <div style={{ ...lblStyle, left: 10, top: 125, width: 81 }}>Lý do thu chi</div>
+              <select
+                style={inputStyle({ left: 120, top: 123, width: 385, height: 23 })}
+                value={formData.dlyDoThuChiId || ''}
+                onChange={(e) => handleChange('dlyDoThuChiId', e.target.value)}
+              >
+                <option value="">-- Chọn lý do --</option>
+                {metadata.lyDoThuChi?.map(l => (
+                  <option key={l.id} value={l.id}>{l.name}</option>
+                ))}
+              </select>
+
+              {/* Loại thẻ */}
+              <div style={{ ...lblStyle, left: 10, top: 154, width: 55 }}>Loại thẻ</div>
+              <select
+                style={yellowInputStyle({ left: 120, top: 152, width: 385, height: 23, fontWeight: 600 })}
+                value={formData.dloaiTheId || ''}
+                onChange={(e) => handleChange('dloaiTheId', e.target.value)}
+              >
+                <option value="">-- Chọn loại thẻ đặt cọc --</option>
+                {metadata.loaiThe?.map(lt => (
+                  <option key={lt.id} value={lt.id}>{lt.name} ({lt.giaBan?.toLocaleString()} đ)</option>
+                ))}
+              </select>
+
+              {/* Giá trị gói & Giảm giá (%) */}
+              <div style={{ ...lblStyle, left: 10, top: 183, width: 64 }}>Giá trị gói</div>
+              <input
+                type="number"
+                min="0"
+                style={inputStyle({ left: 120, top: 181, width: 95, textAlign: 'right' })}
+                value={formData.giaTriGoi ?? 0}
+                onChange={(e) => handleChange('giaTriGoi', parseFloat(e.target.value) || 0)}
+              />
+              <div style={{ ...lblStyle, left: 234, top: 184, width: 85 }}>Giảm giá (%)</div>
+              <input
+                type="number"
+                min="0"
+                style={inputStyle({ left: 325, top: 181, width: 95, textAlign: 'right' })}
+                value={formData.giamGia ?? 0}
+                onChange={(e) => handleChange('giamGia', parseFloat(e.target.value) || 0)}
+              />
+
+              {/* Tổng cộng & Tiền giảm */}
+              <div style={{ ...lblStyle, left: 10, top: 211, width: 73 }}>Tổng cộng</div>
+              <input
+                type="number"
+                readOnly
+                style={yellowInputStyle({ left: 120, top: 209, width: 95, textAlign: 'right', fontWeight: 700 })}
+                value={formData.tongCong ?? 0}
+              />
+              <div style={{ ...lblStyle, left: 234, top: 211, width: 68 }}>Tiền giảm</div>
+              <input
+                type="number"
+                readOnly
+                style={inputStyle({ left: 325, top: 209, width: 95, textAlign: 'right' })}
+                value={formData.tienGiam ?? 0}
+              />
+
+              {/* Số tiền đặt trước & Tổng đặt */}
+              <div style={{ ...lblStyle, left: 10, top: 239, width: 103, fontWeight: 700 }}>Số tiền đặt trước</div>
+              <input
+                type="number"
+                min="0"
+                style={yellowInputStyle({ left: 120, top: 237, width: 95, textAlign: 'right', fontWeight: 700, color: '#16a34a' })}
+                value={formData.thu ?? 0}
+                onChange={(e) => handleChange('thu', parseFloat(e.target.value) || 0)}
+              />
+              <div style={{ ...lblStyle, left: 234, top: 239, width: 62 }}>Tổng đặt</div>
+              <input
+                type="number"
+                readOnly
+                style={inputStyle({ left: 325, top: 237, width: 95, textAlign: 'right', fontWeight: 700 })}
+                value={formData.tongDat ?? formData.thu ?? 0}
+              />
+
+              {/* Chuyển khoản */}
+              <label style={{ position: 'absolute', left: 120, top: 267, display: 'flex', alignItems: 'center', gap: 6, fontSize: 11, cursor: 'pointer' }}>
+                <input
+                  type="checkbox"
+                  checked={!!formData.chuyenKhoan}
+                  onChange={(e) => handleChange('chuyenKhoan', e.target.checked)}
+                />
+                <span>Chuyển khoản</span>
+              </label>
+
+              {/* Ghi chú */}
+              <div style={{ ...lblStyle, left: 10, top: 296, width: 52 }}>Ghi chú</div>
+              <input
+                type="text"
+                style={inputStyle({ left: 120, top: 294, width: 385 })}
+                value={formData.note || ''}
+                onChange={(e) => handleChange('note', e.target.value)}
+              />
+            </>
+          )}
+
+          {/* ----------------------------------------------------------------------- */}
+          {/* FORM 6: PHIẾU THU CÔNG NỢ (Khớp AELayout.xml 590x454)                   */}
+          {/* ----------------------------------------------------------------------- */}
+          {tabId === 'thuCongNo' && (
+            <>
+              {/* Ngày & Số phiếu */}
+              <div style={{ ...lblStyle, left: 10, top: 13, width: 32 }}>Ngày</div>
+              <input
+                type="date"
+                required
+                style={yellowInputStyle({ left: 90, top: 10, width: 95 })}
+                value={formData.ngay || ''}
+                onChange={(e) => handleChange('ngay', e.target.value)}
+              />
+              <div style={{ ...lblStyle, left: 344, top: 13, width: 49 }}>Số phiếu</div>
+              <input
+                type="text"
+                required
+                style={inputStyle({ left: 424, top: 10, width: 158, fontWeight: 700, background: '#f0fbfb', color: '#1e3a8a' })}
+                value={formData.soPhiu || ''}
+                onChange={(e) => handleChange('soPhiu', e.target.value)}
+              />
+
+              {/* Nhân viên & Diễn giải */}
+              <div style={{ ...lblStyle, left: 10, top: 39, width: 56 }}>Nhân viên</div>
+              <select
+                style={inputStyle({ left: 90, top: 36, width: 248, height: 21 })}
+                value={formData.dnhanVienId || ''}
+                onChange={(e) => handleChange('dnhanVienId', e.target.value)}
+              >
+                <option value="">-- Chọn nhân viên --</option>
+                {metadata.nhanVien?.map(nv => (
+                  <option key={nv.id} value={nv.id}>{nv.name}</option>
+                ))}
+              </select>
+              <div style={{ ...lblStyle, left: 344, top: 39, width: 48 }}>Diễn giải</div>
+              <input
+                type="text"
+                style={inputStyle({ left: 424, top: 36, width: 158 })}
+                value={formData.dienGiai || ''}
+                onChange={(e) => handleChange('dienGiai', e.target.value)}
+              />
+
+              {/* Lý do thu chi & Chứng từ gốc */}
+              <div style={{ ...lblStyle, left: 10, top: 66, width: 68 }}>Lý do thu chi</div>
+              <select
+                style={inputStyle({ left: 90, top: 63, width: 248, height: 21 })}
+                value={formData.dlyDoThuChiId || ''}
+                onChange={(e) => handleChange('dlyDoThuChiId', e.target.value)}
+              >
+                <option value="">-- Thu công nợ --</option>
+                {metadata.lyDoThuChi?.map(l => (
+                  <option key={l.id} value={l.id}>{l.name}</option>
+                ))}
+              </select>
+              <div style={{ ...lblStyle, left: 344, top: 66, width: 71 }}>Chứng từ gốc</div>
+              <input
+                type="text"
+                style={inputStyle({ left: 424, top: 63, width: 158 })}
+                value={formData.chungTuGoc || ''}
+                onChange={(e) => handleChange('chungTuGoc', e.target.value)}
+              />
+
+              {/* Số tiền thu & Chuyển khoản */}
+              <div style={{ ...lblStyle, left: 10, top: 93, width: 58, fontWeight: 700 }}>Số tiền thu</div>
+              <input
+                type="number"
+                min="0"
+                required
+                style={yellowInputStyle({ left: 90, top: 90, width: 95, textAlign: 'right', fontWeight: 700, color: '#16a34a' })}
+                value={formData.thu ?? 0}
+                onChange={(e) => handleChange('thu', parseFloat(e.target.value) || 0)}
+              />
+              <label style={{ position: 'absolute', left: 191, top: 92, display: 'flex', alignItems: 'center', gap: 6, fontSize: 11, cursor: 'pointer' }}>
+                <input
+                  type="checkbox"
+                  checked={!!formData.chuyenKhoan}
+                  onChange={(e) => handleChange('chuyenKhoan', e.target.checked)}
+                />
+                <span>Chuyển khoản</span>
+              </label>
+
+              {/* Ghi chú */}
+              <div style={{ ...lblStyle, left: 7, top: 119, width: 44 }}>Ghi chú</div>
+              <input
+                type="text"
+                style={inputStyle({ left: 90, top: 116, width: 492 })}
+                value={formData.note || ''}
+                onChange={(e) => handleChange('note', e.target.value)}
+              />
+
+              {/* Grid danh sách công nợ (grMain) */}
+              <div
+                style={{
+                  position: 'absolute',
+                  left: 7,
+                  top: 141,
+                  width: 575,
+                  height: 303,
+                  border: '1px solid #7192b8',
+                  background: '#ffffff',
+                  overflowY: 'auto'
+                }}
+              >
+                <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 11, fontFamily: "Tahoma, sans-serif" }}>
+                  <thead>
+                    <tr style={{ background: '#dce8f5', borderBottom: '1px solid #9fb9d0', height: 24, textAlign: 'left' }}>
+                      <th style={{ padding: '0 6px', borderRight: '1px solid #b8cde0' }}>Ngày</th>
+                      <th style={{ padding: '0 6px', borderRight: '1px solid #b8cde0' }}>Số phiếu nợ</th>
+                      <th style={{ padding: '0 6px', borderRight: '1px solid #b8cde0' }}>Khoản nợ</th>
+                      <th style={{ padding: '0 6px', borderRight: '1px solid #b8cde0', textAlign: 'right' }}>Tổng nợ</th>
+                      <th style={{ padding: '0 6px', textAlign: 'right' }}>Thu lần này</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr style={{ height: 24, borderBottom: '1px solid #e2e8f0' }}>
+                      <td style={{ padding: '0 6px', borderRight: '1px solid #f1f5f9' }}>{toDisplayDate(formData.ngay)}</td>
+                      <td style={{ padding: '0 6px', borderRight: '1px solid #f1f5f9' }}>{formData.soPhiu}</td>
+                      <td style={{ padding: '0 6px', borderRight: '1px solid #f1f5f9' }}>Công nợ hội viên {customer?.tenKhachHang || ''}</td>
+                      <td style={{ padding: '0 6px', borderRight: '1px solid #f1f5f9', textAlign: 'right', fontWeight: 600 }}>{(formData.thu || 0).toLocaleString()}</td>
+                      <td style={{ padding: '0 6px', textAlign: 'right', color: '#16a34a', fontWeight: 700 }}>{(formData.thu || 0).toLocaleString()}</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </>
+          )}
+
+          {/* ----------------------------------------------------------------------- */}
+          {/* FORM 7: ĐƠN HÀNG (Khớp AELayout.xml Đơn hàng 660x510)                   */}
+          {/* ----------------------------------------------------------------------- */}
+          {tabId === 'donHang' && (
+            <>
+              {/* Ngày, Số phiếu, Giờ thanh toán */}
+              <div style={{ ...lblStyle, left: 10, top: 13, width: 32 }}>Ngày</div>
+              <input
+                type="date"
+                required
+                style={yellowInputStyle({ left: 98, top: 10, width: 95 })}
+                value={formData.ngay || ''}
+                onChange={(e) => handleChange('ngay', e.target.value)}
+              />
+              <div style={{ ...lblStyle, left: 199, top: 13, width: 49 }}>Số phiếu</div>
+              <input
+                type="text"
+                required
+                style={inputStyle({ left: 254, top: 10, width: 141, fontWeight: 700, background: '#f0fbfb', color: '#1e3a8a' })}
+                value={formData.soPhiu || ''}
+                onChange={(e) => handleChange('soPhiu', e.target.value)}
+              />
+              <div style={{ ...lblStyle, left: 403, top: 14, width: 77 }}>Giờ thanh toán</div>
+              <input
+                type="time"
+                style={inputStyle({ left: 491, top: 11, width: 72 })}
+                value={formData.gioThanhToan || ''}
+                onChange={(e) => handleChange('gioThanhToan', e.target.value)}
+              />
+
+              {/* Khách hàng */}
+              <div style={{ ...lblStyle, left: 10, top: 39, width: 65 }}>Khách hàng</div>
+              <select
+                style={yellowInputStyle({ left: 98, top: 36, width: 554, height: 21, fontWeight: 600 })}
+                value={formData.khachHangId || ''}
+                onChange={(e) => handleSelectCustomer(e.target.value)}
+              >
+                <option value="">-- Chọn khách hàng --</option>
+                {customers?.map(c => (
+                  <option key={c.id} value={c.id}>[{c.maThe}] {c.tenKhachHang || c.name} - {c.dienThoai || ''}</option>
+                ))}
+              </select>
+
+              {/* Kho xuất & Nhân viên xuất */}
+              <div style={{ ...lblStyle, left: 10, top: 64, width: 49 }}>Kho xuất</div>
+              <select
+                style={inputStyle({ left: 98, top: 63, width: 215, height: 21 })}
+                value={formData.dkhoXuatId || ''}
+                onChange={(e) => handleChange('dkhoXuatId', e.target.value)}
+              >
+                {metadata.khoHang?.map(k => <option key={k.id} value={k.id}>{k.name}</option>) || <option value="">KHO TỔNG</option>}
+              </select>
+              <div style={{ ...lblStyle, left: 377, top: 66, width: 79 }}>Nhân viên xuất</div>
+              <select
+                style={inputStyle({ left: 462, top: 63, width: 190, height: 21 })}
+                value={formData.dnhanVienXuatId || ''}
+                onChange={(e) => handleChange('dnhanVienXuatId', e.target.value)}
+              >
+                <option value="">-- Chọn nhân viên --</option>
+                {metadata.nhanVien?.map(nv => <option key={nv.id} value={nv.id}>{nv.name}</option>)}
+              </select>
+
+              {/* Ghi chú & Diễn giải */}
+              <div style={{ ...lblStyle, left: 10, top: 93, width: 44 }}>Ghi chú</div>
+              <input
+                type="text"
+                style={inputStyle({ left: 98, top: 90, width: 215 })}
+                value={formData.note || ''}
+                onChange={(e) => handleChange('note', e.target.value)}
+              />
+              <div style={{ ...lblStyle, left: 377, top: 93, width: 48 }}>Diễn giải</div>
+              <input
+                type="text"
+                style={inputStyle({ left: 462, top: 90, width: 190 })}
+                value={formData.dienGiai || ''}
+                onChange={(e) => handleChange('dienGiai', e.target.value)}
+              />
+
+              {/* Thanh toán bởi & Giao hàng */}
+              <div style={{ ...lblStyle, left: 10, top: 119, width: 79 }}>Thanh toán bởi</div>
+              <input
+                type="text"
+                readOnly
+                style={inputStyle({ left: 98, top: 116, width: 215, background: '#f8fafc' })}
+                value={formData.userThanhToanId || 'Administrator'}
+              />
+              <div style={{ ...lblStyle, left: 377, top: 119, width: 56 }}>Giao hàng</div>
+              <input
+                type="text"
+                style={inputStyle({ left: 462, top: 116, width: 190 })}
+                value={formData.giaoHang || ''}
+                onChange={(e) => handleChange('giaoHang', e.target.value)}
+              />
+
+              {/* Tab Mua / Trả (Lưới chi tiết đơn hàng tabMuaTra) */}
+              <div
+                style={{
+                  position: 'absolute',
+                  left: 10,
+                  top: 143,
+                  width: 642,
+                  height: 196,
+                  border: '1px solid #7192b8',
+                  background: '#ffffff',
+                  display: 'flex',
+                  flexDirection: 'column'
+                }}
+              >
+                <div style={{ height: 24, background: '#dce8f5', borderBottom: '1px solid #aec4d9', display: 'flex', alignItems: 'center', padding: '0 8px', fontSize: 11, fontWeight: 700, color: '#1e3a8a' }}>
+                  <span>Chi tiết hàng hóa / Dịch vụ đơn hàng</span>
+                </div>
+                <div style={{ flex: 1, padding: 10, color: '#64748b', fontSize: 11 }}>
+                  Chưa có sản phẩm hàng hóa nào trong giỏ hàng. Nhập trực tiếp tổng tiền bên dưới.
+                </div>
+              </div>
+
+              {/* Bảng tính tổng tiền bên phải */}
+              <div style={{ ...lblStyle, left: 380, top: 348, width: 55 }}>Tiền hàng</div>
+              <input
+                type="number"
+                min="0"
+                style={inputStyle({ left: 468, top: 345, width: 184, textAlign: 'right' })}
+                value={formData.tienHang ?? 0}
+                onChange={(e) => handleChange('tienHang', parseFloat(e.target.value) || 0)}
+              />
+
+              <div style={{ ...lblStyle, left: 380, top: 374, width: 83 }}>Phí vận chuyển</div>
+              <input
+                type="number"
+                min="0"
+                style={inputStyle({ left: 468, top: 371, width: 184, textAlign: 'right' })}
+                value={formData.phiVanChuyen ?? 0}
+                onChange={(e) => handleChange('phiVanChuyen', parseFloat(e.target.value) || 0)}
+              />
+
+              <div style={{ ...lblStyle, left: 380, top: 400, width: 69 }}>Tỉ lệ giảm giá</div>
+              <input
+                type="number"
+                min="0"
+                style={inputStyle({ left: 468, top: 397, width: 51, textAlign: 'right' })}
+                value={formData.tiLeGiamGia ?? 0}
+                onChange={(e) => handleChange('tiLeGiamGia', parseFloat(e.target.value) || 0)}
+              />
+              <div style={{ ...lblStyle, left: 525, top: 400, width: 15 }}>%</div>
+              <input
+                type="number"
+                min="0"
+                style={inputStyle({ left: 557, top: 398, width: 95, textAlign: 'right' })}
+                value={formData.tienGiamGia ?? 0}
+                onChange={(e) => handleChange('tienGiamGia', parseFloat(e.target.value) || 0)}
+              />
+
+              <div style={{ ...lblStyle, left: 380, top: 428, width: 51 }}>Tỉ lệ thuế</div>
+              <input
+                type="number"
+                min="0"
+                style={inputStyle({ left: 468, top: 425, width: 51, textAlign: 'right' })}
+                value={formData.tiLeThue ?? 0}
+                onChange={(e) => handleChange('tiLeThue', parseFloat(e.target.value) || 0)}
+              />
+              <div style={{ ...lblStyle, left: 525, top: 428, width: 15 }}>%</div>
+              <input
+                type="number"
+                min="0"
+                style={inputStyle({ left: 557, top: 426, width: 95, textAlign: 'right' })}
+                value={formData.tienThue ?? 0}
+                onChange={(e) => handleChange('tienThue', parseFloat(e.target.value) || 0)}
+              />
+
+              <div style={{ ...lblStyle, left: 380, top: 454, width: 38 }}>Đổi trả</div>
+              <input
+                type="number"
+                min="0"
+                style={inputStyle({ left: 468, top: 451, width: 184, textAlign: 'right' })}
+                value={formData.doiTra ?? 0}
+                onChange={(e) => handleChange('doiTra', parseFloat(e.target.value) || 0)}
+              />
+
+              <div style={{ ...lblStyle, left: 380, top: 482, width: 59, fontWeight: 700 }}>Tổng cộng</div>
+              <input
+                type="number"
+                readOnly
+                style={yellowInputStyle({ left: 468, top: 479, width: 184, textAlign: 'right', fontWeight: 700, color: '#1e3a8a' })}
+                value={formData.tongCong ?? 0}
+              />
+            </>
+          )}
+
+          {/* ----------------------------------------------------------------------- */}
+          {/* CÁC TAB KHÁC: ĐỔI LOẠI THẺ / TĂNG GIẢM ĐIỂM                             */}
+          {/* ----------------------------------------------------------------------- */}
+          {tabId === 'doiLoaiThe' && (
+            <div style={{ padding: '20px 24px', fontSize: 11 }}>
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12, marginBottom: 12 }}>
+                <div>
+                  <label style={{ display: 'block', marginBottom: 4, fontWeight: 600 }}>Loại thẻ hiện tại</label>
+                  <input type="text" readOnly style={{ ...inputStyle(), position: 'static', width: '100%', background: '#f8fafc' }} value={formData.loaiTheCu || '---'} />
+                </div>
+                <div>
+                  <label style={{ display: 'block', marginBottom: 4, fontWeight: 600 }}>Loại thẻ mới</label>
+                  <select style={{ ...yellowInputStyle(), position: 'static', width: '100%', height: 23 }} value={formData.dloaiTheIdMoi || ''} onChange={(e) => handleChange('dloaiTheIdMoi', e.target.value)}>
+                    <option value="">-- Chọn loại thẻ mới --</option>
+                    {metadata.loaiThe?.map(lt => <option key={lt.id} value={lt.id}>{lt.name}</option>)}
+                  </select>
+                </div>
+              </div>
+              <div style={{ marginBottom: 12 }}>
+                <label style={{ display: 'block', marginBottom: 4, fontWeight: 600 }}>Số tiền chênh lệch (đ)</label>
+                <input type="number" min="0" style={{ ...inputStyle(), position: 'static', width: '100%', textAlign: 'right' }} value={formData.soTien ?? 0} onChange={(e) => handleChange('soTien', parseFloat(e.target.value) || 0)} />
+              </div>
+              <div>
+                <label style={{ display: 'block', marginBottom: 4, fontWeight: 600 }}>Ghi chú</label>
+                <input type="text" style={{ ...inputStyle(), position: 'static', width: '100%' }} value={formData.note || ''} onChange={(e) => handleChange('note', e.target.value)} />
+              </div>
+            </div>
+          )}
+
+          {tabId === 'tangGiamDiem' && (
+            <div style={{ padding: '20px 24px', fontSize: 11 }}>
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12, marginBottom: 12 }}>
+                <div>
+                  <label style={{ display: 'block', marginBottom: 4, fontWeight: 600, color: '#16a34a' }}>Điểm thưởng tăng (+)</label>
+                  <input type="number" min="0" style={{ ...inputStyle(), position: 'static', width: '100%', textAlign: 'right', fontWeight: 700 }} value={formData.diemTang ?? 0} onChange={(e) => handleChange('diemTang', parseInt(e.target.value) || 0)} />
+                </div>
+                <div>
+                  <label style={{ display: 'block', marginBottom: 4, fontWeight: 600, color: '#dc2626' }}>Điểm trừ giảm (-)</label>
+                  <input type="number" min="0" style={{ ...inputStyle(), position: 'static', width: '100%', textAlign: 'right', fontWeight: 700 }} value={formData.diemGiam ?? 0} onChange={(e) => handleChange('diemGiam', parseInt(e.target.value) || 0)} />
+                </div>
+              </div>
+              <div>
+                <label style={{ display: 'block', marginBottom: 4, fontWeight: 600 }}>Ghi chú lý do</label>
+                <input type="text" style={{ ...inputStyle(), position: 'static', width: '100%' }} value={formData.note || ''} onChange={(e) => handleChange('note', e.target.value)} />
+              </div>
+            </div>
+          )}
+        </div>
+
+        {/* ========================================================================= */}
+        {/* 5. BOTTOM BAR (LƯU & IN, LƯU & XEM IN, LƯU, LƯU & MỚI, LƯU & THOÁT, THOÁT)*/}
+        {/* ========================================================================= */}
+        <div
+          style={{
+            height: 38,
+            background: 'linear-gradient(180deg, #dbe8f5 0%, #c4d7ea 100%)',
+            borderTop: '1px solid #b2c9dd',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            padding: '0 8px',
+            fontSize: 11,
+            userSelect: 'none'
+          }}
+        >
+          {/* Nút bên trái */}
+          <div style={{ display: 'flex', gap: 6 }}>
             <button
-              type="submit"
-              disabled={saving}
-              className="tn-btn-primary"
+              type="button"
+              className="wf-btn"
+              onClick={handleSubmit}
               style={{
-                height: 28,
-                padding: '0 18px',
-                fontSize: 12.5,
-                background: '#1e3a8a',
-                color: '#fff',
-                border: 'none',
-                borderRadius: 3,
-                fontWeight: 600,
-                cursor: 'pointer'
+                background: 'linear-gradient(180deg, #ffffff 0%, #e2ecf5 100%)',
+                border: '1px solid #7ea2c2',
+                borderRadius: 2,
+                padding: '3px 8px',
+                fontSize: 11,
+                cursor: 'pointer',
+                display: 'flex',
+                alignItems: 'center',
+                gap: 4
               }}
             >
-              {saving ? 'Đang lưu...' : 'Lưu dữ liệu'}
+              <span>🖨</span> Lưu & In
+            </button>
+            <button
+              type="button"
+              className="wf-btn"
+              onClick={handleSubmit}
+              style={{
+                background: 'linear-gradient(180deg, #ffffff 0%, #e2ecf5 100%)',
+                border: '1px solid #7ea2c2',
+                borderRadius: 2,
+                padding: '3px 8px',
+                fontSize: 11,
+                cursor: 'pointer',
+                display: 'flex',
+                alignItems: 'center',
+                gap: 4
+              }}
+            >
+              <span>📄</span> Lưu & Xem in
+            </button>
+          </div>
+
+          {/* Nút bên phải */}
+          <div style={{ display: 'flex', gap: 6 }}>
+            <button
+              type="button"
+              disabled={saving}
+              className="wf-btn"
+              onClick={handleSubmit}
+              style={{
+                background: 'linear-gradient(180deg, #ffffff 0%, #e2ecf5 100%)',
+                border: '1px solid #7ea2c2',
+                borderRadius: 2,
+                padding: '3px 12px',
+                fontSize: 11,
+                fontWeight: 600,
+                cursor: 'pointer',
+                display: 'flex',
+                alignItems: 'center',
+                gap: 4
+              }}
+            >
+              <span>💾</span> {saving ? 'Đang lưu...' : 'Lưu'}
             </button>
             <button
               type="button"
               disabled={saving}
-              className="tn-btn-secondary"
-              onClick={onClose}
+              className="wf-btn"
+              onClick={handleSubmit}
               style={{
-                height: 28,
-                padding: '0 16px',
-                fontSize: 12.5,
-                background: '#fff',
-                color: '#334155',
-                border: '1px solid #cbd5e1',
-                borderRadius: 3,
+                background: 'linear-gradient(180deg, #ffffff 0%, #e2ecf5 100%)',
+                border: '1px solid #7ea2c2',
+                borderRadius: 2,
+                padding: '3px 10px',
+                fontSize: 11,
                 cursor: 'pointer'
               }}
             >
-              Bỏ qua
+              Lưu & Mới
+            </button>
+            <button
+              type="button"
+              disabled={saving}
+              className="wf-btn"
+              onClick={handleSubmit}
+              style={{
+                background: 'linear-gradient(180deg, #ffffff 0%, #e2ecf5 100%)',
+                border: '1px solid #7ea2c2',
+                borderRadius: 2,
+                padding: '3px 10px',
+                fontSize: 11,
+                cursor: 'pointer'
+              }}
+            >
+              Lưu & thoát
+            </button>
+            <button
+              type="button"
+              disabled={saving}
+              className="wf-btn"
+              onClick={onClose}
+              style={{
+                background: 'linear-gradient(180deg, #ffffff 0%, #e2ecf5 100%)',
+                border: '1px solid #7ea2c2',
+                borderRadius: 2,
+                padding: '3px 12px',
+                fontSize: 11,
+                cursor: 'pointer'
+              }}
+            >
+              Thoát
             </button>
           </div>
-        </form>
+        </div>
       </div>
     </div>
   );

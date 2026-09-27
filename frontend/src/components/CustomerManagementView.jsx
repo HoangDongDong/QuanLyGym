@@ -3660,6 +3660,7 @@ export default function CustomerManagementView({ onSwitchToAccessControl, showNo
         tabId={subtabAeModal.tabId}
         tabLabel={subtabAeModal.tabLabel}
         customer={selectedCustomer}
+        customers={customers}
         initialData={subtabAeModal.initialData}
         metadata={metadata}
         onSave={handleSaveSubtabItem}
