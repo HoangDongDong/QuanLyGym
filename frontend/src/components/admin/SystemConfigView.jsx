@@ -1,5 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import { adminService } from '../../services/adminService';
+import {
+  applyMainBackground,
+  applyMainBackgroundFromConfigs,
+  applyProgramTheme,
+  applyProgramThemeFromConfigs,
+  findMainBackgroundItem,
+  findProgramThemeItem,
+  MAIN_BACKGROUND_COLORS,
+  MAIN_BACKGROUND_CONFIG_NAME
+} from '../../theme';
 
 // Icon tương ứng cho từng nhóm theo bản vẽ desktop
 const GROUP_ICONS = {
@@ -91,6 +101,8 @@ export default function SystemConfigView({ showNotification }) {
 
         setConfigValues(map);
         setModifiedIds(new Set());
+        applyProgramThemeFromConfigs(res.data, map, { persist: true });
+        applyMainBackgroundFromConfigs(res.data, map, { persist: true });
       }
     } catch {
       showNotification && showNotification('❌ Không thể tải tham số cấu hình từ Firebird!');
@@ -113,6 +125,16 @@ export default function SystemConfigView({ showNotification }) {
       }
     }));
     setModifiedIds((prev) => new Set(prev).add(id));
+
+    const themeItem = findProgramThemeItem(configGroups);
+    if (themeItem?.id === id && fieldName === 'intValue') {
+      applyProgramTheme(value);
+    }
+
+    const backgroundItem = findMainBackgroundItem(configGroups);
+    if (backgroundItem?.id === id && fieldName === 'intValue') {
+      applyMainBackground(value);
+    }
   };
 
   // Xử lý chọn ảnh Logo
@@ -150,6 +172,8 @@ export default function SystemConfigView({ showNotification }) {
     try {
       const res = await adminService.updateConfigs(itemsToUpdate);
       if (res && res.success) {
+        applyProgramThemeFromConfigs(configGroups, configValues, { persist: true });
+        applyMainBackgroundFromConfigs(configGroups, configValues, { persist: true });
         showNotification && showNotification(`✅ ${res.message}`);
         setModifiedIds(new Set());
       }
@@ -182,7 +206,10 @@ export default function SystemConfigView({ showNotification }) {
     };
 
     const cType = item.controlType;
-    const options = parseOptions(item.otherConfig);
+    const isMainBackgroundConfig = item.name === MAIN_BACKGROUND_CONFIG_NAME;
+    const options = isMainBackgroundConfig
+      ? MAIN_BACKGROUND_COLORS.map((color) => `${color.group} — ${color.name} — ${color.hex}`)
+      : parseOptions(item.otherConfig);
 
     // 1. Checkbox (CONTROLTYPE = 9) - Lưu 30 hoặc 1 vào INTVALUE
     if (cType === 9) {

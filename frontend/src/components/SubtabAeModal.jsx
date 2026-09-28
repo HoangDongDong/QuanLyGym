@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { khachHangService } from '../services/khachHangService';
+import Number3DInput from './Number3DInput';
 
 export default function SubtabAeModal({
   show,
@@ -58,7 +59,7 @@ export default function SubtabAeModal({
 
   // Khởi tạo dữ liệu form tương ứng với từng loại subtab
   useEffect(() => {
-    if (!show) return;
+    if (show === false) return;
 
     const todayIso = new Date().toISOString().split('T')[0];
     const nowTimeStr = new Date().toTimeString().slice(0, 5); // HH:mm
@@ -239,22 +240,104 @@ export default function SubtabAeModal({
           conLai: 0
         });
       }
-      // CÁC TAB KHÁC: ĐỔI LOẠI THẺ, TĂNG GIẢM ĐIỂM
+      // 8. TAB: ĐỔI LOẠI THẺ (SFORM_Export/Đổi loại thẻ)
       else if (tabId === 'doiLoaiThe') {
+        const curLt = metadata.loaiThe?.find(l => l.name === activeCust?.loaiThe || l.id === activeCust?.dloaiTheId) || metadata.loaiThe?.[0];
+        const nextLt = metadata.loaiThe?.find(l => l.id !== curLt?.id) || metadata.loaiThe?.[1] || curLt;
+        const curGia = curLt?.giaBan || 0;
+        const nextGia = nextLt?.giaBan || curGia;
+        const diff = Math.max(0, nextGia - curGia);
+        const soThang = nextLt?.soThang || 1;
+        const soNgay = nextLt?.soNgay || (soThang * 30);
+        const tuNgay = activeCust?.tuNgay ? toIsoDate(activeCust.tuNgay) : todayIso;
+        const denNgayCalc = addDays(tuNgay, soNgay);
+
         setFormData({
           ...baseData,
-          loaiTheCu: activeCust?.loaiThe || '',
-          dloaiTheIdMoi: metadata.loaiThe?.[0]?.id || '',
-          soTien: 0
+          // Thông tin thẻ cũ (Panel1)
+          ngayRef: activeCust?.tuNgay ? toIsoDate(activeCust.tuNgay) : todayIso,
+          loaiTheRef: activeCust?.loaiThe || curLt?.name || '',
+          tuNgayRef: activeCust?.tuNgay ? toIsoDate(activeCust.tuNgay) : todayIso,
+          denNgayRef: activeCust?.denNgay ? toIsoDate(activeCust.denNgay) : todayIso,
+          soTienRef: curGia,
+          tiLeGiamRef: 0,
+          tienGiamRef: 0,
+          tongCongRef: curGia,
+          soLanRef: activeCust?.soLan || curLt?.soLan || 0,
+          caTapRef: activeCust?.caTap || (metadata.caTap?.[0]?.name || ''),
+          refId: activeCust?.tGiaHanTheId || '',
+
+          // Thông tin thẻ mới
+          dloaiTheId: nextLt?.id || '',
+          tuNgay: tuNgay,
+          denNgay: denNgayCalc,
+          soLan: nextLt?.soLan || 0,
+          soThang: soThang,
+          soNgay: soNgay,
+          ngayTangThem: 0,
+          lanTangThem: 0,
+          soTien: nextGia,
+          tiLeGiamGia: 0,
+          tienGiamGia: 0,
+          numTruTheCu: curGia,
+          tongCong: diff,
+          thanhToan: diff,
+          dcatapId: activeCust?.dcatapId || (metadata.caTap?.[0]?.id || ''),
+          note: 'Đổi sang thẻ ' + (nextLt?.name || '')
         });
-      } else if (tabId === 'tangGiamDiem') {
+      }
+      // 9. TAB: BÁO GIÁ (STABLEDESC TBAOGIA)
+      else if (tabId === 'baoGia') {
+        setFormData({
+          ...baseData,
+          tienHang: 0,
+          tiLeGiamGia: 0,
+          tienGiamGia: 0,
+          tiLeThue: 0,
+          tienThue: 0,
+          phiVanChuyen: 0,
+          tongCong: 0
+        });
+      }
+      // 10. TAB: ĐẶT HÀNG (STABLEDESC TDATHANG)
+      else if (tabId === 'datHang') {
+        setFormData({
+          ...baseData,
+          loaiGia: 'Giá bán lẻ',
+          tienHang: 0,
+          tiLeGiamGia: 0,
+          tienGiamGia: 0,
+          tiLeThue: 0,
+          tienThue: 0,
+          phiVanChuyen: 0,
+          tongCong: 0,
+          soPhieuThu: '',
+          soTienDat: 0,
+          soHoaDon: ''
+        });
+      }
+      // 11. TAB: TĂNG GIẢM ĐIỂM (STABLEDESC TTANGGIAMDIEM)
+      else if (tabId === 'tangGiamDiem') {
         setFormData({
           ...baseData,
           diemTang: 10,
           diemGiam: 0,
+          lyDo: 'Tích điểm thành viên',
           note: 'Thưởng tích lũy điểm hội viên'
         });
-      } else {
+      }
+      // 12. TAB: VÀO RA (STABLEDESC TVAORA)
+      else if (tabId === 'vaoRa') {
+        setFormData({
+          ...baseData,
+          dmayVanTayId: metadata.mayVanTay?.[0]?.id || '',
+          gio: nowTimeStr,
+          khan: '',
+          tu: '',
+          note: 'Quẹt thẻ vào phòng tập'
+        });
+      }
+      else {
         setFormData(baseData);
       }
     }
@@ -291,6 +374,22 @@ export default function SubtabAeModal({
           updated.thanhToan = lt.giaBan || 0;
           updated.denNgay = addDays(updated.tuNgay || prev.tuNgay, updated.soNgay);
         }
+      } else if (tabId === 'doiLoaiThe') {
+        const curLt = metadata.loaiThe?.find(l => l.name === cust.loaiThe || l.id === cust.dloaiTheId) || metadata.loaiThe?.[0];
+        const curGia = curLt?.giaBan || 0;
+        updated.loaiTheRef = cust.loaiThe || curLt?.name || '';
+        updated.tuNgayRef = cust.tuNgay ? toIsoDate(cust.tuNgay) : (prev.ngay || '');
+        updated.denNgayRef = cust.denNgay ? toIsoDate(cust.denNgay) : (prev.ngay || '');
+        updated.soTienRef = curGia;
+        updated.tongCongRef = curGia;
+        updated.soLanRef = cust.soLan || curLt?.soLan || 0;
+        updated.caTapRef = cust.caTap || '';
+        updated.numTruTheCu = curGia;
+        const st = Number(prev.soTien) || 0;
+        const tg = Number(prev.tienGiamGia) || 0;
+        const tc = Math.max(0, st - tg - curGia);
+        updated.tongCong = tc;
+        updated.thanhToan = tc;
       }
       return updated;
     });
@@ -381,6 +480,76 @@ export default function SubtabAeModal({
         updated.conLai = tong - ttPay;
       }
 
+      // 5. Đổi loại thẻ (SFORM_Export/Đổi loại thẻ/Code.cs)
+      if (tabId === 'doiLoaiThe') {
+        if (field === 'dloaiTheId') {
+          const lt = metadata.loaiThe?.find(l => l.id === value);
+          if (lt) {
+            const st = lt.giaBan || 0;
+            const sn = lt.soNgay || (lt.soThang * 30 || 30);
+            const tru = Number(prev.numTruTheCu) || 0;
+            const tg = Math.round(st * (Number(prev.tiLeGiamGia) || 0) / 100);
+            const tc = Math.max(0, st - tg - tru);
+            updated.soTien = st;
+            updated.soLan = lt.soLan || 0;
+            updated.soThang = lt.soThang || 1;
+            updated.soNgay = sn;
+            updated.tienGiamGia = tg;
+            updated.tongCong = tc;
+            updated.thanhToan = tc;
+            updated.denNgay = addDays(updated.tuNgay || prev.tuNgay, sn + (Number(prev.ngayTangThem) || 0));
+          }
+        } else if (field === 'tuNgay' || field === 'soNgay' || field === 'ngayTangThem') {
+          const tn = field === 'tuNgay' ? value : prev.tuNgay;
+          const sn = field === 'soNgay' ? Number(value) || 0 : Number(prev.soNgay) || 0;
+          const ntt = field === 'ngayTangThem' ? Number(value) || 0 : Number(prev.ngayTangThem) || 0;
+          updated.denNgay = addDays(tn, sn + ntt);
+        } else if (field === 'tiLeGiamGia' || field === 'soTien') {
+          const st = field === 'soTien' ? Number(value) || 0 : Number(prev.soTien) || 0;
+          const tl = field === 'tiLeGiamGia' ? Number(value) || 0 : Number(prev.tiLeGiamGia) || 0;
+          const tg = Math.round(st * tl / 100);
+          const tru = Number(prev.numTruTheCu) || 0;
+          const tc = Math.max(0, st - tg - tru);
+          updated.tienGiamGia = tg;
+          updated.tongCong = tc;
+          updated.thanhToan = tc;
+        } else if (field === 'tienGiamGia') {
+          const st = Number(prev.soTien) || 0;
+          const tg = Number(value) || 0;
+          const tru = Number(prev.numTruTheCu) || 0;
+          const tc = Math.max(0, st - tg - tru);
+          updated.tongCong = tc;
+          updated.thanhToan = tc;
+          updated.tiLeGiamGia = st > 0 ? Math.round((tg / st) * 100) : 0;
+        }
+      }
+
+      // 6. Báo giá & Đặt hàng (STABLEDESC TBAOGIA / TDATHANG)
+      if (tabId === 'baoGia' || tabId === 'datHang') {
+        const th = field === 'tienHang' ? Number(value) || 0 : Number(prev.tienHang) || 0;
+        let tlGiam = field === 'tiLeGiamGia' ? Number(value) || 0 : Number(prev.tiLeGiamGia) || 0;
+        let tGiam = field === 'tienGiamGia' ? Number(value) || 0 : Number(prev.tienGiamGia) || 0;
+        if (field === 'tiLeGiamGia') {
+          tGiam = Math.round(th * tlGiam / 100);
+          updated.tienGiamGia = tGiam;
+        } else if (field === 'tienGiamGia') {
+          tlGiam = th > 0 ? Math.round((tGiam / th) * 100) : 0;
+          updated.tiLeGiamGia = tlGiam;
+        }
+        let tlThue = field === 'tiLeThue' ? Number(value) || 0 : Number(prev.tiLeThue) || 0;
+        let tThue = field === 'tienThue' ? Number(value) || 0 : Number(prev.tienThue) || 0;
+        if (field === 'tiLeThue') {
+          tThue = Math.round((th - tGiam) * tlThue / 100);
+          updated.tienThue = tThue;
+        } else if (field === 'tienThue') {
+          tlThue = (th - tGiam) > 0 ? Math.round((tThue / (th - tGiam)) * 100) : 0;
+          updated.tiLeThue = tlThue;
+        }
+        const pvc = field === 'phiVanChuyen' ? Number(value) || 0 : Number(prev.phiVanChuyen) || 0;
+        const tc = th - tGiam + tThue + pvc;
+        updated.tongCong = tc;
+      }
+
       return updated;
     });
   };
@@ -414,13 +583,16 @@ export default function SubtabAeModal({
     thuCongNo: 'PHIẾU THU CÔNG NỢ',
     donHang: 'ĐƠN HÀNG',
     doiLoaiThe: 'ĐỔI LOẠI THẺ',
-    tangGiamDiem: 'TĂNG GIẢM ĐIỂM'
+    baoGia: 'BÁO GIÁ',
+    datHang: 'ĐẶT HÀNG',
+    tangGiamDiem: 'TĂNG GIẢM ĐIỂM',
+    vaoRa: 'VÀO RA'
   };
 
   const bannerTitle = formTitles[tabId] || tabLabel.toUpperCase();
   const windowTitle = `${bannerTitle} - ${mode === 'create' ? 'THÊM MỚI' : 'CHỈNH SỬA'}`;
 
-  // Kích thước canvas chuẩn từ AELayout.xml
+  // Kích thước canvas chuẩn từ AELayout.xml và STABLEDESC
   const formDimensions = {
     giaHanThe: { width: 564, height: 433 },
     baoLuuThe: { width: 541, height: 432 },
@@ -429,8 +601,11 @@ export default function SubtabAeModal({
     datCoc: { width: 514, height: 330 },
     thuCongNo: { width: 590, height: 454 },
     donHang: { width: 660, height: 510 },
-    doiLoaiThe: { width: 520, height: 350 },
-    tangGiamDiem: { width: 520, height: 350 }
+    doiLoaiThe: { width: 570, height: 487 },
+    baoGia: { width: 921, height: 451 },
+    datHang: { width: 1020, height: 451 },
+    tangGiamDiem: { width: 370, height: 233 },
+    vaoRa: { width: 400, height: 205 }
   };
 
   const dim = formDimensions[tabId] || { width: 564, height: 433 };
@@ -797,12 +972,10 @@ export default function SubtabAeModal({
 
               {/* Số tiền & Checkbox Kích hoạt sau */}
               <div style={{ ...lblStyle, left: 10, top: 292, width: 49 }}>Số tiền</div>
-              <input
-                type="number"
-                min="0"
-                style={inputStyle({ left: 118, top: 291, width: 128, textAlign: 'right', fontWeight: 600 })}
+              <Number3DInput
+                style={{ left: 118, top: 291, width: 128, fontWeight: 600 }}
                 value={formData.soTien ?? 0}
-                onChange={(e) => handleChange('soTien', parseFloat(e.target.value) || 0)}
+                onChange={(num) => handleChange('soTien', num)}
               />
               <label style={{ position: 'absolute', left: 425, top: 292, display: 'flex', alignItems: 'center', gap: 6, fontSize: 11, cursor: 'pointer', userSelect: 'none' }}>
                 <input
@@ -815,45 +988,37 @@ export default function SubtabAeModal({
 
               {/* Giảm giá (%) & Đặt trước */}
               <div style={{ ...lblStyle, left: 10, top: 320, width: 62 }}>Giảm giá</div>
-              <input
-                type="number"
-                min="0"
-                style={inputStyle({ left: 118, top: 318, width: 34, textAlign: 'right' })}
+              <Number3DInput
+                style={{ left: 118, top: 318, width: 34 }}
                 value={formData.tiLeGiamGia ?? 0}
-                onChange={(e) => handleChange('tiLeGiamGia', parseFloat(e.target.value) || 0)}
+                onChange={(num) => handleChange('tiLeGiamGia', num)}
               />
               <div style={{ ...lblStyle, left: 158, top: 320, width: 20 }}>%</div>
-              <input
-                type="number"
-                min="0"
-                style={inputStyle({ left: 184, top: 318, width: 62, textAlign: 'right' })}
+              <Number3DInput
+                style={{ left: 184, top: 318, width: 62 }}
                 value={formData.tienGiamGia ?? 0}
-                onChange={(e) => handleChange('tienGiamGia', parseFloat(e.target.value) || 0)}
+                onChange={(num) => handleChange('tienGiamGia', num)}
               />
               <div style={{ ...lblStyle, left: 317, top: 320, width: 60 }}>Đặt trước</div>
-              <input
-                type="number"
-                min="0"
-                style={inputStyle({ left: 425, top: 317, width: 128, textAlign: 'right' })}
+              <Number3DInput
+                style={{ left: 425, top: 317, width: 128 }}
                 value={formData.datTruoc ?? 0}
-                onChange={(e) => handleChange('datTruoc', parseFloat(e.target.value) || 0)}
+                onChange={(num) => handleChange('datTruoc', num)}
               />
 
               {/* Tổng cộng & Thanh toán */}
               <div style={{ ...lblStyle, left: 10, top: 346, width: 73 }}>Tổng cộng</div>
-              <input
-                type="number"
+              <Number3DInput
                 readOnly
-                style={yellowInputStyle({ left: 118, top: 344, width: 128, textAlign: 'right', fontWeight: 700 })}
+                isYellow
+                style={{ left: 118, top: 344, width: 128, fontWeight: 700 }}
                 value={formData.tongCong ?? 0}
               />
               <div style={{ ...lblStyle, left: 317, top: 346, width: 75 }}>Thanh toán</div>
-              <input
-                type="number"
-                min="0"
-                style={inputStyle({ left: 425, top: 344, width: 128, textAlign: 'right', fontWeight: 600 })}
+              <Number3DInput
+                style={{ left: 425, top: 344, width: 128, fontWeight: 600 }}
                 value={formData.thanhToan ?? 0}
-                onChange={(e) => handleChange('thanhToan', parseFloat(e.target.value) || 0)}
+                onChange={(num) => handleChange('thanhToan', num)}
               />
 
               {/* Khuyến mãi */}
@@ -1114,13 +1279,11 @@ export default function SubtabAeModal({
 
               {/* Số tiền thu/chi */}
               <div style={{ ...lblStyle, left: 12, top: 252, width: 43, fontWeight: 700 }}>Số tiền:</div>
-              <input
-                type="number"
-                min="0"
-                required
-                style={yellowInputStyle({ left: 91, top: 250, width: 94, textAlign: 'right', fontWeight: 700, color: tabId === 'phieuThu' ? '#16a34a' : '#dc2626' })}
+              <Number3DInput
+                isYellow
+                style={{ left: 91, top: 250, width: 140, fontWeight: 700, color: tabId === 'phieuThu' ? '#16a34a' : '#dc2626' }}
                 value={tabId === 'phieuThu' ? (formData.thu ?? 0) : (formData.chi ?? 0)}
-                onChange={(e) => handleChange(tabId === 'phieuThu' ? 'thu' : 'chi', parseFloat(e.target.value) || 0)}
+                onChange={(num) => handleChange(tabId === 'phieuThu' ? 'thu' : 'chi', num)}
               />
 
               {/* Chuyển khoản */}
@@ -1267,52 +1430,45 @@ export default function SubtabAeModal({
 
               {/* Giá trị gói & Giảm giá (%) */}
               <div style={{ ...lblStyle, left: 10, top: 183, width: 64 }}>Giá trị gói</div>
-              <input
-                type="number"
-                min="0"
-                style={inputStyle({ left: 120, top: 181, width: 95, textAlign: 'right' })}
+              <Number3DInput
+                style={{ left: 120, top: 181, width: 95 }}
                 value={formData.giaTriGoi ?? 0}
-                onChange={(e) => handleChange('giaTriGoi', parseFloat(e.target.value) || 0)}
+                onChange={(num) => handleChange('giaTriGoi', num)}
               />
               <div style={{ ...lblStyle, left: 234, top: 184, width: 85 }}>Giảm giá (%)</div>
-              <input
-                type="number"
-                min="0"
-                style={inputStyle({ left: 325, top: 181, width: 95, textAlign: 'right' })}
+              <Number3DInput
+                style={{ left: 325, top: 181, width: 95 }}
                 value={formData.giamGia ?? 0}
-                onChange={(e) => handleChange('giamGia', parseFloat(e.target.value) || 0)}
+                onChange={(num) => handleChange('giamGia', num)}
               />
 
               {/* Tổng cộng & Tiền giảm */}
               <div style={{ ...lblStyle, left: 10, top: 211, width: 73 }}>Tổng cộng</div>
-              <input
-                type="number"
+              <Number3DInput
                 readOnly
-                style={yellowInputStyle({ left: 120, top: 209, width: 95, textAlign: 'right', fontWeight: 700 })}
+                isYellow
+                style={{ left: 120, top: 209, width: 95, fontWeight: 700 }}
                 value={formData.tongCong ?? 0}
               />
               <div style={{ ...lblStyle, left: 234, top: 211, width: 68 }}>Tiền giảm</div>
-              <input
-                type="number"
+              <Number3DInput
                 readOnly
-                style={inputStyle({ left: 325, top: 209, width: 95, textAlign: 'right' })}
+                style={{ left: 325, top: 209, width: 95 }}
                 value={formData.tienGiam ?? 0}
               />
 
               {/* Số tiền đặt trước & Tổng đặt */}
               <div style={{ ...lblStyle, left: 10, top: 239, width: 103, fontWeight: 700 }}>Số tiền đặt trước</div>
-              <input
-                type="number"
-                min="0"
-                style={yellowInputStyle({ left: 120, top: 237, width: 95, textAlign: 'right', fontWeight: 700, color: '#16a34a' })}
+              <Number3DInput
+                isYellow
+                style={{ left: 120, top: 237, width: 95, fontWeight: 700, color: '#16a34a' }}
                 value={formData.thu ?? 0}
-                onChange={(e) => handleChange('thu', parseFloat(e.target.value) || 0)}
+                onChange={(num) => handleChange('thu', num)}
               />
               <div style={{ ...lblStyle, left: 234, top: 239, width: 62 }}>Tổng đặt</div>
-              <input
-                type="number"
+              <Number3DInput
                 readOnly
-                style={inputStyle({ left: 325, top: 237, width: 95, textAlign: 'right', fontWeight: 700 })}
+                style={{ left: 325, top: 237, width: 95, fontWeight: 700 }}
                 value={formData.tongDat ?? formData.thu ?? 0}
               />
 
@@ -1402,13 +1558,11 @@ export default function SubtabAeModal({
 
               {/* Số tiền thu & Chuyển khoản */}
               <div style={{ ...lblStyle, left: 10, top: 93, width: 58, fontWeight: 700 }}>Số tiền thu</div>
-              <input
-                type="number"
-                min="0"
-                required
-                style={yellowInputStyle({ left: 90, top: 90, width: 95, textAlign: 'right', fontWeight: 700, color: '#16a34a' })}
+              <Number3DInput
+                isYellow
+                style={{ left: 90, top: 90, width: 95, fontWeight: 700, color: '#16a34a' }}
                 value={formData.thu ?? 0}
-                onChange={(e) => handleChange('thu', parseFloat(e.target.value) || 0)}
+                onChange={(num) => handleChange('thu', num)}
               />
               <label style={{ position: 'absolute', left: 191, top: 92, display: 'flex', alignItems: 'center', gap: 6, fontSize: 11, cursor: 'pointer' }}>
                 <input
@@ -1583,122 +1737,706 @@ export default function SubtabAeModal({
 
               {/* Bảng tính tổng tiền bên phải */}
               <div style={{ ...lblStyle, left: 380, top: 348, width: 55 }}>Tiền hàng</div>
-              <input
-                type="number"
-                min="0"
-                style={inputStyle({ left: 468, top: 345, width: 184, textAlign: 'right' })}
+              <Number3DInput
+                style={{ left: 468, top: 345, width: 184 }}
                 value={formData.tienHang ?? 0}
-                onChange={(e) => handleChange('tienHang', parseFloat(e.target.value) || 0)}
+                onChange={(num) => handleChange('tienHang', num)}
               />
 
               <div style={{ ...lblStyle, left: 380, top: 374, width: 83 }}>Phí vận chuyển</div>
-              <input
-                type="number"
-                min="0"
-                style={inputStyle({ left: 468, top: 371, width: 184, textAlign: 'right' })}
+              <Number3DInput
+                style={{ left: 468, top: 371, width: 184 }}
                 value={formData.phiVanChuyen ?? 0}
-                onChange={(e) => handleChange('phiVanChuyen', parseFloat(e.target.value) || 0)}
+                onChange={(num) => handleChange('phiVanChuyen', num)}
               />
 
               <div style={{ ...lblStyle, left: 380, top: 400, width: 69 }}>Tỉ lệ giảm giá</div>
-              <input
-                type="number"
-                min="0"
-                style={inputStyle({ left: 468, top: 397, width: 51, textAlign: 'right' })}
+              <Number3DInput
+                style={{ left: 468, top: 397, width: 51 }}
                 value={formData.tiLeGiamGia ?? 0}
-                onChange={(e) => handleChange('tiLeGiamGia', parseFloat(e.target.value) || 0)}
+                onChange={(num) => handleChange('tiLeGiamGia', num)}
               />
               <div style={{ ...lblStyle, left: 525, top: 400, width: 15 }}>%</div>
-              <input
-                type="number"
-                min="0"
-                style={inputStyle({ left: 557, top: 398, width: 95, textAlign: 'right' })}
+              <Number3DInput
+                style={{ left: 557, top: 398, width: 95 }}
                 value={formData.tienGiamGia ?? 0}
-                onChange={(e) => handleChange('tienGiamGia', parseFloat(e.target.value) || 0)}
+                onChange={(num) => handleChange('tienGiamGia', num)}
               />
 
               <div style={{ ...lblStyle, left: 380, top: 428, width: 51 }}>Tỉ lệ thuế</div>
-              <input
-                type="number"
-                min="0"
-                style={inputStyle({ left: 468, top: 425, width: 51, textAlign: 'right' })}
+              <Number3DInput
+                style={{ left: 468, top: 425, width: 51 }}
                 value={formData.tiLeThue ?? 0}
-                onChange={(e) => handleChange('tiLeThue', parseFloat(e.target.value) || 0)}
+                onChange={(num) => handleChange('tiLeThue', num)}
               />
               <div style={{ ...lblStyle, left: 525, top: 428, width: 15 }}>%</div>
-              <input
-                type="number"
-                min="0"
-                style={inputStyle({ left: 557, top: 426, width: 95, textAlign: 'right' })}
+              <Number3DInput
+                style={{ left: 557, top: 426, width: 95 }}
                 value={formData.tienThue ?? 0}
-                onChange={(e) => handleChange('tienThue', parseFloat(e.target.value) || 0)}
+                onChange={(num) => handleChange('tienThue', num)}
               />
 
               <div style={{ ...lblStyle, left: 380, top: 454, width: 38 }}>Đổi trả</div>
-              <input
-                type="number"
-                min="0"
-                style={inputStyle({ left: 468, top: 451, width: 184, textAlign: 'right' })}
+              <Number3DInput
+                style={{ left: 468, top: 451, width: 184 }}
                 value={formData.doiTra ?? 0}
-                onChange={(e) => handleChange('doiTra', parseFloat(e.target.value) || 0)}
+                onChange={(num) => handleChange('doiTra', num)}
               />
 
               <div style={{ ...lblStyle, left: 380, top: 482, width: 59, fontWeight: 700 }}>Tổng cộng</div>
-              <input
-                type="number"
+              <Number3DInput
                 readOnly
-                style={yellowInputStyle({ left: 468, top: 479, width: 184, textAlign: 'right', fontWeight: 700, color: '#1e3a8a' })}
+                isYellow
+                style={{ left: 468, top: 479, width: 184, fontWeight: 700, color: '#1e3a8a' }}
                 value={formData.tongCong ?? 0}
               />
             </>
           )}
 
           {/* ----------------------------------------------------------------------- */}
-          {/* CÁC TAB KHÁC: ĐỔI LOẠI THẺ / TĂNG GIẢM ĐIỂM                             */}
+          {/* FORM 8: ĐỔI LOẠI THẺ (Khớp 100% WinForms AELayout.xml 570x487)          */}
           {/* ----------------------------------------------------------------------- */}
           {tabId === 'doiLoaiThe' && (
-            <div style={{ padding: '20px 24px', fontSize: 11 }}>
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12, marginBottom: 12 }}>
-                <div>
-                  <label style={{ display: 'block', marginBottom: 4, fontWeight: 600 }}>Loại thẻ hiện tại</label>
-                  <input type="text" readOnly style={{ ...inputStyle(), position: 'static', width: '100%', background: '#f8fafc' }} value={formData.loaiTheCu || '---'} />
-                </div>
-                <div>
-                  <label style={{ display: 'block', marginBottom: 4, fontWeight: 600 }}>Loại thẻ mới</label>
-                  <select style={{ ...yellowInputStyle(), position: 'static', width: '100%', height: 23 }} value={formData.dloaiTheIdMoi || ''} onChange={(e) => handleChange('dloaiTheIdMoi', e.target.value)}>
-                    <option value="">-- Chọn loại thẻ mới --</option>
-                    {metadata.loaiThe?.map(lt => <option key={lt.id} value={lt.id}>{lt.name}</option>)}
-                  </select>
-                </div>
+            <>
+              {/* Ngày & Số phiếu */}
+              <div style={{ ...lblStyle, left: 10, top: 13, width: 41 }}>Ngày</div>
+              <input
+                type="date"
+                required
+                style={yellowInputStyle({ left: 118, top: 10, width: 104 })}
+                value={formData.ngay || ''}
+                onChange={(e) => handleChange('ngay', e.target.value)}
+              />
+              <div style={{ ...lblStyle, left: 333, top: 13, width: 61 }}>Số phiếu</div>
+              <input
+                type="text"
+                required
+                style={inputStyle({ left: 407, top: 10, width: 154, fontWeight: 700, background: '#f0fbfb', color: '#1e3a8a' })}
+                value={formData.soPhiu || ''}
+                onChange={(e) => handleChange('soPhiu', e.target.value)}
+              />
+
+              {/* Khách hàng */}
+              <div style={{ ...lblStyle, left: 10, top: 39, width: 78 }}>Khách hàng</div>
+              <select
+                style={yellowInputStyle({ left: 118, top: 38, width: 443, height: 23, fontWeight: 600 })}
+                value={formData.khachHangId || ''}
+                onChange={(e) => handleSelectCustomer(e.target.value)}
+              >
+                <option value="">-- Chọn khách hàng --</option>
+                {customers?.map(c => (
+                  <option key={c.id} value={c.id}>[{c.maThe}] {c.tenKhachHang || c.name} - {c.dienThoai || ''}</option>
+                ))}
+              </select>
+
+              {/* Địa chỉ & Điện thoại */}
+              <div style={{ ...lblStyle, left: 10, top: 69, width: 48 }}>Địa chỉ</div>
+              <input
+                type="text"
+                readOnly
+                style={inputStyle({ left: 118, top: 67, width: 166, background: '#f8fafc' })}
+                value={formData.diaChi || ''}
+              />
+              <div style={{ ...lblStyle, left: 327, top: 70, width: 67 }}>Điện thoại</div>
+              <input
+                type="text"
+                readOnly
+                style={inputStyle({ left: 407, top: 67, width: 154, background: '#f8fafc' })}
+                value={formData.dienThoai || ''}
+              />
+
+              {/* Nhóm thông tin thẻ cũ (Panel1) */}
+              <div style={{ ...lblStyle, left: 10, top: 97, width: 95, fontWeight: 600 }}>Thông tin thẻ cũ</div>
+              <div
+                style={{
+                  position: 'absolute',
+                  left: 118,
+                  top: 95,
+                  width: 443,
+                  height: 165,
+                  border: '1px solid #7192b8',
+                  background: '#dce8f5',
+                  boxSizing: 'border-box'
+                }}
+              >
+                {/* Ngày thẻ cũ */}
+                <div style={{ ...lblStyle, left: 7, top: 5, fontSize: 11 }}>Ngày</div>
+                <input
+                  type="date"
+                  readOnly
+                  style={inputStyle({ left: 71, top: 3, width: 95, background: '#f1f5f9' })}
+                  value={formData.ngayRef || ''}
+                />
+
+                {/* Loại thẻ cũ */}
+                <div style={{ ...lblStyle, left: 7, top: 32, fontSize: 11 }}>Loại thẻ</div>
+                <input
+                  type="text"
+                  readOnly
+                  style={inputStyle({ left: 71, top: 30, width: 351, background: '#f1f5f9', fontWeight: 600 })}
+                  value={formData.loaiTheRef || ''}
+                />
+
+                {/* Từ ngày & Đến ngày cũ */}
+                <div style={{ ...lblStyle, left: 7, top: 59, fontSize: 11 }}>Từ ngày</div>
+                <input
+                  type="date"
+                  readOnly
+                  style={inputStyle({ left: 71, top: 57, width: 95, background: '#f1f5f9' })}
+                  value={formData.tuNgayRef || ''}
+                />
+                <div style={{ ...lblStyle, left: 263, top: 59, fontSize: 11 }}>Đến ngày</div>
+                <input
+                  type="date"
+                  readOnly
+                  style={inputStyle({ left: 327, top: 57, width: 95, background: '#f1f5f9' })}
+                  value={formData.denNgayRef || ''}
+                />
+
+                {/* Số tiền & Giảm giá cũ */}
+                <div style={{ ...lblStyle, left: 7, top: 85, fontSize: 11 }}>Số tiền</div>
+                <input
+                  type="number"
+                  readOnly
+                  style={inputStyle({ left: 71, top: 83, width: 95, textAlign: 'right', background: '#f1f5f9' })}
+                  value={formData.soTienRef ?? 0}
+                />
+                <div style={{ ...lblStyle, left: 193, top: 85, fontSize: 11 }}>Giảm giá</div>
+                <input
+                  type="number"
+                  readOnly
+                  style={inputStyle({ left: 259, top: 83, width: 41, textAlign: 'right', background: '#f1f5f9' })}
+                  value={formData.tiLeGiamRef ?? 0}
+                />
+                <div style={{ ...lblStyle, left: 306, top: 85, fontSize: 11 }}>%</div>
+                <input
+                  type="number"
+                  readOnly
+                  style={inputStyle({ left: 327, top: 83, width: 95, textAlign: 'right', background: '#f1f5f9' })}
+                  value={formData.tienGiamRef ?? 0}
+                />
+
+                {/* Cộng & Số lần cũ */}
+                <div style={{ ...lblStyle, left: 7, top: 111, fontSize: 11, fontWeight: 600 }}>Cộng</div>
+                <input
+                  type="number"
+                  readOnly
+                  style={yellowInputStyle({ left: 71, top: 109, width: 95, textAlign: 'right', fontWeight: 700 })}
+                  value={formData.tongCongRef ?? 0}
+                />
+                <div style={{ ...lblStyle, left: 193, top: 111, fontSize: 11 }}>Số lần</div>
+                <input
+                  type="number"
+                  readOnly
+                  style={inputStyle({ left: 259, top: 110, width: 41, textAlign: 'right', background: '#f1f5f9' })}
+                  value={formData.soLanRef ?? 0}
+                />
+
+                {/* Ca tập cũ */}
+                <div style={{ ...lblStyle, left: 7, top: 138, fontSize: 11 }}>Ca tập</div>
+                <input
+                  type="text"
+                  readOnly
+                  style={inputStyle({ left: 72, top: 136, width: 351, background: '#f1f5f9' })}
+                  value={formData.caTapRef || 'Cả ngày'}
+                />
               </div>
-              <div style={{ marginBottom: 12 }}>
-                <label style={{ display: 'block', marginBottom: 4, fontWeight: 600 }}>Số tiền chênh lệch (đ)</label>
-                <input type="number" min="0" style={{ ...inputStyle(), position: 'static', width: '100%', textAlign: 'right' }} value={formData.soTien ?? 0} onChange={(e) => handleChange('soTien', parseFloat(e.target.value) || 0)} />
-              </div>
-              <div>
-                <label style={{ display: 'block', marginBottom: 4, fontWeight: 600 }}>Ghi chú</label>
-                <input type="text" style={{ ...inputStyle(), position: 'static', width: '100%' }} value={formData.note || ''} onChange={(e) => handleChange('note', e.target.value)} />
-              </div>
-            </div>
+
+              {/* Thông tin thẻ mới bên dưới */}
+              <div style={{ ...lblStyle, left: 10, top: 267, width: 55, fontWeight: 600 }}>Loại thẻ</div>
+              <select
+                style={yellowInputStyle({ left: 118, top: 266, width: 443, height: 23, fontWeight: 600 })}
+                value={formData.dloaiTheId || ''}
+                onChange={(e) => handleChange('dloaiTheId', e.target.value)}
+              >
+                <option value="">-- Chọn loại thẻ / Gói tập mới --</option>
+                {metadata.loaiThe?.map(lt => (
+                  <option key={lt.id} value={lt.id}>
+                    {lt.name} ({lt.giaBan?.toLocaleString()} đ - {lt.soThang || 1} tháng)
+                  </option>
+                ))}
+              </select>
+
+              {/* Từ ngày, Đến ngày, Số lần mới */}
+              <div style={{ ...lblStyle, left: 10, top: 296, width: 57 }}>Từ ngày</div>
+              <input
+                type="date"
+                required
+                style={yellowInputStyle({ left: 118, top: 295, width: 130 })}
+                value={formData.tuNgay || ''}
+                onChange={(e) => handleChange('tuNgay', e.target.value)}
+              />
+              <div style={{ ...lblStyle, left: 262, top: 297, width: 65 }}>Đến ngày</div>
+              <input
+                type="date"
+                required
+                style={yellowInputStyle({ left: 333, top: 294, width: 95, fontWeight: 700 })}
+                value={formData.denNgay || ''}
+                onChange={(e) => handleChange('denNgay', e.target.value)}
+              />
+              <div style={{ ...lblStyle, left: 436, top: 296, width: 46 }}>Số lần</div>
+              <input
+                type="number"
+                min="0"
+                style={inputStyle({ left: 501, top: 294, width: 60, textAlign: 'right' })}
+                value={formData.soLan ?? 0}
+                onChange={(e) => handleChange('soLan', parseInt(e.target.value) || 0)}
+              />
+
+              {/* Ngày tặng thêm & Lần tặng thêm */}
+              <div style={{ ...lblStyle, left: 10, top: 325, width: 102 }}>Ngày tặng thêm</div>
+              <input
+                type="number"
+                min="0"
+                style={inputStyle({ left: 118, top: 323, width: 130, textAlign: 'right' })}
+                value={formData.ngayTangThem ?? 0}
+                onChange={(e) => handleChange('ngayTangThem', parseInt(e.target.value) || 0)}
+              />
+              <div style={{ ...lblStyle, left: 404, top: 326, width: 91 }}>Lần tặng thêm</div>
+              <input
+                type="number"
+                min="0"
+                style={inputStyle({ left: 501, top: 324, width: 60, textAlign: 'right' })}
+                value={formData.lanTangThem ?? 0}
+                onChange={(e) => handleChange('lanTangThem', parseInt(e.target.value) || 0)}
+              />
+
+              {/* Số tiền thẻ mới */}
+              <div style={{ ...lblStyle, left: 10, top: 353, width: 49 }}>Số tiền</div>
+              <Number3DInput
+                style={{ left: 118, top: 351, width: 130, fontWeight: 600 }}
+                value={formData.soTien ?? 0}
+                onChange={(num) => handleChange('soTien', num)}
+              />
+
+              {/* Giảm giá & Trừ thẻ cũ */}
+              <div style={{ ...lblStyle, left: 10, top: 380, width: 62 }}>Giảm giá</div>
+              <Number3DInput
+                style={{ left: 118, top: 377, width: 30 }}
+                value={formData.tiLeGiamGia ?? 0}
+                onChange={(num) => handleChange('tiLeGiamGia', num)}
+              />
+              <div style={{ ...lblStyle, left: 153, top: 380, width: 20 }}>%</div>
+              <Number3DInput
+                style={{ left: 177, top: 377, width: 71 }}
+                value={formData.tienGiamGia ?? 0}
+                onChange={(num) => handleChange('tienGiamGia', num)}
+              />
+              <div style={{ ...lblStyle, left: 328, top: 379, width: 66, fontWeight: 700, color: '#b45309' }}>Trừ thẻ cũ</div>
+              <Number3DInput
+                readOnly
+                isYellow
+                style={{ left: 431, top: 377, width: 130, fontWeight: 700, color: '#b45309' }}
+                value={formData.numTruTheCu ?? formData.tongCongRef ?? 0}
+              />
+
+              {/* Tổng cộng & Thanh toán */}
+              <div style={{ ...lblStyle, left: 10, top: 405, width: 73, fontWeight: 700 }}>Tổng cộng</div>
+              <Number3DInput
+                readOnly
+                isYellow
+                style={{ left: 118, top: 403, width: 130, fontWeight: 700, color: '#1e3a8a' }}
+                value={formData.tongCong ?? 0}
+              />
+              <div style={{ ...lblStyle, left: 323, top: 405, width: 75 }}>Thanh toán</div>
+              <Number3DInput
+                style={{ left: 431, top: 403, width: 130, fontWeight: 600 }}
+                value={formData.thanhToan ?? 0}
+                onChange={(num) => handleChange('thanhToan', num)}
+              />
+
+              {/* Ca tập */}
+              <div style={{ ...lblStyle, left: 10, top: 433, width: 47 }}>Ca tập</div>
+              <select
+                style={inputStyle({ left: 118, top: 430, width: 443, height: 23 })}
+                value={formData.dcatapId || ''}
+                onChange={(e) => handleChange('dcatapId', e.target.value)}
+              >
+                <option value="">-- Cả ngày (Mặc định) --</option>
+                {metadata.caTap?.map(ct => (
+                  <option key={ct.id} value={ct.id}>{ct.name}</option>
+                ))}
+              </select>
+
+              {/* Ghi chú */}
+              <div style={{ ...lblStyle, left: 10, top: 460, width: 52 }}>Ghi chú</div>
+              <input
+                type="text"
+                style={inputStyle({ left: 118, top: 457, width: 443 })}
+                value={formData.note || ''}
+                onChange={(e) => handleChange('note', e.target.value)}
+              />
+            </>
           )}
 
+          {/* ----------------------------------------------------------------------- */}
+          {/* FORM 9: BÁO GIÁ & FORM 10: ĐẶT HÀNG (STABLEDESC TBAOGIA / TDATHANG)       */}
+          {/* ----------------------------------------------------------------------- */}
+          {(tabId === 'baoGia' || tabId === 'datHang') && (
+            <>
+              {/* Ngày & Số phiếu */}
+              <div style={{ ...lblStyle, left: 10, top: 12, width: 40 }}>Ngày</div>
+              <input
+                type="date"
+                required
+                style={yellowInputStyle({ left: 90, top: 10, width: 115 })}
+                value={formData.ngay || ''}
+                onChange={(e) => handleChange('ngay', e.target.value)}
+              />
+              <div style={{ ...lblStyle, left: 220, top: 12, width: 55 }}>Số phiếu</div>
+              <input
+                type="text"
+                required
+                style={inputStyle({ left: 280, top: 10, width: 140, fontWeight: 700, background: '#f0fbfb', color: '#1e3a8a' })}
+                value={formData.soPhiu || ''}
+                onChange={(e) => handleChange('soPhiu', e.target.value)}
+              />
+
+              {/* Khách hàng */}
+              <div style={{ ...lblStyle, left: 10, top: 38, width: 70 }}>Khách hàng</div>
+              <select
+                style={yellowInputStyle({ left: 90, top: 36, width: 330, height: 22, fontWeight: 600 })}
+                value={formData.khachHangId || ''}
+                onChange={(e) => handleSelectCustomer(e.target.value)}
+              >
+                <option value="">-- Chọn khách hàng --</option>
+                {customers?.map(c => (
+                  <option key={c.id} value={c.id}>[{c.maThe}] {c.tenKhachHang || c.name} - {c.dienThoai || ''}</option>
+                ))}
+              </select>
+
+              {/* Địa chỉ */}
+              <div style={{ ...lblStyle, left: 10, top: 65, width: 50 }}>Địa chỉ</div>
+              <input
+                type="text"
+                style={inputStyle({ left: 90, top: 63, width: 330 })}
+                value={formData.diaChi || ''}
+                onChange={(e) => handleChange('diaChi', e.target.value)}
+              />
+
+              {/* Điện thoại & Email */}
+              <div style={{ ...lblStyle, left: 10, top: 92, width: 60 }}>Điện thoại</div>
+              <input
+                type="text"
+                style={inputStyle({ left: 90, top: 90, width: 140 })}
+                value={formData.dienThoai || ''}
+                onChange={(e) => handleChange('dienThoai', e.target.value)}
+              />
+              <div style={{ ...lblStyle, left: 245, top: 92, width: 35 }}>Email</div>
+              <input
+                type="email"
+                style={inputStyle({ left: 285, top: 90, width: 135 })}
+                value={formData.email || ''}
+                onChange={(e) => handleChange('email', e.target.value)}
+              />
+
+              {/* Nhân viên kinh doanh */}
+              <div style={{ ...lblStyle, left: 10, top: 119, width: 60 }}>Nhân viên</div>
+              <select
+                style={inputStyle({ left: 90, top: 117, width: 330, height: 22 })}
+                value={formData.dnhanVienId || ''}
+                onChange={(e) => handleChange('dnhanVienId', e.target.value)}
+              >
+                <option value="">-- Chọn nhân viên kinh doanh --</option>
+                {metadata.nhanVien?.map(nv => (
+                  <option key={nv.id} value={nv.id}>{nv.name}</option>
+                ))}
+              </select>
+
+              {/* Diễn giải */}
+              <div style={{ ...lblStyle, left: 10, top: 146, width: 60 }}>Diễn giải</div>
+              <input
+                type="text"
+                style={inputStyle({ left: 90, top: 144, width: 330 })}
+                value={formData.dienGiai || ''}
+                onChange={(e) => handleChange('dienGiai', e.target.value)}
+              />
+
+              {/* Bảng chi tiết hàng hóa báo giá / đặt hàng */}
+              <div
+                style={{
+                  position: 'absolute',
+                  left: 10,
+                  top: 173,
+                  width: tabId === 'datHang' ? 620 : 540,
+                  height: 265,
+                  border: '1px solid #7192b8',
+                  background: '#ffffff',
+                  display: 'flex',
+                  flexDirection: 'column'
+                }}
+              >
+                <div style={{ height: 24, background: '#dce8f5', borderBottom: '1px solid #aec4d9', display: 'flex', alignItems: 'center', padding: '0 8px', fontSize: 11, fontWeight: 700, color: '#1e3a8a' }}>
+                  <span>Chi tiết hàng hóa / dịch vụ {tabId === 'baoGia' ? 'báo giá' : 'đặt hàng'}</span>
+                </div>
+                <div style={{ flex: 1, padding: 10, color: '#64748b', fontSize: 11, overflowY: 'auto' }}>
+                  <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 11 }}>
+                    <thead>
+                      <tr style={{ background: '#f1f5f9', borderBottom: '1px solid #cbd5e1' }}>
+                        <th style={{ textAlign: 'left', padding: '4px 6px' }}>Tên mặt hàng / Dịch vụ</th>
+                        <th style={{ width: 60, textAlign: 'right', padding: '4px 6px' }}>SL</th>
+                        <th style={{ width: 100, textAlign: 'right', padding: '4px 6px' }}>Đơn giá</th>
+                        <th style={{ width: 110, textAlign: 'right', padding: '4px 6px' }}>Thành tiền</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td style={{ padding: '6px' }}>{tabId === 'baoGia' ? 'Gói dịch vụ Gym - Fitness trọn gói' : 'Dịch vụ Đặt hàng thiết bị / Thẻ Gym'}</td>
+                        <td style={{ textAlign: 'right', padding: '6px' }}>1</td>
+                        <td style={{ textAlign: 'right', padding: '6px' }}>{(formData.tienHang || 0).toLocaleString()}</td>
+                        <td style={{ textAlign: 'right', padding: '6px', fontWeight: 600 }}>{(formData.tienHang || 0).toLocaleString()}</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+
+              {/* Bảng tính chiết khấu & tổng tiền bên phải */}
+              <div style={{ position: 'absolute', left: tabId === 'datHang' ? 645 : 565, top: 10, width: 360, height: 430 }}>
+                {/* Tiền hàng */}
+                <div style={{ ...lblStyle, left: 10, top: 12, width: 80 }}>Tiền hàng</div>
+                <input
+                  type="number"
+                  min="0"
+                  style={inputStyle({ left: 110, top: 10, width: 230, textAlign: 'right', fontWeight: 600 })}
+                  value={formData.tienHang ?? 0}
+                  onChange={(e) => handleChange('tienHang', parseFloat(e.target.value) || 0)}
+                />
+
+                {/* Phí vận chuyển */}
+                <div style={{ ...lblStyle, left: 10, top: 40, width: 90 }}>Phí vận chuyển</div>
+                <input
+                  type="number"
+                  min="0"
+                  style={inputStyle({ left: 110, top: 38, width: 230, textAlign: 'right' })}
+                  value={formData.phiVanChuyen ?? 0}
+                  onChange={(e) => handleChange('phiVanChuyen', parseFloat(e.target.value) || 0)}
+                />
+
+                {/* Tỉ lệ giảm giá */}
+                <div style={{ ...lblStyle, left: 10, top: 68, width: 80 }}>Tỉ lệ giảm giá</div>
+                <input
+                  type="number"
+                  min="0"
+                  style={inputStyle({ left: 110, top: 66, width: 50, textAlign: 'right' })}
+                  value={formData.tiLeGiamGia ?? 0}
+                  onChange={(e) => handleChange('tiLeGiamGia', parseFloat(e.target.value) || 0)}
+                />
+                <div style={{ ...lblStyle, left: 165, top: 68, width: 15 }}>%</div>
+                <input
+                  type="number"
+                  min="0"
+                  style={inputStyle({ left: 185, top: 66, width: 155, textAlign: 'right' })}
+                  value={formData.tienGiamGia ?? 0}
+                  onChange={(e) => handleChange('tienGiamGia', parseFloat(e.target.value) || 0)}
+                />
+
+                {/* Tỉ lệ thuế */}
+                <div style={{ ...lblStyle, left: 10, top: 96, width: 80 }}>Tỉ lệ thuế</div>
+                <input
+                  type="number"
+                  min="0"
+                  style={inputStyle({ left: 110, top: 94, width: 50, textAlign: 'right' })}
+                  value={formData.tiLeThue ?? 0}
+                  onChange={(e) => handleChange('tiLeThue', parseFloat(e.target.value) || 0)}
+                />
+                <div style={{ ...lblStyle, left: 165, top: 96, width: 15 }}>%</div>
+                <input
+                  type="number"
+                  min="0"
+                  style={inputStyle({ left: 185, top: 94, width: 155, textAlign: 'right' })}
+                  value={formData.tienThue ?? 0}
+                  onChange={(e) => handleChange('tienThue', parseFloat(e.target.value) || 0)}
+                />
+
+                {/* Tổng cộng */}
+                <div style={{ ...lblStyle, left: 10, top: 126, width: 80, fontWeight: 700 }}>Tổng cộng</div>
+                <input
+                  type="number"
+                  readOnly
+                  style={yellowInputStyle({ left: 110, top: 124, width: 230, textAlign: 'right', fontWeight: 700, color: '#1e3a8a' })}
+                  value={formData.tongCong ?? 0}
+                />
+
+                {/* Tab Đặt hàng có thêm Thanh toán / Đặt cọc */}
+                {tabId === 'datHang' && (
+                  <>
+                    <div style={{ ...lblStyle, left: 10, top: 154, width: 80 }}>Đặt cọc/T.Toán</div>
+                    <input
+                      type="number"
+                      min="0"
+                      style={inputStyle({ left: 110, top: 152, width: 230, textAlign: 'right', fontWeight: 600 })}
+                      value={formData.thanhToan ?? 0}
+                      onChange={(e) => handleChange('thanhToan', parseFloat(e.target.value) || 0)}
+                    />
+                  </>
+                )}
+
+                {/* Ghi chú */}
+                <div style={{ ...lblStyle, left: 10, top: tabId === 'datHang' ? 184 : 156, width: 80 }}>Ghi chú</div>
+                <textarea
+                  style={{
+                    ...inputStyle({
+                      left: 110,
+                      top: tabId === 'datHang' ? 182 : 154,
+                      width: 230,
+                      height: tabId === 'datHang' ? '240px' : '268px'
+                    }),
+                    padding: 6,
+                    resize: 'none'
+                  }}
+                  value={formData.note || ''}
+                  onChange={(e) => handleChange('note', e.target.value)}
+                />
+              </div>
+            </>
+          )}
+
+          {/* ----------------------------------------------------------------------- */}
+          {/* FORM 11: TĂNG GIẢM ĐIỂM (STABLEDESC TTANGGIAMDIEM 370x233)              */}
+          {/* ----------------------------------------------------------------------- */}
           {tabId === 'tangGiamDiem' && (
-            <div style={{ padding: '20px 24px', fontSize: 11 }}>
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12, marginBottom: 12 }}>
-                <div>
-                  <label style={{ display: 'block', marginBottom: 4, fontWeight: 600, color: '#16a34a' }}>Điểm thưởng tăng (+)</label>
-                  <input type="number" min="0" style={{ ...inputStyle(), position: 'static', width: '100%', textAlign: 'right', fontWeight: 700 }} value={formData.diemTang ?? 0} onChange={(e) => handleChange('diemTang', parseInt(e.target.value) || 0)} />
-                </div>
-                <div>
-                  <label style={{ display: 'block', marginBottom: 4, fontWeight: 600, color: '#dc2626' }}>Điểm trừ giảm (-)</label>
-                  <input type="number" min="0" style={{ ...inputStyle(), position: 'static', width: '100%', textAlign: 'right', fontWeight: 700 }} value={formData.diemGiam ?? 0} onChange={(e) => handleChange('diemGiam', parseInt(e.target.value) || 0)} />
-                </div>
-              </div>
-              <div>
-                <label style={{ display: 'block', marginBottom: 4, fontWeight: 600 }}>Ghi chú lý do</label>
-                <input type="text" style={{ ...inputStyle(), position: 'static', width: '100%' }} value={formData.note || ''} onChange={(e) => handleChange('note', e.target.value)} />
-              </div>
-            </div>
+            <>
+              {/* Ngày & Số phiếu */}
+              <div style={{ ...lblStyle, left: 10, top: 12, width: 35 }}>Ngày</div>
+              <input
+                type="date"
+                required
+                style={yellowInputStyle({ left: 75, top: 10, width: 95 })}
+                value={formData.ngay || ''}
+                onChange={(e) => handleChange('ngay', e.target.value)}
+              />
+              <div style={{ ...lblStyle, left: 180, top: 12, width: 50 }}>Số phiếu</div>
+              <input
+                type="text"
+                required
+                style={inputStyle({ left: 235, top: 10, width: 120, fontWeight: 700, background: '#f0fbfb', color: '#1e3a8a' })}
+                value={formData.soPhiu || ''}
+                onChange={(e) => handleChange('soPhiu', e.target.value)}
+              />
+
+              {/* Khách hàng */}
+              <div style={{ ...lblStyle, left: 10, top: 40, width: 65 }}>Khách hàng</div>
+              <select
+                style={yellowInputStyle({ left: 75, top: 38, width: 280, height: 22, fontWeight: 600 })}
+                value={formData.khachHangId || ''}
+                onChange={(e) => handleSelectCustomer(e.target.value)}
+              >
+                <option value="">-- Chọn khách hàng --</option>
+                {customers?.map(c => (
+                  <option key={c.id} value={c.id}>[{c.maThe}] {c.tenKhachHang || c.name}</option>
+                ))}
+              </select>
+
+              {/* Điểm tăng (+) & Điểm giảm (-) */}
+              <div style={{ ...lblStyle, left: 10, top: 69, width: 60, color: '#16a34a', fontWeight: 700 }}>Điểm tăng</div>
+              <input
+                type="number"
+                min="0"
+                style={inputStyle({ left: 75, top: 67, width: 95, textAlign: 'right', fontWeight: 700, color: '#16a34a' })}
+                value={formData.diemTang ?? 0}
+                onChange={(e) => handleChange('diemTang', parseInt(e.target.value) || 0)}
+              />
+              <div style={{ ...lblStyle, left: 180, top: 69, width: 60, color: '#dc2626', fontWeight: 700 }}>Điểm giảm</div>
+              <input
+                type="number"
+                min="0"
+                style={inputStyle({ left: 245, top: 67, width: 110, textAlign: 'right', fontWeight: 700, color: '#dc2626' })}
+                value={formData.diemGiam ?? 0}
+                onChange={(e) => handleChange('diemGiam', parseInt(e.target.value) || 0)}
+              />
+
+              {/* Lý do */}
+              <div style={{ ...lblStyle, left: 10, top: 98, width: 50 }}>Lý do</div>
+              <input
+                type="text"
+                style={inputStyle({ left: 75, top: 96, width: 280 })}
+                value={formData.lyDo || ''}
+                onChange={(e) => handleChange('lyDo', e.target.value)}
+              />
+
+              {/* Ghi chú */}
+              <div style={{ ...lblStyle, left: 10, top: 127, width: 50 }}>Ghi chú</div>
+              <textarea
+                style={{
+                  ...inputStyle({ left: 75, top: 125, width: 280, height: '95px' }),
+                  padding: 4,
+                  resize: 'none'
+                }}
+                value={formData.note || ''}
+                onChange={(e) => handleChange('note', e.target.value)}
+              />
+            </>
+          )}
+
+          {/* ----------------------------------------------------------------------- */}
+          {/* FORM 12: VÀO RA (STABLEDESC TVAORA 400x205)                              */}
+          {/* ----------------------------------------------------------------------- */}
+          {tabId === 'vaoRa' && (
+            <>
+              {/* Ngày & Giờ */}
+              <div style={{ ...lblStyle, left: 10, top: 12, width: 35 }}>Ngày</div>
+              <input
+                type="date"
+                required
+                style={yellowInputStyle({ left: 75, top: 10, width: 115 })}
+                value={formData.ngay || ''}
+                onChange={(e) => handleChange('ngay', e.target.value)}
+              />
+              <div style={{ ...lblStyle, left: 205, top: 12, width: 30 }}>Giờ</div>
+              <input
+                type="time"
+                step="1"
+                required
+                style={inputStyle({ left: 245, top: 10, width: 140 })}
+                value={formData.gio || ''}
+                onChange={(e) => handleChange('gio', e.target.value)}
+              />
+
+              {/* Khách hàng */}
+              <div style={{ ...lblStyle, left: 10, top: 41, width: 65 }}>Khách hàng</div>
+              <select
+                style={yellowInputStyle({ left: 75, top: 39, width: 310, height: 22, fontWeight: 600 })}
+                value={formData.khachHangId || ''}
+                onChange={(e) => handleSelectCustomer(e.target.value)}
+              >
+                <option value="">-- Chọn khách hàng --</option>
+                {customers?.map(c => (
+                  <option key={c.id} value={c.id}>[{c.maThe}] {c.tenKhachHang || c.name}</option>
+                ))}
+              </select>
+
+              {/* Mã thẻ */}
+              <div style={{ ...lblStyle, left: 10, top: 71, width: 50 }}>Mã thẻ</div>
+              <input
+                type="text"
+                readOnly
+                style={inputStyle({ left: 75, top: 69, width: 310, background: '#f8fafc', fontWeight: 600 })}
+                value={formData.maThe || formData.maKhach || customer?.maThe || ''}
+              />
+
+              {/* Máy vân tay / Thiết bị */}
+              <div style={{ ...lblStyle, left: 10, top: 101, width: 50 }}>Thiết bị</div>
+              <select
+                style={inputStyle({ left: 75, top: 99, width: 310, height: 22 })}
+                value={formData.dmayVanTayId || ''}
+                onChange={(e) => handleChange('dmayVanTayId', e.target.value)}
+              >
+                <option value="">-- Máy quẹt vân tay / Cửa kiểm soát --</option>
+                {metadata.mayVanTay?.map(m => (
+                  <option key={m.id} value={m.id}>{m.name}</option>
+                ))}
+              </select>
+
+              {/* Ghi chú */}
+              <div style={{ ...lblStyle, left: 10, top: 131, width: 50 }}>Ghi chú</div>
+              <input
+                type="text"
+                style={inputStyle({ left: 75, top: 129, width: 310 })}
+                value={formData.note || ''}
+                onChange={(e) => handleChange('note', e.target.value)}
+              />
+            </>
           )}
         </div>
 

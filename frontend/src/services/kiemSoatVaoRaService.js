@@ -7,6 +7,12 @@ export const kiemSoatVaoRaService = {
     return res.data;
   },
 
+  // Ảnh mẫu hội viên để tạo vector nhận diện ngay trên trình duyệt
+  async getFaceProfiles() {
+    const res = await api.get('/KiemSoatVaoRa/face-profiles');
+    return res.data;
+  },
+
   // Lấy danh sách lượt vào ra trong ngày hôm nay
   async getTodayLogs(search = '') {
     const res = await api.get('/KiemSoatVaoRa/today-logs', {

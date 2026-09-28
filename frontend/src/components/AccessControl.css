@@ -517,13 +517,59 @@
   border: 1.5px dashed #93c5fd;
   border-radius: 8px;
   background: #fbfcfe;
-  padding: 14px 10px;
+  padding: 8px;
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-start;
   text-align: center;
   box-sizing: border-box;
+}
+
+.tap-camera-live-wrapper {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  overflow: hidden;
+  border-radius: 7px;
+  background: #0f172a;
+  border: 1px solid #7dd3fc;
+  box-shadow: 0 2px 7px rgba(15, 23, 42, 0.2);
+  margin-bottom: 8px;
+}
+
+.tap-camera-live-video {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: cover;
+  transform: scaleX(-1);
+}
+
+.tap-camera-live-indicator {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 3px 7px;
+  border-radius: 10px;
+  background: rgba(15, 23, 42, 0.78);
+  color: #ffffff;
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: 0.25px;
+  backdrop-filter: blur(3px);
+}
+
+.tap-camera-live-scanning,
+.tap-camera-live-no-profiles {
+  color: #86efac;
+}
+
+.tap-camera-live-error {
+  color: #fca5a5;
 }
 
 .tap-camera-placeholder-icon {
@@ -554,6 +600,7 @@
   font-weight: 800;
   color: #1e293b;
   margin-bottom: 3px;
+  line-height: 1.25;
 }
 
 .tap-camera-desc {

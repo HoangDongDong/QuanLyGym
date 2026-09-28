@@ -1,0 +1,234 @@
+/* Global bridge between the Firebird "Giao diện chương trình" setting and the web UI. */
+:root {
+  --theme-primary: #2f74d0;
+  --theme-primary-hover: #245da8;
+  --theme-primary-soft: #e8f1fc;
+  --theme-app-bg: #eef3f8;
+  --theme-main-bg: #ffffff;
+  --theme-main-bg-text: #172033;
+  --theme-surface: #ffffff;
+  --theme-surface-muted: #f5f8fb;
+  --theme-border: #c7d3e1;
+  --theme-text: #1e293b;
+  --theme-text-muted: #64748b;
+  --theme-sidebar: #19283d;
+  --theme-sidebar-header: #142033;
+  --theme-sidebar-active: #274a75;
+  --theme-sidebar-text: #aebed1;
+}
+
+html,
+body,
+.admindek-app {
+  background-color: var(--theme-app-bg);
+  color: var(--theme-text);
+}
+
+.admindek-main,
+.sconf-window-container,
+.tap-admin-page,
+.cust-management-container,
+.card-renewal-container {
+  background-color: var(--theme-main-bg);
+  color: var(--theme-main-bg-text);
+}
+
+.sconf-window-body,
+.sconf-form-pane,
+.sconf-form-scroll-area {
+  background-color: var(--theme-main-bg);
+}
+
+.sconf-form-pane .sconf-label,
+.sconf-form-pane .sconf-checkbox-text,
+.sconf-form-pane .sconf-more-detail,
+.sconf-form-pane .sconf-empty-filter {
+  color: var(--theme-main-bg-text);
+}
+
+/* Thanh điều hướng trên cùng thuộc vùng giao diện chính bên phải. */
+.admindek-main > .admindek-topbar {
+  background-color: var(--theme-main-bg);
+  color: var(--theme-main-bg-text);
+  border-bottom-color: color-mix(in srgb, var(--theme-main-bg-text) 22%, transparent);
+}
+
+.admindek-main > .admindek-topbar .topbar-icon-btn,
+.admindek-main > .admindek-topbar .topbar-badge-btn,
+.admindek-main > .admindek-topbar .user-name-text {
+  color: var(--theme-main-bg-text);
+}
+
+.admindek-sidebar { background: var(--theme-sidebar); color: var(--theme-sidebar-text); }
+.sidebar-header { background: var(--theme-sidebar-header); }
+.nav-submenu { background: color-mix(in srgb, var(--theme-sidebar) 82%, #000000); }
+.nav-item:hover,
+.nav-item.active,
+.nav-item.open { background: var(--theme-sidebar-active); }
+.submenu-item { color: var(--theme-sidebar-text); }
+.submenu-item:hover,
+.submenu-item.active { background: color-mix(in srgb, var(--theme-primary) 24%, transparent); }
+.submenu-item:hover .sub-icon,
+.submenu-item.active .sub-icon,
+.nav-item .nav-icon.house-icon,
+.nav-item.active .nav-icon { color: var(--theme-primary); }
+.brand-icon-wrap { border-color: var(--theme-primary); }
+.brand-icon-inner,
+.sidebar-splitter:hover,
+.sidebar-splitter.dragging { background: var(--theme-primary); }
+
+.admindek-topbar,
+.deals-analytics-card,
+.kpi-card-admindek,
+.admindek-table-card,
+.admindek-toolbar,
+.tap-card,
+.tap-right-panel-card,
+.sconf-window-header,
+.sconf-sidebar,
+.sconf-window-footer,
+.tap-admin-card,
+.cust-main-grid,
+.cust-toolbar,
+.cust-bottom-panel,
+.cust-doc-tabs,
+.cust-modal,
+.gym-ae-modal {
+  background-color: var(--theme-surface);
+  border-color: var(--theme-border);
+}
+
+.topbar-search,
+.chart-time-filter,
+table.admindek-table thead th,
+.sconf-header-icon,
+.sconf-tab-item:hover,
+.tap-history-table thead th,
+.cust-grid-table thead th,
+.cust-sub-table th {
+  background-color: var(--theme-surface-muted);
+}
+
+.admindek-topbar,
+.topbar-search,
+.deals-analytics-card,
+.kpi-card-admindek,
+.admindek-table-card,
+.admindek-toolbar,
+.action-icon-btn,
+.btn-admindek,
+.login-dialog,
+.login-input,
+.tap-card,
+.tap-rfid-input-wrapper,
+.tap-right-panel-card,
+.sconf-window-container,
+.sconf-window-header,
+.sconf-sidebar,
+.sconf-input-text,
+.sconf-input-num,
+.sconf-select,
+.sconf-input-date,
+.sconf-textarea,
+.sconf-search-input,
+.cust-main-grid,
+.cust-toolbar,
+.cust-bottom-panel {
+  border-color: var(--theme-border);
+}
+
+.header-icon-square,
+.user-avatar-img,
+.kpi-icon-square.blue,
+.btn-admindek.primary,
+.login-btn-primary,
+.login-logo-circle,
+.action-icon-btn:hover,
+.sconf-tab-item.active,
+.sconf-btn-save,
+.tap-rfid-submit-btn,
+.tap-btn-save,
+.cust-toolbar-btn.primary,
+.cust-bottom-tab.active,
+.cust-doc-tab.active {
+  background-color: var(--theme-primary);
+  border-color: var(--theme-primary);
+}
+
+.btn-admindek.primary:hover,
+.login-btn-primary:hover,
+.sconf-btn-save:hover,
+.tap-rfid-submit-btn:hover,
+.tap-btn-save:hover { background-color: var(--theme-primary-hover); }
+
+.kpi-big-value,
+.chart-time-filter button.active,
+.header-breadcrumb i,
+.sconf-loading-state i,
+.sconf-tab-icon,
+.tap-rfid-signal-icon,
+.tap-input-icon,
+.tap-customer-time,
+.cust-pane-tab.active,
+.cust-bottom-tab.active,
+.cust-toolbar-btn i {
+  color: var(--theme-primary);
+}
+
+.topbar-search input,
+.user-name-text,
+.header-text-meta h2,
+.card-title-text,
+.table-header-flex h4,
+.sconf-header-title,
+.sconf-label,
+.tap-rfid-title,
+.tap-profile-title,
+.cust-grid-table,
+.cust-sub-table { color: var(--theme-text); }
+
+.header-text-meta p,
+.header-breadcrumb,
+.kpi-label-text,
+.chart-meta-row,
+.sconf-loading-state,
+.tap-tab-item,
+.tap-customer-package { color: var(--theme-text-muted); }
+
+.topbar-icon-btn:hover,
+.topbar-badge-btn:hover,
+.topbar-user:hover,
+.btn-admindek:hover,
+.tb-tab-btn:hover,
+.tap-tab-item:hover { background: var(--theme-primary-soft); }
+
+.tb-tab-btn.active,
+.tap-tab-item.tap-tab-active,
+.cust-pane-tab.active { background: var(--theme-primary-soft); color: var(--theme-primary); border-color: var(--theme-primary); }
+
+.topbar-search input:focus,
+.login-input:focus,
+.sconf-input-text:focus,
+.sconf-input-num:focus,
+.sconf-select:focus,
+.sconf-input-date:focus,
+.sconf-textarea:focus,
+.tap-rfid-input-wrapper:focus-within {
+  border-color: var(--theme-primary);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--theme-primary) 18%, transparent);
+}
+
+.sconf-window-header,
+.sconf-sidebar,
+.sconf-window-footer { background-color: var(--theme-surface); }
+
+[data-app-theme="office-2010-blue-borderless"] .admindek-topbar,
+[data-app-theme="office-2010-blue-borderless"] .admindek-table-card,
+[data-app-theme="office-2010-blue-borderless"] .admindek-toolbar,
+[data-app-theme="office-2010-blue-borderless"] .tap-card,
+[data-app-theme="office-2010-blue-borderless"] .sconf-window-container,
+[data-app-theme="office-2010-blue-borderless"] .cust-main-grid,
+[data-app-theme="office-2010-blue-borderless"] .cust-bottom-panel {
+  border-color: transparent;
+  box-shadow: none;
+}

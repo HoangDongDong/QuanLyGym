@@ -69,7 +69,7 @@ const FALLBACK_MEMBERS = [
   }
 ];
 
-export default function AccessControl({ showNotification, onSwitchToCustomers }) {
+export default function AccessControl({ showNotification }) {
   const [scanInput, setScanInput] = useState('');
   const [currentMember, setCurrentMember] = useState(null);
   const [gateStatus, setGateStatus] = useState('locked'); // 'locked', 'unlocked', 'blocked'
@@ -91,9 +91,15 @@ export default function AccessControl({ showNotification, onSwitchToCustomers })
   });
   const [pingResult, setPingResult] = useState({});
   const [isSubmittingDevice, setIsSubmittingDevice] = useState(false);
+  const [cameraStatus, setCameraStatus] = useState('starting');
 
   const scanInputRef = useRef(null);
   const resetTimerRef = useRef(null);
+  const hiddenCameraRef = useRef(null);
+  const faceScanTimerRef = useRef(null);
+  const faceScanBusyRef = useRef(false);
+  const processCardScanRef = useRef(null);
+  const lastFaceMatchRef = useRef({ maThe: '', count: 0, checkedAt: 0, locked: false, absentCount: 0 });
 
   // Focus ô nhập thẻ ban đầu & hỗ trợ phím tắt F2
   useEffect(() => {
@@ -225,6 +231,159 @@ export default function AccessControl({ showNotification, onSwitchToCustomers })
       setGateSignal('ready');
     }, 4500);
   };
+
+  useEffect(() => {
+    processCardScanRef.current = processCardScan;
+  });
+
+  // Camera chạy nền trong suốt thời gian màn hình Kiểm soát ra vào đang mở.
+  // Khung hình không hiển thị và không gửi lên server; face-api tạo vector ngay
+  // trên trình duyệt rồi chỉ chuyển mã thẻ đã nhận diện vào luồng check-in hiện có.
+  useEffect(() => {
+    let disposed = false;
+    let stream = null;
+
+    const startBackgroundFaceRecognition = async () => {
+      try {
+        setCameraStatus('starting');
+        const faceapi = await import('face-api.js');
+        await Promise.all([
+          faceapi.nets.tinyFaceDetector.loadFromUri('/models'),
+          faceapi.nets.faceLandmark68TinyNet.loadFromUri('/models'),
+          faceapi.nets.faceRecognitionNet.loadFromUri('/models')
+        ]);
+
+        const profileResponse = await kiemSoatVaoRaService.getFaceProfiles();
+        const profiles = profileResponse?.data || [];
+        const labeledDescriptors = [];
+
+        for (const profile of profiles) {
+          if (disposed) break;
+          if (!profile.image || !profile.maThe) continue;
+          try {
+            const referenceImage = await faceapi.fetchImage(profile.image);
+            const referenceFace = await faceapi
+              .detectSingleFace(referenceImage, new faceapi.TinyFaceDetectorOptions({ inputSize: 320, scoreThreshold: 0.5 }))
+              .withFaceLandmarks(true)
+              .withFaceDescriptor();
+
+            if (referenceFace) {
+              labeledDescriptors.push(
+                new faceapi.LabeledFaceDescriptors(String(profile.maThe), [referenceFace.descriptor])
+              );
+            }
+          } catch (profileError) {
+            console.warn(`Không thể tạo mẫu khuôn mặt cho ${profile.name || profile.maThe}:`, profileError);
+          }
+        }
+
+        if (disposed) return;
+        const matcher = labeledDescriptors.length > 0
+          ? new faceapi.FaceMatcher(labeledDescriptors, 0.5)
+          : null;
+
+        stream = await navigator.mediaDevices.getUserMedia({
+          video: {
+            facingMode: 'user',
+            width: { ideal: 640 },
+            height: { ideal: 480 }
+          },
+          audio: false
+        });
+
+        if (disposed) {
+          stream.getTracks().forEach((track) => track.stop());
+          return;
+        }
+
+        const video = hiddenCameraRef.current;
+        if (!video) return;
+        video.srcObject = stream;
+        await video.play();
+        setCameraStatus(matcher ? 'scanning' : 'no-profiles');
+
+        const scanFrame = async () => {
+          if (disposed) return;
+          if (!matcher || video.readyState < 2 || faceScanBusyRef.current) {
+            faceScanTimerRef.current = window.setTimeout(scanFrame, 900);
+            return;
+          }
+
+          faceScanBusyRef.current = true;
+          try {
+            const detectedFace = await faceapi
+              .detectSingleFace(video, new faceapi.TinyFaceDetectorOptions({ inputSize: 224, scoreThreshold: 0.6 }))
+              .withFaceLandmarks(true)
+              .withFaceDescriptor();
+
+            if (!detectedFace) {
+              const previous = lastFaceMatchRef.current;
+              const absentCount = previous.absentCount + 1;
+              lastFaceMatchRef.current = absentCount >= 3
+                ? { maThe: '', count: 0, checkedAt: previous.checkedAt, locked: false, absentCount }
+                : { ...previous, absentCount };
+            } else {
+              const match = matcher.findBestMatch(detectedFace.descriptor);
+              if (match.label !== 'unknown') {
+                const previous = lastFaceMatchRef.current;
+                const sameFaceCount = previous.maThe === match.label ? previous.count + 1 : 1;
+                const now = Date.now();
+                lastFaceMatchRef.current = {
+                  maThe: match.label,
+                  count: sameFaceCount,
+                  checkedAt: previous.checkedAt,
+                  locked: previous.maThe === match.label && previous.locked,
+                  absentCount: 0
+                };
+
+                // Phải khớp hai khung hình liên tiếp. Sau khi ghi nhận, chỉ cho
+                // quét lại khi khuôn mặt đã rời camera ít nhất ba khung hình.
+                const canCheckIn = !previous.locked || previous.maThe !== match.label;
+                if (sameFaceCount >= 2 && canCheckIn && now - previous.checkedAt > 2500) {
+                  lastFaceMatchRef.current = {
+                    maThe: match.label,
+                    count: sameFaceCount,
+                    checkedAt: now,
+                    locked: true,
+                    absentCount: 0
+                  };
+                  await processCardScanRef.current?.(match.label);
+                }
+              } else {
+                const previous = lastFaceMatchRef.current;
+                const absentCount = previous.absentCount + 1;
+                lastFaceMatchRef.current = absentCount >= 3
+                  ? { maThe: '', count: 0, checkedAt: previous.checkedAt, locked: false, absentCount }
+                  : { ...previous, absentCount };
+              }
+            }
+          } catch (scanError) {
+            console.warn('Lỗi nhận diện khuôn mặt nền:', scanError);
+          } finally {
+            faceScanBusyRef.current = false;
+            if (!disposed) faceScanTimerRef.current = window.setTimeout(scanFrame, 900);
+          }
+        };
+
+        scanFrame();
+      } catch (error) {
+        if (disposed) return;
+        console.error('Không thể khởi động camera nhận diện nền:', error);
+        setCameraStatus('error');
+        showNotification && showNotification('Không thể bật camera nhận diện. Vui lòng cấp quyền camera cho trình duyệt.');
+      }
+    };
+
+    startBackgroundFaceRecognition();
+
+    return () => {
+      disposed = true;
+      if (faceScanTimerRef.current) window.clearTimeout(faceScanTimerRef.current);
+      faceScanBusyRef.current = false;
+      if (stream) stream.getTracks().forEach((track) => track.stop());
+      if (hiddenCameraRef.current) hiddenCameraRef.current.srcObject = null;
+    };
+  }, []);
 
   // Fallback quét khi API offline
   const handleFallbackScan = (code) => {
@@ -418,23 +577,6 @@ export default function AccessControl({ showNotification, onSwitchToCustomers })
 
   return (
     <div className="tap-access-control-container">
-      {/* TOP TABS: KIỂM SOÁT VÀO RA | DANH MỤC KHÁCH HÀNG */}
-      <div className="cust-doc-tabs" style={{ gridColumn: '1 / -1', margin: '-16px -16px 10px -16px', background: '#c5d5e8', borderBottom: '2px solid #2d6ca2' }}>
-        <div className="cust-doc-tab active" title="Kiểm soát vào ra">
-          <span>Kiểm soát vào ra</span>
-          <span className="cust-tab-close">×</span>
-        </div>
-        <div
-          className="cust-doc-tab"
-          onClick={onSwitchToCustomers}
-          title="Chuyển sang màn hình Danh mục khách hàng"
-          style={{ cursor: 'pointer' }}
-        >
-          <span>Danh mục khách hàng</span>
-          <span className="cust-tab-close">×</span>
-        </div>
-      </div>
-
       {/* ================= KHỐI TRÁI: ĐIỀU KHIỂN & HỒ SƠ ================= */}
       <div className="tap-ac-left-col">
         {/* CARD 1: ĐẦU ĐỌC THẺ & MÃ VẠCH RFID */}
@@ -675,24 +817,34 @@ export default function AccessControl({ showNotification, onSwitchToCustomers })
             {/* HỘP ẢNH CAMERA AI */}
             <div className="tap-profile-camera-col">
               <div className="tap-camera-dashed-box">
-                {currentMember?.avatar ? (
-                  <img
-                    src={currentMember.avatar}
-                    alt={currentMember.name}
-                    className="tap-camera-member-photo"
+                <div className="tap-camera-live-wrapper">
+                  <video
+                    ref={hiddenCameraRef}
+                    autoPlay
+                    muted
+                    playsInline
+                    className="tap-camera-live-video"
                   />
-                ) : (
-                  <div className="tap-camera-placeholder-icon">
-                    <i className="fa-solid fa-user"></i>
+                  <div className={`tap-camera-live-indicator tap-camera-live-${cameraStatus}`}>
+                    <span className="tap-cam-dot"></span>
+                    {cameraStatus === 'scanning' || cameraStatus === 'no-profiles'
+                      ? 'LIVE'
+                      : cameraStatus === 'error'
+                      ? 'LỖI CAMERA'
+                      : 'ĐANG BẬT'}
                   </div>
-                )}
+                </div>
                 <div className="tap-camera-title">
-                  {currentMember ? currentMember.name : 'CHƯA CÓ HÌNH ẢNH'}
+                  {currentMember ? `ĐÃ NHẬN DIỆN: ${currentMember.name}` : 'CAMERA NHẬN DIỆN TRỰC TIẾP'}
                 </div>
                 <div className="tap-camera-desc">
                   {currentMember
                     ? 'Ảnh đối soát camera cổng xoay trùng khớp 99%'
-                    : 'Camera AI sẽ tự động chụp và đối soát khi quét thẻ'}
+                    : cameraStatus === 'scanning'
+                    ? 'Camera đang chạy nền và tự động nhận diện khuôn mặt'
+                    : cameraStatus === 'no-profiles'
+                    ? 'Hãy lưu ảnh hội viên để dùng nhận diện khuôn mặt'
+                    : 'Đang khởi động camera nhận diện nền'}
                 </div>
                 <div
                   className={`tap-camera-pill ${
@@ -700,7 +852,17 @@ export default function AccessControl({ showNotification, onSwitchToCustomers })
                   }`}
                 >
                   <span className="tap-cam-dot"></span>
-                  <span>{currentMember ? 'CAM_AI: MATCHED' : 'CAM_AI: STANDBY'}</span>
+                  <span>
+                    {currentMember
+                      ? 'CAM_AI: MATCHED'
+                      : cameraStatus === 'scanning'
+                      ? 'CAM_AI: SCANNING'
+                      : cameraStatus === 'no-profiles'
+                      ? 'CAM_AI: CHƯA CÓ ẢNH MẪU'
+                      : cameraStatus === 'error'
+                      ? 'CAM_AI: CAMERA ERROR'
+                      : 'CAM_AI: STARTING'}
+                  </span>
                 </div>
               </div>
             </div>

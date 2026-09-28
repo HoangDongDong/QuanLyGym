@@ -7,7 +7,11 @@ import AuditLogsView from './components/admin/AuditLogsView';
 import UserPermissionsView from './components/admin/UserPermissionsView';
 import SystemConfigView from './components/admin/SystemConfigView';
 import CustomerManagementView from './components/CustomerManagementView';
+import CardRenewalManagementView from './components/CardRenewalManagementView';
+import { adminService } from './services/adminService';
+import { applyMainBackgroundFromConfigs, applyProgramThemeFromConfigs } from './theme';
 import './components/admin/AdminViews.css';
+import './theme.css';
 
 // Định nghĩa bảng ánh xạ đường dẫn URL tương ứng với từng màn hình giao diện
 const ROUTE_CONFIG = {
@@ -20,7 +24,9 @@ const ROUTE_CONFIG = {
   '/goi-tap': { section: 'packages', title: 'Danh mục Loại Thẻ', breadcrumb: 'Hoạt động / Loại thẻ', submenu: 'hoatDong' },
   '/packages': { section: 'packages', title: 'Danh mục Loại Thẻ', breadcrumb: 'Hoạt động / Loại thẻ', submenu: 'hoatDong' },
   '/ton-quy': { section: 'revenue', title: 'Quản lý Thu Chi & Tồn Quỹ', breadcrumb: 'Tài chính / Tồn quỹ', submenu: 'quy' },
-  '/revenue': { section: 'revenue', title: 'Quản lý Thu Chi & Tồn Quỹ', breadcrumb: 'Tài chính / Tồn quỹ', submenu: 'quy' },
+  '/quan-ly-the': { section: 'cardRenewal', title: 'Quản lý thẻ', breadcrumb: 'Hoạt động / Quản lý thẻ', submenu: 'hoatDong' },
+  '/quan-ly-gia-han-the': { section: 'cardRenewal', title: 'Quản lý thẻ', breadcrumb: 'Hoạt động / Quản lý thẻ', submenu: 'hoatDong' },
+  '/gia-han-the': { section: 'cardRenewal', title: 'Quản lý thẻ', breadcrumb: 'Hoạt động / Quản lý thẻ', submenu: 'hoatDong' },
   '/admin/audit-logs': { section: 'auditLogs', title: 'Lịch sử tương tác hệ thống', breadcrumb: 'Quản trị / Lịch sử tương tác', submenu: 'quanTri' },
   '/admin/user-permissions': { section: 'users', title: 'Người dùng và phân quyền', breadcrumb: 'Quản trị / Người dùng & Phân quyền', submenu: 'quanTri' },
   '/admin/system-config': { section: 'systemConfig', title: 'Cấu hình toàn hệ thống', breadcrumb: 'Quản trị / Cấu hình toàn hệ thống', submenu: 'quanTri' },
@@ -32,6 +38,7 @@ const SECTION_PATHS = {
   members: '/hoi-vien',
   packages: '/goi-tap',
   revenue: '/ton-quy',
+  cardRenewal: '/quan-ly-the',
   auditLogs: '/admin/audit-logs',
   users: '/admin/user-permissions',
   systemConfig: '/admin/system-config',
@@ -62,6 +69,9 @@ function getRouteByPath(pathname) {
   }
   if (path.includes('ton-quy') || path.includes('thu-chi') || path.includes('revenue')) {
     return { path: '/ton-quy', ...ROUTE_CONFIG['/ton-quy'] };
+  }
+  if (path.includes('gia-han') || path.includes('renewal')) {
+    return { path: '/quan-ly-gia-han-the', ...ROUTE_CONFIG['/quan-ly-gia-han-the'] };
   }
   return { path: '/kiem-soat-vao-ra', ...ROUTE_CONFIG['/kiem-soat-vao-ra'] };
 }
@@ -185,6 +195,20 @@ export default function App() {
     loadCustomers(searchTerm, memberFilter);
   }, [memberFilter]);
 
+  // Đồng bộ giao diện toàn trang từ cấu hình hệ thống trong Firebird.
+  useEffect(() => {
+    adminService.getConfigs()
+      .then((res) => {
+        if (res?.data) {
+          applyProgramThemeFromConfigs(res.data, null, { persist: true });
+          applyMainBackgroundFromConfigs(res.data, null, { persist: true });
+        }
+      })
+      .catch(() => {
+        // Giữ theme đã lưu cục bộ nếu API tạm thời không khả dụng.
+      });
+  }, []);
+
   const handleSearch = (e) => {
     if (e.key === 'Enter') {
       loadCustomers(searchTerm, memberFilter);
@@ -196,11 +220,47 @@ export default function App() {
     setActivePageTitle(title);
     setActiveBreadcrumb(breadcrumb);
     setIsMobileSidebarOpen(false);
+    // Luôn reset trigger mở form thêm mới khi điều hướng thông thường
+    setCardRenewalOpenAddTrigger(0);
 
     // Cập nhật đường link trên thanh URL của trình duyệt tương ứng với từng trang
     const targetPath = explicitPath || SECTION_PATHS[section] || '/';
     if (window.location.pathname !== targetPath) {
       window.history.pushState({ section, title, breadcrumb }, '', targetPath);
+    }
+  };
+
+  const [cardRenewalOpenAddTrigger, setCardRenewalOpenAddTrigger] = useState(0);
+  const [cardRenewalPrefillCustomer, setCardRenewalPrefillCustomer] = useState(null);
+  const handleOpenCardRenewalAdd = () => {
+    setCardRenewalPrefillCustomer(null);
+    setActiveSection('cardRenewal');
+    setActivePageTitle('Quản lý thẻ');
+    setActiveBreadcrumb('Hoạt động / Quản lý thẻ');
+    setIsMobileSidebarOpen(false);
+    const targetPath = SECTION_PATHS['cardRenewal'] || '/quan-ly-the';
+    if (window.location.pathname !== targetPath) {
+      window.history.pushState({ section: 'cardRenewal', title: 'Quản lý thẻ', breadcrumb: 'Hoạt động / Quản lý thẻ' }, '', targetPath);
+    }
+    // Kích hoạt mở popup Thêm mới Gia hạn thẻ
+    setCardRenewalOpenAddTrigger(Date.now());
+  };
+
+  const handleCustomerCreated = (customer) => {
+    setCardRenewalPrefillCustomer(customer);
+    setActiveSection('cardRenewal');
+    setActivePageTitle('Quản lý thẻ');
+    setActiveBreadcrumb('Hoạt động / Quản lý thẻ / Gia hạn thẻ');
+    setIsMobileSidebarOpen(false);
+    setCardRenewalOpenAddTrigger(Date.now());
+
+    const targetPath = SECTION_PATHS.cardRenewal || '/quan-ly-the';
+    if (window.location.pathname !== targetPath) {
+      window.history.pushState(
+        { section: 'cardRenewal', title: 'Quản lý thẻ', breadcrumb: 'Hoạt động / Quản lý thẻ / Gia hạn thẻ' },
+        '',
+        targetPath
+      );
     }
   };
 
@@ -400,21 +460,19 @@ export default function App() {
                 <i className="fa-solid fa-clipboard-user sub-icon" style={{ color: '#0284c7' }}></i>
                 <span>Danh sách đặt cọc</span>
               </div>
-              <div className="submenu-item" onClick={() => showNotification('Gia hạn thẻ')}>
-                <i className="fa-solid fa-user-plus sub-icon" style={{ color: '#0284c7' }}></i>
+              <div className="submenu-item" onClick={handleOpenCardRenewalAdd}>
+                <i className="fa-solid fa-user-plus sub-icon" style={{ color: '#16a34a' }}></i>
                 <span>Gia hạn thẻ</span>
               </div>
-              <div className="submenu-item" onClick={() => showNotification('Quản lý gia hạn thẻ')}>
+              <div
+                className={`submenu-item ${activeSection === 'cardRenewal' ? 'active' : ''}`}
+                onClick={() => {
+                  setCardRenewalOpenAddTrigger(0);
+                  navigateTo('cardRenewal', 'Quản lý thẻ', 'Hoạt động / Quản lý thẻ');
+                }}
+              >
                 <i className="fa-solid fa-id-card-clip sub-icon" style={{ color: '#0284c7' }}></i>
-                <span>Quản lý gia hạn thẻ</span>
-              </div>
-              <div className="submenu-item" onClick={() => showNotification('Quản lý đổi loại thẻ')}>
-                <i className="fa-solid fa-right-left sub-icon" style={{ color: '#0284c7' }}></i>
-                <span>Quản lý đổi loại thẻ</span>
-              </div>
-              <div className="submenu-item" onClick={() => showNotification('Quản lý bảo lưu thẻ')}>
-                <i className="fa-solid fa-box-archive sub-icon" style={{ color: '#06b6d4' }}></i>
-                <span>Quản lý bảo lưu thẻ</span>
+                <span>Quản lý thẻ</span>
               </div>
 
               <div className="submenu-divider"></div>
@@ -1129,7 +1187,22 @@ export default function App() {
         {activeSection === 'members' && (
           <CustomerManagementView
             onSwitchToAccessControl={() => navigateTo('accessControl', 'Kiểm soát ra vào', 'Hoạt động / Kiểm soát ra vào')}
+            onCustomerCreated={handleCustomerCreated}
             showNotification={showNotification}
+          />
+        )}
+
+        {/* ================= VIEW 2B: QUẢN LÝ THẺ (DEVEXPRESS THEME) ================= */}
+        {activeSection === 'cardRenewal' && (
+          <CardRenewalManagementView
+            onSwitchToCustomer={() => navigateTo('members', 'Danh mục Khách hàng', 'Hoạt động / Khách hàng')}
+            showNotification={showNotification}
+            openAddNewTrigger={cardRenewalOpenAddTrigger}
+            prefillCustomer={cardRenewalPrefillCustomer}
+            onResetOpenAddTrigger={() => {
+              setCardRenewalOpenAddTrigger(0);
+              setCardRenewalPrefillCustomer(null);
+            }}
           />
         )}
 

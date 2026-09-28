@@ -37,6 +37,9 @@ export const khachHangService = {
       return { success: false, data: null };
     }
   },
+  getCustomerSubtabs: async (id) => {
+    return khachHangService.getSubtabs(id);
+  },
 
   // Thêm mới bản ghi vào subtab
   createSubtabItem: async (tabId, data) => {
@@ -44,10 +47,27 @@ export const khachHangService = {
     return response.data;
   },
 
+  // Cập nhật bản ghi trong subtab
+  updateSubtabItem: async (tabId, itemId, data) => {
+    const response = await api.put(`/khachhang/subtabs/${tabId}/${itemId}`, data);
+    return response.data;
+  },
+
   // Xóa bản ghi trong subtab
   deleteSubtabItem: async (tabId, itemId) => {
     const response = await api.delete(`/khachhang/subtabs/${tabId}/${itemId}`);
     return response.data;
+  },
+
+  // Lấy danh sách giao dịch cho Quản lý gia hạn thẻ
+  getGiaHanTheList: async (params = {}) => {
+    try {
+      const response = await api.get('/khachhang/giahanthe/list', { params });
+      return response.data;
+    } catch (error) {
+      console.error('Lỗi gọi API /khachhang/giahanthe/list:', error);
+      return { success: false, data: [] };
+    }
   },
 
   // Lấy danh mục tham chiếu phục vụ thêm/sửa khách hàng

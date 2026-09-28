@@ -296,6 +296,58 @@ public class KiemSoatVaoRaController : ControllerBase
     }
 
     /// <summary>
+    /// Danh sách ảnh mẫu hội viên dùng để nhận diện khuôn mặt tại trình duyệt.
+    /// Ảnh chỉ được gửi về trang kiểm soát vào ra và việc tạo vector khuôn mặt
+    /// được thực hiện cục bộ, không gửi khung hình camera lên máy chủ.
+    /// </summary>
+    [HttpGet("face-profiles")]
+    public IActionResult GetFaceProfiles()
+    {
+        try
+        {
+            using var conn = new FbConnection(_connStr);
+            conn.Open();
+
+            using var cmd = conn.CreateCommand();
+            cmd.CommandText = @"
+                SELECT ID, MAKHACH, NAME, ANH
+                FROM DKHACHHANG
+                WHERE ANH IS NOT NULL
+                  AND (STATUS <> -1 OR STATUS IS NULL)
+                ORDER BY NAME";
+
+            var profiles = new List<object>();
+            using var reader = cmd.ExecuteReader();
+            while (reader.Read())
+            {
+                try
+                {
+                    var bytes = (byte[])reader["ANH"];
+                    if (bytes.Length == 0) continue;
+
+                    profiles.Add(new
+                    {
+                        id = reader["ID"]?.ToString()?.Trim() ?? "",
+                        maThe = reader["MAKHACH"]?.ToString()?.Trim() ?? "",
+                        name = reader["NAME"]?.ToString()?.Trim() ?? "",
+                        image = "data:image/jpeg;base64," + Convert.ToBase64String(bytes)
+                    });
+                }
+                catch
+                {
+                    // Bỏ qua ảnh hỏng để một hồ sơ không làm gián đoạn toàn bộ camera.
+                }
+            }
+
+            return Ok(new { success = true, count = profiles.Count, data = profiles });
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(500, new { success = false, message = "Lỗi tải ảnh nhận diện: " + ex.Message });
+        }
+    }
+
+    /// <summary>
     /// Lấy danh sách lượt khách vào ra trong ngày hôm nay từ bảng TVAORA
     /// </summary>
     [HttpGet("today-logs")]

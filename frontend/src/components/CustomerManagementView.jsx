@@ -13,7 +13,7 @@ import TreeQuickAddModal from './TreeQuickAddModal';
 import SubtabAeModal from './SubtabAeModal';
 import './CustomerManagement.css';
 
-export default function CustomerManagementView({ onSwitchToAccessControl, showNotification }) {
+export default function CustomerManagementView({ onSwitchToAccessControl, onCustomerCreated, showNotification }) {
   // 1. Dữ liệu chính
   const [customers, setCustomers] = useState([]);
   const [counts, setCounts] = useState({
@@ -1192,8 +1192,21 @@ export default function CustomerManagementView({ onSwitchToAccessControl, showNo
           setModalState(prev => ({ ...prev, show: false }));
           loadCustomersAndCounts();
 
-          // Cấu hình: Tự động mở form Gia hạn thẻ khi thêm khách hàng (GiaHanTheKhiThemKhachHang)
-          if (systemConfigs.GiaHanTheKhiThemKhachHang) {
+          const createdCustomer = {
+            ...data,
+            id: res.id,
+            tenKhachHang: data.name,
+            maThe: data.maThe || data.maKhach || data.code || '',
+            dloaiTheId: data.dLoaiTheId || data.dloaiTheId || '',
+            dcatapId: data.dCaTapId || data.dcatapId || '',
+            nhanVienId: data.dNhanVienId || data.nhanVienId || ''
+          };
+
+          // Sau khi tạo khách, chuyển thẳng sang màn hình Gia hạn và chọn đúng khách mới.
+          if (typeof onCustomerCreated === 'function') {
+            onCustomerCreated(createdCustomer);
+          } else if (systemConfigs.GiaHanTheKhiThemKhachHang) {
+            // Fallback khi component được dùng độc lập ngoài App chính.
             setTimeout(() => {
               setActiveBottomTab('giaHanThe');
               setSubtabAeModal({
@@ -1202,8 +1215,9 @@ export default function CustomerManagementView({ onSwitchToAccessControl, showNo
                 tabId: 'giaHanThe',
                 tabLabel: 'Gia hạn thẻ',
                 initialData: {
+                  khachHangId: res.id,
                   khachHang: data.name,
-                  maThe: data.code || ''
+                  maThe: createdCustomer.maThe
                 }
               });
               showNotification && showNotification('Tự động mở form Gia hạn thẻ theo Cấu hình hệ thống!');
