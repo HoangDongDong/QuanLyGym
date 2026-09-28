@@ -2569,6 +2569,332 @@
   cursor: pointer;
 }
 
+/* Responsive layout for System configuration and User permissions. */
+.sconf-window-container button,
+.perm-window-container button {
+  border-radius: 7px;
+  transition: background-color 0.16s ease, border-color 0.16s ease,
+    box-shadow 0.16s ease, transform 0.16s ease;
+}
+
+.sconf-window-container button:not(:disabled):hover,
+.perm-window-container button:not(:disabled):hover {
+  box-shadow: 0 2px 7px rgba(15, 23, 42, 0.14);
+  transform: translateY(-1px);
+}
+
+.sconf-window-container button:active,
+.perm-window-container button:active {
+  box-shadow: none;
+  transform: translateY(0);
+}
+
+.sconf-tab-item,
+.perm-tab-btn,
+.perm-tree-item {
+  border-radius: 7px 7px 0 0;
+}
+
+.sconf-input-text,
+.sconf-input-num,
+.sconf-select,
+.sconf-input-date,
+.sconf-textarea,
+.sconf-footer-search,
+.perm-filter-input,
+.perm-form-input,
+.perm-form-select,
+.perm-form-textarea {
+  border-radius: 7px;
+}
+
+@media (max-width: 992px) {
+  .sconf-sidebar {
+    width: 190px;
+  }
+
+  .sconf-form-scroll-area {
+    padding: 16px 18px;
+  }
+
+  .perm-left-pane {
+    width: 230px;
+  }
+
+  .perm-sub-tree-pane {
+    width: 160px;
+  }
+}
+
+@media (max-width: 768px) {
+  .sconf-window-container,
+  .perm-window-container {
+    height: calc(100dvh - 56px);
+    min-height: 0;
+    overflow: hidden;
+  }
+
+  .sconf-window-header,
+  .perm-window-header {
+    min-height: 44px;
+    height: auto;
+    padding: 7px 10px;
+    gap: 8px;
+  }
+
+  .sconf-header-title,
+  .perm-title-main {
+    font-size: 15px;
+    line-height: 1.25;
+  }
+
+  .sconf-unsaved-badge {
+    position: static;
+    margin-left: auto;
+    white-space: nowrap;
+  }
+
+  .sconf-window-body,
+  .perm-window-body {
+    flex-direction: column;
+    min-height: 0;
+  }
+
+  .sconf-sidebar {
+    width: 100%;
+    height: 44px;
+    flex: 0 0 44px;
+    overflow-x: auto;
+    overflow-y: hidden;
+    border-right: 0;
+    border-bottom: 1px solid #b8c8d8;
+    scrollbar-width: thin;
+  }
+
+  .sconf-sidebar-list {
+    display: flex;
+    min-width: max-content;
+    height: 100%;
+  }
+
+  .sconf-tab-item {
+    flex: 0 0 auto;
+    height: 43px;
+    padding: 0 12px;
+    border-right: 1px solid #d7e0e9;
+    border-bottom: 0;
+  }
+
+  .sconf-tab-item.active {
+    border-left: 0;
+    border-bottom: 3px solid var(--theme-primary, #0284c7);
+  }
+
+  .sconf-form-pane,
+  .perm-right-pane {
+    min-width: 0;
+    min-height: 0;
+    width: 100%;
+  }
+
+  .sconf-form-scroll-area {
+    padding: 12px;
+  }
+
+  .sconf-general-layout,
+  .sconf-paired-row,
+  .sconf-dev-lock-row {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .sconf-general-fields,
+  .sconf-logo-box-col,
+  .sconf-paired-col,
+  .sconf-input-wrap,
+  .sconf-field-row,
+  .sconf-field-checkbox-row {
+    width: 100%;
+    min-width: 0;
+    max-width: none;
+  }
+
+  .sconf-input-text,
+  .sconf-input-num,
+  .sconf-select,
+  .sconf-input-date,
+  .sconf-textarea,
+  .sconf-search-input,
+  .perm-filter-input,
+  .perm-form-input,
+  .perm-form-select,
+  .perm-form-textarea {
+    font-size: 16px;
+  }
+
+  .sconf-window-footer {
+    height: auto;
+    min-height: 52px;
+    padding: 7px 10px;
+    gap: 7px;
+    flex-wrap: wrap;
+  }
+
+  .sconf-footer-search,
+  .sconf-footer-actions {
+    width: 100%;
+  }
+
+  .sconf-footer-actions {
+    justify-content: stretch;
+  }
+
+  .sconf-btn-save,
+  .sconf-btn-exit {
+    flex: 1;
+    justify-content: center;
+  }
+
+  .perm-window-container {
+    overflow-y: auto;
+  }
+
+  .perm-window-body {
+    flex: none;
+    overflow: visible;
+  }
+
+  .perm-left-pane {
+    width: 100%;
+    height: auto;
+    flex: none;
+    border-right: 0;
+    border-bottom: 1px solid #9fb2c7;
+  }
+
+  .perm-group-section {
+    max-height: 185px;
+  }
+
+  .perm-user-section {
+    min-height: 160px;
+    max-height: 230px;
+  }
+
+  .perm-right-pane,
+  .perm-role-editor-container {
+    min-height: 560px;
+    height: auto;
+  }
+
+  .perm-tabs-header {
+    overflow-x: auto;
+    overflow-y: hidden;
+  }
+
+  .perm-tab-btn {
+    flex: 0 0 auto;
+    white-space: nowrap;
+  }
+
+  .perm-tab-content-split {
+    flex-direction: column;
+    min-height: 500px;
+  }
+
+  .perm-sub-tree-pane {
+    width: 100%;
+    height: auto;
+    flex: 0 0 auto;
+    display: flex;
+    overflow-x: auto;
+    overflow-y: hidden;
+    padding: 4px;
+    border-right: 0;
+    border-bottom: 1px solid #b8c8d8;
+  }
+
+  .perm-tree-item {
+    flex: 0 0 auto;
+    white-space: nowrap;
+  }
+
+  .perm-grid-pane {
+    min-height: 430px;
+  }
+
+  .perm-grid-toolbar {
+    height: auto;
+    min-height: 44px;
+    padding: 6px;
+    flex-wrap: wrap;
+  }
+
+  .perm-filter-box {
+    flex: 1 1 100%;
+  }
+
+  .perm-filter-input {
+    min-width: 0;
+    width: 100%;
+  }
+
+  .perm-quick-actions {
+    width: 100%;
+    flex-wrap: wrap;
+  }
+
+  .perm-data-table-wrap {
+    overflow: auto;
+  }
+
+  .perm-role-table,
+  .perm-user-table {
+    min-width: 620px;
+  }
+
+  .perm-window-footer {
+    height: auto;
+    min-height: 44px;
+    padding: 7px 10px;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+
+  .perm-footer-note {
+    flex: 1 1 100%;
+  }
+
+  .perm-modal-overlay {
+    padding: 6px;
+    align-items: flex-start;
+    overflow-y: auto;
+  }
+
+  .perm-modal-box,
+  .win-group-modal-window,
+  .win-modal-box {
+    width: calc(100vw - 12px) !important;
+    max-width: none !important;
+    max-height: calc(100dvh - 12px);
+    overflow-y: auto;
+  }
+}
+
+@media (max-width: 480px) {
+  .sconf-tab-name {
+    max-width: 130px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .perm-btn-batch,
+  .perm-btn-save-grid {
+    flex: 1 1 auto;
+    justify-content: center;
+  }
+}
+
 /* Footers with Multiple Buttons */
 .win-modal-footer-multi {
   background: #dbe5f1;
@@ -2613,5 +2939,3 @@
   color: #b91c1c;
   border-color: #fca5a5;
 }
-
-

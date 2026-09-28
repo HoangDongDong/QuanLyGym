@@ -643,7 +643,7 @@ export default function SubtabAeModal({
 
   return (
     <div
-      className="choice-dialog-backdrop"
+      className="choice-dialog-backdrop subtab-ae-backdrop"
       onClick={onClose}
       style={{
         position: 'fixed',
@@ -659,7 +659,7 @@ export default function SubtabAeModal({
       }}
     >
       <div
-        className="winforms-window"
+        className="winforms-window subtab-ae-window"
         onClick={(e) => e.stopPropagation()}
         style={{
           width: dim.width + 2,
@@ -812,6 +812,7 @@ export default function SubtabAeModal({
         {/* 4. FORM CANVAS: EXACT LOCATIONS & SIZES FROM AELAYOUT.XML                 */}
         {/* ========================================================================= */}
         <div
+          className="subtab-ae-canvas"
           style={{
             position: 'relative',
             width: dim.width,

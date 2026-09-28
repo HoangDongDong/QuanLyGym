@@ -3263,3 +3263,192 @@
   line-height: 1.2;
 }
 
+/* Mobile/tablet sizing shared by Customer management and Card renewal. */
+.cust-mgmt-container button,
+.subtab-ae-window button {
+  border-radius: 7px !important;
+  transition: background-color 0.16s ease, border-color 0.16s ease,
+    box-shadow 0.16s ease, transform 0.16s ease;
+}
+
+.cust-mgmt-container button:not(:disabled):hover,
+.subtab-ae-window button:not(:disabled):hover {
+  box-shadow: 0 2px 7px rgba(15, 23, 42, 0.15);
+  transform: translateY(-1px);
+}
+
+.cust-mgmt-container button:active,
+.subtab-ae-window button:active {
+  box-shadow: none;
+  transform: translateY(0);
+}
+
+.cust-mgmt-container input,
+.cust-mgmt-container select,
+.cust-config-trigger-btn,
+.cust-user-perm-badge {
+  border-radius: 7px;
+}
+
+.cust-bottom-tab,
+.cust-tree-item {
+  border-radius: 6px;
+}
+
+@media (max-width: 992px) {
+  .cust-ribbon-bar {
+    overflow-x: auto;
+    overflow-y: hidden;
+    scrollbar-width: thin;
+  }
+
+  .cust-ribbon-bar > * {
+    flex: 0 0 auto;
+  }
+
+  .cust-grid-table {
+    min-width: 1120px;
+  }
+
+  .card-renewal-view table {
+    min-width: 1040px;
+  }
+}
+
+@media (max-width: 768px) {
+  .cust-mgmt-container,
+  .card-renewal-view {
+    width: 100%;
+    height: auto !important;
+    min-height: calc(100dvh - 56px);
+    overflow-x: hidden;
+    overflow-y: auto;
+  }
+
+  .cust-split-body {
+    flex: none !important;
+    flex-direction: column;
+    overflow: visible !important;
+    min-height: 0;
+  }
+
+  .cust-left-pane {
+    width: 100% !important;
+    min-width: 0 !important;
+    max-width: none !important;
+    height: auto !important;
+    max-height: 255px;
+    flex: 0 0 auto !important;
+    border-right: 0 !important;
+    border-bottom: 1px solid #9fb2c7;
+    overflow-y: auto;
+  }
+
+  .cust-vertical-splitter {
+    display: none !important;
+  }
+
+  .cust-right-pane,
+  .card-renewal-right-pane {
+    width: 100% !important;
+    min-width: 0 !important;
+    height: 720px !important;
+    min-height: 720px;
+    flex: 0 0 auto !important;
+    overflow: hidden;
+  }
+
+  .card-renewal-right-pane > div:first-child > div:first-child {
+    min-height: 36px;
+    height: auto !important;
+    overflow-x: auto;
+    overflow-y: hidden;
+    flex-wrap: nowrap;
+  }
+
+  .cust-ribbon-bar {
+    min-height: 40px;
+    padding: 4px 6px;
+  }
+
+  .cust-ribbon-filter input,
+  .cust-ribbon-filter select,
+  .cust-left-pane input,
+  .cust-left-pane select {
+    font-size: 16px !important;
+  }
+
+  .cust-grid-wrapper {
+    overflow: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .cust-bottom-pane {
+    height: clamp(230px, 40dvh, 340px) !important;
+    min-height: 220px;
+  }
+
+  .cust-bottom-tabs-header {
+    overflow-x: auto;
+    overflow-y: hidden;
+  }
+
+  .cust-bottom-tab {
+    flex: 0 0 auto;
+    white-space: nowrap;
+  }
+
+  .cust-bottom-tab-body {
+    overflow: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .cust-statusbar {
+    min-height: 28px;
+    height: auto;
+    overflow-x: auto;
+    overflow-y: hidden;
+    white-space: nowrap;
+  }
+
+  .wf-context-menu,
+  .wf-submenu {
+    max-width: calc(100vw - 16px);
+  }
+
+  .subtab-ae-backdrop {
+    align-items: flex-start !important;
+    justify-content: flex-start !important;
+    padding: 6px;
+    overflow: auto;
+  }
+
+  .subtab-ae-window {
+    width: calc(100vw - 12px) !important;
+    max-width: none !important;
+    max-height: calc(100dvh - 12px);
+    overflow: auto !important;
+    flex: 0 0 auto;
+  }
+
+  .subtab-ae-canvas {
+    min-width: 560px;
+    flex: 0 0 auto;
+  }
+}
+
+@media (max-width: 480px) {
+  .cust-left-pane {
+    max-height: 220px;
+  }
+
+  .cust-right-pane,
+  .card-renewal-right-pane {
+    height: 680px !important;
+    min-height: 680px;
+  }
+
+  .cust-ribbon-btn {
+    min-height: 32px;
+  }
+}

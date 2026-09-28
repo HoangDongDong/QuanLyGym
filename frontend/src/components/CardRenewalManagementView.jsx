@@ -428,7 +428,7 @@ export default function CardRenewalManagementView({ onSwitchToCustomer, showNoti
   const modalCustomer = modalPrefillCustomer || renewalSelectedCustomer;
 
   return (
-    <div className="cust-mgmt-container" style={{ height: 'calc(100vh - 64px)' }}>
+    <div className="cust-mgmt-container card-renewal-view" style={{ height: 'calc(100vh - 64px)' }}>
       {/* MAIN SPLIT BODY */}
       <div className="cust-split-body" style={{ flex: 1, display: 'flex', overflow: 'hidden' }}>
         {/* =================================================================== */}
@@ -624,7 +624,7 @@ export default function CardRenewalManagementView({ onSwitchToCustomer, showNoti
         {/* =================================================================== */}
         {/* KHU VỰC BÊN PHẢI: LƯỚI GIA HẠN THẺ + SPLITTER + SUBTABS BÊN DƯỚI     */}
         {/* =================================================================== */}
-        <div style={{ flex: 1, display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
+        <div className="cust-right-pane card-renewal-right-pane" style={{ flex: 1, display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
           {/* 1. LƯỚI CHÍNH GIA HẠN THẺ (GRID TRÊN) */}
           <div style={{ flex: 1, display: 'flex', flexDirection: 'column', overflow: 'hidden', background: '#ffffff' }}>
             {/* Header dải tiêu đề + Toolbar chuẩn WinForms */}
