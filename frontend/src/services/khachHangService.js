@@ -70,6 +70,22 @@ export const khachHangService = {
     }
   },
 
+  // Lấy danh sách phiếu đặt cọc và đánh dấu phiếu đã được đăng ký thẻ.
+  getDatCocList: async (params = {}) => {
+    try {
+      const response = await api.get('/khachhang/datcoc/list', { params });
+      return response.data;
+    } catch (error) {
+      console.error('Lỗi gọi API /khachhang/datcoc/list:', error);
+      return { success: false, data: [] };
+    }
+  },
+
+  registerDeposit: async (depositId, renewalId) => {
+    const response = await api.post(`/khachhang/datcoc/${encodeURIComponent(depositId)}/register/${encodeURIComponent(renewalId)}`);
+    return response.data;
+  },
+
   // Lấy danh mục tham chiếu phục vụ thêm/sửa khách hàng
   getMetadata: async () => {
     try {

@@ -206,10 +206,7 @@ export default function SystemConfigView({ showNotification }) {
     };
 
     const cType = item.controlType;
-    const isMainBackgroundConfig = item.name === MAIN_BACKGROUND_CONFIG_NAME;
-    const options = isMainBackgroundConfig
-      ? MAIN_BACKGROUND_COLORS.map((color) => `${color.group} — ${color.name} — ${color.hex}`)
-      : parseOptions(item.otherConfig);
+    const options = parseOptions(item.otherConfig);
 
     // 1. Checkbox (CONTROLTYPE = 9) - Lưu 30 hoặc 1 vào INTVALUE
     if (cType === 9) {

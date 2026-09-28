@@ -16,6 +16,8 @@ export default function SubtabAeModal({
 }) {
   const [formData, setFormData] = useState({});
   const [saving, setSaving] = useState(false);
+  const [showCustomerPicker, setShowCustomerPicker] = useState(false);
+  const [customerSearch, setCustomerSearch] = useState('');
 
   // Helper date add
   const addDays = (dateStr, days) => {
@@ -102,6 +104,7 @@ export default function SubtabAeModal({
         const soThang = defaultLt?.soThang || 1;
         const soNgay = defaultLt?.soNgay || (soThang * 30);
         const giaBan = defaultLt?.giaBan || 0;
+        const datTruoc = Number(activeCust?.datTruoc) || 0;
         const denNgayCalc = addDays(todayIso, soNgay);
 
         setFormData({
@@ -119,9 +122,10 @@ export default function SubtabAeModal({
           soTien: giaBan,
           tiLeGiamGia: 0,
           tienGiamGia: 0,
-          datTruoc: 0,
+          datTruoc,
+          depositId: activeCust?.depositId || '',
           tongCong: giaBan,
-          thanhToan: giaBan,
+          thanhToan: Math.max(0, giaBan - datTruoc),
           khuyenMai: '',
           chuaKichHoat: false
         });
@@ -347,7 +351,7 @@ export default function SubtabAeModal({
 
   // Lấy thông tin khách khi chọn combobox khách hàng
   const handleSelectCustomer = (custId) => {
-    const cust = customers.find(c => c.id === custId) || customer;
+    const cust = customers.find(c => String(c.id) === String(custId)) || customer;
     if (!cust) return;
 
     setFormData(prev => {
@@ -371,8 +375,18 @@ export default function SubtabAeModal({
           updated.soLan = lt.soLan || 0;
           updated.soTien = lt.giaBan || 0;
           updated.tongCong = lt.giaBan || 0;
-          updated.thanhToan = lt.giaBan || 0;
+          updated.thanhToan = Math.max(0, (lt.giaBan || 0) - (Number(prev.datTruoc) || 0));
           updated.denNgay = addDays(updated.tuNgay || prev.tuNgay, updated.soNgay);
+        }
+      } else if (tabId === 'datCoc') {
+        const lt = metadata.loaiThe?.find(l => l.id === (cust.dloaiTheId || prev.dloaiTheId));
+        if (lt) {
+          const giaTriGoi = Number(lt.giaBan) || 0;
+          const giamGia = Number(prev.giamGia) || 0;
+          const tienGiam = Math.round(giaTriGoi * giamGia / 100);
+          updated.giaTriGoi = giaTriGoi;
+          updated.tienGiam = tienGiam;
+          updated.tongCong = giaTriGoi - tienGiam;
         }
       } else if (tabId === 'doiLoaiThe') {
         const curLt = metadata.loaiThe?.find(l => l.name === cust.loaiThe || l.id === cust.dloaiTheId) || metadata.loaiThe?.[0];
@@ -395,6 +409,13 @@ export default function SubtabAeModal({
     });
   };
 
+  const normalizedCustomerSearch = customerSearch.trim().toLocaleLowerCase('vi');
+  const customerPickerRows = (customers || []).filter((cust) => {
+    if (!normalizedCustomerSearch) return true;
+    return [cust.maThe, cust.maKhach, cust.tenKhachHang, cust.name, cust.dienThoai, cust.diaChi]
+      .some((value) => String(value || '').toLocaleLowerCase('vi').includes(normalizedCustomerSearch));
+  });
+
   // Cập nhật giá trị và tự động tính toán nghiệp vụ
   const handleChange = (field, value) => {
     setFormData(prev => {
@@ -412,7 +433,7 @@ export default function SubtabAeModal({
             const tg = Math.round((lt.giaBan || 0) * (Number(prev.tiLeGiamGia) || 0) / 100);
             updated.tienGiamGia = tg;
             updated.tongCong = (lt.giaBan || 0) - tg;
-            updated.thanhToan = (lt.giaBan || 0) - tg;
+            updated.thanhToan = Math.max(0, (lt.giaBan || 0) - tg - (Number(prev.datTruoc) || 0));
             updated.denNgay = addDays(updated.tuNgay || prev.tuNgay, updated.soNgay + (Number(prev.ngayTangThem) || 0));
           }
         } else if (field === 'tuNgay' || field === 'soNgay' || field === 'ngayTangThem') {
@@ -426,13 +447,15 @@ export default function SubtabAeModal({
           const tg = Math.round(st * tl / 100);
           updated.tienGiamGia = tg;
           updated.tongCong = st - tg;
-          updated.thanhToan = st - tg;
+          updated.thanhToan = Math.max(0, st - tg - (Number(prev.datTruoc) || 0));
         } else if (field === 'tienGiamGia') {
           const st = Number(prev.soTien) || 0;
           const tg = Number(value) || 0;
           updated.tongCong = st - tg;
-          updated.thanhToan = st - tg;
+          updated.thanhToan = Math.max(0, st - tg - (Number(prev.datTruoc) || 0));
           updated.tiLeGiamGia = st > 0 ? Math.round((tg / st) * 100) : 0;
+        } else if (field === 'datTruoc') {
+          updated.thanhToan = Math.max(0, (Number(prev.tongCong) || 0) - (Number(value) || 0));
         }
       }
 
@@ -1367,8 +1390,8 @@ export default function SubtabAeModal({
                   cursor: 'pointer'
                 }}
                 onClick={() => {
-                  const cust = customers?.[0];
-                  if (cust) handleSelectCustomer(cust.id);
+                  setCustomerSearch('');
+                  setShowCustomerPicker(true);
                 }}
               >
                 Chọn
@@ -2570,6 +2593,127 @@ export default function SubtabAeModal({
           </div>
         </div>
       </div>
+
+      {showCustomerPicker && (
+        <div
+          onClick={() => setShowCustomerPicker(false)}
+          style={{
+            position: 'fixed',
+            inset: 0,
+            zIndex: 1200,
+            background: 'rgba(15, 23, 42, 0.35)',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            padding: 16
+          }}
+        >
+          <div
+            onClick={(event) => event.stopPropagation()}
+            style={{
+              width: 640,
+              maxWidth: '96vw',
+              maxHeight: '78vh',
+              background: '#f8fbff',
+              border: '1px solid #7192b8',
+              borderRadius: 8,
+              boxShadow: '0 18px 50px rgba(15, 23, 42, 0.35)',
+              overflow: 'hidden',
+              display: 'flex',
+              flexDirection: 'column'
+            }}
+          >
+            <div style={{
+              height: 38,
+              padding: '0 12px',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              background: 'linear-gradient(180deg, #eef6fd 0%, #c9dceb 100%)',
+              borderBottom: '1px solid #9db8cf',
+              fontSize: 13,
+              fontWeight: 700,
+              color: '#17324d'
+            }}>
+              <span>Chọn khách hàng đã có</span>
+              <button
+                type="button"
+                onClick={() => setShowCustomerPicker(false)}
+                style={{ border: 0, background: 'transparent', fontSize: 18, color: '#475569', cursor: 'pointer' }}
+                aria-label="Đóng danh sách khách hàng"
+              >
+                ×
+              </button>
+            </div>
+
+            <div style={{ padding: 10, borderBottom: '1px solid #cbd5e1', background: '#eef5fb' }}>
+              <input
+                autoFocus
+                type="text"
+                value={customerSearch}
+                onChange={(event) => setCustomerSearch(event.target.value)}
+                placeholder="Tìm theo mã thẻ, tên, điện thoại hoặc địa chỉ..."
+                style={{
+                  width: '100%',
+                  height: 32,
+                  boxSizing: 'border-box',
+                  border: '1px solid #7192b8',
+                  borderRadius: 5,
+                  padding: '0 10px',
+                  fontSize: 12,
+                  outline: 'none',
+                  background: '#ffffff'
+                }}
+              />
+            </div>
+
+            <div style={{ overflow: 'auto', minHeight: 180, maxHeight: '55vh', background: '#ffffff' }}>
+              <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 12 }}>
+                <thead style={{ position: 'sticky', top: 0, zIndex: 1 }}>
+                  <tr style={{ height: 32, background: '#dbe9f5', color: '#1e3a5f', textAlign: 'left' }}>
+                    <th style={{ padding: '0 10px', borderRight: '1px solid #c4d5e4', width: 110 }}>Mã thẻ</th>
+                    <th style={{ padding: '0 10px', borderRight: '1px solid #c4d5e4' }}>Tên khách hàng</th>
+                    <th style={{ padding: '0 10px', borderRight: '1px solid #c4d5e4', width: 120 }}>Điện thoại</th>
+                    <th style={{ padding: '0 10px', width: 150 }}>Loại thẻ</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {customerPickerRows.length === 0 ? (
+                    <tr>
+                      <td colSpan={4} style={{ padding: 28, textAlign: 'center', color: '#64748b' }}>
+                        Không tìm thấy khách hàng phù hợp.
+                      </td>
+                    </tr>
+                  ) : customerPickerRows.map((cust, index) => (
+                    <tr
+                      key={cust.id || index}
+                      onClick={() => {
+                        handleSelectCustomer(cust.id);
+                        setShowCustomerPicker(false);
+                      }}
+                      style={{
+                        height: 34,
+                        cursor: 'pointer',
+                        background: index % 2 === 0 ? '#ffffff' : '#f7fbff',
+                        borderBottom: '1px solid #e2e8f0'
+                      }}
+                    >
+                      <td style={{ padding: '0 10px', color: '#1d4ed8', fontWeight: 700 }}>{cust.maThe || cust.maKhach || '---'}</td>
+                      <td style={{ padding: '0 10px', fontWeight: 600 }}>{cust.tenKhachHang || cust.name || '---'}</td>
+                      <td style={{ padding: '0 10px' }}>{cust.dienThoai || '---'}</td>
+                      <td style={{ padding: '0 10px' }}>{cust.loaiThe || '---'}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+
+            <div style={{ padding: '8px 10px', background: '#eef5fb', borderTop: '1px solid #cbd5e1', fontSize: 11, color: '#64748b' }}>
+              Nhấp vào một khách hàng để chọn và tự động điền thông tin.
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

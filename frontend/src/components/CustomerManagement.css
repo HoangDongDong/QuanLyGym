@@ -8,7 +8,7 @@
   flex-direction: column;
   height: calc(100vh - 64px);
   width: 100%;
-  background: #dfe7f0;
+  background: transparent !important;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   font-size: 11.5px;
   color: #1e293b;
@@ -488,32 +488,32 @@
 }
 
 .cust-grid-table tbody tr:nth-child(even) {
-  background: #fbfcfe;
+  background: transparent;
 }
 
 .cust-grid-table tbody tr:nth-child(odd) {
-  background: #ffffff;
+  background: transparent;
 }
 
 .cust-grid-table tbody tr:hover {
-  background: #eef6ff !important;
+  background: rgba(255, 255, 255, 0.35) !important;
 }
 
 .cust-grid-table tbody tr.selected {
-  background: #3399ff !important;
-  color: #ffffff !important;
+  background: rgba(59, 130, 246, 0.16) !important;
+  color: #0f172a !important;
 }
 
 .cust-grid-table tbody tr.selected td {
-  color: #ffffff !important;
-  background-color: #3399ff !important;
-  border-color: #2b88e6;
+  color: #0f172a !important;
+  background-color: rgba(59, 130, 246, 0.16) !important;
+  border-color: rgba(59, 130, 246, 0.3);
 }
 
 .cust-grid-table tbody td {
-  padding: 3px 8px;
-  border-bottom: 1px solid #e2e8f0;
-  border-right: 1px solid #edf2f7;
+  padding: 4px 8px;
+  border-bottom: 1px solid rgba(226, 232, 240, 0.45);
+  border-right: 1px solid rgba(226, 232, 240, 0.3);
   white-space: nowrap;
   color: #1e293b;
   font-size: 11.5px;
@@ -522,10 +522,10 @@
 .cust-grid-indicator {
   width: 30px;
   text-align: center;
-  background: #eef4fa !important;
+  background: transparent !important;
   color: #475569;
   font-weight: 600;
-  border-right: 1px solid #adc1d6 !important;
+  border-right: 1px solid rgba(203, 213, 225, 0.4) !important;
 }
 
 .cust-grid-table tbody tr.selected .cust-grid-indicator {
@@ -2301,8 +2301,29 @@
 }
 
 .fr-company-header-classic {
+  position: relative;
+  min-height: 58px;
   text-align: center;
   margin-bottom: 12px;
+}
+
+.fr-company-logo-classic {
+  position: absolute;
+  left: 0;
+  top: -5px;
+  width: 120px;
+  height: 62px;
+  object-fit: contain;
+  object-position: left center;
+}
+
+.fr-company-info-classic {
+  min-height: 58px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 0 130px;
 }
 
 .fr-company-name-classic {
@@ -3452,3 +3473,775 @@
     min-height: 32px;
   }
 }
+
+/* ===================================================================
+   MODERN GLASSMORPHIC TRANSLUCENT THEME
+   Nền bán trong suốt cao (Translucent Glass) nhìn xuyên thấu dải sóng
+   =================================================================== */
+
+.cust-mgmt-container {
+  background: transparent !important;
+  color: #1e293b;
+}
+
+.cust-mgmt-container .cust-split-body {
+  padding: 10px 14px 14px 14px;
+  gap: 12px;
+  background: transparent !important;
+}
+
+/* 1. KHUNG TRÁI: CỘT TRẠNG THÁI (HOÀN TOÀN TRONG SUỐT NHÌN XUYÊN THẤU SÓNG GÓC TRÁI DƯỚI) */
+.cust-mgmt-container .cust-left-pane {
+  background: rgba(255, 255, 255, 0.2) !important;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.55) !important;
+  border-radius: 16px !important;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.02) !important;
+  overflow: hidden;
+}
+
+/* Danh sách cây và vùng trống bên dưới: Hoàn toàn trong suốt để dải sóng lộ rõ rệt */
+.cust-mgmt-container .cust-tree-list {
+  background: transparent !important;
+  padding: 6px 0;
+}
+
+.cust-mgmt-container .cust-pane-tabs {
+  background: rgba(255, 255, 255, 0.14) !important;
+  border-bottom: 1px solid rgba(226, 232, 240, 0.4);
+  height: 36px;
+  padding: 4px 8px 0 8px;
+}
+
+.cust-mgmt-container .cust-pane-tab {
+  height: 32px;
+  padding: 0 14px;
+  font-size: 12px;
+  font-weight: 650;
+  color: #64748b;
+  border-radius: 8px 8px 0 0;
+  border: 1px solid transparent;
+  background: transparent;
+}
+
+.cust-mgmt-container .cust-pane-tab.active {
+  background: rgba(255, 255, 255, 0.6) !important;
+  color: var(--theme-primary, #2563eb) !important;
+  border-color: rgba(255, 255, 255, 0.8);
+  border-bottom-color: transparent;
+  border-top: 2.5px solid var(--theme-primary, #2563eb);
+}
+
+.cust-mgmt-container .cust-tree-toolbar {
+  background: rgba(255, 255, 255, 0.12) !important;
+  border-bottom: 1px solid rgba(226, 232, 240, 0.35);
+  padding: 7px 10px;
+  gap: 8px;
+}
+
+.cust-mgmt-container .cust-tree-btn {
+  width: 28px;
+  height: 28px;
+  background: rgba(255, 255, 255, 0.65);
+  border: 1px solid rgba(226, 232, 240, 0.8);
+  border-radius: 7px;
+  color: #475569;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.03);
+  transition: all 0.2s ease;
+}
+
+.cust-mgmt-container .cust-tree-btn:hover {
+  background: rgba(255, 255, 255, 0.95);
+  border-color: var(--theme-primary, #2563eb);
+  color: var(--theme-primary, #2563eb);
+}
+
+.cust-mgmt-container .cust-tree-item {
+  margin: 3px 8px;
+  padding: 7px 10px;
+  border-radius: 9px;
+  background: transparent;
+  transition: all 0.18s ease;
+}
+
+.cust-mgmt-container .cust-tree-item:hover {
+  background: rgba(255, 255, 255, 0.45);
+}
+
+.cust-mgmt-container .cust-tree-item.active {
+  background: rgba(255, 255, 255, 0.68) !important;
+  color: var(--theme-primary, #2563eb) !important;
+  border: 1px solid rgba(255, 255, 255, 0.85) !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+}
+
+.cust-mgmt-container .cust-tree-item.active .cust-tree-label span {
+  color: var(--theme-primary, #2563eb) !important;
+  font-weight: 700;
+}
+
+.cust-mgmt-container .cust-tree-count {
+  background: rgba(241, 245, 249, 0.65);
+  color: #64748b;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 650;
+  padding: 1px 7px;
+}
+
+.cust-mgmt-container .cust-tree-item.active .cust-tree-count {
+  background: var(--theme-primary, #2563eb) !important;
+  color: #ffffff !important;
+}
+
+/* 2. KHUNG PHẢI: HIỂN THỊ TRỰC TIẾP TRÊN NỀN SÓNG LỤA */
+.cust-mgmt-container .cust-right-pane {
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+/* 2.1 BANNER TIÊU ĐỀ: DANH MỤC KHÁCH HÀNG (TRONG SUỐT) */
+.cust-mgmt-container .cust-main-header {
+  min-height: 60px;
+  height: auto;
+  background: rgba(255, 255, 255, 0.45) !important;
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1px solid rgba(255, 255, 255, 0.55) !important;
+  border-radius: 16px !important;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.02) !important;
+  padding: 10px 18px !important;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.cust-mgmt-container .cust-header-title-group {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.cust-mgmt-container .cust-header-icon-box {
+  width: 42px;
+  height: 42px;
+  border-radius: 12px;
+  background: var(--theme-primary, #2563eb);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #ffffff;
+  font-size: 19px;
+  box-shadow: 0 4px 14px rgba(37, 99, 235, 0.28);
+  flex-shrink: 0;
+}
+
+.cust-mgmt-container .cust-header-title-text h2 {
+  font-size: 18px;
+  font-weight: 750;
+  color: #0f172a;
+  margin: 0 0 2px 0;
+  letter-spacing: -0.3px;
+}
+
+.cust-mgmt-container .cust-header-title-text p {
+  font-size: 12px;
+  color: #64748b;
+  margin: 0;
+}
+
+.cust-mgmt-container .cust-config-trigger-btn {
+  height: 33px;
+  padding: 0 14px;
+  background: rgba(255, 255, 255, 0.7);
+  border: 1px solid rgba(203, 213, 225, 0.8);
+  color: #334155;
+  font-size: 12px;
+  font-weight: 650;
+  border-radius: 9px;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.03);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  transition: all 0.2s ease;
+}
+
+.cust-mgmt-container .cust-config-trigger-btn:hover {
+  background: rgba(255, 255, 255, 0.95);
+  border-color: var(--theme-primary, #2563eb);
+  color: var(--theme-primary, #2563eb);
+  transform: translateY(-1px);
+}
+
+/* 2.2 TOOLBAR RIBBON KHÁCH HÀNG (TRONG SUỐT) */
+.cust-mgmt-container .cust-ribbon-bar {
+  background: rgba(255, 255, 255, 0.42) !important;
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1px solid rgba(255, 255, 255, 0.55) !important;
+  border-radius: 12px !important;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.02) !important;
+  padding: 8px 12px;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.cust-mgmt-container .cust-ribbon-filter input {
+  height: 33px;
+  background: rgba(255, 255, 255, 0.75);
+  border: 1px solid rgba(203, 213, 225, 0.8);
+  border-radius: 8px;
+  padding: 0 12px;
+  font-size: 12px;
+}
+
+.cust-mgmt-container .cust-ribbon-btn {
+  height: 33px;
+  padding: 0 13px;
+  background: rgba(255, 255, 255, 0.7);
+  border: 1px solid rgba(203, 213, 225, 0.8);
+  border-radius: 8px;
+  font-weight: 650;
+  font-size: 12px;
+  color: #334155;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.03);
+  transition: all 0.18s ease;
+}
+
+/* Nút + Thêm (Insert) */
+.cust-mgmt-container .cust-ribbon-btn.primary {
+  background: #16a34a !important;
+  border-color: #15803d !important;
+  color: #ffffff !important;
+  box-shadow: 0 3px 10px rgba(22, 163, 74, 0.28) !important;
+}
+
+.cust-mgmt-container .cust-ribbon-btn.primary i {
+  color: #ffffff !important;
+}
+
+.cust-mgmt-container .cust-ribbon-btn.edit {
+  background: rgba(255, 255, 255, 0.75);
+  border-color: #fed7aa;
+  color: #ea580c;
+}
+
+.cust-mgmt-container .cust-ribbon-btn.danger {
+  background: rgba(255, 255, 255, 0.75);
+  border-color: #fecdd3;
+  color: #e11d48;
+}
+
+.cust-mgmt-container .cust-ribbon-btn.excel-import,
+.cust-mgmt-container .cust-ribbon-btn.excel-export {
+  background: rgba(255, 255, 255, 0.75);
+  border-color: #bbf7d0;
+  color: #16a34a;
+}
+
+.cust-mgmt-container .cust-ribbon-btn.print {
+  background: rgba(255, 255, 255, 0.75);
+  border-color: #e2e8f0;
+  color: #475569;
+}
+
+.cust-mgmt-container .cust-ribbon-btn.device,
+.cust-mgmt-container .cust-ribbon-btn.fingerprint {
+  background: rgba(255, 255, 255, 0.75);
+  border-color: #bfdbfe;
+  color: #2563eb;
+}
+
+.cust-mgmt-container .cust-ribbon-btn:hover:not(:disabled) {
+  background: rgba(255, 255, 255, 0.95);
+  transform: translateY(-1px);
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.08);
+}
+
+/* 2.3 BẢNG DỮ LIỆU MASTER GRID (HOÀN TOÀN TRONG SUỐT NHÌN XUYÊN THẤU DẢI SÓNG) */
+.cust-mgmt-container .cust-grid-wrapper {
+  background: rgba(255, 255, 255, 0.4) !important;
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1px solid rgba(255, 255, 255, 0.55) !important;
+  border-radius: 14px !important;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.02) !important;
+  overflow: auto;
+}
+
+.cust-mgmt-container .cust-grid-table {
+  background: transparent !important;
+}
+
+.cust-mgmt-container .cust-grid-table thead th {
+  background: rgba(255, 255, 255, 0.55) !important;
+  backdrop-filter: blur(8px);
+  border-color: rgba(203, 213, 225, 0.5);
+  color: #1e293b;
+  font-weight: 700;
+  padding: 8px 10px;
+}
+
+/* Từng hàng trong bảng đều trong suốt để dải sóng lộ rõ rệt */
+.cust-mgmt-container .cust-grid-table tbody tr,
+.cust-mgmt-container .cust-grid-table tbody tr:nth-child(even),
+.cust-mgmt-container .cust-grid-table tbody tr:nth-child(odd) {
+  background: transparent !important;
+  transition: background 0.15s ease;
+}
+
+.cust-mgmt-container .cust-grid-table tbody td {
+  background: transparent !important;
+  border-bottom: 1px solid rgba(203, 213, 225, 0.35);
+  border-right: 1px solid rgba(203, 213, 225, 0.25);
+  color: #1e293b;
+}
+
+.cust-mgmt-container .cust-grid-indicator {
+  background: transparent !important;
+  border-right: 1px solid rgba(203, 213, 225, 0.35) !important;
+}
+
+.cust-mgmt-container .cust-grid-table tbody tr:hover,
+.cust-mgmt-container .cust-grid-table tbody tr:hover td {
+  background: rgba(255, 255, 255, 0.35) !important;
+}
+
+/* Hàng được chọn (Selected row) nhẹ nhàng trong suốt */
+.cust-mgmt-container .cust-grid-table tbody tr.selected,
+.cust-mgmt-container .cust-grid-table tbody tr.selected td {
+  background: rgba(59, 130, 246, 0.14) !important;
+  border-color: rgba(59, 130, 246, 0.3) !important;
+  color: #0f172a !important;
+}
+
+.cust-mgmt-container .cust-grid-table tbody tr.selected td:nth-child(2) {
+  background: rgba(59, 130, 246, 0.22) !important;
+  font-weight: 700;
+}
+
+.cust-mgmt-container .cust-status-badge {
+  padding: 3px 8px;
+  border-radius: 999px;
+  font-weight: 650;
+  font-size: 11px;
+}
+
+/* 2.4 KHUNG CHI TIẾT BÊN DƯỚI (BOTTOM DETAIL PANE TRONG SUỐT) */
+.cust-mgmt-container .cust-bottom-pane {
+  background: rgba(255, 255, 255, 0.42) !important;
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1px solid rgba(255, 255, 255, 0.55) !important;
+  border-radius: 16px !important;
+  box-shadow: 0 6px 22px rgba(0, 0, 0, 0.02) !important;
+  overflow: hidden;
+}
+
+.cust-mgmt-container .cust-bottom-tabs-header {
+  height: 40px;
+  background: rgba(255, 255, 255, 0.3) !important;
+  border-bottom: 1px solid rgba(226, 232, 240, 0.5);
+  padding: 4px 8px;
+  gap: 6px;
+}
+
+.cust-mgmt-container .cust-bottom-tab {
+  height: 32px;
+  padding: 0 13px;
+  background: transparent !important;
+  border: none;
+  border-radius: 8px;
+  font-weight: 650;
+  font-size: 12px;
+  color: #64748b;
+  transition: all 0.18s ease;
+}
+
+.cust-mgmt-container .cust-bottom-tab.active {
+  background: rgba(255, 255, 255, 0.8) !important;
+  color: var(--theme-primary, #2563eb) !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06) !important;
+}
+
+.cust-mgmt-container .cust-bottom-tab-body {
+  background: transparent !important;
+  padding: 10px 14px;
+}
+
+.cust-mgmt-container .cust-audit-content {
+  background: transparent;
+}
+
+.cust-mgmt-container .cust-audit-row {
+  margin-bottom: 10px;
+  font-size: 11.5px;
+  color: #64748b;
+}
+
+/* 2.5 18 THẺ CARD THÔNG TIN CHI TIẾT (TRONG SUỐT CAO ĐỘ) */
+.cust-mgmt-container .cust-detail-cards {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 10px;
+}
+
+.cust-mgmt-container .cust-detail-card {
+  min-height: 54px;
+  padding: 8px 12px;
+  background: rgba(255, 255, 255, 0.42) !important;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.65) !important;
+  border-radius: 12px !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.02) !important;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  transition: all 0.2s ease;
+}
+
+.cust-mgmt-container .cust-detail-card:hover {
+  background: rgba(255, 255, 255, 0.65) !important;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.04) !important;
+  border-color: rgba(255, 255, 255, 0.9) !important;
+}
+
+/* Icon tròn màu sắc bên trái từng card */
+.cust-mgmt-container .cust-detail-card .card-icon {
+  width: 34px;
+  height: 34px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 15px;
+  flex-shrink: 0;
+}
+
+.cust-mgmt-container .cust-detail-card .card-icon.red {
+  background: rgba(254, 226, 226, 0.7);
+  color: #e11d48;
+}
+
+.cust-mgmt-container .cust-detail-card .card-icon.blue {
+  background: rgba(224, 242, 254, 0.7);
+  color: #0284c7;
+}
+
+.cust-mgmt-container .cust-detail-card .card-icon.purple {
+  background: rgba(237, 233, 254, 0.7);
+  color: #7c3aed;
+}
+
+.cust-mgmt-container .cust-detail-card .card-icon.orange {
+  background: rgba(255, 237, 213, 0.7);
+  color: #ea580c;
+}
+
+.cust-mgmt-container .cust-detail-card .card-icon.yellow {
+  background: rgba(254, 249, 195, 0.7);
+  color: #ca8a04;
+}
+
+.cust-mgmt-container .cust-detail-card .card-icon.green {
+  background: rgba(220, 252, 231, 0.7);
+  color: #16a34a;
+}
+
+.cust-mgmt-container .cust-detail-card .card-body-meta {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.cust-mgmt-container .cust-detail-card .card-lbl {
+  font-size: 9.5px;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: #64748b;
+  letter-spacing: 0.3px;
+  margin-bottom: 2px;
+}
+
+.cust-mgmt-container .cust-detail-card .card-val {
+  font-size: 12px;
+  font-weight: 650;
+  color: #0f172a;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.cust-mgmt-container .cust-statusbar {
+  background: rgba(255, 255, 255, 0.45) !important;
+  backdrop-filter: blur(10px);
+  border-top: 1px solid rgba(226, 232, 240, 0.5);
+}
+
+/* ===================================================================
+   3. ÁP DỤNG TRONG SUỐT (GLASSMORPHISM) CHO TRANG QUẢN LÝ THẺ
+   Loại bỏ hoàn toàn các mảng trắng đục xám xịt WinForms cũ
+   =================================================================== */
+.card-renewal-view {
+  background: transparent !important;
+}
+
+.card-renewal-view .cust-split-body {
+  padding: 10px 14px 14px 14px !important;
+  gap: 12px !important;
+  background: transparent !important;
+}
+
+/* Khung trái Loại thẻ của trang Quản lý thẻ */
+.card-renewal-view .cust-left-pane {
+  background: rgba(255, 255, 255, 0.32) !important;
+  backdrop-filter: blur(16px) !important;
+  -webkit-backdrop-filter: blur(16px) !important;
+  border: 1px solid rgba(255, 255, 255, 0.6) !important;
+  border-radius: 16px !important;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.03) !important;
+  overflow: hidden !important;
+}
+
+.card-renewal-view .cust-left-pane > div {
+  background: transparent !important;
+}
+
+.card-renewal-view .cust-left-pane input,
+.card-renewal-view .cust-left-pane select {
+  background: rgba(255, 255, 255, 0.7) !important;
+  border: 1px solid rgba(203, 213, 225, 0.8) !important;
+  border-radius: 6px !important;
+}
+
+/* Khung phải và Lưới Quản lý thẻ */
+.card-renewal-view .card-renewal-right-pane {
+  background: transparent !important;
+  border: none !important;
+  gap: 10px !important;
+}
+
+.card-renewal-view .card-renewal-right-pane > div:first-child {
+  background: rgba(255, 255, 255, 0.35) !important;
+  backdrop-filter: blur(14px) !important;
+  -webkit-backdrop-filter: blur(14px) !important;
+  border: 1px solid rgba(255, 255, 255, 0.6) !important;
+  border-radius: 14px !important;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.02) !important;
+  overflow: hidden !important;
+}
+
+.card-renewal-view .card-renewal-right-pane > div:first-child > .cust-ribbon-bar {
+  background: rgba(255, 255, 255, 0.42) !important;
+  backdrop-filter: blur(14px) !important;
+  -webkit-backdrop-filter: blur(14px) !important;
+  border: 1px solid rgba(255, 255, 255, 0.55) !important;
+  border-radius: 12px !important;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.02) !important;
+  padding: 8px 12px !important;
+  gap: 8px !important;
+  flex-wrap: wrap !important;
+  overflow: visible !important;
+}
+
+/* Ribbon filter input trong trang Quản lý thẻ */
+.card-renewal-view .cust-ribbon-filter input {
+  height: 33px !important;
+  background: rgba(255, 255, 255, 0.75) !important;
+  border: 1px solid rgba(203, 213, 225, 0.8) !important;
+  border-radius: 8px !important;
+  padding: 0 12px !important;
+  font-size: 12px !important;
+}
+
+/* Ribbon buttons trong trang Quản lý thẻ */
+.card-renewal-view .cust-ribbon-btn {
+  height: 33px !important;
+  padding: 0 13px !important;
+  background: rgba(255, 255, 255, 0.7) !important;
+  border: 1px solid rgba(203, 213, 225, 0.8) !important;
+  border-radius: 8px !important;
+  font-weight: 650 !important;
+  font-size: 12px !important;
+  color: #334155 !important;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.03) !important;
+  transition: all 0.18s ease !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 6px !important;
+  cursor: pointer !important;
+}
+
+.card-renewal-view .cust-ribbon-btn.primary {
+  background: #16a34a !important;
+  border-color: #15803d !important;
+  color: #ffffff !important;
+  box-shadow: 0 3px 10px rgba(22, 163, 74, 0.28) !important;
+}
+
+.card-renewal-view .cust-ribbon-btn.primary i {
+  color: #ffffff !important;
+}
+
+.card-renewal-view .cust-ribbon-btn.edit {
+  background: rgba(255, 255, 255, 0.75) !important;
+  border-color: #fed7aa !important;
+  color: #ea580c !important;
+}
+
+.card-renewal-view .cust-ribbon-btn.danger {
+  background: rgba(255, 255, 255, 0.75) !important;
+  border-color: #fecdd3 !important;
+  color: #e11d48 !important;
+}
+
+.card-renewal-view .cust-ribbon-btn.excel-export {
+  background: rgba(255, 255, 255, 0.75) !important;
+  border-color: #bbf7d0 !important;
+  color: #16a34a !important;
+}
+
+.card-renewal-view .cust-ribbon-btn.print {
+  background: rgba(255, 255, 255, 0.75) !important;
+  border-color: #e2e8f0 !important;
+  color: #475569 !important;
+}
+
+.card-renewal-view .cust-ribbon-btn.device {
+  background: rgba(255, 255, 255, 0.75) !important;
+  border-color: #bfdbfe !important;
+  color: #2563eb !important;
+}
+
+.card-renewal-view .cust-ribbon-btn:hover:not(:disabled) {
+  background: rgba(255, 255, 255, 0.95) !important;
+  transform: translateY(-1px) !important;
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.08) !important;
+}
+
+.card-renewal-view .cust-ribbon-btn.primary:hover:not(:disabled) {
+  background: #15803d !important;
+  box-shadow: 0 4px 14px rgba(22, 163, 74, 0.38) !important;
+}
+
+/* Tree toolbar buttons trong trang Quản lý thẻ */
+.card-renewal-view .cust-tree-toolbar {
+  background: rgba(255, 255, 255, 0.12) !important;
+  border-bottom: 1px solid rgba(226, 232, 240, 0.35) !important;
+  padding: 7px 10px !important;
+  gap: 8px !important;
+  display: flex !important;
+  align-items: center !important;
+}
+
+.card-renewal-view .cust-tree-btn {
+  width: 28px !important;
+  height: 28px !important;
+  background: rgba(255, 255, 255, 0.65) !important;
+  border: 1px solid rgba(226, 232, 240, 0.8) !important;
+  border-radius: 7px !important;
+  color: #475569 !important;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.03) !important;
+  transition: all 0.2s ease !important;
+  cursor: pointer !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+
+.card-renewal-view .cust-tree-btn:hover {
+  background: rgba(255, 255, 255, 0.95) !important;
+  border-color: var(--theme-primary, #2563eb) !important;
+  color: var(--theme-primary, #2563eb) !important;
+}
+
+
+
+.card-renewal-view .card-renewal-right-pane table,
+.card-renewal-view .card-renewal-right-pane tbody,
+.card-renewal-view .card-renewal-right-pane tr,
+.card-renewal-view .card-renewal-right-pane td {
+  background: transparent !important;
+}
+
+.card-renewal-view .card-renewal-right-pane thead tr {
+  background: rgba(255, 255, 255, 0.55) !important;
+  backdrop-filter: blur(8px) !important;
+  border-bottom: 1px solid rgba(203, 213, 225, 0.5) !important;
+}
+
+.card-renewal-view .card-renewal-right-pane tbody tr:hover,
+.card-renewal-view .card-renewal-right-pane tbody tr:hover td {
+  background: rgba(255, 255, 255, 0.4) !important;
+}
+
+.card-renewal-view .card-renewal-right-pane tbody tr.selected,
+.card-renewal-view .card-renewal-right-pane tbody tr.selected td {
+  background: rgba(59, 130, 246, 0.16) !important;
+}
+
+/* Khung chi tiết subtabs bên dưới của Quản lý thẻ */
+.card-renewal-view .card-renewal-right-pane > div:last-child {
+  background: rgba(255, 255, 255, 0.38) !important;
+  backdrop-filter: blur(14px) !important;
+  -webkit-backdrop-filter: blur(14px) !important;
+  border: 1px solid rgba(255, 255, 255, 0.6) !important;
+  border-radius: 14px !important;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.02) !important;
+  overflow: hidden !important;
+}
+
+/* ===================================================================
+   4. BREADCRUMB BANNER TRÊN CÙNG (.admindek-page-header)
+   =================================================================== */
+.admindek-page-header {
+  background: rgba(255, 255, 255, 0.42) !important;
+  backdrop-filter: blur(14px) !important;
+  -webkit-backdrop-filter: blur(14px) !important;
+  border: 1px solid rgba(255, 255, 255, 0.6) !important;
+  border-radius: 16px !important;
+  margin: 12px 14px 4px 14px !important;
+  padding: 10px 18px !important;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.02) !important;
+}
+
+/* ===================================================================
+   5. TRANG DANH SACH DAT COC (.deposit-view)
+   =================================================================== */
+.deposit-view { background: transparent !important; }
+.deposit-view .cust-split-body { padding: 10px 14px 14px 14px !important; gap: 12px !important; background: transparent !important; }
+.deposit-view .cust-left-pane { background: rgba(255,255,255,0.32) !important; backdrop-filter: blur(16px) !important; -webkit-backdrop-filter: blur(16px) !important; border: 1px solid rgba(255,255,255,0.6) !important; border-radius: 16px !important; box-shadow: 0 8px 30px rgba(0,0,0,0.03) !important; overflow: hidden !important; }
+.deposit-view .cust-left-pane > div { background: transparent !important; }
+.deposit-view .cust-left-pane input, .deposit-view .cust-left-pane select { background: rgba(255,255,255,0.7) !important; border: 1px solid rgba(203,213,225,0.8) !important; border-radius: 6px !important; box-sizing: border-box !important; }
+.deposit-view .cust-tree-toolbar { background: rgba(255,255,255,0.12) !important; border-bottom: 1px solid rgba(226,232,240,0.35) !important; padding: 7px 10px !important; gap: 8px !important; display: flex !important; align-items: center !important; }
+.deposit-view .cust-tree-btn { width: 28px !important; height: 28px !important; background: rgba(255,255,255,0.65) !important; border: 1px solid rgba(226,232,240,0.8) !important; border-radius: 7px !important; transition: all 0.2s ease !important; cursor: pointer !important; display: inline-flex !important; align-items: center !important; justify-content: center !important; }
+.deposit-view .cust-tree-btn:hover { background: rgba(255,255,255,0.95) !important; border-color: var(--theme-primary,#2563eb) !important; color: var(--theme-primary,#2563eb) !important; }
+.deposit-view .cust-tree-item { margin: 3px 8px !important; padding: 7px 10px !important; border-radius: 9px !important; background: transparent !important; transition: all 0.18s ease !important; cursor: pointer !important; }
+.deposit-view .cust-tree-item:hover { background: rgba(255,255,255,0.45) !important; }
+.deposit-view .cust-tree-item.active { background: rgba(59,130,246,0.14) !important; border: 1px solid rgba(59,130,246,0.25) !important; }
+.deposit-view .cust-tree-label { display: flex; align-items: center; gap: 6px; }
+.deposit-view .cust-right-pane { background: transparent !important; border: none !important; box-shadow: none !important; gap: 10px !important; }
+.deposit-view .cust-main-header { min-height: 60px; height: auto; background: rgba(255,255,255,0.45) !important; backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px); border: 1px solid rgba(255,255,255,0.55) !important; border-radius: 16px !important; box-shadow: 0 6px 20px rgba(0,0,0,0.02) !important; padding: 10px 18px !important; display: flex; align-items: center; justify-content: space-between; }
+.deposit-view .cust-ribbon-bar { background: rgba(255,255,255,0.42) !important; backdrop-filter: blur(14px) !important; -webkit-backdrop-filter: blur(14px) !important; border: 1px solid rgba(255,255,255,0.55) !important; border-radius: 12px !important; box-shadow: 0 4px 14px rgba(0,0,0,0.02) !important; padding: 8px 12px !important; gap: 8px !important; flex-wrap: wrap !important; }
+.deposit-view .cust-ribbon-filter input { height: 33px !important; background: rgba(255,255,255,0.75) !important; border: 1px solid rgba(203,213,225,0.8) !important; border-radius: 8px !important; padding: 0 12px !important; font-size: 12px !important; }
+.deposit-view .cust-ribbon-btn { height: 33px !important; padding: 0 13px !important; background: rgba(255,255,255,0.7) !important; border: 1px solid rgba(203,213,225,0.8) !important; border-radius: 8px !important; font-weight: 650 !important; font-size: 12px !important; color: #334155 !important; box-shadow: 0 1px 3px rgba(0,0,0,0.03) !important; transition: all 0.18s ease !important; display: inline-flex !important; align-items: center !important; gap: 6px !important; cursor: pointer !important; }
+.deposit-view .cust-ribbon-btn.primary { background: #10b981 !important; border-color: #059669 !important; color: #ffffff !important; box-shadow: 0 3px 10px rgba(16,185,129,0.28) !important; }
+.deposit-view .cust-ribbon-btn.primary i { color: #ffffff !important; }
+.deposit-view .cust-ribbon-btn.edit { background: rgba(255,255,255,0.75) !important; border-color: #fed7aa !important; color: #ea580c !important; }
+.deposit-view .cust-ribbon-btn.danger { background: rgba(255,255,255,0.75) !important; border-color: #fecdd3 !important; color: #e11d48 !important; }
+.deposit-view .cust-ribbon-btn.print { background: rgba(255,255,255,0.75) !important; border-color: #e2e8f0 !important; color: #475569 !important; }
+.deposit-view .cust-ribbon-btn.device { background: rgba(255,255,255,0.75) !important; border-color: #bfdbfe !important; color: #2563eb !important; }
+.deposit-view .cust-ribbon-btn:hover:not(:disabled) { background: rgba(255,255,255,0.95) !important; transform: translateY(-1px) !important; box-shadow: 0 3px 8px rgba(0,0,0,0.08) !important; }
+.deposit-view .cust-ribbon-btn.primary:hover:not(:disabled) { background: #059669 !important; box-shadow: 0 4px 14px rgba(16,185,129,0.38) !important; }
+.deposit-view .deposit-right-pane > div:first-child { background: rgba(255,255,255,0.35) !important; backdrop-filter: blur(14px) !important; -webkit-backdrop-filter: blur(14px) !important; border: 1px solid rgba(255,255,255,0.6) !important; border-radius: 14px !important; box-shadow: 0 6px 20px rgba(0,0,0,0.02) !important; overflow: hidden !important; }
+.deposit-view .deposit-right-pane table, .deposit-view .deposit-right-pane tbody, .deposit-view .deposit-right-pane tr, .deposit-view .deposit-right-pane td { background: transparent !important; }
+.deposit-view .deposit-right-pane thead tr { background: rgba(255,255,255,0.55) !important; backdrop-filter: blur(8px) !important; border-bottom: 1px solid rgba(203,213,225,0.5) !important; }
+.deposit-view .deposit-right-pane tbody tr:hover, .deposit-view .deposit-right-pane tbody tr:hover td { background: rgba(255,255,255,0.4) !important; }
+.deposit-view .deposit-right-pane tbody tr.selected, .deposit-view .deposit-right-pane tbody tr.selected td { background: rgba(59,130,246,0.16) !important; }

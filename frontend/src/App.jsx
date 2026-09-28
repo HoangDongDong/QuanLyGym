@@ -8,6 +8,7 @@ import UserPermissionsView from './components/admin/UserPermissionsView';
 import SystemConfigView from './components/admin/SystemConfigView';
 import CustomerManagementView from './components/CustomerManagementView';
 import CardRenewalManagementView from './components/CardRenewalManagementView';
+import DepositManagementView from './components/DepositManagementView';
 import { adminService } from './services/adminService';
 import { applyMainBackgroundFromConfigs, applyProgramThemeFromConfigs } from './theme';
 import './components/admin/AdminViews.css';
@@ -27,6 +28,7 @@ const ROUTE_CONFIG = {
   '/quan-ly-the': { section: 'cardRenewal', title: 'Quản lý thẻ', breadcrumb: 'Hoạt động / Quản lý thẻ', submenu: 'hoatDong' },
   '/quan-ly-gia-han-the': { section: 'cardRenewal', title: 'Quản lý thẻ', breadcrumb: 'Hoạt động / Quản lý thẻ', submenu: 'hoatDong' },
   '/gia-han-the': { section: 'cardRenewal', title: 'Quản lý thẻ', breadcrumb: 'Hoạt động / Quản lý thẻ', submenu: 'hoatDong' },
+  '/danh-sach-dat-coc': { section: 'deposit', title: 'Danh sách đặt cọc', breadcrumb: 'Hoạt động / Danh sách đặt cọc', submenu: 'hoatDong' },
   '/admin/audit-logs': { section: 'auditLogs', title: 'Lịch sử tương tác hệ thống', breadcrumb: 'Quản trị / Lịch sử tương tác', submenu: 'quanTri' },
   '/admin/user-permissions': { section: 'users', title: 'Người dùng và phân quyền', breadcrumb: 'Quản trị / Người dùng & Phân quyền', submenu: 'quanTri' },
   '/admin/system-config': { section: 'systemConfig', title: 'Cấu hình toàn hệ thống', breadcrumb: 'Quản trị / Cấu hình toàn hệ thống', submenu: 'quanTri' },
@@ -39,6 +41,7 @@ const SECTION_PATHS = {
   packages: '/goi-tap',
   revenue: '/ton-quy',
   cardRenewal: '/quan-ly-the',
+  deposit: '/danh-sach-dat-coc',
   auditLogs: '/admin/audit-logs',
   users: '/admin/user-permissions',
   systemConfig: '/admin/system-config',
@@ -72,6 +75,9 @@ function getRouteByPath(pathname) {
   }
   if (path.includes('gia-han') || path.includes('renewal')) {
     return { path: '/quan-ly-gia-han-the', ...ROUTE_CONFIG['/quan-ly-gia-han-the'] };
+  }
+  if (path.includes('dat-coc') || path.includes('deposit')) {
+    return { path: '/danh-sach-dat-coc', ...ROUTE_CONFIG['/danh-sach-dat-coc'] };
   }
   return { path: '/kiem-soat-vao-ra', ...ROUTE_CONFIG['/kiem-soat-vao-ra'] };
 }
@@ -231,9 +237,11 @@ export default function App() {
   };
 
   const [cardRenewalOpenAddTrigger, setCardRenewalOpenAddTrigger] = useState(0);
+  const [cardRenewalOpenTabId, setCardRenewalOpenTabId] = useState('giaHanThe');
   const [cardRenewalPrefillCustomer, setCardRenewalPrefillCustomer] = useState(null);
   const handleOpenCardRenewalAdd = () => {
     setCardRenewalPrefillCustomer(null);
+    setCardRenewalOpenTabId('giaHanThe');
     setActiveSection('cardRenewal');
     setActivePageTitle('Quản lý thẻ');
     setActiveBreadcrumb('Hoạt động / Quản lý thẻ');
@@ -246,8 +254,28 @@ export default function App() {
     setCardRenewalOpenAddTrigger(Date.now());
   };
 
+  const handleOpenDepositAdd = () => {
+    setCardRenewalPrefillCustomer(null);
+    setCardRenewalOpenTabId('datCoc');
+    setActiveSection('cardRenewal');
+    setActivePageTitle('Quản lý thẻ');
+    setActiveBreadcrumb('Hoạt động / Đặt cọc');
+    setIsMobileSidebarOpen(false);
+
+    const targetPath = SECTION_PATHS.cardRenewal || '/quan-ly-the';
+    if (window.location.pathname !== targetPath) {
+      window.history.pushState(
+        { section: 'cardRenewal', title: 'Quản lý thẻ', breadcrumb: 'Hoạt động / Đặt cọc' },
+        '',
+        targetPath
+      );
+    }
+    setCardRenewalOpenAddTrigger(Date.now());
+  };
+
   const handleCustomerCreated = (customer) => {
     setCardRenewalPrefillCustomer(customer);
+    setCardRenewalOpenTabId('giaHanThe');
     setActiveSection('cardRenewal');
     setActivePageTitle('Quản lý thẻ');
     setActiveBreadcrumb('Hoạt động / Quản lý thẻ / Gia hạn thẻ');
@@ -452,11 +480,14 @@ export default function App() {
 
               <div className="submenu-divider"></div>
 
-              <div className="submenu-item" onClick={() => showNotification('Đặt cọc')}>
+              <div className="submenu-item" onClick={handleOpenDepositAdd}>
                 <i className="fa-solid fa-file-invoice-dollar sub-icon" style={{ color: '#10b981' }}></i>
                 <span>Đặt cọc</span>
               </div>
-              <div className="submenu-item" onClick={() => showNotification('Danh sách đặt cọc')}>
+              <div
+                className={`submenu-item ${activeSection === 'deposit' ? 'active' : ''}`}
+                onClick={() => navigateTo('deposit', 'Danh sách đặt cọc', 'Hoạt động / Danh sách đặt cọc')}
+              >
                 <i className="fa-solid fa-clipboard-user sub-icon" style={{ color: '#0284c7' }}></i>
                 <span>Danh sách đặt cọc</span>
               </div>
@@ -875,11 +906,12 @@ export default function App() {
             <div className="topbar-search">
               <i className="fa-solid fa-magnifying-glass"></i>
               <input
-                placeholder="Search here..."
+                placeholder="Tìm kiếm khách hàng, mã thẻ, SĐT, địa chỉ..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
                 onKeyDown={handleSearch}
               />
+              <span className="topbar-search-badge">Ctrl + K</span>
             </div>
             <button
               className="topbar-icon-btn desktop-only"
@@ -923,18 +955,16 @@ export default function App() {
               title={currentUser ? `Đang đăng nhập: ${currentUser.fullName || currentUser.username} (${currentUser.role || 'User'})` : 'Chưa đăng nhập'}
               onClick={() => setShowLoginModal(true)}
             >
-              <div className="user-avatar-img">
-                {currentUser?.fullName
-                  ? currentUser.fullName.split(' ').map(w => w[0]).filter(Boolean).slice(-2).join('').toUpperCase()
-                  : (currentUser?.username ? currentUser.username.substring(0, 2).toUpperCase() : 'AD')}
+              <div className="user-avatar-img modern-red">
+                A
               </div>
               <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', lineHeight: 1.2 }}>
-                <span className="user-name-text">{currentUser?.fullName || currentUser?.username || 'Chưa đăng nhập'}</span>
-                <span style={{ fontSize: '10px', color: '#3a82ee', fontWeight: 700 }}>
-                  {currentUser?.role === 'Admin' ? 'Quản trị viên' : (currentUser?.role === 'Member' ? 'Hội viên' : 'Nhân viên')}
+                <span className="user-name-text">{currentUser?.fullName || currentUser?.username || 'Administrator'}</span>
+                <span style={{ fontSize: '11px', color: '#64748b', fontWeight: 500 }}>
+                  {currentUser?.role === 'Admin' ? 'Quản trị viên' : (currentUser?.role === 'Member' ? 'Hội viên' : 'Quản trị viên')}
                 </span>
               </div>
-              <div className="user-status-dot">✓</div>
+              <i className="fa-solid fa-chevron-down" style={{ fontSize: 11, color: '#94a3b8', marginLeft: 4 }}></i>
             </div>
           </div>
         </header>
@@ -1198,11 +1228,20 @@ export default function App() {
             onSwitchToCustomer={() => navigateTo('members', 'Danh mục Khách hàng', 'Hoạt động / Khách hàng')}
             showNotification={showNotification}
             openAddNewTrigger={cardRenewalOpenAddTrigger}
+            openAddTabId={cardRenewalOpenTabId}
             prefillCustomer={cardRenewalPrefillCustomer}
             onResetOpenAddTrigger={() => {
               setCardRenewalOpenAddTrigger(0);
+              setCardRenewalOpenTabId('giaHanThe');
               setCardRenewalPrefillCustomer(null);
             }}
+          />
+        )}
+
+        {/* ================= VIEW 2C: DANH SÁCH ĐẶT CỌC ================= */}
+        {activeSection === 'deposit' && (
+          <DepositManagementView
+            showNotification={showNotification}
           />
         )}
 

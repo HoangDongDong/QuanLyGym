@@ -3,6 +3,7 @@ import { khachHangService } from '../services/khachHangService';
 import CustomerAeModal from './CustomerAeModal';
 import CustomerSystemConfigModal from './CustomerSystemConfigModal';
 import { authService } from '../services/authService';
+import { adminService } from '../services/adminService';
 import * as XLSX from 'xlsx';
 import FastReportModal from './FastReportModal';
 import ExcelImportModal from './ExcelImportModal';
@@ -12,6 +13,116 @@ import TreeItemModal from './TreeItemModal';
 import TreeQuickAddModal from './TreeQuickAddModal';
 import SubtabAeModal from './SubtabAeModal';
 import './CustomerManagement.css';
+
+const printColumn = (key, label, width = '100px', align = 'left') => ({
+  key, label, width, align, defaultChecked: true
+});
+
+const moneyColumn = (key, label, width = '100px') => ({
+  ...printColumn(key, label, width, 'right'),
+  format: (value) => value === null || value === undefined || value === ''
+    ? ''
+    : Number(value).toLocaleString('vi-VN')
+});
+
+const SUBTAB_PRINT_COLUMNS = {
+  baoGia: [
+    printColumn('ngay', 'Ngày', '85px', 'center'), printColumn('soPhiu', 'Số phiếu', '95px'),
+    printColumn('tenKhach', 'Tên khách', '135px'), printColumn('diaChi', 'Địa chỉ', '135px'),
+    printColumn('dienThoai', 'Điện thoại', '95px'), moneyColumn('tienHang', 'Tiền hàng'),
+    moneyColumn('tienGiamGia', 'Tiền giảm giá'), moneyColumn('tongCong', 'Tổng cộng', '110px')
+  ],
+  donHang: [
+    printColumn('soPhiu', 'Số phiếu', '95px'), printColumn('ngay', 'Ngày', '80px', 'center'),
+    printColumn('khachHang', 'Khách hàng', '125px'), moneyColumn('tongCong', 'Tổng cộng'),
+    printColumn('nhanVienBan', 'Nhân viên bán', '105px'), printColumn('gioThanhToan', 'Giờ thanh toán', '90px'),
+    printColumn('thuNgan', 'Thu ngân', '95px'), printColumn('voucher', 'Voucher', '80px'),
+    moneyColumn('tienMat', 'Tiền mặt'), moneyColumn('chuyenKhoan', 'Chuyển khoản'),
+    moneyColumn('theTraTruoc', 'Thẻ TT'), moneyColumn('tienHang', 'Tiền hàng'),
+    moneyColumn('tienGiamGia', 'Tiền giảm giá'), moneyColumn('tienThue', 'Tiền thuế'),
+    moneyColumn('phiVanChuyen', 'Phí vận chuyển'), moneyColumn('thanhToan', 'Thanh toán'),
+    moneyColumn('conLai', 'Còn lại'), printColumn('nhanVienGiaoHang', 'Nhân viên giao', '110px'),
+    printColumn('cuaHang', 'Cửa hàng', '100px'), printColumn('note', 'Ghi chú', '120px')
+  ],
+  datHang: [
+    printColumn('soPhiu', 'Số phiếu', '95px'), printColumn('ngay', 'Ngày', '80px', 'center'),
+    printColumn('tenKhach', 'Khách hàng', '125px'), printColumn('dienThoai', 'Điện thoại', '95px'),
+    printColumn('diaChi', 'Địa chỉ', '130px'), printColumn('email', 'Email', '110px'),
+    moneyColumn('tienHang', 'Tiền hàng'), printColumn('tiLeGiamGia', 'Tỉ lệ giảm', '80px', 'right'),
+    moneyColumn('tienGiamGia', 'Tiền giảm'), moneyColumn('tienThue', 'Tiền thuế'),
+    moneyColumn('phiVanChuyen', 'Phí vận chuyển'), moneyColumn('tongCong', 'Tổng cộng', '110px'),
+    printColumn('note', 'Ghi chú', '120px')
+  ],
+  giaHanThe: [
+    moneyColumn('soTien', 'Số tiền'), printColumn('note', 'Ghi chú', '110px'),
+    printColumn('soPhiu', 'Số phiếu', '95px'), printColumn('ngay', 'Ngày', '80px', 'center'),
+    printColumn('khachHang', 'Khách hàng', '120px'), printColumn('soLan', 'Số lần', '55px', 'right'),
+    printColumn('loaiThe', 'Loại thẻ', '95px'), printColumn('tuNgay', 'Từ ngày', '80px', 'center'),
+    printColumn('denNgay', 'Đến ngày', '80px', 'center'), printColumn('daTap', 'Đã tập', '55px', 'right'),
+    printColumn('tiLeGiamGia', 'Tỉ lệ giảm', '75px', 'right'), moneyColumn('tienGiamGia', 'Tiền giảm'),
+    moneyColumn('tongCong', 'Tổng cộng'), moneyColumn('thanhToan', 'Thanh toán'),
+    printColumn('khuyenMai', 'Khuyến mãi', '95px')
+  ],
+  baoLuuThe: [
+    moneyColumn('soTien', 'Số tiền (Phí)'), printColumn('note', 'Ghi chú', '120px'),
+    printColumn('soPhiu', 'Số phiếu', '95px'), printColumn('ngay', 'Ngày', '80px', 'center'),
+    printColumn('khachHang', 'Khách hàng', '120px'), printColumn('loaiThe', 'Loại thẻ', '95px'),
+    printColumn('tuNgay', 'Từ ngày', '80px', 'center'), printColumn('denNgay', 'Đến ngày', '80px', 'center'),
+    printColumn('soNgay', 'Số ngày', '65px', 'right'), printColumn('denNgayThuc', 'Đến ngày thực', '95px', 'center')
+  ],
+  doiLoaiThe: [
+    moneyColumn('soTien', 'Số tiền (Phí)'), printColumn('note', 'Ghi chú', '120px'),
+    printColumn('soPhiu', 'Số phiếu', '95px'), printColumn('ngay', 'Ngày', '80px', 'center'),
+    printColumn('khachHang', 'Khách hàng', '120px'), printColumn('loaiThe', 'Loại thẻ mới', '105px')
+  ],
+  tangGiamDiem: [
+    printColumn('soPhiu', 'Số phiếu', '95px'), printColumn('ngay', 'Ngày', '80px', 'center'),
+    printColumn('khachHang', 'Khách hàng', '120px'), printColumn('diemTang', 'Điểm tăng', '75px', 'right'),
+    printColumn('diemGiam', 'Điểm giảm', '75px', 'right'), printColumn('lyDo', 'Lý do', '120px'),
+    printColumn('note', 'Ghi chú', '130px')
+  ],
+  theTrang: [
+    printColumn('khachHang', 'Khách hàng', '120px'), printColumn('chieuCao', 'Chiều cao', '70px', 'right'),
+    printColumn('canNang', 'Cân nặng', '70px', 'right'), printColumn('vongNguc', 'Vòng ngực', '70px', 'right'),
+    printColumn('vongBung', 'Vòng bụng', '70px', 'right'), printColumn('vongMong', 'Vòng mông', '70px', 'right'),
+    printColumn('bmi', 'BMI', '60px', 'right'), printColumn('ngay', 'Ngày', '80px', 'center'),
+    printColumn('note', 'Ghi chú', '130px')
+  ],
+  phieuThu: [
+    printColumn('soPhiu', 'Số phiếu', '95px'), printColumn('ngay', 'Ngày', '80px', 'center'),
+    moneyColumn('thu', 'Số tiền thu'), printColumn('tenDoiTuong', 'Khách hàng / Đối tượng', '135px'),
+    printColumn('lyDoThuChi', 'Lý do thu chi', '115px'), printColumn('dienGiai', 'Diễn giải', '135px'),
+    printColumn('chungTuGoc', 'Chứng từ gốc', '95px'), printColumn('nhanVien', 'Nhân viên', '100px'),
+    printColumn('cuaHang', 'Cửa hàng', '100px'), printColumn('note', 'Ghi chú', '120px')
+  ],
+  phieuChi: [
+    printColumn('soPhiu', 'Số phiếu', '95px'), printColumn('ngay', 'Ngày', '80px', 'center'),
+    moneyColumn('chi', 'Số tiền chi'), printColumn('tenDoiTuong', 'Khách hàng / Đối tượng', '135px'),
+    printColumn('lyDoThuChi', 'Lý do thu chi', '115px'), printColumn('dienGiai', 'Diễn giải', '135px'),
+    printColumn('chungTuGoc', 'Chứng từ gốc', '95px'), printColumn('nhanVien', 'Nhân viên', '100px'),
+    printColumn('cuaHang', 'Cửa hàng', '100px'), printColumn('note', 'Ghi chú', '120px')
+  ],
+  thuCongNo: [
+    printColumn('note', 'Ghi chú', '100px'), printColumn('soPhiu', 'Số phiếu', '90px'),
+    printColumn('ngay', 'Ngày', '80px', 'center'), printColumn('tenDoiTuong', 'Tên đối tượng', '120px'),
+    printColumn('diaChi', 'Địa chỉ', '110px'), printColumn('nhanVien', 'Nhân viên', '95px'),
+    printColumn('khachHang', 'Khách hàng', '115px'), printColumn('loaiDoiTuong', 'Loại đối tượng', '95px'),
+    printColumn('lyDoThuChi', 'Lý do thu chi', '110px'), printColumn('dienGiai', 'Diễn giải', '130px'),
+    moneyColumn('thu', 'Số tiền thu'), moneyColumn('chi', 'Số tiền chi')
+  ],
+  datCoc: [
+    printColumn('soPhiu', 'Số phiếu', '95px'), printColumn('ngay', 'Ngày', '80px', 'center'),
+    moneyColumn('thu', 'Tiền đặt cọc'), printColumn('tenDoiTuong', 'Khách hàng', '125px'),
+    printColumn('dienGiai', 'Diễn giải', '140px'), printColumn('chungTuGoc', 'Chứng từ gốc', '95px'),
+    printColumn('nhanVien', 'Nhân viên', '100px'), printColumn('note', 'Ghi chú', '130px')
+  ],
+  vaoRa: [
+    printColumn('maThe', 'Số phiếu / Mã thẻ', '110px'), printColumn('ngay', 'Ngày', '80px', 'center'),
+    printColumn('gio', 'Giờ', '70px', 'center'), printColumn('khachHang', 'Khách hàng', '120px'),
+    printColumn('may', 'Thiết bị / Máy', '115px'), printColumn('giaHanThe', 'Gia hạn thẻ', '95px'),
+    printColumn('note', 'Ghi chú', '130px')
+  ]
+};
 
 export default function CustomerManagementView({ onSwitchToAccessControl, onCustomerCreated, showNotification }) {
   // 1. Dữ liệu chính
@@ -57,7 +168,21 @@ export default function CustomerManagementView({ onSwitchToAccessControl, onCust
   });
 
   // 5. Modal Thêm mới / Chỉnh sửa khách hàng (DynamicAeForm DKHACHHANG)
-    const [showFastReport, setShowFastReport] = useState(false);
+  const [showFastReport, setShowFastReport] = useState(false);
+  const [printConfig, setPrintConfig] = useState({
+    scope: 'customers',
+    title: 'Khách hàng',
+    rows: null,
+    columns: null,
+    sheetName: 'KhachHang'
+  });
+  const [printCompanyInfo, setPrintCompanyInfo] = useState({
+    name: '',
+    address: '',
+    phone: '',
+    email: '',
+    logoBase64: ''
+  });
   const [showExcelImport, setShowExcelImport] = useState(false);
   const [showDeviceSync, setShowDeviceSync] = useState(false);
   const [showFingerprintEnroll, setShowFingerprintEnroll] = useState(false);
@@ -316,6 +441,39 @@ export default function CustomerManagementView({ onSwitchToAccessControl, onCust
       }
     } catch (err) {
       console.warn('Lỗi nạp cấu hình hệ thống:', err);
+    }
+
+    try {
+      const globalConfigRes = await adminService.getConfigs();
+      const groups = globalConfigRes?.data || [];
+      const normalizeKey = (value = '') => String(value)
+        .normalize('NFD')
+        .replace(/[\u0300-\u036f]/g, '')
+        .replace(/[^a-zA-Z0-9]/g, '')
+        .toLowerCase();
+      const generalGroup = groups.find((group) => normalizeKey(group.groupName) === 'thongtinchung');
+      const allItems = groups.flatMap((group) => group.items || []);
+      const prioritizedItems = [...(generalGroup?.items || []), ...allItems];
+      const findConfig = (aliases) => prioritizedItems.find((item) => {
+        const name = normalizeKey(item.name);
+        const caption = normalizeKey(item.caption);
+        return aliases.includes(name) || aliases.includes(caption);
+      });
+      const readText = (aliases) => {
+        const item = findConfig(aliases);
+        return String(item?.textValue || item?.moreDetail || '').trim();
+      };
+      const logoItem = findConfig(['logo', 'logocongty', 'logodoanhnghiep']);
+
+      setPrintCompanyInfo({
+        name: readText(['companyname', 'tencongty', 'tendoanhnghiep', 'congty']),
+        address: readText(['companyaddress', 'diachi', 'diachicongty', 'diachidoanhnghiep']),
+        phone: readText(['companyphone', 'sodienthoai', 'dienthoai', 'dienthoaicongty', 'phone']),
+        email: readText(['companyemail', 'email', 'emailcongty', 'emaildoanhnghiep']),
+        logoBase64: logoItem?.blobValue || ''
+      });
+    } catch (err) {
+      console.warn('Lỗi nạp thông tin công ty dùng cho bản in:', err);
     }
   };
 
@@ -801,8 +959,26 @@ export default function CustomerManagementView({ onSwitchToAccessControl, onCust
 
   // 5. In danh sách subtab
   const handleSubtabPrint = () => {
+    const tabId = subtabContextMenu.tabId || activeBottomTab;
+    const tabLabel = subtabContextMenu.tabLabel || bottomTabs.find((tab) => tab.id === tabId)?.label || 'Bản ghi';
+    const rows = tabId === 'thuCongNo'
+      ? (subtabsData?.thuCongNo || subtabsData?.phieuThuCongNo || [])
+      : (subtabsData?.[tabId] || []);
     closeSubtabContextMenu();
-    window.print();
+    if (tabId === 'thongTin') {
+      showNotification && showNotification('Tab Thông tin không phải dạng lưới để in danh sách.');
+      return;
+    }
+    setPrintConfig({
+      scope: 'subtab',
+      title: `${tabLabel}${selectedCustomer?.tenKhachHang ? ` - ${selectedCustomer.tenKhachHang}` : ''}`,
+      rows,
+      columns: SUBTAB_PRINT_COLUMNS[tabId] || [],
+      sheetName: ['\\', '/', '?', '*', '[', ']', ':']
+        .reduce((name, character) => name.split(character).join(''), tabLabel)
+        .slice(0, 31) || 'DuLieu'
+    });
+    setShowFastReport(true);
   };
 
   // 6. Sao chép ô
@@ -1298,6 +1474,13 @@ export default function CustomerManagementView({ onSwitchToAccessControl, onCust
       showNotification && showNotification('⚠️ Bạn không có quyền in danh sách khách hàng!');
       return;
     }
+    setPrintConfig({
+      scope: 'customers',
+      title: 'Khách hàng',
+      rows: null,
+      columns: null,
+      sheetName: 'KhachHang'
+    });
     setShowFastReport(true);
   };
 
@@ -1627,22 +1810,22 @@ export default function CustomerManagementView({ onSwitchToAccessControl, onCust
         {/* RIGHT AREA: MASTER GRID + BOTTOM DETAIL TABS (KHUNG TÍM) */}
         <div className="cust-right-pane">
           <div className="cust-main-header">
-            <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-              <span>Khách hàng</span>
+            <div className="cust-header-title-group">
+              <div className="cust-header-icon-box">
+                <i className="fa-solid fa-users"></i>
+              </div>
+              <div className="cust-header-title-text">
+                <h2>Danh mục khách hàng</h2>
+                <p>Quản lý thông tin khách hàng, thẻ tập và trạng thái sử dụng</p>
+              </div>
               {isInTrash && (
-                <span style={{ fontSize: 12, color: '#dc2626', fontWeight: 600 }}>
+                <span style={{ fontSize: 12, color: '#dc2626', fontWeight: 600, marginLeft: 8 }}>
                   (Thùng rác - Bản ghi đã xóa)
                 </span>
               )}
-              {/* BADGE PHÂN QUYỀN NGƯỜI DÙNG TÂN AN PHÁT */}
-              <span className="cust-user-perm-badge" title="Quyền hạn truy cập của tài khoản trong hệ thống">
-                <i className="fa-solid fa-shield-halved"></i> {permissions.userRoleName || 'Admin'}
-                {permissions.canAdd && permissions.canEdit && permissions.canDelete ? ' (Toàn quyền)' : ' (Phân quyền)'}
-              </span>
             </div>
 
-            <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-              {/* NÚT MỞ CẤU HÌNH HỆ THỐNG */}
+            <div className="cust-header-actions">
               {permissions.canManageConfig && (
                 <button
                   className="cust-config-trigger-btn"
@@ -1684,7 +1867,7 @@ export default function CustomerManagementView({ onSwitchToAccessControl, onCust
             </button>
 
             <button
-              className="cust-ribbon-btn"
+              className="cust-ribbon-btn edit"
               onClick={handleEditCustomer}
               disabled={!permissions.canEdit}
               style={!permissions.canEdit ? { opacity: 0.5, cursor: 'not-allowed' } : {}}
@@ -1733,7 +1916,7 @@ export default function CustomerManagementView({ onSwitchToAccessControl, onCust
             <div className="cust-ribbon-sep"></div>
 
             <button
-              className="cust-ribbon-btn"
+              className="cust-ribbon-btn excel-import"
               onClick={handleOpenExcelImport}
               disabled={!permissions.canAdd}
               style={!permissions.canAdd ? { opacity: 0.5, cursor: 'not-allowed' } : {}}
@@ -1744,7 +1927,7 @@ export default function CustomerManagementView({ onSwitchToAccessControl, onCust
             </button>
 
             <button
-              className="cust-ribbon-btn"
+              className="cust-ribbon-btn excel-export"
               onClick={handleExportExcel}
               disabled={!permissions.canExport}
               style={!permissions.canExport ? { opacity: 0.5, cursor: 'not-allowed' } : {}}
@@ -1755,7 +1938,7 @@ export default function CustomerManagementView({ onSwitchToAccessControl, onCust
             </button>
 
             <button
-              className="cust-ribbon-btn"
+              className="cust-ribbon-btn print"
               onClick={handlePrintReport}
               disabled={!permissions.canExport}
               style={!permissions.canExport ? { opacity: 0.5, cursor: 'not-allowed' } : {}}
@@ -1768,7 +1951,7 @@ export default function CustomerManagementView({ onSwitchToAccessControl, onCust
             <div className="cust-ribbon-sep"></div>
 
             <button
-              className="cust-ribbon-btn"
+              className="cust-ribbon-btn device"
               onClick={handleOpenDeviceSync}
               disabled={!permissions.canSyncDevice}
               style={!permissions.canSyncDevice ? { opacity: 0.5, cursor: 'not-allowed' } : {}}
@@ -1779,7 +1962,7 @@ export default function CustomerManagementView({ onSwitchToAccessControl, onCust
             </button>
 
             <button
-              className="cust-ribbon-btn"
+              className="cust-ribbon-btn fingerprint"
               onClick={handleOpenFingerprintEnroll}
               disabled={!permissions.canSyncDevice}
               style={!permissions.canSyncDevice ? { opacity: 0.5, cursor: 'not-allowed' } : {}}
@@ -2115,82 +2298,139 @@ export default function CustomerManagementView({ onSwitchToAccessControl, onCust
 
                       <div className="cust-detail-cards">
                         <div className="cust-detail-card">
-                          <div className="card-lbl">Mã thẻ / Khách</div>
-                          <div className="card-val font-semibold">{subtabsData?.thongTin?.maKhach || selectedCustomer.maThe || '---'}</div>
-                        </div>
-                        <div className="cust-detail-card">
-                          <div className="card-lbl">Tên khách hàng</div>
-                          <div className="card-val font-semibold" style={{ color: '#1d4ed8' }}>{subtabsData?.thongTin?.name || selectedCustomer.tenKhachHang || '---'}</div>
-                        </div>
-                        <div className="cust-detail-card">
-                          <div className="card-lbl">Điện thoại</div>
-                          <div className="card-val">{subtabsData?.thongTin?.dienThoai || selectedCustomer.dienThoai || '---'}</div>
-                        </div>
-                        <div className="cust-detail-card">
-                          <div className="card-lbl">Email</div>
-                          <div className="card-val">{subtabsData?.thongTin?.email || selectedCustomer.email || '---'}</div>
-                        </div>
-                        <div className="cust-detail-card">
-                          <div className="card-lbl">Địa chỉ</div>
-                          <div className="card-val">{subtabsData?.thongTin?.diaChi || selectedCustomer.diaChi || '---'}</div>
-                        </div>
-                        <div className="cust-detail-card">
-                          <div className="card-lbl">Tỉnh thành</div>
-                          <div className="card-val">{subtabsData?.thongTin?.tenTinhThanh || selectedCustomer.tinhThanh || '---'}</div>
-                        </div>
-                        <div className="cust-detail-card">
-                          <div className="card-lbl">Facebook</div>
-                          <div className="card-val">{subtabsData?.thongTin?.facebook || selectedCustomer.facebook || '---'}</div>
-                        </div>
-                        <div className="cust-detail-card">
-                          <div className="card-lbl">Ngày sinh / Thành lập</div>
-                          <div className="card-val">{subtabsData?.thongTin?.ngaySinh || selectedCustomer.ngaySinh || '---'}</div>
-                        </div>
-                        <div className="cust-detail-card">
-                          <div className="card-lbl">Mã số thuế</div>
-                          <div className="card-val">{subtabsData?.thongTin?.maSoThue || selectedCustomer.maSoThue || '---'}</div>
-                        </div>
-                        <div className="cust-detail-card">
-                          <div className="card-lbl">Điểm tích lũy ban đầu</div>
-                          <div className="card-val font-semibold" style={{ color: '#059669' }}>{(subtabsData?.thongTin?.diemTichLuyBanDau ?? selectedCustomer.diemTichLuyBanDau ?? 0).toLocaleString()}</div>
-                        </div>
-                        <div className="cust-detail-card">
-                          <div className="card-lbl">Loại thẻ / Gói tập</div>
-                          <div className="card-val font-semibold">{subtabsData?.thongTin?.tenLoaiThe || selectedCustomer.loaiThe || '---'}</div>
-                        </div>
-                        <div className="cust-detail-card">
-                          <div className="card-lbl">Trạng thái thẻ</div>
-                          <div className="card-val">{subtabsData?.thongTin?.tenTrangThai || selectedCustomer.trangThai || '---'}</div>
-                        </div>
-                        <div className="cust-detail-card">
-                          <div className="card-lbl">Thời hạn sử dụng</div>
-                          <div className="card-val">{subtabsData?.thongTin?.tuNgay || selectedCustomer.tuNgay || '---'} ➔ {subtabsData?.thongTin?.denNgay || selectedCustomer.denNgay || '---'}</div>
-                        </div>
-                        <div className="cust-detail-card">
-                          <div className="card-lbl">Số lần / Đã tập / Còn lại</div>
-                          <div className="card-val">
-                            {subtabsData?.thongTin?.soLan ?? selectedCustomer.soLan ?? 0} / {subtabsData?.thongTin?.daTap ?? selectedCustomer.daTap ?? 0} / <strong style={{ color: (subtabsData?.thongTin?.conLai ?? selectedCustomer.conLai ?? 0) < 0 ? '#dc2626' : '#16a34a' }}>{subtabsData?.thongTin?.conLai ?? selectedCustomer.conLai ?? 0}</strong>
+                          <div className="card-icon red"><i className="fa-solid fa-id-card"></i></div>
+                          <div className="card-body-meta">
+                            <div className="card-lbl">MÃ THẺ / KHÁCH</div>
+                            <div className="card-val font-semibold">{subtabsData?.thongTin?.maKhach || selectedCustomer.maThe || '---'}</div>
                           </div>
                         </div>
                         <div className="cust-detail-card">
-                          <div className="card-lbl">Ca tập</div>
-                          <div className="card-val">{subtabsData?.thongTin?.tenCaTap || selectedCustomer.caTap || 'Toàn thời gian'}</div>
+                          <div className="card-icon blue"><i className="fa-solid fa-user"></i></div>
+                          <div className="card-body-meta">
+                            <div className="card-lbl">TÊN KHÁCH HÀNG</div>
+                            <div className="card-val font-semibold">{subtabsData?.thongTin?.name || selectedCustomer.tenKhachHang || '---'}</div>
+                          </div>
                         </div>
                         <div className="cust-detail-card">
-                          <div className="card-lbl">Nhóm khách hàng</div>
-                          <div className="card-val">{subtabsData?.thongTin?.tenNhom || selectedCustomer.nhomKhachHang || '---'}</div>
+                          <div className="card-icon purple"><i className="fa-solid fa-phone"></i></div>
+                          <div className="card-body-meta">
+                            <div className="card-lbl">ĐIỆN THOẠI</div>
+                            <div className="card-val">{subtabsData?.thongTin?.dienThoai || selectedCustomer.dienThoai || '---'}</div>
+                          </div>
                         </div>
                         <div className="cust-detail-card">
-                          <div className="card-lbl">Nhân viên phụ trách</div>
-                          <div className="card-val">{subtabsData?.thongTin?.tenNhanVien || selectedCustomer.nhanVien || '---'}</div>
+                          <div className="card-icon red"><i className="fa-regular fa-envelope"></i></div>
+                          <div className="card-body-meta">
+                            <div className="card-lbl">EMAIL</div>
+                            <div className="card-val">{subtabsData?.thongTin?.email || selectedCustomer.email || '---'}</div>
+                          </div>
                         </div>
                         <div className="cust-detail-card">
-                          <div className="card-lbl">Mã vân tay</div>
-                          <div className="card-val font-medium">{subtabsData?.thongTin?.maVanTay || selectedCustomer.maVanTay ? '✅ Đã đăng ký' : 'Chưa có'}</div>
+                          <div className="card-icon red"><i className="fa-solid fa-location-dot"></i></div>
+                          <div className="card-body-meta">
+                            <div className="card-lbl">ĐỊA CHỈ</div>
+                            <div className="card-val">{subtabsData?.thongTin?.diaChi || selectedCustomer.diaChi || '---'}</div>
+                          </div>
+                        </div>
+                        <div className="cust-detail-card">
+                          <div className="card-icon orange"><i className="fa-solid fa-map-location-dot"></i></div>
+                          <div className="card-body-meta">
+                            <div className="card-lbl">TỈNH THÀNH</div>
+                            <div className="card-val">{subtabsData?.thongTin?.tenTinhThanh || selectedCustomer.tinhThanh || '---'}</div>
+                          </div>
+                        </div>
+                        <div className="cust-detail-card">
+                          <div className="card-icon blue"><i className="fa-brands fa-facebook"></i></div>
+                          <div className="card-body-meta">
+                            <div className="card-lbl">FACEBOOK</div>
+                            <div className="card-val">{subtabsData?.thongTin?.facebook || selectedCustomer.facebook || '---'}</div>
+                          </div>
+                        </div>
+                        <div className="cust-detail-card">
+                          <div className="card-icon blue"><i className="fa-regular fa-calendar-days"></i></div>
+                          <div className="card-body-meta">
+                            <div className="card-lbl">NGÀY SINH / THÀNH LẬP</div>
+                            <div className="card-val">{subtabsData?.thongTin?.ngaySinh || selectedCustomer.ngaySinh || '---'}</div>
+                          </div>
+                        </div>
+                        <div className="cust-detail-card">
+                          <div className="card-icon yellow"><i className="fa-regular fa-star"></i></div>
+                          <div className="card-body-meta">
+                            <div className="card-lbl">MÃ SỐ THUẾ</div>
+                            <div className="card-val">{subtabsData?.thongTin?.maSoThue || selectedCustomer.maSoThue || '---'}</div>
+                          </div>
+                        </div>
+                        <div className="cust-detail-card">
+                          <div className="card-icon green"><i className="fa-solid fa-award"></i></div>
+                          <div className="card-body-meta">
+                            <div className="card-lbl">ĐIỂM TÍCH LŨY BAN ĐẦU</div>
+                            <div className="card-val font-semibold">{(subtabsData?.thongTin?.diemTichLuyBanDau ?? selectedCustomer.diemTichLuyBanDau ?? 0).toLocaleString()}</div>
+                          </div>
+                        </div>
+                        <div className="cust-detail-card">
+                          <div className="card-icon orange"><i className="fa-solid fa-tags"></i></div>
+                          <div className="card-body-meta">
+                            <div className="card-lbl">LOẠI THẺ / GÓI TẬP</div>
+                            <div className="card-val font-semibold">{subtabsData?.thongTin?.tenLoaiThe || selectedCustomer.loaiThe || '---'}</div>
+                          </div>
+                        </div>
+                        <div className="cust-detail-card">
+                          <div className="card-icon blue"><i className="fa-regular fa-clock"></i></div>
+                          <div className="card-body-meta">
+                            <div className="card-lbl">TRẠNG THÁI THẺ</div>
+                            <div className="card-val">{subtabsData?.thongTin?.tenTrangThai || selectedCustomer.trangThai || '---'}</div>
+                          </div>
+                        </div>
+                        <div className="cust-detail-card">
+                          <div className="card-icon blue"><i className="fa-regular fa-calendar-check"></i></div>
+                          <div className="card-body-meta">
+                            <div className="card-lbl">THỜI HẠN SỬ DỤNG</div>
+                            <div className="card-val">{subtabsData?.thongTin?.tuNgay || selectedCustomer.tuNgay || '---'} ➔ {subtabsData?.thongTin?.denNgay || selectedCustomer.denNgay || '---'}</div>
+                          </div>
+                        </div>
+                        <div className="cust-detail-card">
+                          <div className="card-icon blue"><i className="fa-solid fa-layer-group"></i></div>
+                          <div className="card-body-meta">
+                            <div className="card-lbl">SỐ LẦN / ĐÃ TẬP / CÒN LẠI</div>
+                            <div className="card-val">
+                              {subtabsData?.thongTin?.soLan ?? selectedCustomer.soLan ?? 0} / {subtabsData?.thongTin?.daTap ?? selectedCustomer.daTap ?? 0} / <strong style={{ color: (subtabsData?.thongTin?.conLai ?? selectedCustomer.conLai ?? 0) < 0 ? '#dc2626' : '#16a34a' }}>{subtabsData?.thongTin?.conLai ?? selectedCustomer.conLai ?? 0}</strong>
+                            </div>
+                          </div>
+                        </div>
+                        <div className="cust-detail-card">
+                          <div className="card-icon orange"><i className="fa-solid fa-bullseye"></i></div>
+                          <div className="card-body-meta">
+                            <div className="card-lbl">CA TẬP</div>
+                            <div className="card-val">{subtabsData?.thongTin?.tenCaTap || selectedCustomer.caTap || 'Toàn thời gian'}</div>
+                          </div>
+                        </div>
+                        <div className="cust-detail-card">
+                          <div className="card-icon green"><i className="fa-solid fa-users-rectangle"></i></div>
+                          <div className="card-body-meta">
+                            <div className="card-lbl">NHÓM KHÁCH HÀNG</div>
+                            <div className="card-val">{subtabsData?.thongTin?.tenNhom || selectedCustomer.nhomKhachHang || '---'}</div>
+                          </div>
+                        </div>
+                        <div className="cust-detail-card">
+                          <div className="card-icon orange"><i className="fa-solid fa-user-tie"></i></div>
+                          <div className="card-body-meta">
+                            <div className="card-lbl">NHÂN VIÊN PHỤ TRÁCH</div>
+                            <div className="card-val">{subtabsData?.thongTin?.tenNhanVien || selectedCustomer.nhanVien || '---'}</div>
+                          </div>
+                        </div>
+                        <div className="cust-detail-card">
+                          <div className="card-icon blue"><i className="fa-solid fa-fingerprint"></i></div>
+                          <div className="card-body-meta">
+                            <div className="card-lbl">MÃ VÂN TAY</div>
+                            <div className="card-val font-medium">{subtabsData?.thongTin?.maVanTay || selectedCustomer.maVanTay ? '✅ Đã đăng ký' : 'Chưa có'}</div>
+                          </div>
                         </div>
                         <div className="cust-detail-card" style={{ gridColumn: 'span 2' }}>
-                          <div className="card-lbl">Ghi chú</div>
-                          <div className="card-val" style={{ fontSize: 11, fontWeight: 400 }}>{subtabsData?.thongTin?.note || selectedCustomer.note || 'Không có'}</div>
+                          <div className="card-icon blue"><i className="fa-regular fa-clipboard"></i></div>
+                          <div className="card-body-meta">
+                            <div className="card-lbl">GHI CHÚ</div>
+                            <div className="card-val" style={{ fontSize: 11, fontWeight: 400 }}>{subtabsData?.thongTin?.note || selectedCustomer.note || 'Không có'}</div>
+                          </div>
                         </div>
                       </div>
                     </div>
@@ -2762,6 +3002,11 @@ export default function CustomerManagementView({ onSwitchToAccessControl, onCust
         show={showFastReport}
         onClose={() => setShowFastReport(false)}
         customers={customers}
+        rows={printConfig.scope === 'subtab' ? printConfig.rows : null}
+        columns={printConfig.columns}
+        initialTitle={printConfig.title}
+        sheetName={printConfig.sheetName}
+        companyInfo={printCompanyInfo}
         selectedCustomer={selectedCustomer || (customers.length > 0 ? customers[0] : null)}
         showNotification={showNotification}
       />
@@ -2951,7 +3196,7 @@ export default function CustomerManagementView({ onSwitchToAccessControl, onCust
           {/* 9. In danh sách */}
           <div
             className="wf-menu-item"
-            onClick={() => { closeContextMenu(); setShowFastReport(true); }}
+            onClick={() => { closeContextMenu(); handlePrintReport(); }}
           >
             <span className="wf-menu-icon"></span>
             <span className="wf-menu-text">In danh sách</span>

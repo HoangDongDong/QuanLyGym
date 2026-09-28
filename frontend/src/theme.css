@@ -24,19 +24,26 @@ body,
   color: var(--theme-text);
 }
 
-.admindek-main,
-.sconf-window-container,
-.tap-admin-page,
-.cust-management-container,
-.card-renewal-container {
+.admindek-main {
   background-color: var(--theme-main-bg);
+  background-image: var(--theme-content-bg);
+  background-size: 100% 100%;
+  background-position: center;
+  background-repeat: no-repeat;
+  color: var(--theme-main-bg-text);
+  position: relative;
+}
+
+.sconf-window-container,
+.tap-admin-page {
+  background-color: transparent;
   color: var(--theme-main-bg-text);
 }
 
 .sconf-window-body,
 .sconf-form-pane,
 .sconf-form-scroll-area {
-  background-color: var(--theme-main-bg);
+  background-color: transparent;
 }
 
 .sconf-form-pane .sconf-label,
@@ -48,9 +55,10 @@ body,
 
 /* Thanh điều hướng trên cùng thuộc vùng giao diện chính bên phải. */
 .admindek-main > .admindek-topbar {
-  background-color: var(--theme-main-bg);
+  background-color: color-mix(in srgb, var(--theme-main-bg) 88%, transparent);
+  backdrop-filter: blur(10px);
   color: var(--theme-main-bg-text);
-  border-bottom-color: color-mix(in srgb, var(--theme-main-bg-text) 22%, transparent);
+  border-bottom-color: color-mix(in srgb, var(--theme-main-bg-text) 18%, transparent);
 }
 
 .admindek-main > .admindek-topbar .topbar-icon-btn,
@@ -59,9 +67,22 @@ body,
   color: var(--theme-main-bg-text);
 }
 
-.admindek-sidebar { background: var(--theme-sidebar); color: var(--theme-sidebar-text); }
-.sidebar-header { background: var(--theme-sidebar-header); }
-.nav-submenu { background: color-mix(in srgb, var(--theme-sidebar) 82%, #000000); }
+.admindek-sidebar {
+  background-color: var(--theme-sidebar);
+  background-image: var(--theme-sidebar-bg);
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  color: var(--theme-sidebar-text);
+}
+.sidebar-header {
+  background: color-mix(in srgb, var(--theme-sidebar-header) 70%, transparent);
+  backdrop-filter: blur(6px);
+}
+.nav-submenu {
+  background: color-mix(in srgb, var(--theme-sidebar) 75%, transparent);
+  backdrop-filter: blur(8px);
+}
 .nav-item:hover,
 .nav-item.active,
 .nav-item.open { background: var(--theme-sidebar-active); }
@@ -232,3 +253,37 @@ table.admindek-table thead th,
   border-color: transparent;
   box-shadow: none;
 }
+
+/* Topbar kiểu dáng hiện đại bo tròn viên thuốc chuẩn ảnh mẫu */
+.topbar-search {
+  width: 380px !important;
+  border-radius: 999px !important;
+  background: rgba(255, 255, 255, 0.88) !important;
+  backdrop-filter: blur(12px) !important;
+  border: 1px solid rgba(226, 232, 240, 0.9) !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03) !important;
+  padding: 6px 14px !important;
+}
+
+.topbar-search input {
+  font-size: 12.5px !important;
+}
+
+.topbar-search-badge {
+  font-size: 11px;
+  font-weight: 600;
+  color: #94a3b8;
+  background: #f1f5f9;
+  border: 1px solid #e2e8f0;
+  border-radius: 6px;
+  padding: 2px 6px;
+  white-space: nowrap;
+}
+
+.user-avatar-img.modern-red {
+  background: linear-gradient(135deg, #f43f5e 0%, #e11d48 100%) !important;
+  color: #ffffff !important;
+  font-weight: 700 !important;
+  box-shadow: 0 4px 12px rgba(225, 29, 72, 0.35) !important;
+}
+

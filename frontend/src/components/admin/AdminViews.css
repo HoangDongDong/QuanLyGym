@@ -2939,3 +2939,1005 @@
   color: #b91c1c;
   border-color: #fca5a5;
 }
+
+/* ==========================================================================
+   GIAO DIỆN CẤU HÌNH HÌNH NỀN WAVE 3D (NỘI DUNG & SIDEBAR)
+   ========================================================================== */
+.sconf-bg-presets-container {
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+  padding: 12px 18px 32px;
+  max-width: 1300px;
+}
+
+.sconf-bg-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(8px);
+  padding: 10px 16px;
+  border-radius: 8px;
+  border: 1px solid #cbd5e1;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+.sconf-bg-toolbar-hint {
+  font-size: 13px;
+  color: #475569;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.sconf-bg-toolbar-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.sconf-bg-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 14px;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  border: 1px solid #94a3b8;
+  background: #ffffff;
+  color: #1e293b;
+  transition: all 0.15s ease;
+}
+
+.sconf-bg-btn:hover {
+  background: #f1f5f9;
+  border-color: #64748b;
+}
+
+.sconf-bg-btn.primary {
+  background: linear-gradient(135deg, #2563eb, #1d4ed8);
+  border-color: #1d4ed8;
+  color: #ffffff;
+  box-shadow: 0 2px 4px rgba(37, 99, 235, 0.25);
+}
+
+.sconf-bg-btn.primary:hover {
+  background: linear-gradient(135deg, #1d4ed8, #1e40af);
+}
+
+.sconf-bg-section {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.sconf-bg-section-title {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 900;
+  color: #0b192c;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.sconf-bg-section-title::before {
+  content: '';
+  display: inline-block;
+  width: 5px;
+  height: 18px;
+  background: #2563eb;
+  border-radius: 3px;
+}
+
+.sconf-bg-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(185px, 1fr));
+  gap: 14px;
+}
+
+@media (min-width: 1200px) {
+  .sconf-bg-grid-6 {
+    grid-template-columns: repeat(6, 1fr);
+  }
+}
+
+/* Thẻ mẫu nền nội dung (Light Wave) */
+.sconf-content-card {
+  position: relative;
+  background: #ffffff;
+  border: 2px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 8px;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  overflow: hidden;
+}
+
+.sconf-content-card:hover {
+  border-color: #93c5fd;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(37, 99, 235, 0.12);
+}
+
+.sconf-content-card.active {
+  border-color: #2563eb;
+  box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.25), 0 8px 20px rgba(37, 99, 235, 0.18);
+  transform: translateY(-2px);
+}
+
+.sconf-preview-box {
+  width: 100%;
+  height: 220px;
+  border-radius: 8px;
+  position: relative;
+  background-size: cover;
+  background-position: center;
+  border: 1px solid rgba(0, 0, 0, 0.05);
+  overflow: hidden;
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.5);
+}
+
+.sconf-badge-pill {
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  background: rgba(15, 23, 42, 0.12);
+  backdrop-filter: blur(6px);
+  color: #0f172a;
+  padding: 3px 8px;
+  border-radius: 6px;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.2px;
+}
+
+.sconf-active-indicator {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: #2563eb;
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+  box-shadow: 0 2px 5px rgba(37, 99, 235, 0.4);
+}
+
+/* Hàng swatch màu của nền nội dung */
+.sconf-swatches-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 4px;
+  padding: 2px 0;
+}
+
+.sconf-swatch-item {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+  min-width: 0;
+}
+
+.sconf-swatch-chip {
+  width: 100%;
+  height: 18px;
+  border-radius: 4px;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  box-shadow: inset 0 1px 2px rgba(255, 255, 255, 0.6);
+}
+
+.sconf-swatch-hex {
+  font-size: 8.5px;
+  font-family: monospace;
+  font-weight: 700;
+  color: #475569;
+  letter-spacing: -0.2px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100%;
+}
+
+/* Thẻ mẫu nền Sidebar (Dark Neon Wave) */
+.sconf-sidebar-card {
+  position: relative;
+  border: 2px solid transparent;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  overflow: hidden;
+  height: 270px;
+  display: flex;
+  flex-direction: column;
+}
+
+.sconf-sidebar-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
+}
+
+.sconf-sidebar-card.active {
+  border-color: #60a5fa;
+  box-shadow: 0 0 20px rgba(96, 165, 250, 0.5), 0 8px 24px rgba(0, 0, 0, 0.4);
+  transform: translateY(-3px);
+}
+
+.sconf-sidebar-card-inner {
+  flex: 1;
+  position: relative;
+  background-size: cover;
+  background-position: center;
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.sconf-sidebar-pill {
+  align-self: flex-start;
+  background: rgba(255, 255, 255, 0.16);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: #ffffff;
+  padding: 3px 9px;
+  border-radius: 6px;
+  font-size: 11px;
+  font-weight: 700;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+}
+
+.sconf-sidebar-dots-col {
+  align-self: flex-end;
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  background: rgba(0, 0, 0, 0.25);
+  backdrop-filter: blur(6px);
+  padding: 8px 10px;
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  margin-top: auto;
+}
+
+.sconf-sidebar-dot-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.sconf-sidebar-dot {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  border: 1.5px solid rgba(255, 255, 255, 0.4);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
+  flex-shrink: 0;
+}
+
+.sconf-sidebar-hex-text {
+  font-size: 9.5px;
+  font-family: monospace;
+  font-weight: 600;
+  color: #e2e8f0;
+  letter-spacing: 0.3px;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.8);
+}
+
+/* ==========================================================================
+   5. FLOATING GLASS CARDS (TỪNG KHUNG BO TRÒN TRONG SUỐT THEO DANH MỤC KHÁCH HÀNG)
+   Áp dụng cho Cấu hình toàn hệ thống, Phân quyền người dùng & Lịch sử tương tác
+   ========================================================================== */
+
+/* --- 5.1 CẤU HÌNH TOÀN BỘ HỆ THỐNG (.sconf-window-container) --- */
+.sconf-window-container {
+  background: transparent !important;
+  padding: 10px 14px 14px 14px !important;
+  gap: 12px !important;
+  height: calc(100vh - 64px) !important;
+  border: none !important;
+  box-sizing: border-box !important;
+  display: flex !important;
+  flex-direction: column !important;
+  overflow: hidden !important;
+}
+
+/* Khung 1: Header Banner Tiêu đề Cấu hình */
+.sconf-window-header {
+  background: rgba(255, 255, 255, 0.42) !important;
+  backdrop-filter: blur(14px) !important;
+  -webkit-backdrop-filter: blur(14px) !important;
+  border: 1px solid rgba(255, 255, 255, 0.6) !important;
+  border-radius: 16px !important;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.02) !important;
+  padding: 10px 18px !important;
+  min-height: 58px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  flex-shrink: 0 !important;
+}
+
+.sconf-header-icon {
+  width: 42px !important;
+  height: 42px !important;
+  border-radius: 12px !important;
+  background: var(--theme-primary, #2563eb) !important;
+  color: #ffffff !important;
+  box-shadow: 0 4px 14px rgba(37, 99, 235, 0.28) !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  font-size: 19px !important;
+  border: none !important;
+}
+
+.sconf-header-title {
+  font-size: 18px !important;
+  font-weight: 750 !important;
+  color: #0f172a !important;
+  margin: 0 !important;
+  letter-spacing: -0.3px !important;
+}
+
+.sconf-unsaved-badge {
+  background: rgba(254, 243, 199, 0.85) !important;
+  color: #b45309 !important;
+  border: 1px solid #fde047 !important;
+  border-radius: 999px !important;
+  padding: 5px 12px !important;
+  font-weight: 700 !important;
+  font-size: 12px !important;
+}
+
+/* Khung 2: Thân cấu hình (Body chia 2 khung tách biệt) */
+.sconf-window-body {
+  background: transparent !important;
+  border: none !important;
+  gap: 12px !important;
+  display: flex !important;
+  flex: 1 !important;
+  min-height: 0 !important;
+  overflow: hidden !important;
+  height: auto !important;
+}
+
+/* Khung 2A: Cột danh mục nhóm cấu hình bên trái (Bo tròn trong suốt nhìn xuyên thấu dải sóng) */
+.sconf-sidebar {
+  width: 250px !important;
+  background: rgba(255, 255, 255, 0.22) !important;
+  backdrop-filter: blur(14px) !important;
+  -webkit-backdrop-filter: blur(14px) !important;
+  border: 1px solid rgba(255, 255, 255, 0.55) !important;
+  border-radius: 16px !important;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.02) !important;
+  overflow-y: auto !important;
+  height: 100% !important;
+  padding: 8px 6px !important;
+  box-sizing: border-box !important;
+}
+
+.sconf-sidebar-list {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 3px !important;
+}
+
+.sconf-tab-item {
+  border-radius: 9px !important;
+  margin: 2px 4px !important;
+  padding: 8px 12px !important;
+  border: 1px solid transparent !important;
+  background: transparent !important;
+  color: #1e293b !important;
+  font-weight: 550 !important;
+  font-size: 12.5px !important;
+  transition: all 0.18s ease !important;
+  border-bottom: none !important;
+}
+
+.sconf-tab-item:hover {
+  background: rgba(255, 255, 255, 0.45) !important;
+}
+
+.sconf-tab-item.active {
+  background: rgba(255, 255, 255, 0.72) !important;
+  color: var(--theme-primary, #2563eb) !important;
+  font-weight: 700 !important;
+  border: 1px solid rgba(255, 255, 255, 0.85) !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04) !important;
+}
+
+.sconf-tab-icon {
+  font-size: 14px !important;
+  width: 18px !important;
+  text-align: center !important;
+  color: #64748b !important;
+}
+
+.sconf-tab-item.active .sconf-tab-icon {
+  color: var(--theme-primary, #2563eb) !important;
+}
+
+/* Khung 2B: Khung nội dung nhập liệu bên phải (Bo tròn trong suốt nhìn xuyên thấu dải sóng) */
+.sconf-form-pane {
+  flex: 1 !important;
+  background: rgba(255, 255, 255, 0.35) !important;
+  backdrop-filter: blur(14px) !important;
+  -webkit-backdrop-filter: blur(14px) !important;
+  border: 1px solid rgba(255, 255, 255, 0.55) !important;
+  border-radius: 16px !important;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.02) !important;
+  display: flex !important;
+  flex-direction: column !important;
+  overflow: hidden !important;
+  height: 100% !important;
+}
+
+.sconf-form-scroll-area {
+  background: transparent !important;
+  padding: 18px 24px !important;
+  overflow-y: auto !important;
+  flex: 1 !important;
+}
+
+.sconf-label {
+  font-size: 12px !important;
+  font-weight: 650 !important;
+  color: #334155 !important;
+}
+
+.sconf-input-text,
+.sconf-input-num,
+.sconf-select,
+.sconf-input-date,
+.sconf-textarea {
+  background: rgba(255, 255, 255, 0.75) !important;
+  border: 1px solid rgba(203, 213, 225, 0.8) !important;
+  border-radius: 9px !important;
+  padding: 0 12px !important;
+  font-size: 12.5px !important;
+  color: #0f172a !important;
+  transition: all 0.2s ease !important;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.02) !important;
+}
+
+.sconf-input-text:focus,
+.sconf-input-num:focus,
+.sconf-select:focus,
+.sconf-input-date:focus,
+.sconf-textarea:focus {
+  background: #ffffff !important;
+  border-color: var(--theme-primary, #2563eb) !important;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15) !important;
+}
+
+.sconf-ellipsis-btn {
+  border-radius: 8px !important;
+  background: rgba(255, 255, 255, 0.85) !important;
+  border: 1px solid rgba(203, 213, 225, 0.8) !important;
+}
+
+.sconf-logo-preview-box {
+  border-radius: 12px !important;
+  border: 1px solid rgba(203, 213, 225, 0.8) !important;
+  background: rgba(255, 255, 255, 0.7) !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03) !important;
+}
+
+.sconf-btn-choose-logo {
+  border-radius: 8px !important;
+  background: rgba(255, 255, 255, 0.85) !important;
+  border: 1px solid rgba(203, 213, 225, 0.8) !important;
+  font-weight: 650 !important;
+}
+
+.sconf-btn-clear-logo {
+  border-radius: 8px !important;
+}
+
+/* Khung 3: Footer Tìm kiếm & Ghi dữ liệu (Bo tròn thanh mảnh) */
+.sconf-window-footer {
+  background: rgba(255, 255, 255, 0.38) !important;
+  backdrop-filter: blur(14px) !important;
+  -webkit-backdrop-filter: blur(14px) !important;
+  border: 1px solid rgba(255, 255, 255, 0.55) !important;
+  border-radius: 14px !important;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.02) !important;
+  padding: 8px 16px !important;
+  flex-shrink: 0 !important;
+}
+
+.sconf-search-input {
+  background: rgba(255, 255, 255, 0.75) !important;
+  border: 1px solid rgba(203, 213, 225, 0.8) !important;
+  border-radius: 8px !important;
+  height: 33px !important;
+  padding: 0 24px 0 28px !important;
+}
+
+.sconf-btn-save {
+  background: var(--theme-primary, #2563eb) !important;
+  color: #ffffff !important;
+  border-radius: 8px !important;
+  height: 33px !important;
+  padding: 0 16px !important;
+  font-weight: 650 !important;
+  border: none !important;
+  box-shadow: 0 2px 8px rgba(37, 99, 235, 0.28) !important;
+  transition: all 0.18s ease !important;
+}
+
+.sconf-btn-save:hover {
+  filter: brightness(1.08) !important;
+  transform: translateY(-1px) !important;
+}
+
+/* --- 5.2 QUẢN LÝ TÀI KHOẢN NGƯỜI SỬ DỤNG VÀ PHÂN QUYỀN (.perm-window-container) --- */
+.perm-window-container {
+  background: transparent !important;
+  padding: 10px 14px 14px 14px !important;
+  gap: 12px !important;
+  height: calc(100vh - 64px) !important;
+  border: none !important;
+  box-sizing: border-box !important;
+  display: flex !important;
+  flex-direction: column !important;
+  overflow: hidden !important;
+}
+
+/* Khung 1: Header Banner Tiêu đề Phân quyền */
+.perm-window-header {
+  background: rgba(255, 255, 255, 0.42) !important;
+  backdrop-filter: blur(14px) !important;
+  -webkit-backdrop-filter: blur(14px) !important;
+  border: 1px solid rgba(255, 255, 255, 0.6) !important;
+  border-radius: 16px !important;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.02) !important;
+  padding: 10px 18px !important;
+  min-height: 58px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  flex-shrink: 0 !important;
+}
+
+.perm-header-icon {
+  width: 42px !important;
+  height: 42px !important;
+  border-radius: 12px !important;
+  background: var(--theme-primary, #2563eb) !important;
+  color: #ffffff !important;
+  box-shadow: 0 4px 14px rgba(37, 99, 235, 0.28) !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  font-size: 19px !important;
+  border: none !important;
+}
+
+.perm-title-main {
+  font-size: 18px !important;
+  font-weight: 750 !important;
+  color: #0f172a !important;
+  margin: 0 !important;
+  letter-spacing: -0.3px !important;
+}
+
+/* Khung 2: Thân phân quyền (Body chia 2 khung tách biệt) */
+.perm-window-body {
+  background: transparent !important;
+  border: none !important;
+  gap: 12px !important;
+  display: flex !important;
+  flex: 1 !important;
+  min-height: 0 !important;
+  overflow: hidden !important;
+  height: auto !important;
+}
+
+/* Khung 2A: Cột trái (Nhóm & Tài khoản bo tròn độc lập) */
+.perm-left-pane {
+  width: 290px !important;
+  background: rgba(255, 255, 255, 0.22) !important;
+  backdrop-filter: blur(14px) !important;
+  -webkit-backdrop-filter: blur(14px) !important;
+  border: 1px solid rgba(255, 255, 255, 0.55) !important;
+  border-radius: 16px !important;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.02) !important;
+  overflow: hidden !important;
+  height: 100% !important;
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 10px !important;
+  padding: 10px !important;
+  box-sizing: border-box !important;
+}
+
+.perm-group-section,
+.perm-user-section {
+  background: rgba(255, 255, 255, 0.32) !important;
+  backdrop-filter: blur(8px) !important;
+  border: 1px solid rgba(255, 255, 255, 0.55) !important;
+  border-radius: 12px !important;
+  overflow: hidden !important;
+  display: flex !important;
+  flex-direction: column !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.02) !important;
+}
+
+.perm-pane-toolbar {
+  background: rgba(255, 255, 255, 0.22) !important;
+  border-bottom: 1px solid rgba(226, 232, 240, 0.45) !important;
+  padding: 6px 8px !important;
+  gap: 6px !important;
+}
+
+.perm-btn-tool {
+  background: rgba(255, 255, 255, 0.8) !important;
+  border: 1px solid rgba(203, 213, 225, 0.8) !important;
+  border-radius: 7px !important;
+  padding: 4px 10px !important;
+  font-size: 11.5px !important;
+  font-weight: 650 !important;
+  color: #334155 !important;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.03) !important;
+  transition: all 0.18s ease !important;
+}
+
+.perm-btn-tool:hover {
+  background: rgba(255, 255, 255, 0.98) !important;
+  border-color: var(--theme-primary, #2563eb) !important;
+  color: var(--theme-primary, #2563eb) !important;
+  transform: translateY(-1px) !important;
+}
+
+.perm-btn-add {
+  color: #16a34a !important;
+}
+
+.perm-btn-del {
+  color: #e11d48 !important;
+}
+
+.perm-group-list,
+.perm-user-list {
+  background: transparent !important;
+  padding: 5px !important;
+  overflow-y: auto !important;
+  flex: 1 !important;
+}
+
+.perm-group-item,
+.perm-user-item {
+  border-radius: 8px !important;
+  margin: 2px 4px !important;
+  padding: 6px 10px !important;
+  background: transparent !important;
+  border: 1px solid transparent !important;
+  color: #1e293b !important;
+  font-size: 12px !important;
+  font-weight: 550 !important;
+  transition: all 0.18s ease !important;
+}
+
+.perm-group-item:hover,
+.perm-user-item:hover {
+  background: rgba(255, 255, 255, 0.45) !important;
+}
+
+.perm-group-item.active,
+.perm-user-item.active {
+  background: rgba(255, 255, 255, 0.72) !important;
+  color: var(--theme-primary, #2563eb) !important;
+  font-weight: 700 !important;
+  border: 1px solid rgba(255, 255, 255, 0.85) !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04) !important;
+}
+
+/* Khung 2B: Cột phải (Lưới phân quyền bo tròn độc lập) */
+.perm-right-pane {
+  flex: 1 !important;
+  background: rgba(255, 255, 255, 0.35) !important;
+  backdrop-filter: blur(14px) !important;
+  -webkit-backdrop-filter: blur(14px) !important;
+  border: 1px solid rgba(255, 255, 255, 0.55) !important;
+  border-radius: 16px !important;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.02) !important;
+  overflow: hidden !important;
+  height: 100% !important;
+  display: flex !important;
+  flex-direction: column !important;
+}
+
+.perm-empty-state {
+  background: transparent !important;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  justify-content: center !important;
+  height: 100% !important;
+  color: #64748b !important;
+  font-size: 13.5px !important;
+  font-weight: 600 !important;
+  letter-spacing: 0.2px !important;
+}
+
+.perm-tab-header-strip {
+  background: rgba(255, 255, 255, 0.25) !important;
+  border-bottom: 1px solid rgba(226, 232, 240, 0.5) !important;
+  padding: 6px 12px 0 12px !important;
+  display: flex !important;
+  gap: 6px !important;
+}
+
+.perm-tab-btn {
+  border-radius: 8px 8px 0 0 !important;
+  padding: 6px 16px !important;
+  font-size: 12px !important;
+  font-weight: 650 !important;
+  color: #64748b !important;
+  background: transparent !important;
+  border: 1px solid transparent !important;
+  border-bottom: none !important;
+  transition: all 0.18s ease !important;
+}
+
+.perm-tab-btn.active {
+  background: rgba(255, 255, 255, 0.75) !important;
+  color: var(--theme-primary, #2563eb) !important;
+  border-color: rgba(255, 255, 255, 0.8) !important;
+  border-top: 2.5px solid var(--theme-primary, #2563eb) !important;
+}
+
+.perm-sub-toolbar {
+  background: rgba(255, 255, 255, 0.2) !important;
+  border-bottom: 1px solid rgba(226, 232, 240, 0.45) !important;
+  padding: 8px 12px !important;
+  gap: 8px !important;
+}
+
+.perm-filter-input {
+  background: rgba(255, 255, 255, 0.75) !important;
+  border: 1px solid rgba(203, 213, 225, 0.8) !important;
+  border-radius: 7px !important;
+  height: 28px !important;
+  padding: 0 10px !important;
+}
+
+.perm-table-wrap {
+  background: transparent !important;
+  overflow: auto !important;
+  flex: 1 !important;
+}
+
+.perm-table {
+  background: transparent !important;
+  width: 100% !important;
+  border-collapse: collapse !important;
+}
+
+.perm-table thead tr {
+  background: rgba(255, 255, 255, 0.55) !important;
+  backdrop-filter: blur(8px) !important;
+  border-bottom: 1px solid rgba(203, 213, 225, 0.5) !important;
+}
+
+.perm-table tbody tr {
+  background: transparent !important;
+  border-bottom: 1px solid rgba(226, 232, 240, 0.35) !important;
+  transition: background 0.15s ease !important;
+}
+
+.perm-table tbody tr:hover {
+  background: rgba(255, 255, 255, 0.38) !important;
+}
+
+/* Sub-tree bên trong Lưới phân quyền (Danh mục chức năng & báo cáo) */
+.perm-sub-tree-pane {
+  background: rgba(255, 255, 255, 0.25) !important;
+  border-right: 1px solid rgba(226, 232, 240, 0.5) !important;
+  padding: 6px !important;
+  width: 170px !important;
+  flex-shrink: 0 !important;
+}
+
+.perm-sub-tree-item {
+  border-radius: 8px !important;
+  margin: 2px 2px !important;
+  padding: 6px 10px !important;
+  border: 1px solid transparent !important;
+  background: transparent !important;
+  color: #1e293b !important;
+  font-size: 12px !important;
+  font-weight: 550 !important;
+  cursor: pointer !important;
+  transition: all 0.18s ease !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+}
+
+.perm-sub-tree-item:hover {
+  background: rgba(255, 255, 255, 0.45) !important;
+}
+
+.perm-sub-tree-item.active {
+  background: rgba(255, 255, 255, 0.75) !important;
+  color: var(--theme-primary, #2563eb) !important;
+  font-weight: 700 !important;
+  border: 1px solid rgba(255, 255, 255, 0.85) !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04) !important;
+}
+
+.perm-grid-pane {
+  background: transparent !important;
+  flex: 1 !important;
+  display: flex !important;
+  flex-direction: column !important;
+  min-width: 0 !important;
+}
+
+.perm-grid-toolbar {
+  background: rgba(255, 255, 255, 0.22) !important;
+  border-bottom: 1px solid rgba(226, 232, 240, 0.45) !important;
+  padding: 8px 12px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  gap: 8px !important;
+}
+
+.perm-btn-batch {
+  border-radius: 7px !important;
+  background: rgba(255, 255, 255, 0.8) !important;
+  border: 1px solid rgba(203, 213, 225, 0.8) !important;
+  font-size: 11.5px !important;
+  font-weight: 650 !important;
+  padding: 4px 10px !important;
+}
+
+.perm-btn-save-grid {
+  border-radius: 7px !important;
+  background: var(--theme-primary, #2563eb) !important;
+  color: #ffffff !important;
+  border: none !important;
+  font-size: 12px !important;
+  font-weight: 650 !important;
+  padding: 5px 14px !important;
+  box-shadow: 0 2px 8px rgba(37, 99, 235, 0.28) !important;
+}
+
+/* Custom scrollbars thanh mảnh bo tròn */
+.sconf-sidebar::-webkit-scrollbar,
+.sconf-form-scroll-area::-webkit-scrollbar,
+.perm-group-list::-webkit-scrollbar,
+.perm-user-list::-webkit-scrollbar,
+.perm-sub-tree-pane::-webkit-scrollbar,
+.perm-data-table-wrap::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+.sconf-sidebar::-webkit-scrollbar-thumb,
+.sconf-form-scroll-area::-webkit-scrollbar-thumb,
+.perm-group-list::-webkit-scrollbar-thumb,
+.perm-user-list::-webkit-scrollbar-thumb,
+.perm-sub-tree-pane::-webkit-scrollbar-thumb,
+.perm-data-table-wrap::-webkit-scrollbar-thumb {
+  background: rgba(148, 163, 184, 0.4);
+  border-radius: 999px;
+}
+
+.sconf-sidebar::-webkit-scrollbar-thumb:hover,
+.sconf-form-scroll-area::-webkit-scrollbar-thumb:hover,
+.perm-group-list::-webkit-scrollbar-thumb:hover,
+.perm-user-list::-webkit-scrollbar-thumb:hover,
+.perm-sub-tree-pane::-webkit-scrollbar-thumb:hover,
+.perm-data-table-wrap::-webkit-scrollbar-thumb:hover {
+  background: rgba(100, 116, 139, 0.6);
+}
+
+.sconf-sidebar,
+.sconf-form-scroll-area,
+.perm-group-list,
+.perm-user-list,
+.perm-sub-tree-pane,
+.perm-data-table-wrap {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(148, 163, 184, 0.4) transparent;
+}
+
+/* --- 5.3 LỊCH SỬ TƯƠNG TÁC HỆ THỐNG (.tap-admin-page-container) --- */
+.tap-admin-page-container {
+  background: transparent !important;
+  padding: 10px 14px 14px 14px !important;
+  gap: 12px !important;
+  height: calc(100vh - 64px) !important;
+  box-sizing: border-box !important;
+  overflow-y: auto !important;
+}
+
+.tap-admin-header-row {
+  background: rgba(255, 255, 255, 0.42) !important;
+  backdrop-filter: blur(14px) !important;
+  -webkit-backdrop-filter: blur(14px) !important;
+  border: 1px solid rgba(255, 255, 255, 0.6) !important;
+  border-radius: 16px !important;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.02) !important;
+  padding: 12px 20px !important;
+}
+
+.tap-admin-toolbar {
+  background: rgba(255, 255, 255, 0.35) !important;
+  backdrop-filter: blur(14px) !important;
+  -webkit-backdrop-filter: blur(14px) !important;
+  border: 1px solid rgba(255, 255, 255, 0.6) !important;
+  border-radius: 14px !important;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.02) !important;
+  padding: 10px 16px !important;
+}
+
+.tap-admin-search-wrap input {
+  background: rgba(255, 255, 255, 0.75) !important;
+  border: 1px solid rgba(203, 213, 225, 0.8) !important;
+  border-radius: 8px !important;
+}
+
+.tap-filter-btn {
+  border-radius: 8px !important;
+  background: rgba(255, 255, 255, 0.7) !important;
+  border: 1px solid rgba(203, 213, 225, 0.8) !important;
+}
+
+.tap-filter-btn.active {
+  background: var(--theme-primary, #2563eb) !important;
+  color: #ffffff !important;
+  border-color: var(--theme-primary, #2563eb) !important;
+}
+
+.tap-admin-table-card {
+  background: rgba(255, 255, 255, 0.35) !important;
+  backdrop-filter: blur(14px) !important;
+  -webkit-backdrop-filter: blur(14px) !important;
+  border: 1px solid rgba(255, 255, 255, 0.6) !important;
+  border-radius: 16px !important;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.02) !important;
+  overflow: hidden !important;
+}
+
+.tap-admin-table {
+  background: transparent !important;
+}
+
+.tap-admin-table thead tr {
+  background: rgba(255, 255, 255, 0.55) !important;
+  backdrop-filter: blur(8px) !important;
+}
+
+.tap-admin-table tbody tr {
+  background: transparent !important;
+}
+
+.tap-admin-table tbody tr:hover {
+  background: rgba(255, 255, 255, 0.38) !important;
+}
+
+

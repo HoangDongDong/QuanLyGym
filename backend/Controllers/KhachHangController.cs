@@ -1227,8 +1227,8 @@ public class KhachHangController : ControllerBase
 
                 case "datcoc":
                     cmd.CommandText = @"
-                        INSERT INTO TTHUCHI (ID, NAME, NGAY, DKHACHHANGID, TENDOITUONG, DIENTHOAI, DIACHI, DLOAITHEID, GIATRIGOI, GIAMGIA, TIENGIAM, THU, CHI, DLYDOTHUCHIID, CHUYENKHOAN, NOTE, STATUS, TIMECREATED, USERCREATEDID)
-                        VALUES (@id, @name, @ngay, @khId, @tenDoiTuong, @dienThoai, @diaChi, @loaiTheId, @giaTriGoi, @giamGia, @tienGiam, @thu, 0, @lyDoId, @chuyenKhoan, @note, 30, @timeCreated, @userCreated)";
+                        INSERT INTO TTHUCHI (ID, NAME, NGAY, DKHACHHANGID, TENDOITUONG, DIENTHOAI, DIACHI, DLOAITHEID, GIATRIGOI, GIAMGIA, TIENGIAM, THU, CHI, DLYDOTHUCHIID, CHUYENKHOAN, DATCOCID, NOTE, STATUS, TIMECREATED, USERCREATEDID)
+                        VALUES (@id, @name, @ngay, @khId, @tenDoiTuong, @dienThoai, @diaChi, @loaiTheId, @giaTriGoi, @giamGia, @tienGiam, @thu, 0, @lyDoId, @chuyenKhoan, @datCocId, @note, 30, @timeCreated, @userCreated)";
                     cmd.Parameters.AddWithValue("@id", newId);
                     cmd.Parameters.AddWithValue("@name", soPhiu);
                     cmd.Parameters.AddWithValue("@ngay", ngayChungTu);
@@ -1243,6 +1243,9 @@ public class KhachHangController : ControllerBase
                     cmd.Parameters.AddWithValue("@thu", body.TryGetProperty("thu", out var pDcThu) ? pDcThu.GetDecimal() : 0);
                     cmd.Parameters.AddWithValue("@lyDoId", body.TryGetProperty("dlyDoThuChiId", out var pDcLyDo) ? (object)pDcLyDo.GetString() : DBNull.Value);
                     cmd.Parameters.AddWithValue("@chuyenKhoan", body.TryGetProperty("chuyenKhoan", out var pDcCk) && pDcCk.GetBoolean() ? 1 : 0);
+                    // Trước khi đăng ký thẻ, DATCOCID trỏ về chính phiếu để đánh dấu đây là giao dịch đặt cọc.
+                    // Khi đăng ký thành công, giá trị này sẽ được thay bằng ID phiếu gia hạn thẻ.
+                    cmd.Parameters.AddWithValue("@datCocId", newId);
                     cmd.Parameters.AddWithValue("@note", note);
                     cmd.Parameters.AddWithValue("@timeCreated", DateTime.Now);
                     cmd.Parameters.AddWithValue("@userCreated", _adminUserId);
@@ -1557,8 +1560,182 @@ public class KhachHangController : ControllerBase
     }
 
     /// <summary>
+    /// Lấy danh sách đặt cọc cho trang Danh sách đặt cọc (TTHUCHI: DATCOCID IS NOT NULL)
+    /// </summary>
+    [HttpGet("datcoc/list")]
+    public IActionResult GetDatCocList(
+        [FromQuery] string? fromDate = null,
+        [FromQuery] string? toDate = null,
+        [FromQuery] string? loaiTheId = null,
+        [FromQuery] string? search = null)
+    {
+        try
+        {
+            using var conn = new FbConnection(GetConnStr());
+            conn.Open();
+
+            using var cmd = conn.CreateCommand();
+            var sb = new StringBuilder(@"
+                SELECT
+                    tc.ID, tc.NAME AS SO_PHIEU, tc.NGAY,
+                    tc.DKHACHHANGID, k.NAME AS TEN_KHACH, k.MAKHACH, k.DIACHI, k.DIENTHOAI,
+                    tc.THU AS SO_TIEN_COC,
+                    COALESCE(g.TONGCONG, tc.GIATRIGOI) AS GIA_TAO_GOI,
+                    tc.DLOAITHEID, lt.NAME AS TEN_LOAI_THE,
+                    tc.GIAMGIA AS GIAM_GIA, tc.TIENGIAM AS TIEN_GIAM,
+                    tc.DLYDOTHUCHIID, tc.CHUYENKHOAN,
+                    tc.NOTE, tc.DIENGIAI,
+                    tc.DATCOCID, tc.STATUS,
+                    tc.TIMECREATED, tc.TIMEMODIFIED,
+                    u1.NAME AS NGUOI_TAO, u2.NAME AS NGUOI_SUA
+                FROM TTHUCHI tc
+                LEFT JOIN DKHACHHANG k ON tc.DKHACHHANGID = k.ID
+                LEFT JOIN DLOAITHE lt ON tc.DLOAITHEID = lt.ID
+                LEFT JOIN TGIAHANTHE g ON tc.DATCOCID = g.ID
+                LEFT JOIN SUSER u1 ON tc.USERCREATEDID = u1.ID
+                LEFT JOIN SUSER u2 ON tc.USERMODIFIEDID = u2.ID
+                WHERE tc.DATCOCID IS NOT NULL AND tc.DATCOCID <> ''
+                  AND (tc.STATUS <> -1 OR tc.STATUS IS NULL)
+            ");
+
+            if (!string.IsNullOrEmpty(fromDate) && DateTime.TryParse(fromDate, out var dFrom))
+            {
+                sb.Append(" AND tc.NGAY >= @fromDate");
+                cmd.Parameters.AddWithValue("@fromDate", dFrom.Date);
+            }
+            if (!string.IsNullOrEmpty(toDate) && DateTime.TryParse(toDate, out var dTo))
+            {
+                sb.Append(" AND tc.NGAY <= @toDate");
+                cmd.Parameters.AddWithValue("@toDate", dTo.Date.AddDays(1).AddSeconds(-1));
+            }
+            if (!string.IsNullOrEmpty(loaiTheId) && loaiTheId != "all" && loaiTheId != "chuaThietLap" && loaiTheId != "trash")
+            {
+                sb.Append(" AND tc.DLOAITHEID = @loaiTheId");
+                cmd.Parameters.AddWithValue("@loaiTheId", loaiTheId);
+            }
+            else if (loaiTheId == "chuaThietLap")
+            {
+                sb.Append(" AND (tc.DLOAITHEID IS NULL OR tc.DLOAITHEID = '')");
+            }
+            else if (loaiTheId == "trash")
+            {
+                sb.Clear();
+                sb.Append(@"
+                    SELECT
+                        tc.ID, tc.NAME AS SO_PHIEU, tc.NGAY,
+                        tc.DKHACHHANGID, k.NAME AS TEN_KHACH, k.MAKHACH, k.DIACHI, k.DIENTHOAI,
+                        tc.THU AS SO_TIEN_COC,
+                        COALESCE(g.TONGCONG, tc.GIATRIGOI) AS GIA_TAO_GOI,
+                        tc.DLOAITHEID, lt.NAME AS TEN_LOAI_THE,
+                        tc.GIAMGIA AS GIAM_GIA, tc.TIENGIAM AS TIEN_GIAM,
+                        tc.DLYDOTHUCHIID, tc.CHUYENKHOAN,
+                        tc.NOTE, tc.DIENGIAI,
+                        tc.DATCOCID, tc.STATUS,
+                        tc.TIMECREATED, tc.TIMEMODIFIED,
+                        u1.NAME AS NGUOI_TAO, u2.NAME AS NGUOI_SUA
+                    FROM TTHUCHI tc
+                    LEFT JOIN DKHACHHANG k ON tc.DKHACHHANGID = k.ID
+                    LEFT JOIN DLOAITHE lt ON tc.DLOAITHEID = lt.ID
+                    LEFT JOIN TGIAHANTHE g ON tc.DATCOCID = g.ID
+                    LEFT JOIN SUSER u1 ON tc.USERCREATEDID = u1.ID
+                    LEFT JOIN SUSER u2 ON tc.USERMODIFIEDID = u2.ID
+                    WHERE tc.DATCOCID IS NOT NULL AND tc.DATCOCID <> ''
+                      AND tc.STATUS = -1
+                ");
+            }
+
+            if (!string.IsNullOrEmpty(search))
+            {
+                sb.Append(" AND (LOWER(tc.NAME) LIKE @kw OR LOWER(k.NAME) LIKE @kw OR LOWER(k.MAKHACH) LIKE @kw OR LOWER(k.DIENTHOAI) LIKE @kw)");
+                cmd.Parameters.AddWithValue("@kw", $"%{search.ToLower()}%");
+            }
+
+            sb.Append(" ORDER BY tc.NGAY DESC, tc.TIMECREATED DESC");
+            cmd.CommandText = sb.ToString();
+
+            var list = new List<object>();
+            using var r = cmd.ExecuteReader();
+            while (r.Read())
+            {
+                list.Add(new
+                {
+                    id = r["ID"]?.ToString()?.Trim(),
+                    soPhieu = r["SO_PHIEU"]?.ToString()?.Trim() ?? "",
+                    ngay = r["NGAY"] is not DBNull ? Convert.ToDateTime(r["NGAY"]).ToString("dd/MM/yyyy") : "",
+                    khachHangId = r["DKHACHHANGID"]?.ToString()?.Trim() ?? "",
+                    khachHang = r["TEN_KHACH"]?.ToString()?.Trim() ?? "",
+                    maKhach = r["MAKHACH"]?.ToString()?.Trim() ?? "",
+                    diaChi = r["DIACHI"]?.ToString()?.Trim() ?? "",
+                    dienThoai = r["DIENTHOAI"]?.ToString()?.Trim() ?? "",
+                    soTienCoc = r["SO_TIEN_COC"] is not DBNull ? Convert.ToDecimal(r["SO_TIEN_COC"]) : 0,
+                    giaTaoGoi = r["GIA_TAO_GOI"] is not DBNull ? Convert.ToDecimal(r["GIA_TAO_GOI"]) : 0,
+                    loaiTheId = r["DLOAITHEID"]?.ToString()?.Trim() ?? "",
+                    loaiThe = r["TEN_LOAI_THE"]?.ToString()?.Trim() ?? "",
+                    giamGia = r["GIAM_GIA"] is not DBNull ? Convert.ToDecimal(r["GIAM_GIA"]) : 0,
+                    tienGiam = r["TIEN_GIAM"] is not DBNull ? Convert.ToDecimal(r["TIEN_GIAM"]) : 0,
+                    dlyDoThuChiId = r["DLYDOTHUCHIID"]?.ToString()?.Trim() ?? "",
+                    chuyenKhoan = r["CHUYENKHOAN"] is not DBNull && Convert.ToInt32(r["CHUYENKHOAN"]) == 1,
+                    note = r["NOTE"]?.ToString()?.Trim() ?? "",
+                    dienGiai = r["DIENGIAI"]?.ToString()?.Trim() ?? "",
+                    datCocId = r["DATCOCID"]?.ToString()?.Trim() ?? "",
+                    daDangKy = !string.Equals(
+                        r["DATCOCID"]?.ToString()?.Trim(),
+                        r["ID"]?.ToString()?.Trim(),
+                        StringComparison.OrdinalIgnoreCase),
+                    status = r["STATUS"] is not DBNull ? Convert.ToInt32(r["STATUS"]) : 30,
+                    timeCreated = r["TIMECREATED"] is not DBNull ? Convert.ToDateTime(r["TIMECREATED"]).ToString("dd/MM/yyyy HH:mm") : "",
+                    timeModified = r["TIMEMODIFIED"] is not DBNull ? Convert.ToDateTime(r["TIMEMODIFIED"]).ToString("dd/MM/yyyy HH:mm") : "",
+                    nguoiTao = r["NGUOI_TAO"]?.ToString()?.Trim() ?? "Administrator",
+                    nguoiSua = r["NGUOI_SUA"]?.ToString()?.Trim() ?? ""
+                });
+            }
+
+            return Ok(new { success = true, data = list });
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(500, new { success = false, message = "Lỗi lấy danh sách đặt cọc: " + ex.Message });
+        }
+    }
+
+    /// <summary>
+    /// Liên kết phiếu đặt cọc với phiếu gia hạn vừa tạo khi bấm Đăng ký.
+    /// </summary>
+    [HttpPost("datcoc/{depositId}/register/{renewalId}")]
+    public IActionResult RegisterDeposit(string depositId, string renewalId)
+    {
+        try
+        {
+            using var conn = new FbConnection(GetConnStr());
+            conn.Open();
+
+            using var cmd = conn.CreateCommand();
+            cmd.CommandText = @"
+                UPDATE TTHUCHI
+                SET DATCOCID = @renewalId,
+                    TIMEMODIFIED = CURRENT_TIMESTAMP,
+                    USERMODIFIEDID = @userModified
+                WHERE ID = @depositId";
+            cmd.Parameters.AddWithValue("@renewalId", renewalId.Trim());
+            cmd.Parameters.AddWithValue("@userModified", _adminUserId);
+            cmd.Parameters.AddWithValue("@depositId", depositId.Trim());
+
+            var rows = cmd.ExecuteNonQuery();
+            if (rows == 0)
+                return NotFound(new { success = false, message = "Không tìm thấy phiếu đặt cọc cần đăng ký." });
+
+            return Ok(new { success = true, message = "Đã liên kết phiếu đặt cọc với thẻ đăng ký." });
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(500, new { success = false, message = "Lỗi đăng ký từ phiếu đặt cọc: " + ex.Message });
+        }
+    }
+
+    /// <summary>
     /// Lấy danh sách giao dịch cho Quản lý gia hạn thẻ (TGIAHANTHE)
     /// </summary>
+
     [HttpGet("giahanthe/list")]
     public IActionResult GetGiaHanTheList(
         [FromQuery] string? fromDate = null,

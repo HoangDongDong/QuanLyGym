@@ -1,9 +1,34 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { khachHangService } from '../services/khachHangService';
+import { adminService } from '../services/adminService';
 import SubtabAeModal from './SubtabAeModal';
+import FastReportModal from './FastReportModal';
 import './CustomerManagement.css';
 
-export default function CardRenewalManagementView({ onSwitchToCustomer, showNotification, openAddNewTrigger, prefillCustomer, onResetOpenAddTrigger }) {
+const CARD_RENEWAL_PRINT_COLUMNS = [
+  { key: 'soPhiu', label: 'Số phiếu', width: '90px', defaultChecked: true },
+  { key: 'ngay', label: 'Ngày', width: '85px', align: 'center', defaultChecked: true },
+  { key: 'khachHang', label: 'Khách hàng', width: '150px', defaultChecked: true },
+  { key: 'loaiThe', label: 'Loại thẻ', width: '100px', defaultChecked: true },
+  { key: 'tuNgay', label: 'Từ ngày', width: '85px', align: 'center', defaultChecked: true },
+  { key: 'denNgay', label: 'Đến ngày', width: '85px', align: 'center', defaultChecked: true },
+  { key: 'ngayTangThem', label: 'Ngày tặng thêm', width: '90px', align: 'right', defaultChecked: true },
+  { key: 'soTien', label: 'Số tiền', width: '90px', align: 'right', defaultChecked: true, format: (value) => Number(value || 0).toLocaleString('vi-VN') },
+  { key: 'tiLeGiamGia', label: 'Tỉ lệ giảm giá', width: '85px', align: 'right', defaultChecked: true },
+  { key: 'tongCong', label: 'Tổng cộng', width: '90px', align: 'right', defaultChecked: true, format: (value) => Number(value || 0).toLocaleString('vi-VN') },
+  { key: 'thanhToan', label: 'Thanh toán', width: '90px', align: 'right', defaultChecked: true, format: (value) => Number(value || 0).toLocaleString('vi-VN') },
+  { key: 'khuyenMai', label: 'Khuyến mãi', width: '110px', defaultChecked: true }
+];
+
+const CARD_SUBTAB_PRINT_COLUMNS = [
+  { key: 'soPhieuIn', label: 'Số phiếu', width: '100px', defaultChecked: true },
+  { key: 'ngay', label: 'Ngày', width: '90px', align: 'center', defaultChecked: true },
+  { key: 'dienGiaiIn', label: 'Diễn giải / Chi tiết', width: '220px', defaultChecked: true },
+  { key: 'soTienIn', label: 'Số tiền / Điểm', width: '110px', align: 'right', defaultChecked: true, format: (value) => Number(value || 0).toLocaleString('vi-VN') },
+  { key: 'note', label: 'Ghi chú', width: '180px', defaultChecked: true }
+];
+
+export default function CardRenewalManagementView({ onSwitchToCustomer, showNotification, openAddNewTrigger, openAddTabId = 'giaHanThe', prefillCustomer, onResetOpenAddTrigger }) {
   // --- STATE BỘ LỌC CỘT TRÁI ---
   const [fromDate, setFromDate] = useState(() => {
     const d = new Date();
@@ -38,6 +63,22 @@ export default function CardRenewalManagementView({ onSwitchToCustomer, showNoti
   const [activeBottomTab, setActiveBottomTab] = useState('thongTin');
   const [subtabsData, setSubtabsData] = useState(null);
   const [loadingSubtabs, setLoadingSubtabs] = useState(false);
+
+  // --- IN LƯỚI / FASTREPORT ---
+  const [showFastReport, setShowFastReport] = useState(false);
+  const [printConfig, setPrintConfig] = useState({
+    rows: [],
+    columns: CARD_RENEWAL_PRINT_COLUMNS,
+    title: 'Quản lý thẻ',
+    sheetName: 'QuanLyThe'
+  });
+  const [printCompanyInfo, setPrintCompanyInfo] = useState({
+    name: '',
+    address: '',
+    phone: '',
+    email: '',
+    logoBase64: ''
+  });
 
   // --- CO DÃN SPLITTER ---
   const [leftWidth, setLeftWidth] = useState(210);
@@ -103,6 +144,46 @@ export default function CardRenewalManagementView({ onSwitchToCustomer, showNoti
       .catch(err => console.error('Lỗi tải metadata:', err));
   }, []);
 
+  // Nạp thông tin chung để phần in dùng đúng cấu hình hệ thống.
+  useEffect(() => {
+    const loadPrintCompanyInfo = async () => {
+      try {
+        const configResponse = await adminService.getConfigs();
+        const groups = configResponse?.data || [];
+        const normalizeKey = (value = '') => String(value)
+          .normalize('NFD')
+          .replace(/[\u0300-\u036f]/g, '')
+          .replace(/[^a-zA-Z0-9]/g, '')
+          .toLowerCase();
+        const generalGroup = groups.find((group) => normalizeKey(group.groupName) === 'thongtinchung');
+        const allItems = groups.flatMap((group) => group.items || []);
+        const prioritizedItems = [...(generalGroup?.items || []), ...allItems];
+        const findConfig = (aliases) => prioritizedItems.find((item) => {
+          const name = normalizeKey(item.name);
+          const caption = normalizeKey(item.caption);
+          return aliases.includes(name) || aliases.includes(caption);
+        });
+        const readText = (aliases) => {
+          const item = findConfig(aliases);
+          return String(item?.textValue || item?.moreDetail || '').trim();
+        };
+        const logoItem = findConfig(['logo', 'logocongty', 'logodoanhnghiep']);
+
+        setPrintCompanyInfo({
+          name: readText(['companyname', 'tencongty', 'tendoanhnghiep', 'congty']),
+          address: readText(['companyaddress', 'diachi', 'diachicongty', 'diachidoanhnghiep']),
+          phone: readText(['companyphone', 'sodienthoai', 'dienthoai', 'dienthoaicongty', 'phone']),
+          email: readText(['companyemail', 'email', 'emailcongty', 'emaildoanhnghiep']),
+          logoBase64: logoItem?.blobValue || ''
+        });
+      } catch (err) {
+        console.warn('Lỗi nạp thông tin công ty dùng cho bản in quản lý thẻ:', err);
+      }
+    };
+
+    loadPrintCompanyInfo();
+  }, []);
+
   // Dropdown trên form giao dịch phải lấy toàn bộ DKHACHHANG, không lấy từ
   // renewalList vì danh sách đó chỉ chứa khách đã từng phát sinh giao dịch.
   const fetchCustomers = async () => {
@@ -142,11 +223,18 @@ export default function CardRenewalManagementView({ onSwitchToCustomer, showNoti
         search: searchFilter.trim() || undefined
       });
       if (res?.data) {
-        setRenewalList(res.data);
-        if (res.data.length > 0) {
+        // API dùng tên loaiTheId, còn form giao dịch dùng dloaiTheId.
+        // Chuẩn hóa tại đây để cả chọn dòng và mở form sửa đều giữ đúng gói hiện tại.
+        const normalizedRenewals = res.data.map((item) => ({
+          ...item,
+          dloaiTheId: item.dloaiTheId || item.dLoaiTheId || item.loaiTheId || '',
+          dcatapId: item.dcatapId || item.dCaTapId || item.caTapId || ''
+        }));
+        setRenewalList(normalizedRenewals);
+        if (normalizedRenewals.length > 0) {
           // Tự động chọn dòng đầu tiên hoặc giữ dòng hiện tại nếu còn tồn tại
-          const match = selectedRow ? res.data.find(r => r.id === selectedRow.id) : null;
-          handleSelectRow(match || res.data[0]);
+          const match = selectedRow ? normalizedRenewals.find(r => r.id === selectedRow.id) : null;
+          handleSelectRow(match || normalizedRenewals[0]);
         } else {
           setSelectedRow(null);
           setSubtabsData(null);
@@ -238,8 +326,10 @@ export default function CardRenewalManagementView({ onSwitchToCustomer, showNoti
     });
   };
 
-  // Thêm mới giao dịch gia hạn thẻ
-  const handleAddNewRenewal = async () => {
+  // Mở form thêm mới giao dịch tương ứng (gia hạn thẻ, đặt cọc...).
+  const handleAddNewRenewal = async (requestedTabId = 'giaHanThe') => {
+    const targetTabId = typeof requestedTabId === 'string' ? requestedTabId : 'giaHanThe';
+    const targetTabLabel = bottomTabs.find((tab) => tab.id === targetTabId)?.label || 'Gia hạn thẻ';
     // Luôn nạp lại để khách vừa thêm ở màn hình Danh mục xuất hiện ngay.
     const latestCustomers = await fetchCustomers();
     const preferredCustomer = prefillCustomer?.id
@@ -248,8 +338,8 @@ export default function CardRenewalManagementView({ onSwitchToCustomer, showNoti
     setModalState({
       show: true,
       mode: 'create',
-      tabId: 'giaHanThe',
-      tabLabel: 'Gia hạn thẻ',
+      tabId: targetTabId,
+      tabLabel: targetTabLabel,
       initialData: preferredCustomer ? {
         khachHangId: preferredCustomer.id,
         tenKhach: preferredCustomer.tenKhachHang || preferredCustomer.name,
@@ -273,17 +363,17 @@ export default function CardRenewalManagementView({ onSwitchToCustomer, showNoti
     });
   };
 
-  // Tự động mở form Thêm mới Gia hạn thẻ CHỈ khi người dùng click vào 'Gia hạn thẻ' trên sidebar nav
+  // Tự động mở đúng form được yêu cầu từ sidebar (Gia hạn thẻ / Đặt cọc).
   const lastTriggerHandledRef = useRef(0);
   useEffect(() => {
     if (openAddNewTrigger && openAddNewTrigger > 0 && openAddNewTrigger !== lastTriggerHandledRef.current) {
       lastTriggerHandledRef.current = openAddNewTrigger;
-      handleAddNewRenewal();
+      handleAddNewRenewal(openAddTabId || 'giaHanThe');
       if (typeof onResetOpenAddTrigger === 'function') {
         onResetOpenAddTrigger();
       }
     }
-  }, [openAddNewTrigger]);
+  }, [openAddNewTrigger, openAddTabId]);
 
   // Sửa giao dịch gia hạn thẻ
   const handleEditRenewal = (rowToEdit) => {
@@ -297,7 +387,14 @@ export default function CardRenewalManagementView({ onSwitchToCustomer, showNoti
       mode: 'edit',
       tabId: row.loaiGiaoDich === '2' ? 'doiLoaiThe' : (row.loaiGiaoDich === '9' ? 'baoLuuThe' : 'giaHanThe'),
       tabLabel: row.loaiGiaoDich === '2' ? 'Đổi loại thẻ' : (row.loaiGiaoDich === '9' ? 'Bảo lưu thẻ' : 'Gia hạn thẻ'),
-      initialData: row
+      initialData: {
+        ...row,
+        dloaiTheId: row.dloaiTheId || row.dLoaiTheId || row.loaiTheId || '',
+        dcatapId: row.dcatapId || row.dCaTapId || row.caTapId || '',
+        tenKhach: row.tenKhach || row.tenKhachHang || row.khachHang || '',
+        dienThoai: row.dienThoai || '',
+        diaChi: row.diaChi || ''
+      }
     });
   };
 
@@ -367,6 +464,35 @@ export default function CardRenewalManagementView({ onSwitchToCustomer, showNoti
     link.click();
     document.body.removeChild(link);
     showNotification && showNotification('Đã xuất danh sách gia hạn thẻ ra file CSV/Excel!');
+  };
+
+  const handlePrintRenewalList = () => {
+    setPrintConfig({
+      rows: renewalList,
+      columns: CARD_RENEWAL_PRINT_COLUMNS,
+      title: 'Quản lý thẻ',
+      sheetName: 'QuanLyThe'
+    });
+    setShowFastReport(true);
+  };
+
+  const handlePrintSubtab = (tabId = activeBottomTab) => {
+    const tab = bottomTabs.find((item) => item.id === tabId);
+    const sourceRows = subtabsData?.[tabId] || [];
+    const rows = sourceRows.map((item) => ({
+      ...item,
+      soPhieuIn: item.soPhiu || item.maThe || '',
+      dienGiaiIn: item.loaiThe || item.dienGiai || item.lyDo || item.may || 'Chi tiết giao dịch',
+      soTienIn: item.soTien || item.tongCong || item.thu || item.chi || item.diemTang || 0
+    }));
+
+    setPrintConfig({
+      rows,
+      columns: CARD_SUBTAB_PRINT_COLUMNS,
+      title: `${tab?.label || 'Chi tiết quản lý thẻ'}${selectedRow?.khachHang ? ` - ${selectedRow.khachHang}` : ''}`,
+      sheetName: tab?.label || 'ChiTietThe'
+    });
+    setShowFastReport(true);
   };
 
   // Kéo thanh co dãn ngang (giữa lưới trên và tab dưới)
@@ -440,8 +566,6 @@ export default function CardRenewalManagementView({ onSwitchToCustomer, showNoti
             width: leftWidth,
             minWidth: 160,
             maxWidth: 360,
-            background: '#ebf2f8',
-            borderRight: '1px solid #a3b8cc',
             display: 'flex',
             flexDirection: 'column',
             boxSizing: 'border-box'
@@ -450,14 +574,13 @@ export default function CardRenewalManagementView({ onSwitchToCustomer, showNoti
           {/* Header Cây: Loại thẻ + Icon bánh răng */}
           <div
             style={{
-              height: 25,
-              background: 'linear-gradient(180deg, #ffffff 0%, #d8e5f2 100%)',
-              borderBottom: '1px solid #b2c9dd',
+              height: 28,
+              borderBottom: '1px solid rgba(226, 232, 240, 0.45)',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'space-between',
-              padding: '0 8px',
-              fontSize: 11.5,
+              padding: '0 10px',
+              fontSize: 12,
               fontWeight: 700,
               color: '#1e3a8a'
             }}
@@ -467,12 +590,12 @@ export default function CardRenewalManagementView({ onSwitchToCustomer, showNoti
           </div>
 
           {/* Bộ lọc Ngày: Từ ngày - Đến ngày */}
-          <div style={{ padding: '6px 8px', borderBottom: '1px solid #c9d8e6', background: '#f5f8fb', fontSize: 11 }}>
+          <div style={{ padding: '6px 8px', borderBottom: '1px solid rgba(226, 232, 240, 0.45)', fontSize: 11 }}>
             <div style={{ display: 'flex', alignItems: 'center', marginBottom: 4, gap: 4 }}>
               <span style={{ width: 32, color: '#334155' }}>Từ:</span>
               <input
                 type="date"
-                style={{ flex: 1, height: 21, fontSize: 11, padding: '1px 4px', border: '1px solid #8caec7', background: '#fff' }}
+                style={{ flex: 1, height: 22, fontSize: 11, padding: '1px 6px' }}
                 value={fromDate}
                 onChange={(e) => setFromDate(e.target.value)}
               />
@@ -481,7 +604,7 @@ export default function CardRenewalManagementView({ onSwitchToCustomer, showNoti
               <span style={{ width: 32, color: '#334155' }}>Đến:</span>
               <input
                 type="date"
-                style={{ flex: 1, height: 21, fontSize: 11, padding: '1px 4px', border: '1px solid #8caec7', background: '#fff' }}
+                style={{ flex: 1, height: 22, fontSize: 11, padding: '1px 6px' }}
                 value={toDate}
                 onChange={(e) => setToDate(e.target.value)}
               />
@@ -489,10 +612,10 @@ export default function CardRenewalManagementView({ onSwitchToCustomer, showNoti
           </div>
 
           {/* Combobox Loại giao dịch */}
-          <div style={{ padding: '6px 8px', borderBottom: '1px solid #c9d8e6', background: '#f5f8fb' }}>
+          <div style={{ padding: '6px 8px', borderBottom: '1px solid rgba(226, 232, 240, 0.45)' }}>
             <div style={{ fontSize: 10.5, color: '#64748b', marginBottom: 2 }}>Loại giao dịch</div>
             <select
-              style={{ width: '100%', height: 22, fontSize: 11, border: '1px solid #8caec7', padding: '0 4px', background: '#fff' }}
+              style={{ width: '100%', height: 24, fontSize: 11, padding: '0 6px' }}
               value={loaiGiaoDich}
               onChange={(e) => setLoaiGiaoDich(e.target.value)}
             >
@@ -505,48 +628,35 @@ export default function CardRenewalManagementView({ onSwitchToCustomer, showNoti
           </div>
 
           {/* Mini Toolbar: Thêm, Sửa, Nạp lại cây loại thẻ */}
-          <div
-            style={{
-              height: 24,
-              background: '#e2edf7',
-              borderBottom: '1px solid #c9d8e6',
-              display: 'flex',
-              alignItems: 'center',
-              padding: '0 6px',
-              gap: 4
-            }}
-          >
+          <div className="cust-tree-toolbar">
             <button
               type="button"
-              className="wf-tool-btn"
+              className="cust-tree-btn"
               title="Thêm loại thẻ mới"
               onClick={() => showNotification && showNotification('Thêm loại thẻ mới')}
-              style={{ border: 'none', background: 'transparent', cursor: 'pointer', fontSize: 12, color: '#16a34a' }}
             >
-              ➕
+              <i className="fa-solid fa-plus" style={{ color: '#16a34a' }}></i>
             </button>
             <button
               type="button"
-              className="wf-tool-btn"
+              className="cust-tree-btn"
               title="Chỉnh sửa loại thẻ"
               onClick={() => showNotification && showNotification('Chỉnh sửa loại thẻ')}
-              style={{ border: 'none', background: 'transparent', cursor: 'pointer', fontSize: 12, color: '#d97706' }}
             >
-              ✏️
+              <i className="fa-solid fa-pen-to-square" style={{ color: '#d97706' }}></i>
             </button>
             <button
               type="button"
-              className="wf-tool-btn"
+              className="cust-tree-btn"
               title="Nạp lại danh mục"
               onClick={fetchRenewalList}
-              style={{ border: 'none', background: 'transparent', cursor: 'pointer', fontSize: 12, color: '#0284c7' }}
             >
-              🔄
+              <i className="fa-solid fa-rotate" style={{ color: '#0284c7' }}></i>
             </button>
           </div>
 
-          {/* CÂY LOẠI THẺ (TREEVIEW) */}
-          <div style={{ flex: 1, overflowY: 'auto', background: '#ffffff', padding: '4px 0', fontSize: 11.5 }}>
+          {/* CÂY LOẠI THẺ (TREEVIEW TRONG SUỐT) */}
+          <div className="cust-tree-list" style={{ flex: 1, overflowY: 'auto', background: 'transparent', padding: '4px 0', fontSize: 11.5 }}>
             {/* Mục: Tất cả */}
             <div
               style={{
@@ -626,36 +736,14 @@ export default function CardRenewalManagementView({ onSwitchToCustomer, showNoti
         {/* =================================================================== */}
         <div className="cust-right-pane card-renewal-right-pane" style={{ flex: 1, display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
           {/* 1. LƯỚI CHÍNH GIA HẠN THẺ (GRID TRÊN) */}
-          <div style={{ flex: 1, display: 'flex', flexDirection: 'column', overflow: 'hidden', background: '#ffffff' }}>
-            {/* Header dải tiêu đề + Toolbar chuẩn WinForms */}
-            <div
-              style={{
-                height: 28,
-                background: 'linear-gradient(180deg, #f2f7fc 0%, #d8e5f2 100%)',
-                borderBottom: '1px solid #aec4d9',
-                display: 'flex',
-                alignItems: 'center',
-                padding: '0 8px',
-                gap: 6,
-                fontSize: 11
-              }}
-            >
-              <span style={{ fontWeight: 700, color: '#0f2942', marginRight: 4 }}>Quản lý thẻ</span>
-
-              {/* Lọc F3 */}
-              <div style={{ display: 'flex', alignItems: 'center', gap: 3 }}>
-                <span style={{ color: '#334155' }}>Lọc (F3):</span>
+          <div style={{ flex: 1, display: 'flex', flexDirection: 'column', overflow: 'hidden', background: 'transparent' }}>
+            {/* TOOLBAR RIBBON QUẢN LÝ THẺ - giống khách hàng */}
+            <div className="cust-ribbon-bar">
+              <div className="cust-ribbon-filter">
+                <span>Lọc (F3):</span>
                 <input
                   type="text"
                   placeholder="Tìm kiếm phiếu, khách hàng..."
-                  style={{
-                    height: 20,
-                    width: 140,
-                    padding: '1px 5px',
-                    fontSize: 11,
-                    border: '1px solid #7192b8',
-                    background: '#ffffd5'
-                  }}
                   value={searchFilter}
                   onChange={(e) => setSearchFilter(e.target.value)}
                   onKeyDown={(e) => {
@@ -664,160 +752,97 @@ export default function CardRenewalManagementView({ onSwitchToCustomer, showNoti
                 />
               </div>
 
-              <div style={{ width: 1, height: 16, background: '#cbd5e1', margin: '0 2px' }} />
-
-              {/* Nút: Thêm mới (Insert) */}
               <button
                 type="button"
-                className="wf-tool-btn"
+                className="cust-ribbon-btn primary"
                 onClick={handleAddNewRenewal}
-                style={{
-                  background: 'transparent',
-                  border: '1px solid transparent',
-                  padding: '2px 6px',
-                  cursor: 'pointer',
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: 4,
-                  fontSize: 11
-                }}
+                title="Thêm mới phiếu gia hạn thẻ (Insert)"
               >
-                <span style={{ color: '#16a34a', fontWeight: 700 }}>➕</span>
+                <i className="fa-solid fa-plus" style={{ color: '#ffffff' }}></i>
                 <span>Thêm mới (Insert)</span>
               </button>
 
-              {/* Nút: Chỉnh sửa (F4) */}
               <button
                 type="button"
-                className="wf-tool-btn"
+                className="cust-ribbon-btn edit"
                 onClick={() => handleEditRenewal()}
-                style={{
-                  background: 'transparent',
-                  border: '1px solid transparent',
-                  padding: '2px 6px',
-                  cursor: 'pointer',
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: 4,
-                  fontSize: 11
-                }}
+                title="Chỉnh sửa phiếu gia hạn thẻ (F4)"
               >
-                <span style={{ color: '#d97706' }}>✏️</span>
+                <i className="fa-solid fa-pen" style={{ color: '#d97706' }}></i>
                 <span>Chỉnh sửa (F4)</span>
               </button>
 
-              {/* Nút: Xóa (Del) */}
               <button
                 type="button"
-                className="wf-tool-btn"
+                className="cust-ribbon-btn danger"
                 onClick={() => handleDeleteRenewal()}
-                style={{
-                  background: 'transparent',
-                  border: '1px solid transparent',
-                  padding: '2px 6px',
-                  cursor: 'pointer',
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: 4,
-                  fontSize: 11
-                }}
+                title="Xóa phiếu gia hạn thẻ (Del)"
               >
-                <span style={{ color: '#dc2626', fontWeight: 700 }}>✕</span>
+                <i className="fa-solid fa-xmark" style={{ color: '#e11d48' }}></i>
                 <span>Xóa (Del)</span>
               </button>
 
-              <div style={{ width: 1, height: 16, background: '#cbd5e1', margin: '0 2px' }} />
+              <div className="cust-ribbon-sep"></div>
 
-              {/* Nút: Xuất excel */}
               <button
                 type="button"
-                className="wf-tool-btn"
+                className="cust-ribbon-btn excel-export"
                 onClick={handleExportExcel}
-                style={{
-                  background: 'transparent',
-                  border: '1px solid transparent',
-                  padding: '2px 6px',
-                  cursor: 'pointer',
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: 4,
-                  fontSize: 11
-                }}
+                title="Xuất danh sách gia hạn thẻ ra file Excel"
               >
-                <span>📊</span>
+                <i className="fa-solid fa-file-export" style={{ color: '#16a34a' }}></i>
                 <span>Xuất excel</span>
               </button>
 
-              {/* Nút: In */}
               <button
                 type="button"
-                className="wf-tool-btn"
-                onClick={() => window.print()}
-                style={{
-                  background: 'transparent',
-                  border: '1px solid transparent',
-                  padding: '2px 6px',
-                  cursor: 'pointer',
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: 4,
-                  fontSize: 11
-                }}
+                className="cust-ribbon-btn print"
+                onClick={handlePrintRenewalList}
+                title="In danh sách gia hạn thẻ"
               >
-                <span>🖨️</span>
+                <i className="fa-solid fa-print" style={{ color: '#475569' }}></i>
                 <span>In</span>
               </button>
 
-              {/* Nút: Tổng */}
               <button
                 type="button"
-                className="wf-tool-btn"
+                className="cust-ribbon-btn print"
                 onClick={() => showNotification && showNotification(`Tổng cộng: ${totalTongCong.toLocaleString()} đ | Đã thanh toán: ${totalThanhToan.toLocaleString()} đ`)}
-                style={{
-                  background: 'transparent',
-                  border: '1px solid transparent',
-                  padding: '2px 6px',
-                  cursor: 'pointer',
-                  fontSize: 11
-                }}
+                title="Xem tổng tiền các phiếu"
               >
                 <span>Σ Tổng</span>
               </button>
 
-              {/* Nút: P.tích */}
+              <div className="cust-ribbon-sep"></div>
+
               <button
                 type="button"
-                className="wf-tool-btn"
+                className="cust-ribbon-btn device"
                 onClick={() => showNotification && showNotification('Phân tích giao dịch gia hạn thẻ')}
-                style={{
-                  background: 'transparent',
-                  border: '1px solid transparent',
-                  padding: '2px 6px',
-                  cursor: 'pointer',
-                  fontSize: 11
-                }}
+                title="Phân tích giao dịch gia hạn thẻ"
               >
-                <span>📈 P.tích</span>
+                <i className="fa-solid fa-chart-line" style={{ color: '#2563eb' }}></i>
+                <span>Phân tích</span>
               </button>
             </div>
 
-            {/* BẢNG LƯỚI CHÍNH WINFORMS GRID */}
-            <div style={{ flex: 1, overflow: 'auto', background: '#ffffff' }}>
+            {/* BẢNG LƯỚI CHÍNH WINFORMS GRID TRONG SUỐT */}
+            <div style={{ flex: 1, overflow: 'auto', background: 'transparent' }}>
               <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 11.5, fontFamily: 'Segoe UI, Tahoma, sans-serif' }}>
                 <thead>
-                  <tr style={{ background: '#dce8f5', borderBottom: '1px solid #9fb9d0', height: 26, textAlign: 'left', position: 'sticky', top: 0, zIndex: 2 }}>
-                    <th style={{ width: 28, textAlign: 'center', borderRight: '1px solid #b8cde0' }}></th>
-                    <th style={{ padding: '0 8px', borderRight: '1px solid #b8cde0', whiteSpace: 'nowrap' }}>Số phiếu</th>
-                    <th style={{ padding: '0 8px', borderRight: '1px solid #b8cde0', whiteSpace: 'nowrap' }}>Ngày</th>
-                    <th style={{ padding: '0 8px', borderRight: '1px solid #b8cde0', whiteSpace: 'nowrap' }}>Khách hàng</th>
-                    <th style={{ padding: '0 8px', borderRight: '1px solid #b8cde0', whiteSpace: 'nowrap' }}>Loại thẻ</th>
-                    <th style={{ padding: '0 8px', borderRight: '1px solid #b8cde0', whiteSpace: 'nowrap' }}>Từ ngày</th>
-                    <th style={{ padding: '0 8px', borderRight: '1px solid #b8cde0', whiteSpace: 'nowrap' }}>Đến ngày</th>
-                    <th style={{ padding: '0 8px', borderRight: '1px solid #b8cde0', textAlign: 'right', whiteSpace: 'nowrap' }}>Ngày tặng thêm</th>
-                    <th style={{ padding: '0 8px', borderRight: '1px solid #b8cde0', textAlign: 'right', whiteSpace: 'nowrap' }}>Số tiền</th>
-                    <th style={{ padding: '0 8px', borderRight: '1px solid #b8cde0', textAlign: 'right', whiteSpace: 'nowrap' }}>Tỉ lệ giảm giá</th>
-                    <th style={{ padding: '0 8px', borderRight: '1px solid #b8cde0', textAlign: 'right', whiteSpace: 'nowrap' }}>Tổng cộng</th>
-                    <th style={{ padding: '0 8px', borderRight: '1px solid #b8cde0', textAlign: 'right', whiteSpace: 'nowrap' }}>Thanh toán</th>
+                  <tr style={{ background: 'rgba(255, 255, 255, 0.55)', backdropFilter: 'blur(8px)', borderBottom: '1px solid rgba(203, 213, 225, 0.5)', height: 28, textAlign: 'left', position: 'sticky', top: 0, zIndex: 2 }}>
+                    <th style={{ width: 28, textAlign: 'center', borderRight: '1px solid rgba(203, 213, 225, 0.4)' }}></th>
+                    <th style={{ padding: '0 8px', borderRight: '1px solid rgba(203, 213, 225, 0.4)', whiteSpace: 'nowrap' }}>Số phiếu</th>
+                    <th style={{ padding: '0 8px', borderRight: '1px solid rgba(203, 213, 225, 0.4)', whiteSpace: 'nowrap' }}>Ngày</th>
+                    <th style={{ padding: '0 8px', borderRight: '1px solid rgba(203, 213, 225, 0.4)', whiteSpace: 'nowrap' }}>Khách hàng</th>
+                    <th style={{ padding: '0 8px', borderRight: '1px solid rgba(203, 213, 225, 0.4)', whiteSpace: 'nowrap' }}>Loại thẻ</th>
+                    <th style={{ padding: '0 8px', borderRight: '1px solid rgba(203, 213, 225, 0.4)', whiteSpace: 'nowrap' }}>Từ ngày</th>
+                    <th style={{ padding: '0 8px', borderRight: '1px solid rgba(203, 213, 225, 0.4)', whiteSpace: 'nowrap' }}>Đến ngày</th>
+                    <th style={{ padding: '0 8px', borderRight: '1px solid rgba(203, 213, 225, 0.4)', textAlign: 'right', whiteSpace: 'nowrap' }}>Ngày tặng thêm</th>
+                    <th style={{ padding: '0 8px', borderRight: '1px solid rgba(203, 213, 225, 0.4)', textAlign: 'right', whiteSpace: 'nowrap' }}>Số tiền</th>
+                    <th style={{ padding: '0 8px', borderRight: '1px solid rgba(203, 213, 225, 0.4)', textAlign: 'right', whiteSpace: 'nowrap' }}>Tỉ lệ giảm giá</th>
+                    <th style={{ padding: '0 8px', borderRight: '1px solid rgba(203, 213, 225, 0.4)', textAlign: 'right', whiteSpace: 'nowrap' }}>Tổng cộng</th>
+                    <th style={{ padding: '0 8px', borderRight: '1px solid rgba(203, 213, 225, 0.4)', textAlign: 'right', whiteSpace: 'nowrap' }}>Thanh toán</th>
                     <th style={{ padding: '0 8px', whiteSpace: 'nowrap' }}>Khuyến mãi</th>
                   </tr>
                 </thead>
@@ -844,49 +869,49 @@ export default function CardRenewalManagementView({ onSwitchToCustomer, showNoti
                           onDoubleClick={() => handleEditRenewal(row)}
                           onContextMenu={(e) => handleMainContextMenu(e, row, 'soPhiu', row.soPhiu)}
                           style={{
-                            height: 24,
-                            background: isSelected ? '#d9e9f6' : (idx % 2 === 1 ? '#f8fafc' : '#ffffff'),
-                            borderBottom: '1px solid #e2e8f0',
+                            height: 25,
+                            background: isSelected ? 'rgba(59, 130, 246, 0.16)' : (idx % 2 === 1 ? 'rgba(255, 255, 255, 0.22)' : 'transparent'),
+                            borderBottom: '1px solid rgba(226, 232, 240, 0.4)',
                             cursor: 'pointer'
                           }}
                         >
-                          <td style={{ textAlign: 'center', borderRight: '1px solid #f1f5f9', color: '#0284c7' }}>
+                          <td style={{ textAlign: 'center', borderRight: '1px solid rgba(241, 245, 249, 0.6)', color: '#0284c7' }}>
                             {isSelected ? '▶' : idx + 1}
                           </td>
-                          <td style={{ padding: '0 8px', borderRight: '1px solid #f1f5f9', fontWeight: 600, color: '#1e3a8a' }}>
+                          <td style={{ padding: '0 8px', borderRight: '1px solid rgba(241, 245, 249, 0.6)', fontWeight: 600, color: '#1e3a8a' }}>
                             {row.soPhiu}
                           </td>
-                          <td style={{ padding: '0 8px', borderRight: '1px solid #f1f5f9' }}>
+                          <td style={{ padding: '0 8px', borderRight: '1px solid rgba(241, 245, 249, 0.6)' }}>
                             {row.ngay}
                           </td>
-                          <td style={{ padding: '0 8px', borderRight: '1px solid #f1f5f9', fontWeight: 600 }}>
+                          <td style={{ padding: '0 8px', borderRight: '1px solid rgba(241, 245, 249, 0.6)', fontWeight: 600 }}>
                             {row.khachHang}
                           </td>
-                          <td style={{ padding: '0 8px', borderRight: '1px solid #f1f5f9' }}>
+                          <td style={{ padding: '0 8px', borderRight: '1px solid rgba(241, 245, 249, 0.6)' }}>
                             <span style={{ display: 'inline-flex', alignItems: 'center', gap: 4 }}>
                               <span style={{ color: '#16a34a' }}>💳</span>
                               {row.loaiThe}
                             </span>
                           </td>
-                          <td style={{ padding: '0 8px', borderRight: '1px solid #f1f5f9' }}>
+                          <td style={{ padding: '0 8px', borderRight: '1px solid rgba(241, 245, 249, 0.6)' }}>
                             {row.tuNgay}
                           </td>
-                          <td style={{ padding: '0 8px', borderRight: '1px solid #f1f5f9', fontWeight: 600 }}>
+                          <td style={{ padding: '0 8px', borderRight: '1px solid rgba(241, 245, 249, 0.6)', fontWeight: 600 }}>
                             {row.denNgay}
                           </td>
-                          <td style={{ padding: '0 8px', borderRight: '1px solid #f1f5f9', textAlign: 'right' }}>
+                          <td style={{ padding: '0 8px', borderRight: '1px solid rgba(241, 245, 249, 0.6)', textAlign: 'right' }}>
                             {row.ngayTangThem ?? 0}
                           </td>
-                          <td style={{ padding: '0 8px', borderRight: '1px solid #f1f5f9', textAlign: 'right' }}>
+                          <td style={{ padding: '0 8px', borderRight: '1px solid rgba(241, 245, 249, 0.6)', textAlign: 'right' }}>
                             {(row.soTien || 0).toLocaleString()}
                           </td>
-                          <td style={{ padding: '0 8px', borderRight: '1px solid #f1f5f9', textAlign: 'right' }}>
+                          <td style={{ padding: '0 8px', borderRight: '1px solid rgba(241, 245, 249, 0.6)', textAlign: 'right' }}>
                             {row.tiLeGiamGia ?? 0}
                           </td>
-                          <td style={{ padding: '0 8px', borderRight: '1px solid #f1f5f9', textAlign: 'right', fontWeight: 700, color: '#0f2942' }}>
+                          <td style={{ padding: '0 8px', borderRight: '1px solid rgba(241, 245, 249, 0.6)', textAlign: 'right', fontWeight: 700, color: '#0f2942' }}>
                             {(row.tongCong || 0).toLocaleString()}
                           </td>
-                          <td style={{ padding: '0 8px', borderRight: '1px solid #f1f5f9', textAlign: 'right', fontWeight: 700, color: '#16a34a' }}>
+                          <td style={{ padding: '0 8px', borderRight: '1px solid rgba(241, 245, 249, 0.6)', textAlign: 'right', fontWeight: 700, color: '#16a34a' }}>
                             {(row.thanhToan || 0).toLocaleString()}
                           </td>
                           <td style={{ padding: '0 8px' }}>
@@ -905,10 +930,10 @@ export default function CardRenewalManagementView({ onSwitchToCustomer, showNoti
           <div
             onPointerDown={handleStartDragH}
             style={{
-              height: 5,
-              background: '#cbdbe8',
-              borderTop: '1px solid #9fb9d0',
-              borderBottom: '1px solid #9fb9d0',
+              height: 6,
+              background: 'rgba(255, 255, 255, 0.35)',
+              borderTop: '1px solid rgba(226, 232, 240, 0.5)',
+              borderBottom: '1px solid rgba(226, 232, 240, 0.5)',
               cursor: 'row-resize',
               display: 'flex',
               alignItems: 'center',
@@ -916,14 +941,19 @@ export default function CardRenewalManagementView({ onSwitchToCustomer, showNoti
               userSelect: 'none'
             }}
           >
-            <div style={{ width: 40, height: 2, background: '#64748b', borderRadius: 1 }} />
+            <div style={{ width: 40, height: 2, background: '#94a3b8', borderRadius: 1 }} />
           </div>
 
-          {/* 3. KHU VỰC CÁC SUBTAB PHÍA DƯỚI (Khớp 100% WinForms screenshot) */}
+          {/* 3. KHU VỰC CÁC SUBTAB PHÍA DƯỚI (TRONG SUỐT) */}
           <div
             style={{
               height: bottomHeight,
-              background: '#ebf2f8',
+              background: 'rgba(255, 255, 255, 0.38)',
+              backdropFilter: 'blur(14px)',
+              WebkitBackdropFilter: 'blur(14px)',
+              border: '1px solid rgba(255, 255, 255, 0.6)',
+              borderRadius: 14,
+              boxShadow: '0 6px 20px rgba(0, 0, 0, 0.02)',
               display: 'flex',
               flexDirection: 'column',
               boxSizing: 'border-box',
@@ -933,13 +963,13 @@ export default function CardRenewalManagementView({ onSwitchToCustomer, showNoti
             {/* DẢI TAB HEADER */}
             <div
               style={{
-                height: 26,
-                background: '#d8e5f2',
-                borderBottom: '1px solid #a3b8cc',
+                height: 32,
+                background: 'rgba(255, 255, 255, 0.25)',
+                borderBottom: '1px solid rgba(226, 232, 240, 0.5)',
                 display: 'flex',
                 alignItems: 'flex-end',
-                padding: '0 4px',
-                gap: 2,
+                padding: '0 6px',
+                gap: 4,
                 overflowX: 'auto'
               }}
             >
@@ -950,16 +980,17 @@ export default function CardRenewalManagementView({ onSwitchToCustomer, showNoti
                     key={tab.id}
                     onClick={() => setActiveBottomTab(tab.id)}
                     style={{
-                      padding: '3px 10px',
-                      fontSize: 11,
-                      fontWeight: isActive ? 700 : 500,
-                      color: isActive ? '#0f2942' : '#334155',
-                      background: isActive ? '#ffffff' : '#e2edf7',
-                      border: '1px solid #9fb9d0',
-                      borderBottom: isActive ? '1px solid #ffffff' : '1px solid #9fb9d0',
-                      borderRadius: '3px 3px 0 0',
+                      padding: '4px 12px',
+                      fontSize: 11.5,
+                      fontWeight: isActive ? 700 : 600,
+                      color: isActive ? 'var(--theme-primary, #2563eb)' : '#64748b',
+                      background: isActive ? 'rgba(255, 255, 255, 0.85)' : 'transparent',
+                      border: '1px solid transparent',
+                      borderBottom: 'none',
+                      borderRadius: '6px 6px 0 0',
                       cursor: 'pointer',
-                      whiteSpace: 'nowrap'
+                      whiteSpace: 'nowrap',
+                      boxShadow: isActive ? '0 2px 6px rgba(0,0,0,0.04)' : 'none'
                     }}
                   >
                     {tab.label}
@@ -968,8 +999,8 @@ export default function CardRenewalManagementView({ onSwitchToCustomer, showNoti
               })}
             </div>
 
-            {/* NỘI DUNG TỪNG SUBTAB */}
-            <div style={{ flex: 1, background: '#ffffff', overflow: 'auto', position: 'relative' }}>
+            {/* NỘI DUNG TỪNG SUBTAB (TRONG SUỐT) */}
+            <div style={{ flex: 1, background: 'transparent', overflow: 'auto', position: 'relative' }}>
               {/* SUBTAB 1: THÔNG TIN (Khớp screenshot của người dùng) */}
               {activeBottomTab === 'thongTin' && (
                 <div style={{ padding: '16px 20px', fontSize: 11.5, color: '#1e293b' }}>
@@ -1007,19 +1038,19 @@ export default function CardRenewalManagementView({ onSwitchToCustomer, showNoti
                   ) : (
                     <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 11, fontFamily: 'Segoe UI, Tahoma, sans-serif' }}>
                       <thead>
-                        <tr style={{ background: '#f1f5f9', borderBottom: '1px solid #cbd5e1', height: 23, textAlign: 'left', position: 'sticky', top: 0 }}>
-                          <th style={{ width: 28, textAlign: 'center', borderRight: '1px solid #e2e8f0' }}>STT</th>
-                          <th style={{ padding: '0 6px', borderRight: '1px solid #e2e8f0' }}>Số phiếu</th>
-                          <th style={{ padding: '0 6px', borderRight: '1px solid #e2e8f0' }}>Ngày</th>
-                          <th style={{ padding: '0 6px', borderRight: '1px solid #e2e8f0' }}>Diễn giải / Chi tiết</th>
-                          <th style={{ padding: '0 6px', borderRight: '1px solid #e2e8f0', textAlign: 'right' }}>Số tiền / Điểm</th>
+                        <tr style={{ background: 'rgba(255, 255, 255, 0.5)', borderBottom: '1px solid rgba(203, 213, 225, 0.5)', height: 26, textAlign: 'left', position: 'sticky', top: 0 }}>
+                          <th style={{ width: 28, textAlign: 'center', borderRight: '1px solid rgba(226, 232, 240, 0.5)' }}>STT</th>
+                          <th style={{ padding: '0 6px', borderRight: '1px solid rgba(226, 232, 240, 0.5)' }}>Số phiếu</th>
+                          <th style={{ padding: '0 6px', borderRight: '1px solid rgba(226, 232, 240, 0.5)' }}>Ngày</th>
+                          <th style={{ padding: '0 6px', borderRight: '1px solid rgba(226, 232, 240, 0.5)' }}>Diễn giải / Chi tiết</th>
+                          <th style={{ padding: '0 6px', borderRight: '1px solid rgba(226, 232, 240, 0.5)', textAlign: 'right' }}>Số tiền / Điểm</th>
                           <th style={{ padding: '0 6px' }}>Ghi chú</th>
                         </tr>
                       </thead>
                       <tbody>
                         {(!subtabsData || !subtabsData[activeBottomTab] || subtabsData[activeBottomTab].length === 0) ? (
                           <tr onContextMenu={(e) => handleSubtabContextMenu(e, activeBottomTab, null, '', '')}>
-                            <td colSpan={6} style={{ textAlign: 'center', padding: 24, color: '#64748b', background: '#fafbfc' }}>
+                            <td colSpan={6} style={{ textAlign: 'center', padding: 24, color: '#64748b', background: 'transparent' }}>
                               Chưa có dữ liệu nào trong tab này. (Nhấp chuột phải để Thêm mới)
                             </td>
                           </tr>
@@ -1038,9 +1069,9 @@ export default function CardRenewalManagementView({ onSwitchToCustomer, showNoti
                                 });
                               }}
                               style={{
-                                height: 22,
-                                borderBottom: '1px solid #f1f5f9',
-                                background: idx % 2 === 1 ? '#f8fafc' : '#ffffff',
+                                height: 24,
+                                borderBottom: '1px solid rgba(226, 232, 240, 0.4)',
+                                background: idx % 2 === 1 ? 'rgba(255, 255, 255, 0.2)' : 'transparent',
                                 cursor: 'pointer'
                               }}
                             >
@@ -1165,7 +1196,7 @@ export default function CardRenewalManagementView({ onSwitchToCustomer, showNoti
           </div>
 
           {/* 7. In danh sách */}
-          <div className="wf-menu-item" onClick={() => { setMainContextMenu(p => ({ ...p, visible: false })); window.print(); }}>
+          <div className="wf-menu-item" onClick={() => { setMainContextMenu(p => ({ ...p, visible: false })); handlePrintRenewalList(); }}>
             <span>🖨️</span>
             <span>In danh sách</span>
           </div>
@@ -1395,7 +1426,7 @@ export default function CardRenewalManagementView({ onSwitchToCustomer, showNoti
             className="wf-menu-item"
             onClick={() => {
               setSubtabContextMenu(p => ({ ...p, visible: false }));
-              window.print();
+              handlePrintSubtab(subtabContextMenu.tabId);
             }}
           >
             <span>🖨️</span>
@@ -1516,6 +1547,17 @@ export default function CardRenewalManagementView({ onSwitchToCustomer, showNoti
           }}
         />
       )}
+
+      <FastReportModal
+        show={showFastReport}
+        onClose={() => setShowFastReport(false)}
+        rows={printConfig.rows}
+        columns={printConfig.columns}
+        initialTitle={printConfig.title}
+        sheetName={printConfig.sheetName}
+        companyInfo={printCompanyInfo}
+        showNotification={showNotification}
+      />
     </div>
   );
 }

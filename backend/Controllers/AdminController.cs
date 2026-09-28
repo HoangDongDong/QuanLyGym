@@ -922,6 +922,115 @@ public class AdminController : ControllerBase
         public List<ConfigUpdateItem> Items { get; set; } = new();
     }
 
+    [HttpPost("configs/sync-theme-options")]
+    public IActionResult SyncThemeOptions()
+    {
+        try
+        {
+            string otherConfigSidebar = string.Join("\r\n", new[]
+            {
+                "Mẫu 1 (Xanh dương)",
+                "Mẫu 2 (Tím)",
+                "Mẫu 3 (Cam)",
+                "Mẫu 4 (Xanh lá)",
+                "Mẫu 5 (Đỏ/Hồng)",
+                "Mẫu 6 (Xám/Trung tính)",
+                "Mẫu 7 (Cyan)",
+                "Mẫu 8 (Midnight)",
+                "Office 2010 Blue",
+                "Office 2010 Silver",
+                "Office 2010 Black"
+            });
+
+            string otherConfigContent = string.Join("\r\n", new[]
+            {
+                "Mẫu 1 (Xanh dương)",
+                "Mẫu 2 (Xanh mềm)",
+                "Mẫu 3 (Tím)",
+                "Mẫu 4 (Cam)",
+                "Mẫu 5 (Xanh bạc hà)",
+                "Mẫu 6 (Hồng phấn)",
+                "Mẫu 7 (Cyan)",
+                "Mẫu 8 (Trắng)",
+                "Trắng",
+                "Bạc",
+                "Xám",
+                "Xanh lá",
+                "Xanh dương",
+                "Đỏ",
+                "Cam",
+                "Hồng",
+                "Tím",
+                "Vàng"
+            });
+
+            using var conn = new FbConnection(GetConnStr());
+            conn.Open();
+
+            using (var cmd = conn.CreateCommand())
+            {
+                cmd.CommandText = @"
+                    UPDATE SCONFIG 
+                    SET OTHERCONFIG = @otherConfig
+                    WHERE UPPER(NAME) = 'GIAODIENCHUONGTRINH'";
+                cmd.Parameters.AddWithValue("@otherConfig", otherConfigSidebar);
+                cmd.ExecuteNonQuery();
+            }
+
+            using (var cmd = conn.CreateCommand())
+            {
+                cmd.CommandText = @"
+                    UPDATE SCONFIG 
+                    SET OTHERCONFIG = @otherConfig
+                    WHERE UPPER(NAME) = 'MAUNENGIAODIENCHINH'";
+                cmd.Parameters.AddWithValue("@otherConfig", otherConfigContent);
+                cmd.ExecuteNonQuery();
+            }
+
+            // Đồng thời cập nhật vào database mẫu TEMPLATE.FDB nếu tồn tại
+            string templateDbPath = @"D:\QuanLyPhongGym\backend\Data\TEMPLATE.FDB";
+            if (System.IO.File.Exists(templateDbPath))
+            {
+                try
+                {
+                    string templateConnStr = $"User=SYSDBA;Password=masterkey;Database={templateDbPath};DataSource=localhost;Port=3050;Dialect=3;Charset=UTF8;";
+                    using var tConn = new FbConnection(templateConnStr);
+                    tConn.Open();
+
+                    using (var tCmd = tConn.CreateCommand())
+                    {
+                        tCmd.CommandText = @"
+                            UPDATE SCONFIG 
+                            SET OTHERCONFIG = @otherConfig
+                            WHERE UPPER(NAME) = 'GIAODIENCHUONGTRINH'";
+                        tCmd.Parameters.AddWithValue("@otherConfig", otherConfigSidebar);
+                        tCmd.ExecuteNonQuery();
+                    }
+
+                    using (var tCmd = tConn.CreateCommand())
+                    {
+                        tCmd.CommandText = @"
+                            UPDATE SCONFIG 
+                            SET OTHERCONFIG = @otherConfig
+                            WHERE UPPER(NAME) = 'MAUNENGIAODIENCHINH'";
+                        tCmd.Parameters.AddWithValue("@otherConfig", otherConfigContent);
+                        tCmd.ExecuteNonQuery();
+                    }
+                }
+                catch (Exception exTpl)
+                {
+                    Console.WriteLine("Cảnh báo cập nhật TEMPLATE.FDB: " + exTpl.Message);
+                }
+            }
+
+            return Ok(new { success = true, message = "Đã cập nhật các mẫu nền vào bảng SCONFIG trong DATA.fdb và TEMPLATE.FDB!" });
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(500, new { success = false, message = "Lỗi cập nhật SCONFIG: " + ex.Message });
+        }
+    }
+
     [HttpPost("configs/update")]
     public IActionResult UpdateConfigs([FromBody] UpdateConfigsRequest req)
     {

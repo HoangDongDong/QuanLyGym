@@ -54,6 +54,7 @@ public class KiemSoatVaoRaController : ControllerBase
                     k.DATAP,
                     k.CONLAI,
                     k.DTRANGTHAIID,
+                    k.DLOAITHEID,
                     k.NOTE,
                     k.TGIAHANTHEID,
                     k.ANH,
@@ -110,7 +111,8 @@ public class KiemSoatVaoRaController : ControllerBase
             var khTen = reader["TEN_KHACH_HANG"]?.ToString() ?? "";
             var khPhone = reader["DIENTHOAI"]?.ToString() ?? "---";
             var khDiaChi = reader["DIACHI"]?.ToString() ?? "---";
-            var khLoaiThe = reader["TEN_LOAI_THE"]?.ToString() ?? "Thẻ Tiêu Chuẩn";
+            var khLoaiTheId = reader["DLOAITHEID"]?.ToString()?.Trim() ?? "";
+            var khLoaiThe = reader["TEN_LOAI_THE"]?.ToString()?.Trim() ?? "";
             var khCaTap = reader["TEN_CA_TAP"]?.ToString() ?? "Toàn thời gian (06:00 - 22:00)";
             var khGoi = khLoaiThe;
             var khNote = reader["NOTE"]?.ToString() ?? "";
@@ -140,6 +142,87 @@ public class KiemSoatVaoRaController : ControllerBase
             }
 
             reader.Close();
+
+            // Phiếu gia hạn là nguồn dữ liệu chính xác nhất của gói đang dùng.
+            // Một số khách được tạo trước rồi mới đăng ký gói nên DKHACHHANG chưa
+            // kịp đồng bộ DLOAITHEID, trong khi TGIAHANTHE đã có đầy đủ loại thẻ,
+            // ca tập và thời hạn. Lấy phiếu mới nhất để hiển thị/xác thực đúng.
+            using (var cmdCurrentPackage = conn.CreateCommand())
+            {
+                cmdCurrentPackage.CommandText = @"
+                    SELECT FIRST 1
+                        g.ID,
+                        g.DLOAITHEID,
+                        lt.NAME AS TEN_LOAI_THE,
+                        ct.NAME AS TEN_CA_TAP,
+                        g.TUNGAY,
+                        g.DENNGAY,
+                        g.SOLAN,
+                        g.DATAP
+                    FROM TGIAHANTHE g
+                    LEFT JOIN DLOAITHE lt ON g.DLOAITHEID = lt.ID
+                    LEFT JOIN DCATAP ct ON g.DCATAPID = ct.ID
+                    WHERE g.DKHACHHANGID = @khId
+                      AND (g.STATUS <> -1 OR g.STATUS IS NULL)
+                      AND g.DLOAITHEID IS NOT NULL
+                      AND (g.DLOAIGIAODICHID IN ('1', '2') OR g.DLOAIGIAODICHID IS NULL)
+                    ORDER BY g.DENNGAY DESC, g.TIMECREATED DESC";
+                cmdCurrentPackage.Parameters.AddWithValue("@khId", khId);
+
+                using var packageReader = cmdCurrentPackage.ExecuteReader();
+                if (packageReader.Read())
+                {
+                    khTgiaHanId = packageReader["ID"]?.ToString()?.Trim() ?? khTgiaHanId;
+                    khLoaiTheId = packageReader["DLOAITHEID"]?.ToString()?.Trim() ?? khLoaiTheId;
+                    khLoaiThe = packageReader["TEN_LOAI_THE"]?.ToString()?.Trim() ?? khLoaiThe;
+                    khGoi = khLoaiThe;
+
+                    var currentCaTap = packageReader["TEN_CA_TAP"]?.ToString()?.Trim();
+                    if (!string.IsNullOrWhiteSpace(currentCaTap)) khCaTap = currentCaTap;
+
+                    if (packageReader["TUNGAY"] != DBNull.Value)
+                        tuNgay = Convert.ToDateTime(packageReader["TUNGAY"]);
+                    if (packageReader["DENNGAY"] != DBNull.Value)
+                        denNgay = Convert.ToDateTime(packageReader["DENNGAY"]);
+                    if (packageReader["SOLAN"] != DBNull.Value)
+                        soLan = Convert.ToInt32(packageReader["SOLAN"]);
+                    if (packageReader["DATAP"] != DBNull.Value)
+                        daTap = Convert.ToInt32(packageReader["DATAP"]);
+                }
+            }
+
+            // Khách hàng có thể đã được tạo sẵn mã thẻ và thời hạn, nhưng chỉ
+            // được phép qua cổng sau khi đã đăng ký một loại thẻ / gói tập thật sự.
+            // Không dùng tên loại thẻ mặc định vì sẽ làm khách chưa có gói thành
+            // hợp lệ chỉ dựa trên TUNGAY/DENNGAY.
+            if (string.IsNullOrWhiteSpace(khLoaiTheId) || string.IsNullOrWhiteSpace(khLoaiThe))
+            {
+                return Ok(new
+                {
+                    success = false,
+                    statusType = "expired",
+                    message = "KHÁCH CHƯA ĐĂNG KÝ GÓI TẬP / DỊCH VỤ",
+                    gateStatus = "blocked",
+                    gateSignal = "blocked",
+                    member = BuildMemberDto(
+                        khMa,
+                        khTen,
+                        khPhone,
+                        ngaySinh,
+                        khDiaChi,
+                        string.IsNullOrWhiteSpace(khCaTap) ? "---" : khCaTap,
+                        "---",
+                        "Chưa đăng ký gói",
+                        tuNgay,
+                        denNgay,
+                        soLan,
+                        daTap,
+                        0,
+                        "CHƯA ĐĂNG KÝ GÓI",
+                        "expired",
+                        avatarBase64)
+                });
+            }
 
             // 2. Kiểm tra chống quét lặp trong thời gian ngắn (<= 2 giây) như Code.cs
             using var cmdDebounce = conn.CreateCommand();

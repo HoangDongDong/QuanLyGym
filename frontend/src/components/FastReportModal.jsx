@@ -1,41 +1,49 @@
-import React, { useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import * as XLSX from 'xlsx';
+
+const CUSTOMER_PRINT_COLUMNS = [
+  { key: 'maThe', label: 'Mã thẻ', width: '85px', align: 'left', defaultChecked: true },
+  { key: 'tenKhachHang', label: 'Tên khách hàng', width: '160px', align: 'left', defaultChecked: true },
+  { key: 'diaChi', label: 'Địa chỉ', width: '140px', align: 'left', defaultChecked: true },
+  { key: 'dienThoai', label: 'Điện thoại', width: '100px', align: 'left', defaultChecked: true },
+  { key: 'loaiThe', label: 'Loại thẻ', width: '100px', align: 'left', defaultChecked: true },
+  { key: 'tuNgay', label: 'Từ ngày', width: '85px', align: 'center', defaultChecked: true },
+  { key: 'denNgay', label: 'Đến ngày', width: '85px', align: 'center', defaultChecked: true },
+  { key: 'trangThai', label: 'Trạng thái', width: '110px', align: 'left', defaultChecked: true },
+  { key: 'soLan', label: 'Số lần', width: '60px', align: 'right', defaultChecked: true },
+  { key: 'daTap', label: 'Đã tập', width: '60px', align: 'right', defaultChecked: true },
+  { key: 'conLai', label: 'Còn lại', width: '60px', align: 'right', defaultChecked: true },
+  { key: 'facebook', label: 'Facebook', width: '100px', align: 'left', defaultChecked: true },
+  { key: 'note', label: 'Ghi chú', width: '100px', align: 'left', defaultChecked: true },
+  { key: 'ngaySinh', label: 'Ngày thành lập/sinh nhật', width: '110px', align: 'center', defaultChecked: true }
+];
 
 export const FastReportModal = ({
   show,
   onClose,
   customers = [],
   selectedCustomer = null,
-  showNotification
+  showNotification,
+  rows = null,
+  columns = null,
+  initialTitle = 'Khách hàng',
+  sheetName = 'KhachHang',
+  companyInfo = null
 }) => {
-  if (!show) return null;
-
   // View state: 'in_luoi' (Form In lưới) | 'fastreport_preview' (Cửa sổ In danh sách)
   const [viewState, setViewState] = useState('in_luoi');
 
   // Form In lưới State (Khớp 100% ảnh chụp màn hình WinForms của Tân An Phát)
-  const [reportTitle, setReportTitle] = useState('Khách hàng');
+  const [reportTitle, setReportTitle] = useState(initialTitle);
   const [reportNote, setReportNote] = useState('');
   const [printOrientation, setPrintOrientation] = useState('landscape'); // 'landscape' (A4 nằm ngang) | 'portrait' (A4 thẳng đứng)
   const [includeStt, setIncludeStt] = useState(true);
 
-  // Danh sách các cột cho phép tích chọn in
-  const availableColumns = [
-    { key: 'maThe', label: 'Mã thẻ', width: '85px', align: 'left', defaultChecked: true },
-    { key: 'tenKhachHang', label: 'Tên khách hàng', width: '160px', align: 'left', defaultChecked: true },
-    { key: 'diaChi', label: 'Địa chỉ', width: '140px', align: 'left', defaultChecked: true },
-    { key: 'dienThoai', label: 'Điện thoại', width: '100px', align: 'left', defaultChecked: true },
-    { key: 'loaiThe', label: 'Loại thẻ', width: '100px', align: 'left', defaultChecked: true },
-    { key: 'tuNgay', label: 'Từ ngày', width: '85px', align: 'center', defaultChecked: true },
-    { key: 'denNgay', label: 'Đến ngày', width: '85px', align: 'center', defaultChecked: true },
-    { key: 'trangThai', label: 'Trạng thái', width: '110px', align: 'left', defaultChecked: true },
-    { key: 'soLan', label: 'Số lần', width: '60px', align: 'right', defaultChecked: true },
-    { key: 'daTap', label: 'Đã tập', width: '60px', align: 'right', defaultChecked: true },
-    { key: 'conLai', label: 'Còn lại', width: '60px', align: 'right', defaultChecked: true },
-    { key: 'facebook', label: 'Facebook', width: '100px', align: 'left', defaultChecked: true },
-    { key: 'note', label: 'Ghi chú', width: '100px', align: 'left', defaultChecked: true },
-    { key: 'ngaySinh', label: 'Ngày thành lập/sinh nhật', width: '110px', align: 'center', defaultChecked: true }
-  ];
+  const availableColumns = useMemo(
+    () => (Array.isArray(columns) && columns.length > 0 ? columns : CUSTOMER_PRINT_COLUMNS),
+    [columns]
+  );
+  const printRows = Array.isArray(rows) ? rows : customers;
 
   const [selectedColumns, setSelectedColumns] = useState(() => {
     const init = {};
@@ -44,6 +52,22 @@ export const FastReportModal = ({
     });
     return init;
   });
+
+  useEffect(() => {
+    if (!show) return;
+    const nextSelection = {};
+    availableColumns.forEach((column) => {
+      nextSelection[column.key] = column.defaultChecked !== false;
+    });
+    setSelectedColumns(nextSelection);
+    setReportTitle(initialTitle || 'Khách hàng');
+    setReportNote('');
+    setPrintOrientation('landscape');
+    setIncludeStt(true);
+    setViewState('in_luoi');
+  }, [show, initialTitle, availableColumns]);
+
+  if (!show) return null;
 
   const toggleColumn = (key) => {
     setSelectedColumns(prev => ({
@@ -57,27 +81,34 @@ export const FastReportModal = ({
   };
 
   const handleExportExcel = () => {
-    if (customers.length === 0) {
+    if (printRows.length === 0) {
       alert('Không có dữ liệu để xuất Excel!');
       return;
     }
     const activeCols = availableColumns.filter(c => selectedColumns[c.key]);
-    const exportRows = customers.map((c, idx) => {
+    const exportRows = printRows.map((c, idx) => {
       const row = {};
       if (includeStt) row['STT'] = idx + 1;
       activeCols.forEach(col => {
-        row[col.label] = c[col.key] || '';
+        row[col.label] = typeof col.format === 'function'
+          ? col.format(c[col.key], c)
+          : (c[col.key] ?? '');
       });
       return row;
     });
 
     const ws = XLSX.utils.json_to_sheet(exportRows);
     const wb = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(wb, ws, 'KhachHang');
+    XLSX.utils.book_append_sheet(wb, ws, String(sheetName || 'DuLieu').slice(0, 31));
     XLSX.writeFile(wb, `In_Danh_Sach_${new Date().toISOString().slice(0, 10)}.xlsx`);
   };
 
   const activeCols = availableColumns.filter(c => selectedColumns[c.key]);
+  const companyLogoSrc = companyInfo?.logoBase64
+    ? (companyInfo.logoBase64.startsWith('data:')
+        ? companyInfo.logoBase64
+        : `data:image/png;base64,${companyInfo.logoBase64}`)
+    : '';
 
   return (
     <div className="fr-overlay">
@@ -273,9 +304,20 @@ export const FastReportModal = ({
             >
               {/* Header Công Ty (Căn giữa) */}
               <div className="fr-company-header-classic">
-                <div className="fr-company-name-classic">(TÊN CÔNG TY)</div>
-                <div className="fr-company-meta-classic">Địa chỉ: (ĐỊA CHỈ)</div>
-                <div className="fr-company-meta-classic">Điện thoại: (ĐIỆN THOẠI), Email: (EMAIL)</div>
+                {companyLogoSrc && (
+                  <img
+                    src={companyLogoSrc}
+                    alt="Logo công ty"
+                    className="fr-company-logo-classic"
+                  />
+                )}
+                <div className="fr-company-info-classic">
+                  <div className="fr-company-name-classic">{companyInfo?.name || '(TÊN CÔNG TY)'}</div>
+                  <div className="fr-company-meta-classic">Địa chỉ: {companyInfo?.address || '(ĐỊA CHỈ)'}</div>
+                  <div className="fr-company-meta-classic">
+                    Điện thoại: {companyInfo?.phone || '(ĐIỆN THOẠI)'}, Email: {companyInfo?.email || '(EMAIL)'}
+                  </div>
+                </div>
               </div>
 
               {/* Đường kẻ cam ngang đặc trưng */}
@@ -302,18 +344,20 @@ export const FastReportModal = ({
                   </tr>
                 </thead>
                 <tbody>
-                  {customers.length === 0 ? (
+                  {printRows.length === 0 ? (
                     <tr>
                       <td colSpan={activeCols.length + (includeStt ? 1 : 0)} style={{ textAlign: 'center', padding: '16px' }}>
-                        Không có dữ liệu khách hàng nào để in.
+                        Không có dữ liệu nào để in.
                       </td>
                     </tr>
                   ) : (
-                    customers.map((c, idx) => (
+                    printRows.map((c, idx) => (
                       <tr key={c.id || idx}>
                         {includeStt && <td style={{ textAlign: 'center' }}>{idx + 1}</td>}
                         {activeCols.map(col => {
-                          let val = c[col.key] || '';
+                          const val = typeof col.format === 'function'
+                            ? col.format(c[col.key], c)
+                            : (c[col.key] ?? '');
                           return (
                             <td
                               key={col.key}
